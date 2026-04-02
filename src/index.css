@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  --color-utama: #2563eb;
+  --color-utama-hover: #1d4ed8;
+  --color-bg-light: #f8faff;
+  --color-aksen: #3b82f6;
+  --color-teks: #1e293b;
+  --color-teks-muted: #64748b;
+  --color-bg-alt: #f0f4ff;     /* untuk section bergantian */
+  --color-footer-bg: #0f172a;  /* footer gelap elegan */
+  --color-footer-teks: #94a3b8;
+}
+
+body {
+  background-color: #ffffff;
+  color: var(--color-teks);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
