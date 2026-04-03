@@ -50,7 +50,11 @@ const StatsSection = () => {
   const sectionRef = useRef(null);
 
   return (
-    <section ref={sectionRef} className="panel bg-white py-16 px-5 border-t border-gray-100">
+    <section 
+      ref={sectionRef} 
+      className="section min-h-screen flex items-center justify-center bg-white px-5"
+      id="stats-section"
+    >
       <div className="flex flex-wrap justify-center gap-8 md:gap-16 max-w-[1200px] mx-auto">
         {stats.map((stat, idx) => (
           <Counter

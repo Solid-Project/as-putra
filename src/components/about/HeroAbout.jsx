@@ -68,7 +68,7 @@ const HeroAbout = () => {
       ref={sectionRef}
       className="section relative h-screen overflow-hidden"
       style={{
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('/img/team2.jpeg')`,
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('/img/team.jpeg')`,
         backgroundPosition: 'center',
         backgroundSize: 'cover'
       }}

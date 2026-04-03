@@ -14,30 +14,26 @@ const SectorStrip = () => {
   const itemsRef = useRef([]);
 
   useEffect(() => {
-    // ANIMASI CINEMATIC - LANGSUNG JALAN TANPA SCROLLTRIGGER
     const ctx = gsap.context(() => {
-      
-      // 🔥 STAGGER MASUK CINEMATIC (SAMA PERSIS KAYA DULU)
       gsap.fromTo(itemsRef.current,
         { 
-          y: 100,        // Dari bawah
-          opacity: 0,    // Transparan
-          scale: 0.9,    // Agak kecil
-          rotateX: 10    // Efek 3D
+          y: 100,
+          opacity: 0,
+          scale: 0.9,
+          rotateX: 10
         },
         {
-          y: 0,          // Ke posisi normal
-          opacity: 1,    // Muncul
-          scale: 1,      // Ukuran normal
-          rotateX: 0,    // Rotasi normal
-          stagger: 0.15, // Muncul bergantian
-          duration: 1,   // Durasi 1 detik
-          ease: "power3.out", // Easing halus
-          delay: 0.3     // Delay sedikit setelah page load
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          rotateX: 0,
+          stagger: 0.15,
+          duration: 1,
+          ease: "power3.out",
+          delay: 0.3
         }
       );
 
-      // 🔥 HOVER CINEMATIC (SAMA PERSIS KAYA DULU)
       itemsRef.current.forEach(el => {
         if (!el) return;
         
@@ -64,7 +60,6 @@ const SectorStrip = () => {
         el.addEventListener('mouseenter', handleMouseEnter);
         el.addEventListener('mouseleave', handleMouseLeave);
       });
-
     }, sectionRef);
 
     return () => ctx.revert();
@@ -73,22 +68,24 @@ const SectorStrip = () => {
   return (
     <section
       ref={sectionRef}
-      className="section grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 h-auto md:h-[630px]"
+      className="section min-h-screen flex items-center justify-center"
       id="sector-strip"
     >
-      {sectors.map((sector, idx) => (
-        <div
-          key={idx}
-          ref={(el) => (itemsRef.current[idx] = el)}
-          className="relative bg-cover bg-center p-8 flex flex-col justify-center text-white rounded-lg transition-all duration-300 cursor-pointer"
-          style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${sector.bg})`
-          }}
-        >
-          <h3 className="text-xl font-bold mb-3">{sector.name}</h3>
-          <p className="text-sm opacity-90">{sector.desc}</p>
-        </div>
-      ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 w-full h-auto md:h-[630px] max-w-[1400px] mx-auto">
+        {sectors.map((sector, idx) => (
+          <div
+            key={idx}
+            ref={(el) => (itemsRef.current[idx] = el)}
+            className="relative bg-cover bg-center p-8 flex flex-col justify-center text-white rounded-lg transition-all duration-300 cursor-pointer h-full"
+            style={{
+              backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${sector.bg})`
+            }}
+          >
+            <h3 className="text-xl font-bold mb-3">{sector.name}</h3>
+            <p className="text-sm opacity-90">{sector.desc}</p>
+          </div>
+        ))}
+      </div>
     </section>
   );
 };

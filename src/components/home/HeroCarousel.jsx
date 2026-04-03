@@ -10,8 +10,7 @@ const slides = [
   {
     type: "video",
     src: heroVideo,
-    poster:
-      "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1920&q=80",
+    poster: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1920&q=80",
   },
   {
     type: "image",
@@ -43,7 +42,7 @@ const HeroCarousel = () => {
     }
   }, [current]);
 
-  // ANIMASI HERO
+  // ANIMASI HERO - DI MODIF UNTUK LENIS
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Initial animation
@@ -57,7 +56,7 @@ const HeroCarousel = () => {
           duration: 1.2,
           ease: "power3.out",
           delay: 0.3,
-        },
+        }
       );
 
       // Animasi button stagger
@@ -71,10 +70,10 @@ const HeroCarousel = () => {
           duration: 0.8,
           ease: "power3.out",
           delay: 0.6,
-        },
+        }
       );
 
-      // Floating effect
+      // Floating effect - tetap jalan
       gsap.to(contentRef.current, {
         y: "-=12",
         repeat: -1,
@@ -83,7 +82,7 @@ const HeroCarousel = () => {
         ease: "sine.inOut",
       });
 
-      // Parallax background
+      // ⚠️ PARALLAX - MODIF untuk Lenis (gunakan scrub: true tetap aman dengan Lenis)
       gsap.to(bgRef.current, {
         y: 100,
         ease: "none",
@@ -91,9 +90,8 @@ const HeroCarousel = () => {
           trigger: heroRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: 0.2,
-          fastScrollEnd: true,
-          preventOverlaps: true,
+          scrub: 0.5, // Lebih smooth
+          invalidateOnRefresh: true, // Biar refresh saat resize
         },
       });
     }, heroRef);
@@ -104,7 +102,7 @@ const HeroCarousel = () => {
   return (
     <section
       ref={heroRef}
-      className="section relative h-screen overflow-hidden"
+      className="section min-h-screen relative overflow-hidden"
       id="hero-section"
     >
       {/* BACKGROUND */}
@@ -112,7 +110,9 @@ const HeroCarousel = () => {
         {slides.map((slide, idx) => (
           <div
             key={idx}
-            className={`absolute inset-0 transition-opacity duration-1000 ${idx === current ? "opacity-100" : "opacity-0"}`}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              idx === current ? "opacity-100" : "opacity-0"
+            }`}
           >
             {slide.type === "video" ? (
               <video
@@ -139,7 +139,7 @@ const HeroCarousel = () => {
       {/* CONTENT */}
       <div
         ref={contentRef}
-        className="relative z-10 h-full flex items-center justify-center text-center px-5"
+        className="relative z-10 h-full flex items-center justify-center text-center px-5 min-h-screen"
       >
         <div>
           <h1 className="font-['Playfair_Display'] text-4xl md:text-6xl lg:text-7xl text-white mb-4 drop-shadow-lg">

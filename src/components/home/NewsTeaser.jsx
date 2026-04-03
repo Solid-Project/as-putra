@@ -7,7 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const news = [
   { id: 'csr-1', title: 'Pemberdayaan Peternak Mandiri', date: '24 Jan 2026', desc: 'Mendampingi 100+ peternak lokal Kuningan dengan pelatihan manajemen modern.', image: 'https://images.unsplash.com/photo-1589922583749-6b8473a85048?q=80&w=687&auto=format&fit=crop' },
-  { id: 'csr-2', title: 'AS PUTRA Green: 5000 Pohon', date: '20 Jan 2026', desc: 'Aksi nyata pelestarian lingkungan dengan menanam 5000 bibit pohon pelindung.', image: 'https://plus.unsplash.com/premium_photo-1681140560806-928e8b9a9a20?q=80&w=1170&auto=format&fit=crop' },
+  { id: 'csr-2', title: 'AS PUTRA Green: 5000 Pohon', date: '20 Jan 2026', desc: 'Aksi nyata pelestarian lingkungan dengan menanam 5000 bibit pohon pelindung.', image: 'https://plus.unsplash.com/premium_photo-1681140560806-928e9b8a9a20?q=80&w=1170&auto=format&fit=crop' },
   { id: 'comm-1', title: 'Kolaborasi Riset Pakan IPB', date: '10 Jan 2026', desc: 'Kerjasama strategis dengan universitas terkemuka untuk pakan ramah lingkungan.', image: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=600&q=80' }
 ];
 
@@ -17,7 +17,7 @@ const NewsTeaser = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // 🔥 Animasi cards masuk - DIPERBAIKI
+      // Animasi cards masuk
       gsap.fromTo(cardsRef.current,
         { y: 60, opacity: 0, scale: 0.95 },
         {
@@ -29,11 +29,11 @@ const NewsTeaser = () => {
           stagger: 0.15,
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 85%",      // DARI "top 80%" JADI "top 85%"
-            end: "bottom 70%",     // TAMBAHKAN end
-            toggleActions: "play none none reverse", // DARI "play reverse play reverse"
+            start: "top 85%",
+            end: "bottom 70%",
+            toggleActions: "play none none reverse",
             immediateRender: false,
-            invalidateOnRefresh: true  // TAMBAHKAN
+            invalidateOnRefresh: true
           }
         }
       );
@@ -45,10 +45,10 @@ const NewsTeaser = () => {
   return (
     <section 
       ref={sectionRef} 
-      className="section py-20 px-5 bg-white"
+      className="section min-h-screen flex flex-col justify-center px-5 bg-white"
       id="news-section"
     >
-      <div className="text-center mb-16">
+      <div className="text-center mb-12">
         <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl text-[var(--color-teks)] mb-4">
           Berita Terbaru
         </h2>

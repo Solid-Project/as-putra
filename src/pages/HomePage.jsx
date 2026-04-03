@@ -1,23 +1,24 @@
-// pages/HomePage.jsx
-import React from 'react';
-import HeroCarousel from '@/components/home/HeroCarousel';
-import HistorySection from '@/components/home/HistorySection';
-import CultureSection from '@/components/home/CultureSection';
-import StatsSection from '@/components/home/StatsSection';
-import SectorStrip from '@/components/home/SectorStrip';
-import NewsTeaser from '@/components/home/NewsTeaser';
-import useFullpageSnap from '@/hooks/useFullpageSnap';
+// src/pages/HomePage.jsx
+import React from "react";
+import HeroCarousel from "@/components/home/HeroCarousel";
+import HistorySection from "@/components/home/HistorySection";
+import CultureSection from "@/components/home/CultureSection";
+import StatsSection from "@/components/home/StatsSection";
+import SectorStrip from "@/components/home/SectorStrip";
+import NewsTeaser from "@/components/home/NewsTeaser";
+import useLenisScroll from "@/hooks/useLenisScroll";
 
 const HomePage = () => {
-  // Fullpage snap with enabled config
-  useFullpageSnap({
+  useLenisScroll({
     enabled: true,
-    duration: 0.5,
-    ease: 'power2.inOut'
+    snapEnabled: true,
+    sectionSelector: ".section",
+    snapDuration: 0.35,      // Cepat dan responsif
+    wheelThreshold: 15,       // Scroll sedikit langsung pindah
   });
 
   return (
-    <main className="overflow-x-hidden">
+    <main className="relative">
       <HeroCarousel />
       <HistorySection />
       <CultureSection />

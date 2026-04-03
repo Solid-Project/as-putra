@@ -119,7 +119,7 @@ const HistorySection = () => {
   return (
     <section
       ref={sectionRef}
-      className="section relative bg-gradient-to-b from-white to-gray-50 py-24 px-5 z-20 overflow-hidden"
+      className="section min-h-screen relative bg-gradient-to-b from-white to-gray-50 py-24 px-5 z-20 overflow-hidden"
       id="history-section"
     >
       {/* Decorative Background Element */}

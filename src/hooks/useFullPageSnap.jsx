@@ -1,126 +1,175 @@
-import { useEffect } from "react";
+// hooks/useFullpageSnap.js
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
-const useFullpageSnap = (config = {}) => {
-  const { duration = 0.6, ease = "power2.out", enabled = true } = config;
+gsap.registerPlugin(ScrollToPlugin);
+
+const useFullpageSnap = (options = {}) => {
+  const {
+    enabled = true,
+    duration = 0.6,
+    ease = "power2.inOut",
+    sectionSelector = ".section",
+  } = options;
+
+  const isScrollingRef = useRef(false);
+  const sectionsRef = useRef([]);
 
   useEffect(() => {
-    if (!enabled) {
-      console.log("useFullpageSnap disabled");
-      return;
-    }
+    if (!enabled) return;
 
-    console.log("🔥 useFullpageSnap activated!");
-
-    const sections = document.querySelectorAll(".section");
+    const sections = document.querySelectorAll(sectionSelector);
     if (sections.length === 0) {
-      console.log("No .section found");
+      console.warn(`No elements found with selector: ${sectionSelector}`);
       return;
     }
-    console.log(`Found ${sections.length} sections`);
 
-    let isScrolling = false;
-    let scrollAnimation = null;
+    sectionsRef.current = sections;
 
-    const getCurrentIndex = (scrollY) => {
-      for (let i = 0; i < sections.length; i++) {
-        const section = sections[i];
-        const nextSection = sections[i + 1];
-        const sectionEnd = nextSection ? nextSection.offsetTop : Infinity;
-        if (scrollY >= section.offsetTop && scrollY < sectionEnd) {
-          return i;
+    // Ambil index section yang sedang aktif berdasarkan posisi scroll
+    const getActiveIndex = () => {
+      const scrollY = window.scrollY;
+      const viewportCenter = scrollY + window.innerHeight / 2;
+
+      let activeIndex = 0;
+      let minDistance = Infinity;
+
+      sections.forEach((section, idx) => {
+        const sectionTop = section.offsetTop;
+        const sectionBottom = sectionTop + section.offsetHeight;
+        const sectionCenter = (sectionTop + sectionBottom) / 2;
+        const distance = Math.abs(viewportCenter - sectionCenter);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          activeIndex = idx;
         }
-      }
-      return 0;
+      });
+
+      console.log("Active index:", activeIndex, "ScrollY:", scrollY); // debug
+      return activeIndex;
     };
 
     const scrollToSection = (index) => {
-      const target = sections[index];
-      if (!target || isScrolling) return;
+      if (isScrollingRef.current) return;
+      if (index < 0 || index >= sections.length) return;
 
-      console.log(`Snapping to section ${index}:`, target.id || target.className);
+      const targetSection = sections[index];
+      if (!targetSection) return;
 
-      // Kill animasi sebelumnya jika ada
-      if (scrollAnimation) {
-        scrollAnimation.kill();
-      }
+      console.log("Scrolling to index:", index);
+      isScrollingRef.current = true;
 
-      isScrolling = true;
-
-      // 🔥🔥🔥 INI KODE BARU - MANUAL ANIMATION TANPA SCROLLTOPLUGIN 🔥🔥🔥
-      const startY = window.scrollY;
-      const targetY = target.offsetTop;
-      const distance = targetY - startY;
-      const startTime = performance.now();
-
-      const animateScroll = (currentTime) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(1, elapsed / (duration * 1000));
-        
-        // Easing function: power2.out
-        const easeProgress = 1 - Math.pow(1 - progress, 2);
-        
-        const currentY = startY + (distance * easeProgress);
-        window.scrollTo(0, currentY);
-        
-        if (progress < 1) {
-          scrollAnimation = requestAnimationFrame(animateScroll);
-        } else {
-          window.scrollTo(0, targetY);
-          isScrolling = false;
-          scrollAnimation = null;
-          console.log("Snap complete");
-        }
-      };
-
-      if (scrollAnimation) {
-        cancelAnimationFrame(scrollAnimation);
-      }
-      scrollAnimation = requestAnimationFrame(animateScroll);
+      gsap.to(window, {
+        duration: duration,
+        scrollTo: {
+          y: targetSection.offsetTop,
+          autoKill: false,
+        },
+        ease: ease,
+        onComplete: () => {
+          isScrollingRef.current = false;
+          console.log("Scroll complete at index:", getActiveIndex());
+        },
+        onUpdate: () => {
+          // Optional: log progress
+        },
+      });
     };
 
+    let wheelTimeout = null;
+    let lastDelta = 0;
+
     const handleWheel = (e) => {
-      if (isScrolling) {
+      // Clear timeout sebelumnya
+      if (wheelTimeout) clearTimeout(wheelTimeout);
+
+      // Akumulasi delta untuk mencegah terlalu sensitif
+      lastDelta += e.deltaY;
+
+      wheelTimeout = setTimeout(() => {
+        lastDelta = 0;
+      }, 200);
+
+      // Cek apakah akumulasi cukup besar (minimal 30px)
+      if (Math.abs(lastDelta) < 30) {
+        return;
+      }
+
+      if (isScrollingRef.current) {
         e.preventDefault();
         return;
       }
 
-      const scrollY = window.scrollY;
-      const currentIndex = getCurrentIndex(scrollY);
-      const currentSection = sections[currentIndex];
+      const activeIndex = getActiveIndex();
+      console.log("Wheel - activeIndex:", activeIndex, "lastDelta:", lastDelta);
 
-      console.log(`Wheel deltaY: ${e.deltaY}, currentIndex: ${currentIndex}, no-snap: ${currentSection?.classList.contains("no-snap")}`);
-
-      if (currentSection?.classList.contains("no-snap")) {
-        console.log("No-snap detected - natural scroll");
-        return;
+      // Scroll ke bawah
+      if (lastDelta > 0 && activeIndex < sections.length - 1) {
+        e.preventDefault();
+        scrollToSection(activeIndex + 1);
+        lastDelta = 0;
       }
+      // Scroll ke atas
+      else if (lastDelta < 0 && activeIndex > 0) {
+        e.preventDefault();
+        scrollToSection(activeIndex - 1);
+        lastDelta = 0;
+      }
+    };
 
-      e.preventDefault();
+    // Keyboard handler
+    const handleKeyDown = (e) => {
+      if (isScrollingRef.current) return;
 
-      if (e.deltaY > 0) {
-        const nextIndex = Math.min(currentIndex + 1, sections.length - 1);
-        if (nextIndex !== currentIndex) {
-          scrollToSection(nextIndex);
-        }
-      } else {
-        const prevIndex = Math.max(currentIndex - 1, 0);
-        if (prevIndex !== currentIndex) {
-          scrollToSection(prevIndex);
-        }
+      const activeIndex = getActiveIndex();
+
+      if (e.key === "ArrowDown" && activeIndex < sections.length - 1) {
+        e.preventDefault();
+        scrollToSection(activeIndex + 1);
+      } else if (e.key === "ArrowUp" && activeIndex > 0) {
+        e.preventDefault();
+        scrollToSection(activeIndex - 1);
+      }
+    };
+
+    // Touch handler untuk mobile
+    let touchStartY = 0;
+    const handleTouchStart = (e) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e) => {
+      if (isScrollingRef.current) return;
+
+      const touchEndY = e.changedTouches[0].clientY;
+      const diff = touchStartY - touchEndY;
+      
+      if (Math.abs(diff) < 50) return;
+      
+      const activeIndex = getActiveIndex();
+
+      if (diff > 0 && activeIndex < sections.length - 1) {
+        scrollToSection(activeIndex + 1);
+      } else if (diff < 0 && activeIndex > 0) {
+        scrollToSection(activeIndex - 1);
       }
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchend", handleTouchEnd);
 
     return () => {
-      if (scrollAnimation) {
-        cancelAnimationFrame(scrollAnimation);
-      }
+      if (wheelTimeout) clearTimeout(wheelTimeout);
       window.removeEventListener("wheel", handleWheel);
-      console.log("useFullpageSnap cleanup");
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [duration, ease, enabled]);
+  }, [enabled, duration, ease, sectionSelector]);
 };
 
 export default useFullpageSnap;
