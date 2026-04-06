@@ -12,8 +12,9 @@ const HeroAbout = () => {
   const lineRef = useRef(null);
   const subtitleRef = useRef(null);
   const scrollBtnRef = useRef(null);
+  const bgImageRef = useRef(null); // Ref baru untuk handle parallax image lebih bersih
+
   const scrollToNext = () => {
-    // Mencari section berikutnya setelah hero untuk scroll otomatis
     const nextSection = sectionRef.current?.nextElementSibling;
     if (nextSection) {
       nextSection.scrollIntoView({ behavior: "smooth" });
@@ -22,7 +23,7 @@ const HeroAbout = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // GSAP animations
+      // 1. ANIMASI MASUK (REVEAL) - TETAP ASLI
       gsap.fromTo(titleRef.current, { y: 50, opacity: 0 }, {
         y: 0,
         opacity: 1,
@@ -53,16 +54,30 @@ const HeroAbout = () => {
         delay: 0.6,
       });
 
-      // Parallax background
-      gsap.to(sectionRef.current, {
-        backgroundPositionY: '+=120px',
+      // 2. LIVE PARALLAX: BACKGROUND IMAGE
+      // Gambar meluncur turun perlahan (y: 20%)
+      gsap.to(bgImageRef.current, {
+        y: '20%',
         ease: 'none',
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top bottom',
+          start: 'top top',
           end: 'bottom top',
-          scrub: 0.5,
-          invalidateOnRefresh: true
+          scrub: true,
+        },
+      });
+
+      // 3. LIVE PARALLAX: CONTENT WRAPPER
+      // Teks meluncur naik (y: -100px) untuk efek depth
+      gsap.to(contentRef.current, {
+        y: -100,
+        opacity: 0.6, // Memudar pelan agar fokus ke section bawah
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
         },
       });
 
@@ -74,106 +89,77 @@ const HeroAbout = () => {
   return (
     <section
       ref={sectionRef}
-      className="section relative h-screen overflow-hidden"
-      style={{
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('/react/img/team.jpeg')`,
-        backgroundPosition: 'center',
-        backgroundSize: 'cover'
-      }}
+      className="section relative h-screen overflow-hidden bg-black"
+      id="hero-about"
       data-theme="dark"
       data-title="Tentang Kami"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/50" />
+      {/* BACKGROUND IMAGE LAYER - Terpisah agar Parallax Halus */}
+      <div 
+        ref={bgImageRef}
+        className="absolute inset-0 z-0 h-[120%] w-full"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('/react/img/team.jpeg')`,
+          backgroundPosition: 'center',
+          backgroundSize: 'cover'
+        }}
+      />
+
+      {/* OVERLAY GRADIENT */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/60 z-[1]" />
       
+      {/* CONTENT LAYER */}
       <div ref={contentRef} className="relative z-10 h-full flex items-center justify-center text-center px-5">
         <div>
-          <h1 ref={titleRef} className="font-['Playfair_Display'] text-4xl md:text-6xl lg:text-7xl text-white mb-4 drop-shadow-lg">
+          <h1 ref={titleRef} className="font-['Playfair_Display'] text-5xl md:text-7xl lg:text-8xl text-white mb-6 drop-shadow-2xl font-bold">
             Tentang Kami
           </h1>
 
-          <div ref={lineRef} className="w-16 h-0.5 bg-[var(--color-utama)] mx-auto mb-10" style={{ width: 0 }} />
+          <div ref={lineRef} className="w-16 h-1 bg-[var(--color-utama)] mx-auto mb-10" />
 
-          <p ref={subtitleRef} className="text-white/95 max-w-[600px] mx-auto mb-10 text-base md:text-lg">
-            Dari awal yang sederhana hingga menjadi kekuatan industri terkemuka.
+          <p ref={subtitleRef} className="text-white/95 max-w-[650px] mx-auto mb-12 text-lg md:text-xl font-light leading-relaxed">
+            Membangun warisan melalui inovasi, integritas, dan komitmen <br className="hidden md:block"/> untuk masa depan yang lebih baik.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-5 justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Link
               to="/about"
-              className="group relative px-8 py-3.5 bg-[var(--color-utama)] text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[var(--color-utama)]/30 hover:-translate-y-0.5"
+              className="group relative px-10 py-4 bg-[var(--color-utama)] text-white font-bold tracking-widest text-[10px] uppercase rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-[var(--color-utama)]/40 hover:-translate-y-1"
             >
               <span className="relative z-10 flex items-center gap-2">
                 Pelajari Lebih Lanjut
-                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </span>
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             </Link>
+            
             <Link
               to="/career"
-              className="group relative px-8 py-3.5 bg-white/20 backdrop-blur-sm border border-white/40 text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:bg-white/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-white/20"
+              className="group relative px-10 py-4 bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold tracking-widest text-[10px] uppercase rounded-full transition-all duration-300 hover:bg-white hover:text-black hover:-translate-y-1"
             >
-              <span className="relative z-10 flex items-center gap-2">
-                Bergabung Bersama Kami
-                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </span>
+              Bergabung Bersama Kami
             </Link>
           </div>
         </div>
       </div>
+
+      {/* SCROLL BUTTON */}
       <button
         ref={scrollBtnRef}
         onClick={scrollToNext}
-        className="absolute bottom-12 right-[10%] z-20 hidden lg:flex flex-col items-center gap-2 group cursor-pointer"
+        className="absolute bottom-12 right-[10%] z-20 hidden lg:flex flex-col items-center gap-4 group cursor-pointer"
       >
-        {/* Teks Scroll yang lebih besar & berjarak */}
-        <span className="vertical-text text-[11px] font-black uppercase tracking-[0.5em] text-white/40 group-hover:text-[var(--color-utama)] transition-colors duration-500 mb-4">
+        <span className="vertical-text text-[10px] font-black uppercase tracking-[0.5em] text-white/40 group-hover:text-[var(--color-utama)] transition-colors duration-500">
           Scroll
         </span>
-
-        {/* Stack Panah (Tanpa Line) */}
-        <div className="flex flex-col items-center -space-y-2">
-          <svg
-            className="w-8 h-8 text-[var(--color-utama)] animate-arrow-1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2.5}
-              d="M19 9l-7 7-7-7"
-            />
+        <div className="flex flex-col items-center -space-y-3">
+          <svg className="w-8 h-8 text-[var(--color-utama)] animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
           </svg>
-          <svg
-            className="w-8 h-8 text-[var(--color-utama)] animate-arrow-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2.5}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-          <svg
-            className="w-8 h-8 text-[var(--color-utama)] animate-arrow-3"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2.5}
-              d="M19 9l-7 7-7-7"
-            />
+          <svg className="w-8 h-8 text-[var(--color-utama)] animate-bounce opacity-50" style={{ animationDelay: '0.2s' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
           </svg>
         </div>
       </button>
@@ -182,4 +168,3 @@ const HeroAbout = () => {
 };
 
 export default HeroAbout;
-

@@ -1,4 +1,3 @@
-// src/components/about/VisionMission.jsx
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -12,11 +11,13 @@ const VisionMission = () => {
   const bgRef = useRef(null);
   const lineRef = useRef(null);
   const glowRef = useRef(null);
+  const textBgRef = useRef(null);
+  const floatRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
 
-      // fade in content
+      // 1. ANIMASI ENTRANCE (ASLI KAMU)
       gsap.from(leftRef.current, {
         y: 60,
         opacity: 0,
@@ -40,41 +41,64 @@ const VisionMission = () => {
         }
       });
 
-      // parallax background
-      gsap.to(bgRef.current, {
-        yPercent: -10,
+      // 2. LIVE PARALLAX (DIBUAT SIMETRIS & MENGISI RUANG)
+      
+      // Typography Background meluncur horizontal
+      gsap.to(textBgRef.current, {
+        x: -150,
         ease: 'none',
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top bottom',
           end: 'bottom top',
-          scrub: true,
+          scrub: 1,
         }
       });
 
-      // parallax line grid
-      gsap.to(lineRef.current, {
-        yPercent: -5,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true,
+      // Floating Shapes meluncur naik
+      gsap.fromTo(floatRef.current, 
+        { y: 100 }, 
+        {
+          y: -100,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 2,
+          }
         }
-      });
+      );
 
-      // parallax glow blur
-      gsap.to(glowRef.current, {
-        yPercent: -7,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true,
+      // Content (Left & Right) tetap meluncur naik (Range 80px agar terasa)
+      gsap.fromTo([leftRef.current, rightRef.current], 
+        { y: 80 }, 
+        {
+          y: -80,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.2,
+          }
         }
-      });
+      );
+
+      // Background Image meluncur turun
+      gsap.fromTo(bgRef.current, 
+        { y: -50 }, 
+        {
+          y: 50,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          }
+        }
+      );
 
     }, sectionRef);
 
@@ -86,36 +110,52 @@ const VisionMission = () => {
       ref={sectionRef}
       className="section relative min-h-screen flex items-center px-6 md:px-12 overflow-hidden"
       style={{ 
-        backgroundImage:`linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('/react/img/mission.jpg')`,
-        backgroundPosition:`center`,
-        backgroundSize:`cover`
-       }}
-       data-title="Visi & Misi"
-       data-theme="light"
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('/react/img/mission.jpg')`,
+        backgroundPosition: `center`,
+        backgroundSize: `cover`
+      }}
+      data-title="Visi & Misi"
+      data-theme="light"
     >
-      {/* 🔥 BACKGROUND IMAGE + OVERLAY */}
-      <div ref={bgRef} className="absolute inset-0 -z-20">
+      {/* 🔥 ADDITION 1: LARGE TYPOGRAPHY BG (Mengisi kekosongan) */}
+      <div 
+        ref={textBgRef} 
+        className="absolute top-1/2 left-0 -translate-y-1/2 whitespace-nowrap opacity-[0.03] select-none pointer-events-none z-0"
+      >
+        <span className="text-[200px] font-black uppercase text-blue-900">
+          Visionary Reliable Sustainable Innovative
+        </span>
+      </div>
+
+      {/* 🔥 ADDITION 2: FLOATING DECOR (Mengisi kekosongan samping) */}
+      <div ref={floatRef} className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-1/4 right-[10%] w-24 h-24 border-8 border-blue-500/10 rounded-full" />
+        <div className="absolute bottom-1/4 left-[5%] w-32 h-32 border border-blue-500/20 rounded-2xl rotate-12" />
+      </div>
+
+      {/* 🔥 BACKGROUND IMAGE + OVERLAY (ASLI KAMU) */}
+      <div ref={bgRef} className="absolute inset-0 -z-20 h-[120%] -top-[10%]">
         <img
-          src="@/img/mission.jpg"
+          src="/react/img/mission.jpg"
           alt="background"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/40 to-white/30" />
       </div>
 
-      {/* 🔥 LINE GRID DECOR */}
+      {/* 🔥 LINE GRID DECOR (ASLI KAMU) */}
       <div ref={lineRef} className="absolute inset-0 -z-10 opacity-20">
         <div className="w-full h-full bg-[linear-gradient(to_right,#3b82f6_1px,transparent_1px),linear-gradient(to_bottom,#3b82f6_1px,transparent_1px)] bg-[size:60px_60px]" />
       </div>
 
-      {/* 🔥 SOFT GLOW BLUR */}
+      {/* 🔥 SOFT GLOW BLUR (ASLI KAMU) */}
       <div ref={glowRef} className="absolute inset-0 -z-10">
         <div className="absolute top-[-120px] left-[-120px] w-[420px] h-[420px] bg-blue-300/30 blur-[140px] rounded-full" />
         <div className="absolute bottom-[-120px] right-[-120px] w-[420px] h-[420px] bg-indigo-300/30 blur-[140px] rounded-full" />
       </div>
 
-      {/* 🔥 CONTENT */}
-      <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-16 items-center">
+      {/* 🔥 CONTENT (ASLI KAMU) */}
+      <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-16 items-center relative z-10 w-full">
 
         {/* LEFT SIDE */}
         <div ref={leftRef} className="space-y-6">
@@ -169,7 +209,6 @@ const VisionMission = () => {
                     <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 text-white text-sm font-semibold shadow-md">
                       {i + 1}
                     </div>
-                    <div className="absolute inset-0 rounded-full bg-blue-400 opacity-20 blur-md group-hover/item:opacity-40 transition" />
                   </div>
                   <span className="text-gray-600 leading-relaxed group-hover/item:text-gray-900 transition">
                     {item}

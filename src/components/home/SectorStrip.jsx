@@ -1,5 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const sectors = [
   { name: 'Peternakan', desc: 'Breeding, hatchery, kemitraan, dan pengelolaan peternakan terpadu.', bg: '/react/img/property.jpg' },
@@ -15,6 +18,9 @@ const SectorStrip = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      
+      // 1. ANIMASI ENTRANCE (ASLI KAMU)
+      // Kita buat trigger animasi masuk ini selesai tepat di posisi y: 0
       gsap.fromTo(itemsRef.current,
         { 
           y: 100,
@@ -30,13 +36,42 @@ const SectorStrip = () => {
           stagger: 0.15,
           duration: 1,
           ease: "power3.out",
-          delay: 0.3
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 85%", // Mulai muncul sebelum section masuk penuh
+          }
         }
       );
 
-      itemsRef.current.forEach(el => {
+      // 2. LIVE PARALLAX (DIPERBAIKI AGAR SEJAJAR SAAT AKTIF)
+      itemsRef.current.forEach((el, idx) => {
         if (!el) return;
         
+        // Offset range yang sama (60px)
+        // Kita gunakan start dan end yang simetris dari tengah (0)
+        const range = 60;
+        const fromY = idx % 2 === 0 ? range : -range;
+        const toY = idx % 2 === 0 ? -range : range;
+
+        gsap.fromTo(el, 
+          { y: fromY }, 
+          {
+            y: toY,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              // KUNCI UTAMA: start dan end harus simetris terhadap viewport
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1,
+            }
+          }
+        );
+      });
+
+      // 3. HOVER INTERACTION (ASLI KAMU)
+      itemsRef.current.forEach(el => {
+        if (!el) return;
         const handleMouseEnter = () => {
           gsap.to(el, { 
             scale: 1.05, 
@@ -46,7 +81,6 @@ const SectorStrip = () => {
             ease: "power2.out" 
           });
         };
-        
         const handleMouseLeave = () => {
           gsap.to(el, { 
             scale: 1, 
@@ -56,10 +90,10 @@ const SectorStrip = () => {
             ease: "power2.out" 
           });
         };
-        
         el.addEventListener('mouseenter', handleMouseEnter);
         el.addEventListener('mouseleave', handleMouseLeave);
       });
+
     }, sectionRef);
 
     return () => ctx.revert();
@@ -68,15 +102,16 @@ const SectorStrip = () => {
   return (
     <section
       ref={sectionRef}
-      className="section min-h-screen flex items-center justify-center"
-      id="sector-strip" data-title="Sektor Usaha" data-theme="dark"
+      className="section min-h-screen flex items-center justify-center bg-white overflow-hidden"
+      id="sector-strip" data-title="Sektor Usaha" data-theme="light"
     >
+      {/* GRID FIT TANPA ROUNDED & TANPA GAP */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 w-full h-auto md:h-[630px] max-w-[1400px] mx-auto">
         {sectors.map((sector, idx) => (
           <div
             key={idx}
             ref={(el) => (itemsRef.current[idx] = el)}
-            className="relative bg-cover bg-center p-8 flex flex-col justify-center text-white rounded-lg transition-all duration-300 cursor-pointer h-full"
+            className="relative bg-cover bg-center p-8 flex flex-col justify-center text-white transition-all duration-300 cursor-pointer h-full"
             style={{
               backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${sector.bg})`
             }}

@@ -14,68 +14,63 @@ const CultureSection = () => {
   useEffect(() => {
     const section = sectionRef.current;
 
-    // 🔥 TITLE
+    // --- 1. LIVE PARALLAX (Satu Kecepatan Agar Tetap Sejajar & Padat) ---
+    const ctx = gsap.context(() => {
+      // Header meluncur naik sedikit (jarak dikurangi agar tidak terlalu jauh)
+      gsap.to([titleRef.current, textRef.current, lineRef.current], {
+        y: -30,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1,
+        }
+      });
+
+      // SEMUA CARD BERGERAK BERSAMAAN (Tetap Sejajar)
+      gsap.to(cardsRef.current, {
+        y: -50,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.2,
+        }
+      });
+    }, section);
+
+    // --- 2. ANIMASI REVEAL ASLI (Intersection Observer) ---
     const titleAnim = gsap.fromTo(
       titleRef.current,
-      { y: 60, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 1.2,
-        ease: "power3.out",
-        paused: true,
-      },
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: "power3.out", paused: true }
     );
 
-    // 🔥 LINE
     const lineAnim = gsap.fromTo(
       lineRef.current,
       { width: 0 },
-      {
-        width: 64,
-        duration: 1,
-        ease: "power3.out",
-        paused: true,
-      },
+      { width: 64, duration: 0.8, ease: "power3.out", paused: true }
     );
 
-    // 🔥 TEXT
     const textAnim = gsap.fromTo(
       textRef.current,
-      { y: 30, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        delay: 0.2,
-        ease: "power3.out",
-        paused: true,
-      },
+      { y: 20, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, delay: 0.1, ease: "power3.out", paused: true }
     );
 
-    // 🔥 CARDS
     const cardsAnim = gsap.fromTo(
       cardsRef.current,
-      { y: 60, opacity: 0, scale: 0.95 },
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        stagger: 0.2,
-        duration: 1,
-        delay: 0.3,
-        ease: "power3.out",
-        paused: true,
-      },
+      { y: 40, opacity: 0, scale: 0.98 },
+      { y: 0, opacity: 1, scale: 1, stagger: 0.15, duration: 0.8, delay: 0.2, ease: "power3.out", paused: true }
     );
 
-    // 🔥 OBSERVER (KUNCI UTAMA)
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // kasih sedikit delay biar lebih smooth
-            gsap.delayedCall(0.15, () => {
+            gsap.delayedCall(0.1, () => {
               titleAnim.restart();
               lineAnim.restart();
               textAnim.restart();
@@ -84,15 +79,14 @@ const CultureSection = () => {
           }
         });
       },
-      {
-        threshold: 0.4, // ⬅️ penting (jangan terlalu besar)
-      },
+      { threshold: 0.3 },
     );
 
     observer.observe(section);
 
     return () => {
       observer.disconnect();
+      ctx.revert();
     };
   }, []);
 
@@ -100,63 +94,66 @@ const CultureSection = () => {
     {
       icon: "✦",
       title: "Integritas",
-      desc: "Kami memegang komitmen untuk bekerja secara jujur, transparan, dan bertanggung jawab — baik kepada klien, mitra, maupun tim internal.",
+      desc: "Kami memegang komitmen untuk bekerja secara jujur, transparan, dan bertanggung jawab.",
     },
     {
       icon: "★",
       title: "Keunggulan",
-      desc: "Kami terus meningkatkan kualitas kerja melalui perbaikan berkelanjutan, standar yang jelas, dan perhatian pada detail di setiap proses.",
+      desc: "Kami terus meningkatkan kualitas kerja melalui perbaikan berkelanjutan dan standar yang jelas.",
     },
     {
       icon: "♥",
-      title: "Kolaborasi & Komunitas",
-      desc: "Kami percaya pertumbuhan yang berkelanjutan hanya bisa dicapai melalui kerja sama yang sehat, saling menghargai, dan kontribusi positif bagi lingkungan sekitar.",
+      title: "Kolaborasi",
+      desc: "Kami percaya pertumbuhan yang berkelanjutan hanya bisa dicapai melalui kerja sama yang sehat.",
     },
   ];
 
   return (
     <section
       ref={sectionRef}
-      className="section py-12 md:py-16 bg-white px-[5%]"
+      // py-12 md:py-16 membuat section lebih padat (jarak kosong berkurang)
+      className="section py-12 md:py-16 bg-white px-[5%] overflow-hidden"
       id="culture-section" data-title="Budaya Kami" data-theme="light"
     >
-      <div className="text-center mb-16">
+      {/* Header dengan mb-10 agar lebih rapat ke card */}
+      <div className="text-center mb-10 md:mb-12">
         <h2
           ref={titleRef}
-          className="font-['Playfair_Display'] text-3xl md:text-4xl text-[var(--color-teks)] mb-4"
+          className="font-['Playfair_Display'] text-3xl md:text-4xl text-[var(--color-teks)] mb-3"
         >
           Budaya Kami
         </h2>
 
         <div
           ref={lineRef}
-          className="h-0.5 bg-[var(--color-utama)] mx-auto mb-4"
+          className="h-0.5 bg-[var(--color-utama)] mx-auto mb-3"
           style={{ width: 0 }}
         />
 
         <p
           ref={textRef}
-          className="text-[var(--color-teks-muted)] max-w-[600px] mx-auto"
+          className="text-[var(--color-teks-muted)] max-w-[600px] mx-auto text-sm md:text-base leading-relaxed"
         >
           Nilai-nilai yang membentuk cara kami bekerja, berkolaborasi, dan
           bertumbuh bersama.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-8 max-w-[1200px] mx-auto">
+      {/* Grid dengan gap-6 agar lebih padat */}
+      <div className="grid md:grid-cols-3 gap-6 max-w-[1100px] mx-auto">
         {cards.map((item, idx) => (
           <div
             key={idx}
             ref={(el) => (cardsRef.current[idx] = el)}
-            className="text-center p-8 rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-lg"
+            className="text-center p-6 md:p-8 rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-md"
           >
-            <div className="text-4xl text-[var(--color-utama)] mb-4">
+            <div className="text-3xl text-[var(--color-utama)] mb-3">
               {item.icon}
             </div>
-            <h3 className="text-xl font-bold text-[var(--color-teks)]">
+            <h3 className="text-lg md:text-xl font-bold text-[var(--color-teks)]">
               {item.title}
             </h3>
-            <p className="text-[var(--color-teks-muted)] mt-3 text-sm leading-relaxed">
+            <p className="text-[var(--color-teks-muted)] mt-2 text-xs md:text-sm leading-relaxed">
               {item.desc}
             </p>
           </div>

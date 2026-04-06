@@ -23,10 +23,6 @@ const FirstLayout = ({ data }) => {
         }
       });
 
-      // --- LOGIK PARALLAX DUA HALA ---
-      // Kita gunakan yoyo-style movement atau mapping dari -100 ke 0 ke 100
-      // Tapi untuk 'Assembling' yang rapi, kita buat begini:
-      
       tl.fromTo(imageFrameRef.current, 
         { x: "-100%", opacity: 0 },
         { 
@@ -114,7 +110,6 @@ const FirstLayout = ({ data }) => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>

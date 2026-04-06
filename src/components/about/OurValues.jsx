@@ -1,4 +1,3 @@
-// src/components/about/OurValues.jsx
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,36 +7,58 @@ gsap.registerPlugin(ScrollTrigger);
 const OurValues = () => {
   const sectionRef = useRef(null);
   const cardsRef = useRef([]);
-  const titleRef = useRef(null);
-  const subtitleRef = useRef(null);
-  const lineRef = useRef(null);
+  const textBgRef = useRef(null);
 
   const values = [
-    { number: '01', title: 'Integrated Synergy', desc: 'Kolaborasi lintas usaha yang saling menguatkan.' },
-    { number: '02', title: 'Agile Empowerment', desc: 'Adaptif, inovatif, dan terus berkembang.' },
-    { number: '03', title: 'Foundational Trust', desc: 'Integritas dan keandalan sebagai fondasi.' },
-    { number: '04', title: 'Purpose-Driven Impact', desc: 'Pertumbuhan yang memberi dampak nyata.' },
-    { number: '05', title: 'Uncompromising Excellence', desc: 'Profesionalisme tanpa kompromi.' }
+    { number: '01', title: 'Integrated Synergy', desc: 'Kolaborasi lintas usaha yang saling menguatkan.', color: 'bg-blue-600' },
+    { number: '02', title: 'Agile Empowerment', desc: 'Adaptif dan inovatif dalam perubahan pasar.', color: 'bg-indigo-600' },
+    { number: '03', title: 'Foundational Trust', desc: 'Integritas sebagai fondasi utama.', color: 'bg-sky-600' },
+    { number: '04', title: 'Purpose-Driven Impact', desc: 'Pertumbuhan yang memberi dampak nyata.', color: 'bg-blue-500' },
+    { number: '05', title: 'Uncompromising Excellence', desc: 'Profesionalisme tinggi tanpa kompromi.', color: 'bg-indigo-500' }
   ];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Animasi judul
-      gsap.from(titleRef.current, { y: 40, opacity: 0, duration: 0.8, ease: "power3.out", scrollTrigger: { trigger: sectionRef.current, start: "top 85%" }});
-      gsap.from(subtitleRef.current, { y: 20, opacity: 0, duration: 0.8, ease: "power2.out", scrollTrigger: { trigger: sectionRef.current, start: "top 85%" }});
-
-      // Animasi cards stagger
-      cardsRef.current.forEach((card, idx) => {
-        gsap.from(card, {
-          y: 50,
-          opacity: 0,
-          scale: 0.95,
-          duration: 0.7,
-          delay: idx * 0.15,
-          ease: "power3.out",
-          scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none reverse" }
-        });
+      
+      // 1. TYPOGRAPHY WATERMARK (Gerak Horizontal)
+      gsap.to(textBgRef.current, {
+        x: -150,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1,
+        }
       });
+
+      // 2. KUNCI PARALLAX SEJAJAR SEMPURNA (100% PRECISION)
+      cardsRef.current.forEach((card, idx) => {
+        if (!card) return;
+        
+        // Range 80px (Cukup terlihat tapi tetap stabil)
+        const range = 80;
+        const startY = (idx % 2 === 0) ? range : -range;
+        const endY = (idx % 2 === 0) ? -range : range;
+        
+        gsap.fromTo(card, 
+          { y: startY }, 
+          {
+            y: endY,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              // KUNCI: Start & End harus simetris terhadap viewport (Tengah)
+              // Ini menjamin saat section di "center", semua y = 0 (SEJAJAR)
+              start: "top bottom", 
+              end: "bottom top",
+              scrub: 1.2,
+              invalidateOnRefresh: true,
+            }
+          }
+        );
+      });
+
     }, sectionRef);
 
     return () => ctx.revert();
@@ -46,54 +67,68 @@ const OurValues = () => {
   return (
     <section
       ref={sectionRef}
-      className="section relative py-24 px-6 bg-[var(--color-bg-alt)] overflow-hidden"
-      style={{
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.12), rgba(255,255,255,0.12)), url('/react/img/ourvalues.jpg')`,
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat'
-      }}
+      className="section relative py-24 md:py-32 bg-[#F8FAFC] overflow-hidden"
       id="our-values"
-      data-bg="light"
-      data-title="Nilai Perusahaan"
+      data-title="Our Values"
     >
-      {/* Background decor circles */}
-      <div className="absolute top-[-120px] left-[-120px] w-[400px] h-[400px] bg-blue-200/20 blur-[140px] rounded-full -z-10" />
-      <div className="absolute bottom-[-140px] right-[-140px] w-[450px] h-[450px] bg-indigo-200/20 blur-[160px] rounded-full -z-10" />
-
-      {/* Header */}
-      <div className="text-center max-w-3xl mx-auto mb-16 relative z-10">
-        <h2 ref={titleRef} className="text-4xl md:text-5xl font-bold text-[var(--color-teks)] mb-4 font-['Playfair_Display']">
-          Our Values
-        </h2>
-        <div ref={lineRef} className="w-20 h-1 bg-[var(--color-utama)] mx-auto mb-4" />
-        <p ref={subtitleRef} className="text-[var(--color-teks-muted)] text-lg md:text-xl">
-          Nilai-nilai inti yang menjadi fondasi setiap langkah dan keputusan perusahaan kami.
-        </p>
+      {/* WATERMARK TEXT (UKURAN ELEGAN) */}
+      <div ref={textBgRef} className="absolute top-1/2 left-0 -translate-y-1/2 whitespace-nowrap opacity-[0.03] select-none pointer-events-none z-0">
+        <span className="text-[100px] md:text-[130px] font-black uppercase text-blue-900 tracking-tighter">
+          Excellence Trust Synergy Impact Agile
+        </span>
       </div>
 
-      {/* Cards Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto relative z-10">
-        {values.map((item, idx) => (
-          <div
-            key={idx}
-            ref={el => cardsRef.current[idx] = el}
-            className={`relative bg-white rounded-2xl p-8 flex flex-col gap-4 shadow-lg transition-all duration-500 hover:-translate-y-3 hover:scale-105 hover:shadow-2xl cursor-pointer overflow-hidden`}
-          >
-            {/* Custom number badge */}
-            <div className="relative w-14 h-14 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 text-white font-bold text-lg">
-              <span>{item.number}</span>
-              <div className="absolute w-10 h-10 border-2 border-white rounded-full -top-2 -left-2 opacity-30 animate-pulse"></div>
+      {/* MARGIN KIRI KANAN (6% SESUAI ATURANMU) */}
+      <div className="max-w-[1400px] mx-auto px-[6%] relative z-10">
+        
+        {/* HEADER PADAT */}
+        <div className="mb-20 text-center lg:text-left flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+          <div className="max-w-xl">
+            <div className="flex items-center gap-3 mb-4 justify-center lg:justify-start">
+              <div className="w-10 h-[2px] bg-blue-600" />
+              <span className="text-blue-600 font-bold tracking-[0.3em] text-[10px] uppercase">Core Values</span>
             </div>
-
-            {/* Card Content */}
-            <h4 className="text-xl font-bold text-[var(--color-teks)]">{item.title}</h4>
-            <p className="text-[var(--color-teks-muted)] leading-relaxed">{item.desc}</p>
-
-            {/* Subtle accent shape */}
-            <div className="absolute -top-10 -right-10 w-28 h-28 bg-blue-100 rounded-full blur-2xl opacity-30 group-hover:scale-125 transition-all duration-700" />
+            <h2 className="text-4xl md:text-6xl font-['Playfair_Display'] font-black text-slate-900 leading-none tracking-tighter">
+              Our <span className="text-blue-600 italic font-light">Values.</span>
+            </h2>
           </div>
-        ))}
+          <p className="text-slate-500 text-lg font-light max-w-sm lg:border-l-2 lg:border-blue-600 lg:pl-8 leading-relaxed mx-auto lg:mx-0">
+            Prinsip fundamental yang menuntun setiap inovasi di AS Putra Group.
+          </p>
+        </div>
+
+        {/* GRID CARD RAMPING (5 KOLOM) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+          {values.map((item, idx) => (
+            <div
+              key={idx}
+              ref={el => cardsRef.current[idx] = el}
+              className="group relative bg-white p-8 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-500 rounded-sm border-b-2 h-[300px] flex flex-col justify-center text-center items-center overflow-hidden"
+              style={{ borderBottomColor: idx === 0 ? '#2563eb' : idx === 2 ? '#0ea5e9' : '#4f46e5' }}
+            >
+              {/* LARGE BG NUMBER ACCENT */}
+              <span className="absolute top-4 right-4 text-5xl font-black text-slate-50 group-hover:text-blue-50 transition-colors duration-500 select-none">
+                {item.number}
+              </span>
+
+              {/* COLORED BADGE KECIL */}
+              <div className={`w-11 h-11 mb-6 flex items-center justify-center text-white text-[10px] font-bold rounded-full transition-transform duration-700 group-hover:rotate-[360deg] shadow-lg ${item.color}`}>
+                {item.number}
+              </div>
+
+              <h4 className="text-xl font-bold text-slate-950 mb-4 font-['Playfair_Display'] tracking-tight group-hover:text-blue-600 transition-colors duration-300">
+                {item.title}
+              </h4>
+              
+              <p className="text-[11px] text-slate-500 leading-relaxed font-light line-clamp-3 px-2">
+                {item.desc}
+              </p>
+
+              {/* BOTTOM ACCENT */}
+              <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-0 group-hover:w-full transition-all duration-700 ${item.color}`} />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
