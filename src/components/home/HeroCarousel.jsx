@@ -22,10 +22,19 @@ const slides = [
 
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
+  const sectionRef = useRef(null);
   const videoRef = useRef(null);
   const heroRef = useRef(null);
   const contentRef = useRef(null);
   const bgRef = useRef(null);
+  const scrollBtnRef = useRef(null);
+    const scrollToNext = () => {
+      // Mencari section berikutnya setelah hero untuk scroll otomatis
+      const nextSection = sectionRef.current?.nextElementSibling;
+      if (nextSection) {
+        nextSection.scrollIntoView({ behavior: "smooth" });
+      }
+    };
 
   // Carousel auto-play
   useEffect(() => {
@@ -103,7 +112,7 @@ const HeroCarousel = () => {
     <section
       ref={heroRef}
       className="section min-h-screen relative overflow-hidden"
-      id="hero-section"
+      id="hero-section" data-title="AS Putra" data-theme="dark"
     >
       {/* BACKGROUND */}
       <div ref={bgRef} className="absolute inset-0 z-0">
@@ -203,6 +212,59 @@ const HeroCarousel = () => {
           </div>
         </div>
       </div>
+      <button
+        ref={scrollBtnRef}
+        onClick={scrollToNext}
+        className="absolute bottom-12 right-[10%] z-20 hidden lg:flex flex-col items-center gap-2 group cursor-pointer"
+      >
+        {/* Teks Scroll yang lebih besar & berjarak */}
+        <span className="vertical-text text-[11px] font-black uppercase tracking-[0.5em] text-white/40 group-hover:text-[var(--color-utama)] transition-colors duration-500 mb-4">
+          Scroll
+        </span>
+
+        {/* Stack Panah (Tanpa Line) */}
+        <div className="flex flex-col items-center -space-y-2">
+          <svg
+            className="w-8 h-8 text-[var(--color-utama)] animate-arrow-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2.5}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+          <svg
+            className="w-8 h-8 text-[var(--color-utama)] animate-arrow-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2.5}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+          <svg
+            className="w-8 h-8 text-[var(--color-utama)] animate-arrow-3"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2.5}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </div>
+      </button>
     </section>
   );
 };

@@ -1,272 +1,152 @@
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const DEFAULT_DATA = {
+  id: "corporate-stats",
+  title: "Eksistensi Nyata dalam Membangun Bangsa",
+  description: "Sejak didirikan, AS Putra Group konsisten menjaga integritas dan inovasi di setiap lini bisnis, mulai dari ketahanan pangan hingga sektor properti.",
+  statValue: 25, // Gunakan angka murni (Integer) agar bisa dianimasikan
+  statLabel: "Tahun Dedikasi Membangun Kepercayaan",
+  partners: [
+    { name: "Google", url: "https://cdn.simpleicons.org/google/94a3b8" },
+    { name: "Pertamina", url: "https://cdn.simpleicons.org/pertamina/94a3b8" },
+    { name: "Bank Mandiri", url: "https://cdn.simpleicons.org/bankmandiri/94a3b8" },
+    { name: "Toyota", url: "https://cdn.simpleicons.org/toyota/94a3b8" },
+    { name: "Samsung", url: "https://cdn.simpleicons.org/samsung/94a3b8" },
+    { name: "Indofood", url: "https://cdn.simpleicons.org/indofood/94a3b8" },
+  ]
+};
+
 const SecondLayout = ({ data }) => {
+  const displayData = { ...DEFAULT_DATA, ...data };
+  
   const sectionRef = useRef(null);
-  const logoRef = useRef(null);
-  const numberRef = useRef(null);
-  const subtitleRef = useRef(null);
   const titleRef = useRef(null);
   const descRef = useRef(null);
-  const imageRef = useRef(null);
-  const itemsRef = useRef([]);
-  const ctaRef = useRef(null);
-  const parallaxLayersRef = useRef([]);
+  const statsRef = useRef(null);
+  const partnersRef = useRef([]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Logo memanjang animasi
-      gsap.fromTo(logoRef.current, 
-        { scaleX: 0, opacity: 0, rotationX: 90 }, 
-        {
-          scaleX: 1,
-          opacity: 1,
-          rotationX: 0,
-          duration: 1.8,
-          ease: "elastic.out(1, 0.4)",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 90%",
-            end: "bottom 60%",
-            toggleActions: "play none none reverse",
-          }
-        }
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 70%",
+          toggleActions: "play none none reverse",
+        },
+      });
+
+      // 1. Animasi Teks Kiri
+      tl.fromTo([titleRef.current, descRef.current], 
+        { y: 60, opacity: 0 }, 
+        { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power4.out" }
       );
 
-      // Extreme multi-layer parallax
-      parallaxLayersRef.current.forEach((layer, i) => {
-        gsap.to(layer, {
-          y: `-=250`,
-          rotation: i % 2 ? 2 : -2,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: (i + 1) * 0.25,
+      // 2. 🔥 ANIMASI COUNTER (TENGAH)
+      // Kita buat object dummy untuk menampung nilai angka
+      const targetValue = parseInt(displayData.statValue);
+      const cont = { val: 0 };
+
+      tl.to(cont, {
+        val: targetValue,
+        duration: 2,
+        ease: "power3.out",
+        onUpdate: () => {
+          if (statsRef.current) {
+            // Update teks secara manual setiap frame, tambahkan tanda "+" di akhir
+            statsRef.current.innerText = Math.floor(cont.val) + "+";
           }
-        });
-      });
-
-      // Original animations enhanced
-      gsap.fromTo(numberRef.current, { y: 50, opacity: 0 }, {
-        y: 0,
-        opacity: 0.1,
-        duration: 1.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 85%",
-          end: "bottom 70%",
-          toggleActions: "play none none reverse",
         }
-      });
+      }, "-=0.8"); // Mulai sedikit lebih awal sebelum teks kiri selesai
 
-      gsap.fromTo(subtitleRef.current, { y: 20, opacity: 0 }, {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 85%",
-          end: "bottom 70%",
-          toggleActions: "play none none reverse",
-        }
-      });
-
-      gsap.fromTo(titleRef.current, { y: 60, opacity: 0 }, {
-        y: 0,
-        opacity: 1,
-        duration: 0.9,
-        ease: "back.out(0.8)",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 85%",
-          end: "bottom 70%",
-          toggleActions: "play none none reverse",
-        }
-      });
-
-      gsap.fromTo(descRef.current, { y: 30, opacity: 0 }, {
-        y: 0,
-        opacity: 1,
-        duration: 0.7,
-        delay: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 85%",
-          end: "bottom 70%",
-          toggleActions: "play none none reverse",
-        }
-      });
-
-      gsap.fromTo(imageRef.current, { scale: 1.1, opacity: 0 }, {
-        scale: 1,
-        opacity: 1,
-        duration: 1.4,
-        delay: 0.3,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 85%",
-          end: "bottom 70%",
-          toggleActions: "play none none reverse",
-        }
-      });
-
-      gsap.fromTo(itemsRef.current, { y: 40, opacity: 0, scale: 0.95 }, {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        stagger: 0.12,
-        duration: 0.7,
-        delay: 0.5,
-        ease: "back.out(0.8)",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 85%",
-          end: "bottom 70%",
-          toggleActions: "play none none reverse",
-        }
-      });
-
-      gsap.fromTo(ctaRef.current, { y: 20, opacity: 0 }, {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        delay: 0.7,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 85%",
-          end: "bottom 70%",
-          toggleActions: "play none none reverse",
-        }
-      });
-
+      // 3. Animasi Logo Partner (Kanan)
+      tl.fromTo(partnersRef.current, 
+        { scale: 0.8, opacity: 0, y: 20 }, 
+        { scale: 1, opacity: 1, duration: 0.6, stagger: 0.1, ease: "back.out(1.7)" }, 
+        "-=1.2"
+      );
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [displayData]);
 
   return (
-    <section 
+    <section
       ref={sectionRef}
-      className="section relative overflow-hidden bg-gradient-to-br from-amber-50 via-white to-orange-50 min-h-screen"
-      id={data.id}
+      className="section min-h-screen flex items-center py-32 px-[5%] bg-[#fcfcfc] relative overflow-hidden"
+      id={displayData.id}
+      data-theme="light"
     >
-      {/* Extreme Parallax Background Layers */}
-      <div ref={el => parallaxLayersRef.current[0] = el} className="absolute inset-0">
-        <div className="absolute top-[-20%] left-[-20%] w-[140%] h-[140%] bg-gradient-to-br from-[var(--color-utama)]/5 to-transparent rounded-full blur-3xl"></div>
-      </div>
-      <div ref={el => parallaxLayersRef.current[1] = el} className="absolute inset-0">
-        <div className="absolute bottom-[-10%] right-[-10%] w-[120%] h-[120%] bg-[var(--color-utama)]/3 rounded-full blur-2xl rotate-12"></div>
+      {/* BACKGROUND DECORATION */}
+      <div className="absolute inset-0 opacity-[0.04] pointer-events-none">
+        <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[var(--color-utama)] rounded-full blur-[180px]" />
+        <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-slate-500 rounded-full blur-[150px]" />
       </div>
 
-      {/* Pattern */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 25px 25px, var(--color-utama) 2px, transparent 2px)', backgroundSize: '50px 50px' }}></div>
-
-      {/* Logo Section */}
-      <div className="relative z-20 text-center py-16">
-        <div ref={logoRef} className="inline-block mx-auto mb-10">
-          <svg className="w-36 h-20 md:w-52 md:h-28 fill-current text-[var(--color-utama)] drop-shadow-xl" viewBox="0 0 220 90">
-            <rect className="w-full h-full rx='16' ry='16'" fill="currentColor" stroke="rgba(255,255,255,0.3)" strokeWidth="2"/>
-            <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" className="font-bold text-2xl md:text-3xl fill-white drop-shadow-2xl tracking-[0.1em]">AS PUTRA</text>
-            <circle cx="20" cy="20" r="8" fill="rgba(255,255,255,0.4)" />
-            <circle cx="200" cy="70" r="6" fill="rgba(255,255,255,0.3)" />
-          </svg>
-        </div>
-        <div className="text-[var(--color-utama)] font-semibold text-lg md:text-xl tracking-wide">Trusted Excellence Since 1984</div>
-      </div>
-
-      <div className="relative z-10 max-w-[1400px] mx-auto px-5 py-20">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <div className="w-full relative z-10">
+        <div className="grid lg:grid-cols-3 gap-20 items-stretch">
           
-          {/* Left Image */}
-          <div 
-            ref={imageRef}
-            className="relative group order-2 lg:order-1"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-utama)]/10 to-transparent rounded-3xl blur-xl group-hover:opacity-100 transition-opacity"></div>
-            <div className="relative overflow-hidden rounded-3xl shadow-2xl ring ring-[var(--color-utama)]/20 hover:ring-[var(--color-utama)]/40 transition-all duration-500">
-              <img src={data.image} alt={data.title} className="w-full h-[500px] object-cover transition-all duration-1000 group-hover:scale-110" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent" />
+          {/* KOLOM 1: BRAND STORY */}
+          <div className="flex flex-col justify-center border-b lg:border-b-0 pb-12 lg:pb-0">
+            <div className="inline-block w-fit px-5 py-2 mb-8 text-[11px] font-black tracking-[0.4em] uppercase bg-slate-900 text-white rounded-full">
+              Identity
             </div>
-            <div className="absolute -inset-2 bg-gradient-to-r from-[var(--color-utama)]/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700"></div>
+            <h2 ref={titleRef} className="font-['Playfair_Display'] text-5xl md:text-6xl lg:text-7xl text-slate-900 mb-10 font-bold leading-[1.05]">
+              {displayData.title}
+            </h2>
+            <p ref={descRef} className="text-slate-500 text-xl md:text-2xl leading-relaxed font-light">
+              {displayData.description}
+            </p>
           </div>
 
-          {/* Right Content */}
-          <div className="order-1 lg:order-2 text-center lg:text-left">
-            <div className="relative mb-12">
-              <span 
-                ref={numberRef}
-                className="absolute top-0 -right-16 lg:-right-24 text-[12rem] md:text-[16rem] font-bold text-[var(--color-utama)] opacity-10 pointer-events-none"
-              >
-                {data.number}
-              </span>
-              <span 
-                ref={subtitleRef}
-                className="inline-block px-4 py-1.5 rounded-full bg-gradient-to-r from-[var(--color-utama)]/20 to-[var(--color-utama)]/10 text-[var(--color-utama)] text-sm font-semibold tracking-wider uppercase mb-6"
-              >
-                {data.subtitle}
-              </span>
-              <h2 
-                ref={titleRef}
-                className="font-['Playfair_Display'] text-4xl md:text-5xl lg:text-6xl text-[var(--color-teks)] relative z-10 leading-tight"
-              >
-                {data.title}
-              </h2>
+          {/* KOLOM 2: CENTER PIECE (COUNTER ANIMATION) */}
+          <div className="flex flex-col items-center justify-center py-16 px-10 bg-white shadow-[0_30px_100px_-20px_rgba(0,0,0,0.06)] rounded-[40px] relative">
+            <div className="absolute -top-10 bg-[var(--color-utama)] p-6 rounded-3xl shadow-2xl shadow-[var(--color-utama)]/30">
+              <CurrencyDollarIcon className="w-12 h-12 text-white" />
             </div>
             
-            <p 
-              ref={descRef}
-              className="text-[var(--color-teks-muted)] text-lg leading-relaxed mb-12 max-w-xl"
+            {/* Element ref statsRef ini yang akan diisi angka oleh GSAP */}
+            <div
+              ref={statsRef}
+              className="text-[10rem] md:text-[13rem] font-black text-slate-900 tracking-tighter leading-none"
             >
-              {data.description}
-            </p>
+              0+
+            </div>
+            
+            <div className="text-slate-400 font-bold text-xs uppercase tracking-[0.5em] mt-8 text-center max-w-[200px] leading-loose text-balance">
+              {displayData.statLabel}
+            </div>
+          </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
-              {data.items.map((item, idx) => (
-                <Link
+          {/* KOLOM 3: PARTNERS LOGO GRID */}
+          <div className="flex flex-col justify-center">
+            <div className="mb-8">
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400">Strategic Partners</span>
+                <div className="h-[1px] w-12 bg-[var(--color-utama)] mt-2"></div>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              {displayData.partners?.map((partner, idx) => (
+                <div
                   key={idx}
-                  to={item.link}
-                  ref={el => itemsRef.current[idx] = el}
-                  className="group flex items-center gap-4 p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 hover:border-[var(--color-utama)]/40 hover:shadow-2xl hover:shadow-[var(--color-utama)]/10 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02]"
+                  ref={(el) => (partnersRef.current[idx] = el)}
+                  className="group aspect-square flex items-center justify-center p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-xl hover:shadow-slate-200/50 hover:-translate-y-2 transition-all duration-500"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--color-utama)]/20 group-hover:from-[var(--color-utama)] group-hover:to-white/20 flex items-center justify-center text-xl transition-all duration-500 group-hover:scale-110">
-                    {item.icon}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-white group-hover:text-[var(--color-utama)] transition-all duration-300 text-lg">
-                      {item.title}
-                    </h4>
-                    <p className="text-white/60 group-hover:text-white/80 text-sm">{item.description}</p>
-                  </div>
-                </Link>
+                  <img 
+                    src={partner.url} 
+                    alt={partner.name}
+                    className="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 opacity-60 group-hover:opacity-100 group-hover:scale-110"
+                  />
+                </div>
               ))}
             </div>
-
-            {/* CTA */}
-            {data.cta && (
-              <div ref={ctaRef} className="text-center lg:text-left">
-                <Link 
-                  to={data.cta.link}
-                  className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[var(--color-utama)] to-[var(--color-utama)]/80 text-white font-semibold rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-[var(--color-utama)]/50 hover:-translate-y-2 hover:scale-105 transition-all duration-500 overflow-hidden"
-                >
-                  <span>{data.cta.text}</span>
-                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                  <div className="absolute inset-0 bg-white/20 skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                </Link>
-              </div>
-            )}
+            <p className="mt-10 text-slate-400 text-sm italic font-light">
+              Telah dipercaya oleh berbagai institusi nasional maupun internasional.
+            </p>
           </div>
 
         </div>
@@ -276,4 +156,3 @@ const SecondLayout = ({ data }) => {
 };
 
 export default SecondLayout;
-

@@ -1,67 +1,41 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 const useNavbarTheme = () => {
-  const [textTheme, setTextTheme] = useState('dark');
-
-  const getLuminance = (r, g, b) => (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-
-  const analyzeSection = useCallback((section) => {
-    const bgFlag = section.dataset.bg;
-    if (bgFlag === 'dark') return 'light';
-    if (bgFlag === 'light') return 'dark';
-
-    const style = window.getComputedStyle(section);
-    
-    if (style.backgroundImage !== 'none') return 'light';
-
-    if (style.background.includes('linear-gradient')) return 'light';
-
-    const bgColor = style.backgroundColor;
-    const rgbMatch = bgColor.match(/\d+/g);
-    if (rgbMatch && rgbMatch.length >= 3) {
-      const luminance = getLuminance(parseInt(rgbMatch[0]), parseInt(rgbMatch[1]), parseInt(rgbMatch[2]));
-      return luminance < 0.5 ? 'light' : 'dark';
-    }
-
-    return 'dark';
-  }, []);
+  const [theme, setTheme] = useState("dark");
 
   useEffect(() => {
-    const sections = document.querySelectorAll('.section');
-    if (sections.length === 0) return;
+    const handleScroll = () => {
+      const sections = document.querySelectorAll(".section");
+      const scrollPosition = window.scrollY + 70; // 70px adalah offset (kira-kira tinggi navbar)
 
-    let rafId = null;
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
 
-    const updateTheme = () => {
-      const scrollY = window.scrollY;
-      let currentSectionIndex = 0;
-
-      for (let i = 0; i < sections.length; i++) {
-        const section = sections[i];
-        const nextSection = sections[i + 1];
-        const sectionEnd = nextSection ? nextSection.offsetTop : Infinity;
-        if (scrollY >= section.offsetTop - 100 && scrollY < sectionEnd) {
-          currentSectionIndex = i;
-          break;
+        // Jika posisi scroll kita berada di dalam rentang section ini
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+          const sectionTheme = section.getAttribute("data-theme");
+          if (sectionTheme) {
+            setTheme(sectionTheme);
+          }
         }
-      }
-
-      const currentSection = sections[currentSectionIndex];
-      const newTheme = analyzeSection(currentSection);
-      setTextTheme(newTheme);
-
-      rafId = requestAnimationFrame(updateTheme);
+      });
     };
 
-    requestAnimationFrame(updateTheme);
+    // Jalankan saat scroll & resize
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll);
+    
+    // Jalankan sekali saat load untuk deteksi posisi awal
+    handleScroll();
 
     return () => {
-      if (rafId) cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
-  }, [analyzeSection]);
+  }, []);
 
-  return textTheme;
+  return theme;
 };
 
 export default useNavbarTheme;
-

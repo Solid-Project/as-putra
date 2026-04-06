@@ -1,0 +1,123 @@
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { 
+  CurrencyDollarIcon, 
+  GlobeAsiaAustraliaIcon 
+} from "@heroicons/react/24/outline";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const SixLayout = () => {
+  const sectionRef = useRef(null);
+  const leftColRef = useRef(null);
+  const midColRef = useRef(null);
+  const rightColRef = useRef(null);
+  const statsRefs = useRef([]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 75%",
+          toggleActions: "play none none reverse",
+        },
+      });
+
+      // 1. Animasi Kolom Kiri
+      tl.fromTo(leftColRef.current, 
+        { opacity: 0, x: -30 }, 
+        { opacity: 1, x: 0, duration: 1, ease: "power3.out" }
+      );
+
+      // 2. Animasi Kolom Tengah (Counter)
+      const statsData = [124.5, 5.345];
+      statsData.forEach((target, idx) => {
+        const obj = { val: 0 };
+        tl.to(obj, {
+          val: target,
+          duration: 2,
+          ease: "power2.out",
+          onUpdate: () => {
+            if (statsRefs.current[idx]) {
+              statsRefs.current[idx].innerText = obj.val.toLocaleString("id-ID", {
+                minimumFractionDigits: 1,
+                maximumFractionDigits: 3,
+              });
+            }
+          }
+        }, "-=0.8");
+      });
+
+      // 3. Animasi Kolom Kanan (Logo Stagger)
+      tl.fromTo(rightColRef.current.children,
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.6, stagger: 0.2, ease: "back.out(1.7)" },
+        "-=1.5"
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="section min-h-screen flex items-center bg-[#F8FAFC] py-24 px-[5%] relative overflow-hidden"
+      id="six-layout"
+      data-theme="light"
+    >
+      <div className="w-full grid lg:grid-cols-3 items-stretch relative">
+        
+        {/* KOLOM 1: NARASI (KIRI) */}
+        <div ref={leftColRef} className="flex items-center pr-12 lg:pr-20 py-10">
+          <p className="font-['Playfair_Display'] text-2xl md:text-3xl text-slate-800 leading-relaxed italic border-blue-600">
+            "Sebagai salah satu grup usaha terbesar di Indonesia, AS Putra terus berkomitmen menghadirkan fasilitas modern, laboratorium teknologi terkini, serta investasi berkelanjutan demi masa depan industri nasional."
+          </p>
+        </div>
+
+        {/* KOLOM 2: STATISTIK (TENGAH) */}
+        <div ref={midColRef} className="flex flex-col justify-center gap-20 px-12 lg:px-20 py-10 border-y lg:border-y-0 lg:border-x border-slate-200 relative">
+          {/* Garis pemisah halus */}
+          <div className="flex flex-col gap-4">
+            <CurrencyDollarIcon className="w-10 h-10 text-blue-600/60" />
+            <div className="flex items-baseline gap-2">
+              <span ref={(el) => (statsRefs.current[0] = el)} className="text-6xl md:text-7xl font-['Playfair_Display'] font-bold text-slate-900">0</span>
+              <span className="text-xl font-bold text-slate-900">Miliar</span>
+            </div>
+            <p className="text-sm uppercase tracking-[0.2em] text-slate-400 font-bold">Omset Tahunan Grup</p>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <GlobeAsiaAustraliaIcon className="w-10 h-10 text-blue-600/60" />
+            <div className="flex items-baseline gap-2">
+              <span ref={(el) => (statsRefs.current[1] = el)} className="text-6xl md:text-7xl font-['Playfair_Display'] font-bold text-slate-900">0</span>
+              <span className="text-xl font-bold text-slate-900">Juta</span>
+            </div>
+            <p className="text-sm uppercase tracking-[0.2em] text-slate-400 font-bold">Volume Ekspor Global</p>
+          </div>
+        </div>
+
+        {/* KOLOM 3: LOGO PARTNER / UNIT (KANAN) */}
+        <div ref={rightColRef} className="flex flex-col justify-center items-center gap-16 pl-12 lg:pl-20 py-10">
+          {/* Contoh Logo Unit Bisnis (Ganti src dengan logo asli) */}
+          <div className="w-32 h-32 grayscale hover:grayscale-0 transition-all duration-500 flex items-center justify-center border border-slate-100 rounded-full bg-white shadow-sm hover:shadow-xl p-4">
+            <img src="https://cdn.simpleicons.org/blueprint/1e293b" alt="Unit 1" className="w-full object-contain" />
+          </div>
+          
+          <div className="w-28 h-28 grayscale hover:grayscale-0 transition-all duration-500 flex items-center justify-center border border-slate-100 rounded-full bg-white shadow-sm hover:shadow-xl p-6">
+            <img src="https://cdn.simpleicons.org/probot/1e293b" alt="Unit 2" className="w-full object-contain" />
+          </div>
+
+          <div className="w-40 h-16 grayscale hover:grayscale-0 transition-all duration-500 flex items-center justify-center">
+             <span className="font-black text-2xl tracking-tighter text-slate-300 group-hover:text-blue-900 transition-colors">AS PUTRA</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+};
+
+export default SixLayout;

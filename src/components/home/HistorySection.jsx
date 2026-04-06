@@ -120,7 +120,7 @@ const HistorySection = () => {
     <section
       ref={sectionRef}
       className="section min-h-screen relative bg-gradient-to-b from-white to-gray-50 py-24 px-5 z-20 overflow-hidden"
-      id="history-section"
+      id="history-section" data-theme="light" data-title="Sejarah Kami"
     >
       {/* Decorative Background Element */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--color-utama)]/5 rounded-full blur-3xl -z-10"></div>

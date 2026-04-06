@@ -5,7 +5,7 @@ import WhyJoin from '@/components/career/WhyJoin';
 import useFullpageSnap from '@/hooks/useFullpageSnap';
 
 const CareerPage = () => {
-  useFullpageSnap();
+  useFullpageSnap({ enabled: true });
 
   return (
     <main className="overflow-x-hidden">

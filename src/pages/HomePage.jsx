@@ -6,16 +6,10 @@ import CultureSection from "@/components/home/CultureSection";
 import StatsSection from "@/components/home/StatsSection";
 import SectorStrip from "@/components/home/SectorStrip";
 import NewsTeaser from "@/components/home/NewsTeaser";
-import useLenisScroll from "@/hooks/useLenisScroll";
+import useFullpageSnap from "@/hooks/useFullpageSnap";
 
 const HomePage = () => {
-  useLenisScroll({
-    enabled: true,
-    snapEnabled: true,
-    sectionSelector: ".section",
-    snapDuration: 0.35,      // Cepat dan responsif
-    wheelThreshold: 15,       // Scroll sedikit langsung pindah
-  });
+    useFullpageSnap({ enabled: true });
 
   return (
     <main className="relative">

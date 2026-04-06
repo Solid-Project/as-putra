@@ -117,8 +117,8 @@ const CultureSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="section min-h-screen bg-[var(--color-bg-alt)] py-20 px-5"
-      id="culture-section"
+      className="section py-12 md:py-16 bg-white px-[5%]"
+      id="culture-section" data-title="Budaya Kami" data-theme="light"
     >
       <div className="text-center mb-16">
         <h2

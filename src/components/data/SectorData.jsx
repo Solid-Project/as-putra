@@ -6,7 +6,7 @@ export const sectorData = [
     title: 'Peternakan',
     subtitle: 'Pilar Utama Ketahanan Pangan',
     description: 'Fokus utama kami dalam mendukung ketahanan pangan melalui manajemen peternakan terintegrasi. Dengan teknologi modern dan kemitraan yang kuat, kami menghadirkan produk unggas berkualitas tinggi yang memenuhi standar nasional.',
-    image: '/img/peternakan.JPG',
+    image: '/react/img/peternakan.JPG',
     layout: 'layout1',
     order: 1,
     items: [

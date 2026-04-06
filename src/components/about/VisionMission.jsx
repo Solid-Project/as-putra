@@ -7,89 +7,72 @@ gsap.registerPlugin(ScrollTrigger);
 
 const VisionMission = () => {
   const sectionRef = useRef(null);
-  const cardsRef = useRef([]);
+  const leftRef = useRef(null);
+  const rightRef = useRef(null);
+  const bgRef = useRef(null);
+  const lineRef = useRef(null);
+  const glowRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      
-      // 🔥 ANIMASI CARD UTAMA - DIPERBAIKI
-      gsap.fromTo(cardsRef.current,
-        { y: 50, opacity: 0, scale: 0.95 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          stagger: 0.2,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 85%',              // DARI "top 80%" JADI "top 85%"
-            end: 'bottom 70%',             // TAMBAHKAN end
-            toggleActions: 'play none none reverse', // DARI "play reverse play reverse"
-            immediateRender: false,
-            invalidateOnRefresh: true
-          }
+
+      // fade in content
+      gsap.from(leftRef.current, {
+        y: 60,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
         }
-      );
+      });
 
-      // 🔥 ANIMASI ELEMEN DALAM CARD - DIPERBAIKI
-      cardsRef.current.forEach(card => {
-        const title = card.querySelector('h3');
-        const label = card.querySelector('span');
-        const listItems = card.querySelectorAll('li');
-
-        if (title) {
-          gsap.from(title, {
-            y: 20,
-            opacity: 0,
-            duration: 0.7,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 85%',            // DARI "top 90%" JADI "top 85%"
-              end: 'bottom 70%',           // TAMBAHKAN end
-              toggleActions: 'play none none reverse',
-              immediateRender: false,
-              invalidateOnRefresh: true
-            }
-          });
+      gsap.from(rightRef.current, {
+        y: 60,
+        opacity: 0,
+        duration: 1,
+        delay: 0.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
         }
+      });
 
-        if (label) {
-          gsap.from(label, {
-            y: -10,
-            opacity: 0,
-            duration: 0.6,
-            delay: 0.15,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 85%',
-              end: 'bottom 70%',
-              toggleActions: 'play none none reverse',
-              immediateRender: false,
-              invalidateOnRefresh: true
-            }
-          });
+      // parallax background
+      gsap.to(bgRef.current, {
+        yPercent: -10,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
         }
+      });
 
-        if (listItems.length > 0) {
-          gsap.from(listItems, {
-            y: 20,
-            opacity: 0,
-            stagger: 0.1,
-            duration: 0.5,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 85%',
-              end: 'bottom 70%',
-              toggleActions: 'play none none reverse',
-              immediateRender: false,
-              invalidateOnRefresh: true
-            }
-          });
+      // parallax line grid
+      gsap.to(lineRef.current, {
+        yPercent: -5,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        }
+      });
+
+      // parallax glow blur
+      gsap.to(glowRef.current, {
+        yPercent: -7,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
         }
       });
 
@@ -99,71 +82,103 @@ const VisionMission = () => {
   }, []);
 
   return (
-    <section 
-      ref={sectionRef} 
-      className="section no-snap py-20 px-5 bg-white"
-      id="vision-mission"
+    <section
+      ref={sectionRef}
+      className="section relative min-h-screen flex items-center px-6 md:px-12 overflow-hidden"
+      style={{ 
+        backgroundImage:`linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('/react/img/mission.jpg')`,
+        backgroundPosition:`center`,
+        backgroundSize:`cover`
+       }}
+       data-title="Visi & Misi"
+       data-theme="light"
     >
-      <div className="text-center mb-12">
-        <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl text-[var(--color-teks)] mb-4">
-          Visi & Misi
-        </h2>
-        <div className="w-16 h-0.5 bg-[var(--color-utama)] mx-auto"></div>
-        <p className="text-[var(--color-teks-muted)] mt-4 max-w-[600px] mx-auto">
-          Arahan strategis yang menjadi fondasi perjalanan AS PUTRA Group
-        </p>
+      {/* 🔥 BACKGROUND IMAGE + OVERLAY */}
+      <div ref={bgRef} className="absolute inset-0 -z-20">
+        <img
+          src="@/img/mission.jpg"
+          alt="background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/40 to-white/30" />
       </div>
 
-      <div className="max-w-[900px] mx-auto flex flex-col gap-8">
-        {/* Vision Card */}
-        <div
-          ref={el => cardsRef.current[0] = el}
-          className="relative bg-[var(--color-bg-alt)] border border-gray-100 rounded-2xl p-8 md:p-12 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer"
-        >
-          <span className="absolute -top-3 left-8 bg-[var(--color-utama)] text-white text-xs font-bold tracking-wider uppercase px-4 py-1.5 rounded-full shadow-md">
-            Vision
+      {/* 🔥 LINE GRID DECOR */}
+      <div ref={lineRef} className="absolute inset-0 -z-10 opacity-20">
+        <div className="w-full h-full bg-[linear-gradient(to_right,#3b82f6_1px,transparent_1px),linear-gradient(to_bottom,#3b82f6_1px,transparent_1px)] bg-[size:60px_60px]" />
+      </div>
+
+      {/* 🔥 SOFT GLOW BLUR */}
+      <div ref={glowRef} className="absolute inset-0 -z-10">
+        <div className="absolute top-[-120px] left-[-120px] w-[420px] h-[420px] bg-blue-300/30 blur-[140px] rounded-full" />
+        <div className="absolute bottom-[-120px] right-[-120px] w-[420px] h-[420px] bg-indigo-300/30 blur-[140px] rounded-full" />
+      </div>
+
+      {/* 🔥 CONTENT */}
+      <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-16 items-center">
+
+        {/* LEFT SIDE */}
+        <div ref={leftRef} className="space-y-6">
+          <span className="inline-block px-4 py-1 text-xs tracking-widest uppercase bg-blue-100 text-blue-600 rounded-full font-semibold">
+            Vision & Mission
           </span>
-          <h3 className="text-2xl md:text-3xl text-[var(--color-teks)] mb-5 font-['Playfair_Display']">
-            Our Vision
-          </h3>
-          <p className="text-[var(--color-teks-muted)] leading-relaxed text-base md:text-lg">
-            Menjadi ekosistem bisnis terkemuka yang berlandaskan tata kelola terbaik dan inovasi berkelanjutan, untuk menghadirkan kemajuan yang berarti bagi Pelanggan, Mitra, Karyawan, Masyarakat, dan Alam.
+
+          <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 leading-tight">
+            Membangun Masa Depan Bisnis yang Berkelanjutan
+          </h2>
+
+          <p className="text-gray-600 text-lg leading-relaxed">
+            Kami berkomitmen menghadirkan inovasi dan kolaborasi strategis untuk menciptakan ekosistem bisnis yang berdampak luas dan berkelanjutan.
           </p>
+
+          <div className="w-24 h-[3px] bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full" />
         </div>
 
-        {/* Mission Card */}
-        <div
-          ref={el => cardsRef.current[1] = el}
-          className="relative bg-[var(--color-bg-alt)] border border-gray-100 rounded-2xl p-8 md:p-12 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer"
-        >
-          <span className="absolute -top-3 left-8 bg-[var(--color-utama)] text-white text-xs font-bold tracking-wider uppercase px-4 py-1.5 rounded-full shadow-md">
-            Mission
-          </span>
-          <h3 className="text-2xl md:text-3xl text-[var(--color-teks)] mb-5 font-['Playfair_Display']">
-            Misi Kami
-          </h3>
-          <ul className="space-y-4">
-            <li className="pb-4 border-b border-gray-100 last:border-0">
-              <strong className="block text-[var(--color-utama)] mb-1">Saling Terintegrasi</strong>
-              <span className="text-[var(--color-teks-muted)] text-sm">Menyatukan beragam keunggulan untuk hasil terbaik.</span>
-            </li>
-            <li className="pb-4 border-b border-gray-100 last:border-0">
-              <strong className="block text-[var(--color-utama)] mb-1">Adaptif & Inovatif</strong>
-              <span className="text-[var(--color-teks-muted)] text-sm">Mengadopsi inovasi untuk kemajuan berkelanjutan.</span>
-            </li>
-            <li className="pb-4 border-b border-gray-100 last:border-0">
-              <strong className="block text-[var(--color-utama)] mb-1">Bermitra & Terpercaya</strong>
-              <span className="text-[var(--color-teks-muted)] text-sm">Membangun kesuksesan kolaboratif melalui keandalan.</span>
-            </li>
-            <li className="pb-4 border-b border-gray-100 last:border-0">
-              <strong className="block text-[var(--color-utama)] mb-1">Komitmen Bermakna</strong>
-              <span className="text-[var(--color-teks-muted)] text-sm">Pertumbuhan yang berdampak dan bertanggung jawab.</span>
-            </li>
-            <li className="pb-4 border-b border-gray-100 last:border-0">
-              <strong className="block text-[var(--color-utama)] mb-1">Berkelanjutan</strong>
-              <span className="text-[var(--color-teks-muted)] text-sm">Bermanfaat bagi lingkungan dan masyarakat.</span>
-            </li>
-          </ul>
+        {/* RIGHT SIDE */}
+        <div ref={rightRef} className="space-y-8">
+
+          {/* VISION CARD */}
+          <div className="relative group bg-white rounded-2xl p-8 shadow-lg border border-gray-100 overflow-hidden">
+            <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-blue-500 to-indigo-500 rounded-l-2xl" />
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-100 rounded-full blur-2xl opacity-40 group-hover:scale-125 transition duration-700" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">
+              Visi Kami
+            </h3>
+            <p className="text-gray-600 leading-relaxed">
+              Menjadi ekosistem bisnis terkemuka yang berlandaskan tata kelola terbaik dan inovasi berkelanjutan, untuk menghadirkan kemajuan bagi seluruh pemangku kepentingan.
+            </p>
+          </div>
+
+          {/* MISSION CARD */}
+          <div className="relative group bg-white rounded-2xl p-8 shadow-lg border border-gray-100 overflow-hidden">
+            <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-indigo-500 to-blue-500 rounded-l-2xl" />
+            <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-indigo-100 rounded-full blur-2xl opacity-40 group-hover:scale-125 transition duration-700" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-5">
+              Misi Kami
+            </h3>
+            <ul className="space-y-4">
+              {[
+                "Menyatukan keunggulan untuk hasil terbaik",
+                "Berinovasi untuk pertumbuhan berkelanjutan",
+                "Membangun kemitraan yang terpercaya",
+                "Memberikan dampak yang bertanggung jawab",
+                "Berorientasi pada keberlanjutan lingkungan"
+              ].map((item, i) => (
+                <li key={i} className="flex items-start gap-4 group/item">
+                  <div className="relative">
+                    <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 text-white text-sm font-semibold shadow-md">
+                      {i + 1}
+                    </div>
+                    <div className="absolute inset-0 rounded-full bg-blue-400 opacity-20 blur-md group-hover/item:opacity-40 transition" />
+                  </div>
+                  <span className="text-gray-600 leading-relaxed group-hover/item:text-gray-900 transition">
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
         </div>
       </div>
     </section>

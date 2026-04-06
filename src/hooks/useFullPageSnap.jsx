@@ -1,175 +1,131 @@
-// hooks/useFullpageSnap.js
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { useEffect, useRef, useState } from "react";
+import Lenis from "@studio-freight/lenis";
 
-gsap.registerPlugin(ScrollToPlugin);
-
-const useFullpageSnap = (options = {}) => {
-  const {
-    enabled = true,
-    duration = 0.6,
-    ease = "power2.inOut",
-    sectionSelector = ".section",
-  } = options;
-
-  const isScrollingRef = useRef(false);
+const useFullpageSnap = () => {
   const sectionsRef = useRef([]);
+  const isAnimating = useRef(false);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    if (!enabled) return;
+    const lenis = new Lenis({
+      duration: 2.2,
+      easing: (t) => 1 - Math.pow(1 - t, 5),
+      smooth: true,
+      smoothTouch: true
+    });
 
-    const sections = document.querySelectorAll(sectionSelector);
-    if (sections.length === 0) {
-      console.warn(`No elements found with selector: ${sectionSelector}`);
-      return;
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
     }
+    requestAnimationFrame(raf);
 
-    sectionsRef.current = sections;
+    // ambil semua section
+    const getSections = () => {
+      sectionsRef.current = Array.from(
+        document.querySelectorAll(".section")
+      );
+    };
 
-    // Ambil index section yang sedang aktif berdasarkan posisi scroll
-    const getActiveIndex = () => {
-      const scrollY = window.scrollY;
-      const viewportCenter = scrollY + window.innerHeight / 2;
+    // 🔥 ACTIVE SECTION PALING AKURAT (VISIBLE AREA)
+    const getActiveSectionIndex = () => {
+      let maxVisible = 0;
+      let index = 0;
 
-      let activeIndex = 0;
-      let minDistance = Infinity;
+      sectionsRef.current.forEach((section, i) => {
+        const rect = section.getBoundingClientRect();
 
-      sections.forEach((section, idx) => {
-        const sectionTop = section.offsetTop;
-        const sectionBottom = sectionTop + section.offsetHeight;
-        const sectionCenter = (sectionTop + sectionBottom) / 2;
-        const distance = Math.abs(viewportCenter - sectionCenter);
+        const visibleTop = Math.max(rect.top, 0);
+        const visibleBottom = Math.min(
+          rect.bottom,
+          window.innerHeight
+        );
 
-        if (distance < minDistance) {
-          minDistance = distance;
-          activeIndex = idx;
+        const visibleHeight = Math.max(
+          0,
+          visibleBottom - visibleTop
+        );
+
+        if (visibleHeight > maxVisible + 10) {
+          maxVisible = visibleHeight;
+          index = i;
         }
       });
 
-      console.log("Active index:", activeIndex, "ScrollY:", scrollY); // debug
-      return activeIndex;
+      return index;
     };
 
-    const scrollToSection = (index) => {
-      if (isScrollingRef.current) return;
-      if (index < 0 || index >= sections.length) return;
+    // update active index (sinkron dengan Lenis)
+    const updateActive = () => {
+      const index = getActiveSectionIndex();
+      setActiveIndex((prev) =>
+        prev === index ? prev : index
+      );
+    };
 
-      const targetSection = sections[index];
-      if (!targetSection) return;
+    // scroll ke section
+    const scrollToIndex = (index) => {
+      if (index < 0 || index >= sectionsRef.current.length)
+        return;
 
-      console.log("Scrolling to index:", index);
-      isScrollingRef.current = true;
+      isAnimating.current = true;
 
-      gsap.to(window, {
-        duration: duration,
-        scrollTo: {
-          y: targetSection.offsetTop,
-          autoKill: false,
-        },
-        ease: ease,
-        onComplete: () => {
-          isScrollingRef.current = false;
-          console.log("Scroll complete at index:", getActiveIndex());
-        },
-        onUpdate: () => {
-          // Optional: log progress
-        },
+      lenis.scrollTo(sectionsRef.current[index], {
+        duration: 2.2,
+        lock: true
       });
+
+      setTimeout(() => {
+        isAnimating.current = false;
+      }, 1600);
     };
 
-    let wheelTimeout = null;
-    let lastDelta = 0;
-
+    // handle wheel
     const handleWheel = (e) => {
-      // Clear timeout sebelumnya
-      if (wheelTimeout) clearTimeout(wheelTimeout);
+      if (isAnimating.current) return;
+      if (Math.abs(e.deltaY) < 20) return;
 
-      // Akumulasi delta untuk mencegah terlalu sensitif
-      lastDelta += e.deltaY;
+      const direction = e.deltaY > 0 ? 1 : -1;
+      const nextIndex = activeIndex + direction;
 
-      wheelTimeout = setTimeout(() => {
-        lastDelta = 0;
-      }, 200);
-
-      // Cek apakah akumulasi cukup besar (minimal 30px)
-      if (Math.abs(lastDelta) < 30) {
+      if (
+        nextIndex < 0 ||
+        nextIndex >= sectionsRef.current.length
+      )
         return;
-      }
 
-      if (isScrollingRef.current) {
-        e.preventDefault();
-        return;
-      }
+      scrollToIndex(nextIndex);
+    };
 
-      const activeIndex = getActiveIndex();
-      console.log("Wheel - activeIndex:", activeIndex, "lastDelta:", lastDelta);
+    // keyboard
+    const handleKey = (e) => {
+      if (isAnimating.current) return;
 
-      // Scroll ke bawah
-      if (lastDelta > 0 && activeIndex < sections.length - 1) {
-        e.preventDefault();
-        scrollToSection(activeIndex + 1);
-        lastDelta = 0;
-      }
-      // Scroll ke atas
-      else if (lastDelta < 0 && activeIndex > 0) {
-        e.preventDefault();
-        scrollToSection(activeIndex - 1);
-        lastDelta = 0;
+      if (e.key === "ArrowDown") {
+        scrollToIndex(activeIndex + 1);
+      } else if (e.key === "ArrowUp") {
+        scrollToIndex(activeIndex - 1);
       }
     };
 
-    // Keyboard handler
-    const handleKeyDown = (e) => {
-      if (isScrollingRef.current) return;
+    setTimeout(() => {
+      getSections();
+      updateActive();
+    }, 100);
 
-      const activeIndex = getActiveIndex();
+    lenis.on("scroll", updateActive);
 
-      if (e.key === "ArrowDown" && activeIndex < sections.length - 1) {
-        e.preventDefault();
-        scrollToSection(activeIndex + 1);
-      } else if (e.key === "ArrowUp" && activeIndex > 0) {
-        e.preventDefault();
-        scrollToSection(activeIndex - 1);
-      }
-    };
-
-    // Touch handler untuk mobile
-    let touchStartY = 0;
-    const handleTouchStart = (e) => {
-      touchStartY = e.touches[0].clientY;
-    };
-
-    const handleTouchEnd = (e) => {
-      if (isScrollingRef.current) return;
-
-      const touchEndY = e.changedTouches[0].clientY;
-      const diff = touchStartY - touchEndY;
-      
-      if (Math.abs(diff) < 50) return;
-      
-      const activeIndex = getActiveIndex();
-
-      if (diff > 0 && activeIndex < sections.length - 1) {
-        scrollToSection(activeIndex + 1);
-      } else if (diff < 0 && activeIndex > 0) {
-        scrollToSection(activeIndex - 1);
-      }
-    };
-
-    window.addEventListener("wheel", handleWheel, { passive: false });
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("touchstart", handleTouchStart);
-    window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener("wheel", handleWheel);
+    window.addEventListener("keydown", handleKey);
 
     return () => {
-      if (wheelTimeout) clearTimeout(wheelTimeout);
       window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("keydown", handleKey);
+      lenis.destroy();
     };
-  }, [enabled, duration, ease, sectionSelector]);
+  }, [activeIndex]);
+
+  return { activeIndex };
 };
 
 export default useFullpageSnap;

@@ -83,6 +83,8 @@ const HistoryTimeline = () => {
       ref={sectionRef} 
       className="section no-snap py-20 px-5 bg-white"
       id="history-timeline"
+      data-title="Sejarah Perusahaan"
+      data-bg="light"
     >
       <div className="text-center mb-12">
         <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl text-[var(--color-teks)] mb-4">
