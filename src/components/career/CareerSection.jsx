@@ -64,7 +64,7 @@ const CareerSection = () => {
       ref={sectionRef} 
       className="section no-snap py-20 px-5 bg-white"  // ← KUNCI: tambah "no-snap"
       id="career-section"
-      data-title="Karir"
+      data-title="Jenjang Karir"
       data-theme="light"
     >
       <div className="max-w-[1200px] mx-auto">
