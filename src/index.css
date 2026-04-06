@@ -125,3 +125,8 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+/* Efek Meleleh */
+.gooey-filter {
+  filter: url("#goo");
+  transition: filter 0.5s ease; /* Transisi halus saat filter aktif/mati */
+}

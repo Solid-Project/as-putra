@@ -1,9 +1,6 @@
-// src/components/layouts/FourthLayout.jsx
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-// Import gambar kantor/talenta AS Putra kamu (Sesuaikan path-nya)
 import officeTalentImg from "@/assets/img/prop2.jpeg";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -12,44 +9,65 @@ const FourthLayout = () => {
   const sectionRef = useRef(null);
   const textGroupRef = useRef(null);
   const imageFrameRef = useRef(null);
+  const innerImgRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. Animasi Teks (Stagger dari kiri)
-      gsap.fromTo(
-        textGroupRef.current.children,
-        { x: -50, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 1,
-          stagger: 0.3,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 70%",
-            toggleActions: "play none none reverse",
-          },
+      
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom", 
+          end: "bottom top",   
+          scrub: 1.2,          
         }
+      });
+
+      // --- LOGIKA PARALLAX RAPAT (REFINED) ---
+      // Kita gunakan offset pixel (150px) agar tidak terlalu jauh ke kiri/kanan
+      
+      // 1. TEKS: Dari -150px -> 0 (Rapi) -> -150px
+      tl.fromTo(textGroupRef.current, 
+        { x: -150, opacity: 0 }, 
+        { 
+          x: 0, // POSISI SEMPURNA SEJAJAR MARGIN 6%
+          opacity: 1, 
+          ease: "power1.inOut",
+          duration: 0.5 
+        }
+      ).to(textGroupRef.current, {
+        x: -150, 
+        opacity: 0,
+        ease: "power1.inOut",
+        duration: 0.5
+      });
+
+      // 2. IMAGE FRAME: Dari 150px -> 0 (Rapi) -> 150px
+      tl.fromTo(imageFrameRef.current, 
+        { x: 150, opacity: 0, rotation: 3 }, 
+        { 
+          x: 0, // POSISI SEMPURNA SEJAJAR MARGIN 6%
+          opacity: 1, 
+          rotation: 0,
+          ease: "power1.inOut",
+          duration: 0.5 
+        }, 
+        0 
+      ).to(imageFrameRef.current, {
+        x: 150, 
+        opacity: 0,
+        rotation: -3,
+        ease: "power1.inOut",
+        duration: 0.5
+      }, 0.5);
+
+      // 3. INTERNAL IMAGE PARALLAX (Vertikal tetap ada biar hidup)
+      tl.fromTo(innerImgRef.current, 
+        { y: -30 }, 
+        { y: 30, ease: "none", duration: 1 },
+        0
       );
 
-      // 2. Animasi Frame Gambar (Masuk dari kanan dengan rotasi tipis)
-      gsap.fromTo(
-        imageFrameRef.current,
-        { x: 100, opacity: 0, rotation: 5 },
-        {
-          x: 0,
-          opacity: 1,
-          rotation: 0,
-          duration: 1.2,
-          ease: "back.out(1.5)",
-          delay: 0.3,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 70%",
-          },
-        }
-      );
     }, sectionRef);
 
     return () => ctx.revert();
@@ -58,55 +76,41 @@ const FourthLayout = () => {
   return (
     <section
       ref={sectionRef}
-      className="section min-h-screen flex items-center py-24 px-[5%] bg-[#fcfcfc] relative overflow-hidden"
+      className="section min-h-screen flex items-center py-24 px-[6%] bg-[#fcfcfc] relative overflow-hidden"
       id="fourth-layout"
-      data-theme="light" // Agar navbar hitam di section terang ini
     >
-      {/* Container Full-Layout (z-10 agar di atas background decoration) */}
-      <div className="w-full relative z-10">
-        <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-center">
+      <div className="w-full relative z-10 mx-auto">
+        <div className="grid lg:grid-cols-12 gap-16 lg:gap-24 items-center">
           
-          {/* KOLOM KIRI: TEKS (GROUPED FOR GSAP) */}
-          <div ref={textGroupRef} className="flex flex-col gap-16">
-            
-            {/* Blok Teks 1 */}
-            <div className="flex flex-col gap-6">
-              <h2 className="font-['Playfair_Display'] text-4xl md:text-5xl lg:text-6xl text-slate-900 font-bold leading-[1.1]">
+          {/* KOLOM KIRI: TEKS */}
+          <div ref={textGroupRef} className="lg:col-span-6 flex flex-col gap-12 order-1">
+            <div className="max-w-xl">
+              <span className="text-[var(--color-utama)] font-bold tracking-[0.3em] text-[10px] uppercase block mb-6">
+                Growth Commitment
+              </span>
+              <h2 className="font-['Playfair_Display'] text-5xl md:text-6xl lg:text-7xl text-slate-900 font-bold leading-[1.1] tracking-tighter mb-8">
                 AS Putra Group: Komitmen Pertumbuhan
               </h2>
-              <p className="text-slate-600 text-lg md:text-xl leading-relaxed font-light">
+              <div className="w-20 h-1.5 bg-[var(--color-utama)] mb-10"></div>
+              <p className="text-slate-600 text-lg md:text-xl leading-relaxed font-light border-l-2 border-slate-100 pl-8">
                 AS Putra Group berkomitmen untuk menyediakan peluang pengembangan dan
-                karir bagi setiap talenta. Dengan basis operasional yang luas di 10 sektor
-                dan 7 wilayah di Indonesia, kami berperan dalam menyediakan lapangan
-                kerja berkualitas.
-              </p>
-            </div>
-
-            {/* Blok Teks 2 */}
-            <div className="flex flex-col gap-6">
-              <h3 className="text-3xl md:text-4xl text-slate-900 font-bold tracking-tight">
-                Peluang & Sektor Strategis
-              </h3>
-              <p className="text-slate-600 text-lg leading-relaxed font-light">
-                Kami melihat peluang besar dalam pengembangan bisnis berkelanjutan dan inovasi.
-                Dengan integritas tinggi, AS Putra Group menjalin kemitraan strategis untuk
-                pertumbuhan industri dan ekonomi nasional. Peluang karir kami dapat diikuti
-                melalui akun resmi di [LINK: Karier.net] dan Departemen Sumber Daya
-                Manusia kami.
+                karir bagi setiap talenta di 10 sektor strategis.
               </p>
             </div>
           </div>
 
-          {/* KOLOM KANAN: GAMBAR DENGAN FRAME (GAYA REFERENSI) */}
-          <div className="flex justify-center md:justify-end">
+          {/* KOLOM KANAN: IMAGE */}
+          <div className="lg:col-span-6 flex justify-center lg:justify-end order-2">
             <div
               ref={imageFrameRef}
-              className="relative p-3 bg-white border border-slate-200 shadow-2xl rounded-sm max-w-[500px] w-full aspect-[4/5]"
+              className="relative p-4 bg-white border border-slate-100 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] rounded-sm max-w-[500px] w-full aspect-[4/5] overflow-hidden"
             >
               <img
+                ref={innerImgRef}
                 src={officeTalentImg}
                 alt="AS Putra Group Talents"
-                className="w-full h-full object-cover rounded-sm"
+                className="absolute inset-0 w-full h-[120%] object-cover rounded-sm"
+                style={{ top: '-10%' }}
               />
             </div>
           </div>
