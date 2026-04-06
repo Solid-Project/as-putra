@@ -49,8 +49,14 @@ const NewsTeaser = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="section py-20 px-5 bg-[var(--color-bg-light)]" data-theme="light" data-title="Berita Terbaru">
-      <div className="max-w-[1200px] mx-auto">
+    <section 
+      ref={sectionRef} 
+      // KUNCI: Menambahkan h-screen, min-h-screen, dan flex items-center
+      className="section min-h-screen h-screen flex items-center py-20 px-5 bg-[var(--color-bg-light)] overflow-hidden" 
+      data-theme="light" 
+      data-title="Berita Terbaru"
+    >
+      <div className="max-w-[1200px] mx-auto w-full">
         <div className="text-center mb-12">
           <h2 className="font-['Playfair_Display'] text-4xl md:text-5xl font-extrabold mb-4" style={{ color: 'var(--color-teks)' }}>Berita Terbaru</h2>
           <div className="w-24 h-1 mx-auto rounded-full" style={{ backgroundColor: 'var(--color-utama)' }}></div>
@@ -99,7 +105,7 @@ const NewsTeaser = () => {
           ))}
         </div>
 
-        <div className="text-center mt-16">
+        <div className="text-center mt-12"> {/* mt dikecilkan sedikit agar muat di screen */}
           <Link
             to="/news"
             className="inline-block px-12 py-4 font-semibold rounded-full shadow-lg transition-all duration-300 hover:scale-105 hover:-translate-y-1"

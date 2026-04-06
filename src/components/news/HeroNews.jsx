@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import newsBg from '@/assets/img/news.webp';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -85,7 +86,7 @@ const HeroNews = () => {
       ref={sectionRef}
       className="section relative h-screen flex items-center justify-center text-center overflow-hidden"
       style={{
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('/react/img/prop2.jpeg')`,
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url(${newsBg})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}

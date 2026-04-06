@@ -6,9 +6,9 @@ import JobDetailModal from "./JobDetailModal";
 import { 
   BriefcaseIcon, 
   MapPinIcon, 
-  CurrencyDollarIcon,
   AcademicCapIcon,
-  EyeIcon
+  InformationCircleIcon,
+  PaperAirplaneIcon
 } from "@heroicons/react/24/outline";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -18,49 +18,25 @@ const jobOpeningsData = [
     id: 1,
     title: "Farm Manager",
     location: "Kuningan",
-    requirement: "Minimal S1 Peternakan • Pengalaman 5 Tahun",
+    requirement: "S1 Peternakan • Pengalaman 5 Thn",
     type: "Full Time",
     salary: "Competitive",
-    description: "Mengelola seluruh operasional peternakan termasuk perawatan hewan, manajemen pakan, dan koordinasi tim.",
-    responsibilities: [
-      "Mengawasi operasional harian peternakan",
-      "Memastikan kesehatan dan kesejahteraan hewan",
-      "Mengelola stok pakan dan suplemen",
-      "Memimpin tim peternak dan teknisi",
-      "Melakukan evaluasi dan pelaporan rutin"
-    ]
   },
   {
     id: 2,
     title: "Finance Staff",
     location: "Cirebon",
-    requirement: "D3/S1 Akuntansi • Fresh Graduate Welcome",
+    requirement: "D3/S1 Akuntansi • Fresh Graduate",
     type: "Full Time",
     salary: "Competitive",
-    description: "Mengelola transaksi keuangan, pembukuan, dan pelaporan keuangan perusahaan.",
-    responsibilities: [
-      "Mencatat dan merekonsiliasi transaksi keuangan",
-      "Menyusun laporan keuangan bulanan",
-      "Mengelola arus kas dan pembayaran",
-      "Membantu proses audit internal",
-      "Mengelola administrasi perpajakan"
-    ]
   },
   {
     id: 3,
     title: "Hotel Front Office",
     location: "Kuningan",
-    requirement: "Min. SMK Perhotelan • Komunikatif",
+    requirement: "SMK Perhotelan • Komunikatif",
     type: "Full Time",
     salary: "Competitive",
-    description: "Melayani tamu hotel dengan standar pelayanan terbaik untuk pengalaman menginap yang menyenangkan.",
-    responsibilities: [
-      "Menyambut dan melayani tamu dengan ramah",
-      "Melakukan proses check-in dan check-out",
-      "Menangani reservasi dan pertanyaan tamu",
-      "Berkoordinasi dengan departemen lain",
-      "Menangani keluhan tamu dengan profesional"
-    ]
   },
 ];
 
@@ -74,25 +50,22 @@ const CareerJobs = ({ isActive }) => {
     if (!isActive) return;
 
     const ctx = gsap.context(() => {
-      jobsRef.current.forEach((job, index) => {
-        gsap.fromTo(
-          job,
-          { x: -30, opacity: 0 },
-          {
-            x: 0,
-            opacity: 1,
-            duration: 0.6,
-            delay: index * 0.1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: job,
-              start: "top 90%",
-              toggleActions: "play none none reverse",
-              immediateRender: false,
-            },
-          }
-        );
-      });
+      gsap.fromTo(
+        jobsRef.current,
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
     }, sectionRef);
 
     return () => ctx.revert();
@@ -103,75 +76,78 @@ const CareerJobs = ({ isActive }) => {
     setIsModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedJob(null);
-  };
-
   if (!isActive) return null;
 
   return (
-    <div ref={sectionRef}>
+    <div ref={sectionRef} className="py-10">
       <CareerPath />
 
-      <div className="mt-20">
-        {/* Title Section */}
-        <div className="text-center mb-12">
-          <h3 className="font-['Playfair_Display'] text-2xl md:text-3xl font-bold text-[var(--color-teks)] mb-4">
-            Lowongan Kerja Terbaru
+      <div className="mt-24 max-w-5xl mx-auto">
+        {/* Header Section */}
+        <div className="text-center mb-16">
+          <h3 className="font-['Playfair_Display'] text-3xl md:text-4xl font-bold text-[var(--color-teks)] mb-4">
+            Lowongan Terbuka
           </h3>
-          <div className="w-16 h-0.5 bg-[var(--color-utama)] mx-auto mb-4"></div>
-          <p className="text-[var(--color-teks-muted)] max-w-2xl mx-auto">
-            Temukan posisi yang sesuai dengan keahlian Anda dan mulailah karir bersama AS PUTRA
+          <div className="w-12 h-1 bg-[var(--color-utama)] mx-auto mb-6"></div>
+          <p className="text-[var(--color-teks-muted)] max-w-xl mx-auto text-sm md:text-base leading-relaxed">
+            Temukan peluang karir yang tepat dan jadilah bagian dari perjalanan transformasi AS PUTRA.
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto space-y-4">
+        {/* Jobs List */}
+        <div className="grid gap-4">
           {jobOpeningsData.map((job, index) => (
             <div
               key={job.id}
               ref={(el) => (jobsRef.current[index] = el)}
-              className="group bg-[var(--color-bg-alt)] rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
+              className="group relative bg-white border border-gray-100 rounded-2xl p-5 md:p-7 transition-all duration-300 hover:border-[var(--color-utama)]/30 hover:shadow-xl hover:shadow-blue-500/5"
             >
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                
+                {/* Job Info */}
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2 flex-wrap">
-                    <BriefcaseIcon className="w-5 h-5 text-[var(--color-utama)]" />
-                    <h4 className="text-xl font-semibold text-[var(--color-teks)] group-hover:text-[var(--color-utama)] transition-colors duration-300">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="p-2 bg-blue-50 text-[var(--color-utama)] rounded-lg">
+                      <BriefcaseIcon className="w-5 h-5" />
+                    </span>
+                    <h4 className="text-xl font-bold text-[var(--color-teks)] group-hover:text-[var(--color-utama)] transition-colors">
                       {job.title}
                     </h4>
-                    <span className="px-2 py-1 bg-[var(--color-utama)]/10 text-[var(--color-utama)] text-xs rounded-full">
+                    <span className="hidden md:block text-[10px] font-bold uppercase tracking-widest px-2 py-1 bg-gray-100 text-gray-500 rounded">
                       {job.type}
                     </span>
-                    <div className="flex items-center gap-1 text-[var(--color-teks-muted)] text-sm">
-                      <MapPinIcon className="w-4 h-4" />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-6 text-sm text-[var(--color-teks-muted)]">
+                    <div className="flex items-center gap-2">
+                      <MapPinIcon className="w-4 h-4 text-gray-400" />
                       <span>{job.location}</span>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2 text-[var(--color-teks-muted)] text-sm mb-1">
-                    <AcademicCapIcon className="w-4 h-4 text-[var(--color-utama)]" />
-                    <p>{job.requirement}</p>
-                  </div>
-                  <div className="flex items-center gap-2 text-[var(--color-teks-muted)] text-xs">
-                    <CurrencyDollarIcon className="w-4 h-4 text-[var(--color-utama)]" />
-                    <p>{job.salary}</p>
+                    <div className="flex items-center gap-2">
+                      <AcademicCapIcon className="w-4 h-4 text-gray-400" />
+                      <span>{job.requirement}</span>
+                    </div>
                   </div>
                 </div>
-                <div className="flex gap-3">
+
+                {/* Actions */}
+                <div className="flex items-center gap-3 border-t md:border-t-0 pt-4 md:pt-0">
                   <button
                     onClick={() => handleViewDetail(job)}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 border border-[var(--color-utama)] text-[var(--color-utama)] font-medium rounded-lg transition-all duration-300 hover:bg-[var(--color-utama)] hover:text-white"
+                    className="p-3 text-gray-400 hover:text-[var(--color-utama)] hover:bg-blue-50 rounded-xl transition-all"
+                    title="Detail Pekerjaan"
                   >
-                    <EyeIcon className="w-4 h-4" />
-                    <span>Lihat Detail</span>
+                    <InformationCircleIcon className="w-6 h-6" />
                   </button>
+                  
                   <a
-                    href={`mailto:recruitment@asputra.com?subject=Lamaran%20${encodeURIComponent(
-                      job.title
-                    )}`}
-                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-[var(--color-utama)] text-white font-medium rounded-lg transition-all duration-300 hover:bg-opacity-80"
+                    href="https://ig.me/m/ptasputra"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-8 py-3 bg-[var(--color-utama)] text-white text-sm font-bold rounded-xl transition-all duration-300 hover:bg-opacity-90 hover:translate-x-1 shadow-lg shadow-blue-500/20"
                   >
                     <span>Lamar Sekarang</span>
+                    <PaperAirplaneIcon className="w-4 h-4 -rotate-45" />
                   </a>
                 </div>
               </div>
@@ -179,12 +155,14 @@ const CareerJobs = ({ isActive }) => {
           ))}
         </div>
 
-        <div className="text-center mt-8">
+        {/* Footer Info */}
+        <div className="mt-12 text-center p-8 bg-gray-50 rounded-3xl">
           <p className="text-[var(--color-teks-muted)] text-sm">
-            Tidak menemukan posisi yang cocok? Kirimkan CV Anda ke{" "}
+            Posisi yang dicari tidak tersedia? Kami selalu terbuka untuk talenta hebat. <br className="hidden md:block" />
+            Kirimkan CV terbuka Anda ke 
             <a
               href="mailto:recruitment@asputra.com"
-              className="text-[var(--color-utama)] hover:underline transition-colors"
+              className="ml-1 text-[var(--color-utama)] font-bold hover:underline"
             >
               recruitment@asputra.com
             </a>
@@ -192,11 +170,10 @@ const CareerJobs = ({ isActive }) => {
         </div>
       </div>
 
-      {/* Modal Detail Pekerjaan */}
       <JobDetailModal
         job={selectedJob}
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={() => setIsModalOpen(false)}
       />
     </div>
   );

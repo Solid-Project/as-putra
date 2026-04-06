@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import bgOffice from "@/assets/img/property.jpg"; 
+import bgOffice from "@/assets/img/property.webp"; 
 
 gsap.registerPlugin(ScrollTrigger);
 

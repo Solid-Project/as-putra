@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import officeTalentImg from "@/assets/img/prop2.jpeg";
+import officeTalentImg from "@/assets/img/prop2.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,23 +14,25 @@ const FourthLayout = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       
+      // Menggunakan Timeline dengan Pinning agar pas satu layar (min-h-screen)
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top bottom", 
-          end: "bottom top",   
-          scrub: 1.2,          
+          start: "top top",    // Kunci section tepat di atas layar
+          end: "+=150%",       // Durasi scroll untuk menjalankan seluruh paralaks
+          scrub: 1.2,          // Menjaga kehalusan sesuai permintaan Anda
+          pin: true,           // KUNCI: Membuat section tertahan di layar (min-h-screen)
+          invalidateOnRefresh: true,
         }
       });
 
-      // --- LOGIKA PARALLAX RAPAT (REFINED) ---
-      // Kita gunakan offset pixel (150px) agar tidak terlalu jauh ke kiri/kanan
+      // --- LOGIKA PARALLAX ANDA (DIPERTAHANKAN TOTAL) ---
       
-      // 1. TEKS: Dari -150px -> 0 (Rapi) -> -150px
+      // 1. TEKS: Masuk -> Tengah -> Keluar
       tl.fromTo(textGroupRef.current, 
         { x: -150, opacity: 0 }, 
         { 
-          x: 0, // POSISI SEMPURNA SEJAJAR MARGIN 6%
+          x: 0, 
           opacity: 1, 
           ease: "power1.inOut",
           duration: 0.5 
@@ -40,31 +42,31 @@ const FourthLayout = () => {
         opacity: 0,
         ease: "power1.inOut",
         duration: 0.5
-      });
+      }, "+=0.2"); // Beri sedikit jeda di tengah agar enak dibaca
 
-      // 2. IMAGE FRAME: Dari 150px -> 0 (Rapi) -> 150px
+      // 2. IMAGE FRAME: Masuk -> Tengah -> Keluar (DENGAN ROTASI ANDA)
       tl.fromTo(imageFrameRef.current, 
         { x: 150, opacity: 0, rotation: 3 }, 
         { 
-          x: 0, // POSISI SEMPURNA SEJAJAR MARGIN 6%
+          x: 0, 
           opacity: 1, 
           rotation: 0,
           ease: "power1.inOut",
           duration: 0.5 
         }, 
-        0 
+        0 // Mulai bareng teks
       ).to(imageFrameRef.current, {
         x: 150, 
         opacity: 0,
         rotation: -3,
         ease: "power1.inOut",
         duration: 0.5
-      }, 0.5);
+      }, "+=0.2");
 
-      // 3. INTERNAL IMAGE PARALLAX (Vertikal tetap ada biar hidup)
+      // 3. INTERNAL IMAGE PARALLAX (Vertikal tetap hidup)
       tl.fromTo(innerImgRef.current, 
         { y: -30 }, 
-        { y: 30, ease: "none", duration: 1 },
+        { y: 30, ease: "none", duration: 1.2 }, // Durasi disesuaikan dengan total timeline
         0
       );
 
@@ -76,7 +78,8 @@ const FourthLayout = () => {
   return (
     <section
       ref={sectionRef}
-      className="section min-h-screen flex items-center py-24 px-[6%] bg-[#fcfcfc] relative overflow-hidden"
+      // h-screen memastikan section pas satu layar penuh
+      className="section h-screen flex items-center bg-[#fcfcfc] relative overflow-hidden px-[6%]"
       id="fourth-layout"
     >
       <div className="w-full relative z-10 mx-auto">
@@ -109,8 +112,8 @@ const FourthLayout = () => {
                 ref={innerImgRef}
                 src={officeTalentImg}
                 alt="AS Putra Group Talents"
-                className="absolute inset-0 w-full h-[120%] object-cover rounded-sm"
-                style={{ top: '-10%' }}
+                className="absolute inset-0 w-full h-[130%] object-cover rounded-sm"
+                style={{ top: '-15%', willChange: 'transform' }} // willChange untuk performa paralaks internal
               />
             </div>
           </div>

@@ -16,8 +16,8 @@ const slides = [
     type: "image",
     src: "https://plus.unsplash.com/premium_photo-1661930553507-59420df08d82?q=80&w=1074&auto=format&fit=crop",
   },
-  { type: "image", src: "/react/img/prop2.jpeg" },
-  { type: "image", src: "/react/img/hotel2.jpg" },
+  { type: "image", src: "/react/img/prop2.webp" },
+  { type: "image", src: "/react/img/hotel2.webp" },
 ];
 
 const HeroCarousel = () => {
@@ -25,8 +25,11 @@ const HeroCarousel = () => {
   const sectionRef = useRef(null);
   const videoRef = useRef(null);
   const contentRef = useRef(null);
-  const bgRef = useRef(null);
+  const titleRef = useRef(null);
+  const lineRef = useRef(null);
+  const subtitleRef = useRef(null);
   const scrollBtnRef = useRef(null);
+  const bgRef = useRef(null);
 
   const scrollToNext = () => {
     const nextSection = sectionRef.current?.nextElementSibling;
@@ -52,18 +55,66 @@ const HeroCarousel = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      
-      // 1. INITIAL REVEAL (Animasi Masuk)
-      gsap.fromTo(contentRef.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 1.5, ease: "expo.out", delay: 0.5 }
-      );
+      // 1. Animasi Title (Sesuai HeroNews)
+      gsap.fromTo(titleRef.current, { y: 50, opacity: 0 }, {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+          end: "bottom 70%",
+          toggleActions: "play none none reverse",
+          immediateRender: false,
+          invalidateOnRefresh: true
+        }
+      });
 
-      // 2. LIVE PARALLAX: BACKGROUND (Slight Zoom & Drift)
-      // Background bergerak turun sedikit saat di-scroll
+      // 2. Animasi Line (Sesuai HeroNews)
+      gsap.fromTo(lineRef.current, { width: 0 }, {
+        width: 80,
+        duration: 0.6,
+        ease: "back.out(1.2)",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+          end: "bottom 70%",
+          toggleActions: "play none none reverse",
+          immediateRender: false,
+          invalidateOnRefresh: true
+        }
+      });
+
+      // 3. Animasi Subtitle (Sesuai HeroNews)
+      gsap.fromTo(subtitleRef.current, { y: 20, opacity: 0 }, {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+          end: "bottom 70%",
+          toggleActions: "play none none reverse",
+          immediateRender: false,
+          invalidateOnRefresh: true
+        }
+      });
+
+      // 4. Animasi Buttons Stagger (Sesuai HeroNews)
+      gsap.fromTo(contentRef.current.querySelectorAll("a"), { y: 30, opacity: 0 }, {
+        y: 0,
+        opacity: 1,
+        stagger: 0.15,
+        duration: 0.8,
+        ease: "power3.out",
+        delay: 0.6,
+      });
+
+      // 5. Parallax Background
       gsap.to(bgRef.current, {
         yPercent: 15,
-        scale: 1.1,
         ease: "none",
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -72,30 +123,6 @@ const HeroCarousel = () => {
           scrub: true
         }
       });
-
-      // 3. LIVE PARALLAX: CONTENT (Lifting Effect)
-      // Konten bergerak naik lebih cepat (kontras dengan BG)
-      gsap.to(contentRef.current, {
-        y: -100,
-        opacity: 0.5,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true
-        }
-      });
-
-      // 4. FLOATING IDLE (Gerakan melayang halus saat diam)
-      gsap.to(contentRef.current, {
-        y: "-=10",
-        repeat: -1,
-        yoyo: true,
-        duration: 3,
-        ease: "sine.inOut",
-      });
-
     }, sectionRef);
 
     return () => ctx.revert();
@@ -104,10 +131,10 @@ const HeroCarousel = () => {
   return (
     <section
       ref={sectionRef}
-      className="section min-h-screen relative overflow-hidden bg-black"
-      id="hero-section" 
-      data-title="AS Putra" 
+      className="section min-h-screen relative flex items-center justify-center text-center overflow-hidden bg-black"
+      id="hero-section"
       data-theme="dark"
+      data-title="AS Putra"
     >
       {/* BACKGROUND LAYER */}
       <div ref={bgRef} className="absolute inset-0 z-0 scale-110">
@@ -123,9 +150,7 @@ const HeroCarousel = () => {
                 ref={idx === current ? videoRef : null}
                 src={slide.src}
                 poster={slide.poster}
-                muted
-                loop
-                playsInline
+                muted loop autoPlay playsInline
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -134,43 +159,59 @@ const HeroCarousel = () => {
                 style={{ backgroundImage: `url(${slide.src})` }}
               />
             )}
-            {/* Overlay Gradient Premium */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/60" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/50" />
           </div>
         ))}
       </div>
 
       {/* CONTENT LAYER */}
-      <div
-        ref={contentRef}
-        className="relative z-10 h-full flex items-center justify-center text-center px-5 min-h-screen"
-      >
-        <div className="max-w-4xl">
-          <h1 className="font-['Playfair_Display'] text-5xl md:text-7xl lg:text-8xl text-white mb-6 drop-shadow-2xl font-bold leading-[1.1]">
-            Membangun <br /> Masa Depan
-          </h1>
+      <div ref={contentRef} className="relative z-10 px-5">
+        <h1
+          ref={titleRef}
+          className="font-['Playfair_Display'] text-4xl md:text-5xl lg:text-6xl text-white mb-4 drop-shadow-lg leading-[1.1]"
+        >
+          Membangun <br /> Masa Depan
+        </h1>
 
-          <p className="text-white/80 max-w-[650px] mx-auto mb-12 text-lg md:text-xl font-light leading-relaxed">
-            Ekosistem bisnis terintegrasi yang berfokus pada keberlanjutan 
-            dan nilai jangka panjang untuk kemajuan bangsa.
-          </p>
+        <div
+          ref={lineRef}
+          className="h-0.5 bg-[var(--color-utama)] mx-auto mb-10"
+          style={{ width: 0 }}
+        />
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <Link
-              to="/sector"
-              className="group relative px-10 py-4 bg-[var(--color-utama)] text-white font-bold tracking-widest text-[10px] uppercase rounded-full overflow-hidden transition-all duration-500 hover:shadow-[0_20px_40px_rgba(var(--color-utama-rgb),0.3)]"
-            >
-              <span className="relative z-10">Sektor Kami</span>
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-            </Link>
+        <p
+          ref={subtitleRef}
+          className="text-white/95 max-w-[600px] mx-auto mb-10 text-lg leading-relaxed"
+        >
+          Ekosistem bisnis terintegrasi yang berfokus pada keberlanjutan 
+          dan nilai jangka panjang untuk kemajuan bangsa.
+        </p>
 
-            <Link
-              to="/about"
-              className="group relative px-10 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold tracking-widest text-[10px] uppercase rounded-full transition-all duration-500 hover:bg-white hover:text-black"
-            >
+        <div className="flex flex-col sm:flex-row gap-5 justify-center">
+          <Link
+            to="/sector"
+            className="group relative px-8 py-3.5 bg-[var(--color-utama)] text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[var(--color-utama)]/30 hover:-translate-y-0.5"
+          >
+            <span className="relative z-10 flex items-center gap-2">
+              Sektor Kami
+              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </span>
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+          </Link>
+
+          <Link
+            to="/about"
+            className="group relative px-8 py-3.5 bg-white/20 backdrop-blur-sm border border-white/40 text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:bg-white/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-white/20"
+          >
+            <span className="relative z-10 flex items-center gap-2">
               Tentang Kami
-            </Link>
-          </div>
+              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </span>
+          </Link>
         </div>
       </div>
 
@@ -178,20 +219,21 @@ const HeroCarousel = () => {
       <button
         ref={scrollBtnRef}
         onClick={scrollToNext}
-        className="absolute bottom-12 right-[8%] z-20 hidden lg:flex flex-col items-center gap-4 group cursor-pointer"
+        className="absolute bottom-12 right-[10%] z-20 hidden lg:flex flex-col items-center gap-2 group cursor-pointer"
       >
-        <span className="vertical-text text-[10px] font-black uppercase tracking-[0.6em] text-white/30 group-hover:text-[var(--color-utama)] transition-colors duration-500">
+        <span className="vertical-text text-[11px] font-black uppercase tracking-[0.5em] text-white/40 group-hover:text-[var(--color-utama)] transition-colors duration-500 mb-4">
           Scroll
         </span>
-        <div className="flex flex-col items-center -space-y-3">
+
+        <div className="flex flex-col items-center -space-y-2">
           {[1, 2, 3].map((i) => (
             <svg
               key={i}
               className={`w-8 h-8 text-[var(--color-utama)] animate-bounce opacity-${100 - (i * 20)}`}
-              style={{ animationDelay: `${i * 0.2}s` }}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              style={{ animationDelay: `${i * 0.2}s` }}
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
             </svg>

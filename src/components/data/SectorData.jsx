@@ -6,7 +6,7 @@ export const sectorData = [
     title: 'Peternakan',
     subtitle: 'Pilar Utama Ketahanan Pangan',
     description: 'Fokus utama kami dalam mendukung ketahanan pangan melalui manajemen peternakan terintegrasi. Dengan teknologi modern dan kemitraan yang kuat, kami menghadirkan produk unggas berkualitas tinggi yang memenuhi standar nasional.',
-    image: '/react/img/peternakan.JPG',
+    image: '/react/img/peternakan.webp',
     layout: 'layout1',
     order: 1,
     items: [
@@ -26,7 +26,7 @@ export const sectorData = [
     title: 'Hotel & Resort',
     subtitle: 'Luxury Hospitality',
     description: 'Menghadirkan pengalaman menginap yang tak terlupakan dengan layanan prima. Dari hotel bisnis hingga resort eksklusif, kami melayani dengan standar internasional untuk memenuhi kebutuhan tamu modern.',
-    image: '/img/hotel2.jpg',
+    image: '/img/hotel2.webp',
     layout: 'layout2',
     order: 2,
     items: [

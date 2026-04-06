@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import sejarahImg from "@/assets/img/sejarah.png";
+import sejarahImg from "@/assets/img/sejarah.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 

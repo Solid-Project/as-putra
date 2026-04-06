@@ -7,170 +7,91 @@ gsap.registerPlugin(ScrollTrigger);
 
 const HeroCareer = () => {
   const sectionRef = useRef(null);
+  const contentRef = useRef(null);
   const titleRef = useRef(null);
+  const lineRef = useRef(null);
   const subtitleRef = useRef(null);
-  const descriptionRef = useRef(null);
-  const buttonRef = useRef(null);
-  const statsRef = useRef([]);
-  const [displayText, setDisplayText] = useState("");
-  const [isTyping, setIsTyping] = useState(true);
   const scrollBtnRef = useRef(null);
-  
-    const scrollToNext = () => {
-      // Mencari section berikutnya setelah hero untuk scroll otomatis
-      const nextSection = sectionRef.current?.nextElementSibling;
-      if (nextSection) {
-        nextSection.scrollIntoView({ behavior: "smooth" });
-      }
-    };
+  const statsRef = useRef([]);
 
-  const fullText = "Join Our Team";
+  const scrollToNext = () => {
+    const nextSection = sectionRef.current?.nextElementSibling;
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
-  // Typing effect
   useEffect(() => {
-    let currentIndex = 0;
-    let timeoutId;
-
-    const startTyping = () => {
-      currentIndex = 0;
-      setDisplayText("");
-      setIsTyping(true);
-
-      const typingInterval = setInterval(() => {
-        if (currentIndex < fullText.length) {
-          setDisplayText(fullText.slice(0, currentIndex + 1));
-          currentIndex++;
-        } else {
-          clearInterval(typingInterval);
-          setIsTyping(false);
-
-          timeoutId = setTimeout(() => {
-            startTyping();
-          }, 2000);
+    const ctx = gsap.context(() => {
+      // 1. Animasi Title (Sesuai HeroNews)
+      gsap.fromTo(titleRef.current, { y: 50, opacity: 0 }, {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+          end: "bottom 70%",
+          toggleActions: "play none none reverse",
+          immediateRender: false,
+          invalidateOnRefresh: true
         }
-      }, 100);
+      });
 
-      return typingInterval;
-    };
-
-    const interval = startTyping();
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeoutId);
-    };
-  }, []);
-
-  // GSAP animations
-  useEffect(() => {
-    const section = sectionRef.current;
-    const title = titleRef.current;
-    const subtitle = subtitleRef.current;
-    const description = descriptionRef.current;
-    const button = buttonRef.current;
-    const stats = statsRef.current;
-
-    const titleAnim = gsap.fromTo(
-      title,
-      { y: -100, opacity: 0, rotationX: 45 },
-      {
-        y: 0,
-        opacity: 1,
-        rotationX: 0,
-        duration: 1.5,
-        ease: "power3.out",
-        paused: true,
-      }
-    );
-
-    const subtitleAnim = gsap.fromTo(
-      subtitle,
-      { scale: 0.8, opacity: 0 },
-      {
-        scale: 1,
-        opacity: 1,
-        duration: 1.2,
-        delay: 0.3,
+      // 2. Animasi Line (Sesuai HeroNews)
+      gsap.fromTo(lineRef.current, { width: 0 }, {
+        width: 80,
+        duration: 0.6,
         ease: "back.out(1.2)",
-        paused: true,
-      }
-    );
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+          end: "bottom 70%",
+          toggleActions: "play none none reverse",
+          immediateRender: false,
+          invalidateOnRefresh: true
+        }
+      });
 
-    const descriptionAnim = gsap.fromTo(
-      description,
-      { x: -50, opacity: 0 },
-      {
-        x: 0,
-        opacity: 1,
-        duration: 1,
-        delay: 0.6,
-        ease: "power3.out",
-        paused: true,
-      }
-    );
-
-    const buttonAnim = gsap.fromTo(
-      button,
-      { y: 50, opacity: 0, scale: 0.9 },
-      {
+      // 3. Animasi Subtitle (Sesuai HeroNews)
+      gsap.fromTo(subtitleRef.current, { y: 20, opacity: 0 }, {
         y: 0,
         opacity: 1,
-        scale: 1,
-        duration: 1,
-        delay: 0.9,
-        ease: "elastic.out(1, 0.5)",
-        paused: true,
-      }
-    );
+        duration: 0.6,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+          end: "bottom 70%",
+          toggleActions: "play none none reverse",
+          immediateRender: false,
+          invalidateOnRefresh: true
+        }
+      });
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            titleAnim.restart();
-            subtitleAnim.restart();
-            descriptionAnim.restart();
-            buttonAnim.restart();
+      // 4. Animasi Buttons & Stats Stagger
+      gsap.fromTo([contentRef.current.querySelectorAll("a"), statsRef.current], { y: 30, opacity: 0 }, {
+        y: 0,
+        opacity: 1,
+        stagger: 0.1,
+        duration: 0.8,
+        ease: "power3.out",
+        delay: 0.6,
+      });
 
-            stats.forEach((stat, index) => {
-              gsap.fromTo(
-                stat,
-                { y: 30, opacity: 0 },
-                {
-                  y: 0,
-                  opacity: 1,
-                  duration: 0.8,
-                  delay: 1.2 + index * 0.15,
-                  ease: "power3.out",
-                }
-              );
-            });
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
+    }, sectionRef);
 
-    observer.observe(section);
-
-    return () => {
-      observer.disconnect();
-      titleAnim.kill();
-      subtitleAnim.kill();
-      descriptionAnim.kill();
-      buttonAnim.kill();
-    };
+    return () => ctx.revert();
   }, []);
 
-  // Counter animation
+  // Counter animation logic
   useEffect(() => {
     const counters = document.querySelectorAll(".stat-counter");
-
     const animateCounter = (counter) => {
       const target = parseInt(counter.getAttribute("data-target"));
       let current = 0;
       const increment = target / 50;
-
       const updateCounter = () => {
         if (current < target) {
           current += increment;
@@ -180,7 +101,6 @@ const HeroCareer = () => {
           counter.textContent = target;
         }
       };
-
       updateCounter();
     };
 
@@ -197,68 +117,75 @@ const HeroCareer = () => {
     );
 
     counters.forEach((counter) => observer.observe(counter));
-
     return () => observer.disconnect();
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="section hero-section min-h-screen relative flex items-center justify-center py-24 px-5 overflow-hidden"
+      className="section relative h-screen flex items-center justify-center text-center overflow-hidden"
       style={{
-        backgroundImage:
-          "linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('/react/img/team.jpeg')",
-        backgroundPosition: "center",
-        backgroundSize: "cover",
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('/react/img/team.webp')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
       }}
       data-theme="dark"
-      data-title="Banner"
+      data-title="Karir"
     >
-      {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/50" />
-
-      <div className="max-w-[1200px] mx-auto relative z-10 text-center">
-
-        {/* Title */}
-        <h1
+      
+      <div ref={contentRef} className="relative z-10 px-5">
+        <h1 
           ref={titleRef}
-          className="font-['Playfair_Display'] text-4xl md:text-6xl lg:text-7xl text-white mb-6"
+          className="font-['Playfair_Display'] text-4xl md:text-5xl lg:text-6xl text-white mb-4 drop-shadow-lg"
         >
-          Bangun Karir
-          <br />
-          <span className="text-[var(--color-utama)]">
-            Bersama AS PUTRA
-          </span>
+          Bangun Karir <br /> Bersama AS PUTRA
         </h1>
 
-        {/* Description */}
-        <p
-          ref={descriptionRef}
-          className="text-white/80 max-w-2xl mx-auto mb-8"
+        <div 
+          ref={lineRef}
+          className="h-0.5 bg-[var(--color-utama)] mx-auto mb-10"
+          style={{ width: 0 }}
+        />
+
+        <p 
+          ref={subtitleRef}
+          className="text-white/95 max-w-[600px] mx-auto mb-10 text-lg leading-relaxed"
         >
           Bergabunglah dengan tim yang berdedikasi untuk menciptakan dampak
           positif melalui inovasi dan kolaborasi.
         </p>
 
-        {/* Buttons */}
-        <div ref={buttonRef} className="flex gap-4 justify-center mb-16 flex-wrap">
+        {/* Buttons - Identik dengan HeroNews */}
+        <div className="flex flex-col sm:flex-row gap-5 justify-center mb-16">
           <Link
             to="#career-section"
-            className="px-8 py-4 bg-[var(--color-utama)] text-white rounded-full hover:shadow-xl hover:shadow-[var(--color-utama)]/30 transition"
+            className="group relative px-8 py-3.5 bg-[var(--color-utama)] text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[var(--color-utama)]/30 hover:-translate-y-0.5"
           >
-            Lihat Lowongan
+            <span className="relative z-10 flex items-center gap-2">
+              Lihat Lowongan
+              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </span>
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
           </Link>
 
           <Link
             to="/about"
-            className="px-8 py-4 bg-white/20 border border-white/40 text-white rounded-full hover:bg-white/30 transition"
+            className="group relative px-8 py-3.5 bg-white/20 backdrop-blur-sm border border-white/40 text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:bg-white/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-white/20"
           >
-            Tentang Perusahaan
+            <span className="relative z-10 flex items-center gap-2">
+              Tentang Perusahaan
+              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </span>
           </Link>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {/* Stats Grid - Dipertahankan namun dengan styling transparan yang konsisten */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
           {[
             { label: "Karyawan", target: 500 },
             { label: "Tahun", target: 25 },
@@ -268,70 +195,40 @@ const HeroCareer = () => {
             <div
               key={stat.label}
               ref={(el) => (statsRef.current[index] = el)}
-              className="bg-white/20 border border-white/30 rounded-2xl p-6 backdrop-blur-sm hover:bg-white/30 transition"
+              className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 transition-all hover:bg-white/20"
             >
               <div className="text-2xl font-bold text-white">
-                <span className="stat-counter" data-target={stat.target}>
-                  0
-                </span>
-                +
+                <span className="stat-counter" data-target={stat.target}>0</span>+
               </div>
-              <div className="text-white/70 text-sm">{stat.label}</div>
+              <div className="text-white/60 text-xs uppercase tracking-widest">{stat.label}</div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Scroll Indicator - Identik dengan HeroNews */}
       <button
         ref={scrollBtnRef}
         onClick={scrollToNext}
         className="absolute bottom-12 right-[10%] z-20 hidden lg:flex flex-col items-center gap-2 group cursor-pointer"
       >
-        {/* Teks Scroll yang lebih besar & berjarak */}
         <span className="vertical-text text-[11px] font-black uppercase tracking-[0.5em] text-white/40 group-hover:text-[var(--color-utama)] transition-colors duration-500 mb-4">
           Scroll
         </span>
 
-        {/* Stack Panah (Tanpa Line) */}
         <div className="flex flex-col items-center -space-y-2">
-          <svg
-            className="w-8 h-8 text-[var(--color-utama)] animate-arrow-1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2.5}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-          <svg
-            className="w-8 h-8 text-[var(--color-utama)] animate-arrow-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2.5}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-          <svg
-            className="w-8 h-8 text-[var(--color-utama)] animate-arrow-3"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2.5}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
+          {[1, 2, 3].map((i) => (
+            <svg
+              key={i}
+              className={`w-8 h-8 text-[var(--color-utama)] animate-bounce opacity-${100 - (i * 20)}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              style={{ animationDelay: `${i * 0.2}s` }}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+            </svg>
+          ))}
         </div>
       </button>
     </section>

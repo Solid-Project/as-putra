@@ -4,6 +4,7 @@ import HeroCarousel from "@/components/home/HeroCarousel";
 import HistorySection from "@/components/home/HistorySection";
 import CultureSection from "@/components/home/CultureSection";
 import StatsSection from "@/components/home/StatsSection";
+import AboutSummary from "@/components/home/AboutSummary";
 import SectorStrip from "@/components/home/SectorStrip";
 import NewsTeaser from "@/components/home/NewsTeaser";
 import useFullpageSnap from "@/hooks/useFullpageSnap";
@@ -15,8 +16,7 @@ const HomePage = () => {
     <main className="relative">
       <HeroCarousel />
       <HistorySection />
-      <CultureSection />
-      <StatsSection />
+      <AboutSummary/>
       <SectorStrip />
       <NewsTeaser />
     </main>

@@ -141,27 +141,6 @@ const WhyJoin = () => {
             );
           })}
         </div>
-
-        {/* CTA Button */}
-        <div className="text-center mt-16">
-          <a
-            href="mailto:recruitment@asputra.com"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-[var(--color-utama)] text-white font-medium rounded-lg transition-all duration-300 hover:bg-opacity-80 hover:gap-3"
-          >
-            <EnvelopeIcon className="w-5 h-5" />
-            <span>Kirim Lamaran Sekarang</span>
-            <ArrowRightIcon className="w-5 h-5" />
-          </a>
-          <p className="text-[var(--color-teks-muted)] text-sm mt-4">
-            Atau kirim CV langsung ke{" "}
-            <a
-              href="mailto:recruitment@asputra.com"
-              className="text-[var(--color-utama)] hover:underline transition-colors"
-            >
-              recruitment@asputra.com
-            </a>
-          </p>
-        </div>
       </div>
     </section>
   );

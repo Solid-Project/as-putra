@@ -36,7 +36,7 @@ const SectorPage = () => {
       <HeroSector />
       <IntroSection 
     title="Finance Sector" 
-    image="/react/img/team.jpeg" 
+    image="/react/img/team.webp" 
   />
       {layout1Data && <FirstLayout data={layout1Data} />}
       {layout2Data && <SecondLayout data={layout2Data} />}

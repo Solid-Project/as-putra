@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import sectorBg from '@/assets/img/sektor.webp';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -75,11 +76,12 @@ const HeroSector = () => {
       ref={sectionRef}
       className="section relative h-screen flex items-center justify-center text-center overflow-hidden"
       style={{
-        backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://plus.unsplash.com/premium_photo-1661930553507-59420df08d82?q=80&w=1074&auto=format&fit=crop')`,
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url(${sectorBg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
       data-theme="dark"
+      data-title="Unit Bisnis Kami"
     >
       {/* Konten Utama Tengah */}
       <div ref={contentRef} className="relative z-10 px-5">
