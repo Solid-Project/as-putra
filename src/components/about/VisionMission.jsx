@@ -108,7 +108,7 @@ const VisionMission = () => {
       {/* 3. BACKGROUND IMAGE + OVERLAY */}
       <div ref={bgRef} className="absolute inset-0 -z-20 h-[115%] -top-[5%]" style={{ willChange: 'transform' }}>
         <img
-          src="/react/img/mission.jpg"
+          src="/react/img/mission.webp"
           alt="background"
           className="w-full h-full object-cover opacity-25" // Sedikit kurangi opacity agar shapes menonjol
         />
