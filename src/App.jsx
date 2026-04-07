@@ -13,7 +13,6 @@ import EventDetailPage from '@/components/career/EventDetailPage';
 
 function App() {
   return (
-    <Router basename="/react">  {/* ← SATU Router dengan basename */}
       <div className="min-h-screen bg-[#0b132b]">
         <Navbar />
         <SectionNavigation />
@@ -28,7 +27,6 @@ function App() {
         </Routes>
         <Footer />
       </div>
-    </Router>
   );
 }
 
