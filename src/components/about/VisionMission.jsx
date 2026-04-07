@@ -9,20 +9,18 @@ const VisionMission = () => {
   const leftRef = useRef(null);
   const rightRef = useRef(null);
   const bgRef = useRef(null);
-  const textBgRef = useRef(null);
-  const floatRef = useRef(null);
+  // textBgRef dihapus
+  const floatRef = useRef(null); // Ref untuk semua elemen melayang
 
   useEffect(() => {
-    // Gunakan context untuk manajemen memori yang bersih
     const ctx = gsap.context(() => {
       
-      // 1. ANIMASI ENTRANCE (Hanya jalan sekali saat masuk viewport)
-      // Kita pakai timeline agar lebih teratur
+      // 1. ANIMASI ENTRANCE (Hanya jalan sekali)
       const entryTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 75%',
-          toggleActions: 'play none none none', // Hanya play sekali agar ringan
+          toggleActions: 'play none none none',
         }
       });
 
@@ -34,23 +32,12 @@ const VisionMission = () => {
         ease: 'power3.out',
       });
 
-      // 2. LIVE PARALLAX (DIBUAT LEBIH RINGAN DENGAN SCRUB: 1)
-      
-      // Typography Background (Horizontal)
-      gsap.to(textBgRef.current, {
-        xPercent: -20, // Menggunakan xPercent jauh lebih ringan daripada x (pixel)
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1,
-        }
-      });
+      // 2. LIVE PARALLAX
 
-      // Floating Shapes (Naik)
+      // Semua Floating Shapes (Naik perlahan saat scroll down)
+      // Scrub dibuat sedikit lambat (2) agar terasa halus
       gsap.to(floatRef.current, {
-        yPercent: -30,
+        yPercent: -25, // Bergerak naik sejauh 25% dari tingginya
         ease: 'none',
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -60,7 +47,7 @@ const VisionMission = () => {
         }
       });
 
-      // Background Image (Turun)
+      // Background Image (Turun sedikit saat scroll down)
       gsap.to(bgRef.current, {
         yPercent: 10,
         ease: 'none',
@@ -84,21 +71,38 @@ const VisionMission = () => {
       data-title="Visi & Misi"
       data-theme="light"
     >
-      {/* 1. LARGE TYPOGRAPHY BG */}
-      <div 
-        ref={textBgRef} 
-        className="absolute top-1/2 left-0 -translate-y-1/2 whitespace-nowrap opacity-[0.04] select-none pointer-events-none z-0"
-        style={{ willChange: 'transform' }}
-      >
-        <span className="text-[180px] font-black uppercase text-blue-900">
-          Visionary Reliable Sustainable Innovative
-        </span>
-      </div>
+      {/* 1. LARGE TYPOGRAPHY BG - DIHAPUS */}
 
-      {/* 2. FLOATING DECOR */}
+      {/* 2. FLOATING DECOR CONTAINER (Semua elemen di sini kena efek Parallax) */}
       <div ref={floatRef} className="absolute inset-0 z-0 pointer-events-none" style={{ willChange: 'transform' }}>
-        <div className="absolute top-1/4 right-[10%] w-24 h-24 border-8 border-blue-500/10 rounded-full" />
-        <div className="absolute bottom-1/4 left-[5%] w-32 h-32 border border-blue-500/20 rounded-2xl rotate-12" />
+        
+        {/* --- SHAPES ASLI (Dipertahankan) --- */}
+        {/* Lingkaran Besar Kanan Atas */}
+        <div className="absolute top-[15%] right-[10%] w-32 h-32 border-[12px] border-blue-500/10 rounded-full" />
+        
+        {/* Kotak Berputar Kiri Bawah */}
+        <div className="absolute bottom-[20%] left-[5%] w-40 h-40 border-2 border-blue-500/15 rounded-3xl rotate-12" />
+
+        {/* --- TAMBAHAN SHAPES BARU (Untuk mengisi kekosongan) --- */}
+        
+        {/* Segitiga Outline Tengah Kiri */}
+        <svg 
+          width="80" 
+          height="80" 
+          viewBox="0 0 80 80" 
+          fill="none" 
+          className="absolute top-[45%] left-[15%] opacity-[0.12] -rotate-12"
+        >
+          <path d="M40 10L70 70H10L40 10Z" stroke="#3b82f6" strokeWidth="4"/>
+        </svg>
+
+        {/* Pola Garis Diagonal Kanan Tengah */}
+        <div className="absolute top-[55%] right-[18%] w-24 h-24 opacity-[0.08]">
+          <div className="w-full h-full bg-[linear-gradient(135deg,#3b82f6_1px,transparent_1px)] bg-[size:10px_10px]" />
+        </div>
+
+        {/* Lingkaran Kecil Solid Kiri Atas */}
+        <div className="absolute top-[25%] left-[25%] w-6 h-6 bg-blue-400/20 rounded-full" />
       </div>
 
       {/* 3. BACKGROUND IMAGE + OVERLAY */}
@@ -106,13 +110,13 @@ const VisionMission = () => {
         <img
           src="/react/img/mission.jpg"
           alt="background"
-          className="w-full h-full object-cover opacity-30" // Opacity dikurangi agar grid & text-bg terlihat
+          className="w-full h-full object-cover opacity-25" // Sedikit kurangi opacity agar shapes menonjol
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-white/20 to-white/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/30 to-white/70" />
       </div>
 
       {/* 4. LINE GRID DECOR */}
-      <div className="absolute inset-0 -z-10 opacity-[0.15] pointer-events-none">
+      <div className="absolute inset-0 -z-10 opacity-[0.12] pointer-events-none">
         <div className="w-full h-full bg-[linear-gradient(to_right,#3b82f6_1px,transparent_1px),linear-gradient(to_bottom,#3b82f6_1px,transparent_1px)] bg-[size:50px_50px]" />
       </div>
 

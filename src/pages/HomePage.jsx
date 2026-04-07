@@ -7,7 +7,7 @@ import StatsSection from "@/components/home/StatsSection";
 import AboutSummary from "@/components/home/AboutSummary";
 import SectorStrip from "@/components/home/SectorStrip";
 import NewsTeaser from "@/components/home/NewsTeaser";
-import useFullpageSnap from "@/hooks/useFullpageSnap";
+import useFullpageSnap from "@/hooks/useFullPageSnap";
 
 const HomePage = () => {
     useFullpageSnap({ enabled: true });

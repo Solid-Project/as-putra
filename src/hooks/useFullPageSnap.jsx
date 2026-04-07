@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Lenis from "@studio-freight/lenis";
 
-const useFullpageSnap = () => {
+const useFullPageSnap = () => {
   const sectionsRef = useRef([]);
   const isAnimating = useRef(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -128,4 +128,4 @@ const useFullpageSnap = () => {
   return { activeIndex };
 };
 
-export default useFullpageSnap;
+export default useFullPageSnap;

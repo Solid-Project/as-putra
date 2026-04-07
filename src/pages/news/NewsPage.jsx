@@ -2,7 +2,7 @@
 import React from 'react';
 import HeroNews from '@/components/news/HeroNews';
 import NewsSection from '@/components/news/NewsSection';
-import useFullpageSnap from '@/hooks/useFullpageSnap';
+import useFullpageSnap from '@/hooks/useFullPageSnap';
 
 const NewsPage = () => {
   // Fullpage snap dengan konfigurasi aktif

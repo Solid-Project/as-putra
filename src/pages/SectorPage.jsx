@@ -13,7 +13,7 @@ import EightLayout from '@/components/sector/EightLayout';
 import NineLayout from '@/components/sector/NineLayout';
 import TenLayout from '@/components/sector/TenLayout';
 import { sectorData } from '@/components/data/SectorData';
-import useFullpageSnap from '@/hooks/useFullpageSnap';
+import useFullpageSnap from '@/hooks/useFullPageSnap';
 
 const SectorPage = () => {
   useFullpageSnap({enabled: true});

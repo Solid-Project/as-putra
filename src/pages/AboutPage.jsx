@@ -4,7 +4,7 @@ import HeroAbout from '@/components/about/HeroAbout';
 import VisionMission from '@/components/about/VisionMission';
 import OurValues from '@/components/about/OurValues';
 import HistoryTimeline from '@/components/about/HistoryTimeline';
-import useFullpageSnap from '@/hooks/useFullpageSnap';
+import useFullpageSnap from '@/hooks/useFullPageSnap';
 
 const AboutPage = () => {
   // Fullpage snap with enabled config

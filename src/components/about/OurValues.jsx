@@ -7,7 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 const OurValues = () => {
   const sectionRef = useRef(null);
   const cardsRef = useRef([]);
-  const textBgRef = useRef(null);
+  const floatRef = useRef(null);
 
   const values = [
     { number: '01', title: 'Integrated Synergy', desc: 'Kolaborasi lintas usaha yang saling menguatkan.', color: 'bg-blue-600' },
@@ -20,24 +20,17 @@ const OurValues = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       
-      // 1. TYPOGRAPHY WATERMARK (Gerak Horizontal)
-      gsap.to(textBgRef.current, {
-        x: -150,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-        }
-      });
+      // 1. SHAPES PARALLAX (Efek Melayang di Background)
+      const shapes = floatRef.current.children;
+      gsap.to(shapes[0], { yPercent: -50, ease: "none", scrollTrigger: { trigger: sectionRef.current, scrub: 2 } }); // Lingkaran besar
+      gsap.to(shapes[1], { yPercent: 30, rotate: 45, ease: "none", scrollTrigger: { trigger: sectionRef.current, scrub: 1 } }); // Kotak outline
+      gsap.to(shapes[2], { yPercent: -80, ease: "none", scrollTrigger: { trigger: sectionRef.current, scrub: 1.5 } }); // Dot pattern
+      gsap.to(shapes[3], { yPercent: 40, ease: "none", scrollTrigger: { trigger: sectionRef.current, scrub: 2.5 } }); // Lingkaran kecil
 
-      // 2. KUNCI PARALLAX SEJAJAR SEMPURNA (100% PRECISION)
+      // 2. KUNCI PARALLAX KARTU (Sejajar Sempurna)
       cardsRef.current.forEach((card, idx) => {
         if (!card) return;
-        
-        // Range 80px (Cukup terlihat tapi tetap stabil)
-        const range = 80;
+        const range = 60;
         const startY = (idx % 2 === 0) ? range : -range;
         const endY = (idx % 2 === 0) ? -range : range;
         
@@ -48,8 +41,6 @@ const OurValues = () => {
             ease: "none",
             scrollTrigger: {
               trigger: sectionRef.current,
-              // KUNCI: Start & End harus simetris terhadap viewport (Tengah)
-              // Ini menjamin saat section di "center", semua y = 0 (SEJAJAR)
               start: "top bottom", 
               end: "bottom top",
               scrub: 1.2,
@@ -69,19 +60,26 @@ const OurValues = () => {
       ref={sectionRef}
       className="section relative py-24 md:py-32 bg-[#F8FAFC] overflow-hidden"
       id="our-values"
-      data-title="Our Values"
     >
-      {/* WATERMARK TEXT (UKURAN ELEGAN) */}
-      <div ref={textBgRef} className="absolute top-1/2 left-0 -translate-y-1/2 whitespace-nowrap opacity-[0.03] select-none pointer-events-none z-0">
-        <span className="text-[100px] md:text-[130px] font-black uppercase text-blue-900 tracking-tighter">
-          Excellence Trust Synergy Impact Agile
-        </span>
+      {/* DECORATIVE SHAPES (PENGGANTI TEKS) */}
+      <div ref={floatRef} className="absolute inset-0 pointer-events-none z-0">
+        {/* Shape 1: Gradient Blob */}
+        <div className="absolute top-[10%] -left-20 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl" />
+        
+        {/* Shape 2: Floating Outline Square */}
+        <div className="absolute top-[20%] right-[15%] w-32 h-32 border border-blue-200 rotate-12 rounded-2xl opacity-60" />
+        
+        {/* Shape 3: Dot Pattern Custom */}
+        <div className="absolute bottom-[15%] left-[10%] w-40 h-40 opacity-20" 
+             style={{ backgroundImage: 'radial-gradient(#2563eb 1.5px, transparent 1.5px)', backgroundSize: '15px 15px' }} />
+        
+        {/* Shape 4: Accent Circle */}
+        <div className="absolute bottom-[10%] right-[5%] w-20 h-20 bg-indigo-50 rounded-full border-4 border-indigo-100/50" />
       </div>
 
-      {/* MARGIN KIRI KANAN (6% SESUAI ATURANMU) */}
       <div className="max-w-[1400px] mx-auto px-[6%] relative z-10">
         
-        {/* HEADER PADAT */}
+        {/* HEADER */}
         <div className="mb-20 text-center lg:text-left flex flex-col lg:flex-row lg:items-end justify-between gap-8">
           <div className="max-w-xl">
             <div className="flex items-center gap-3 mb-4 justify-center lg:justify-start">
@@ -97,22 +95,22 @@ const OurValues = () => {
           </p>
         </div>
 
-        {/* GRID CARD RAMPING (5 KOLOM) */}
+        {/* GRID CARD */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
           {values.map((item, idx) => (
             <div
               key={idx}
               ref={el => cardsRef.current[idx] = el}
-              className="group relative bg-white p-8 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-500 rounded-sm border-b-2 h-[300px] flex flex-col justify-center text-center items-center overflow-hidden"
-              style={{ borderBottomColor: idx === 0 ? '#2563eb' : idx === 2 ? '#0ea5e9' : '#4f46e5' }}
+              className="group relative bg-white/80 backdrop-blur-sm p-8 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-500 rounded-sm border-b-2 h-[320px] flex flex-col justify-center text-center items-center overflow-hidden"
+              style={{ borderBottomColor: idx % 2 === 0 ? '#2563eb' : '#4f46e5' }}
             >
               {/* LARGE BG NUMBER ACCENT */}
-              <span className="absolute top-4 right-4 text-5xl font-black text-slate-50 group-hover:text-blue-50 transition-colors duration-500 select-none">
+              <span className="absolute -top-2 -right-2 text-6xl font-black text-slate-50 group-hover:text-blue-50/50 transition-colors duration-500 select-none">
                 {item.number}
               </span>
 
-              {/* COLORED BADGE KECIL */}
-              <div className={`w-11 h-11 mb-6 flex items-center justify-center text-white text-[10px] font-bold rounded-full transition-transform duration-700 group-hover:rotate-[360deg] shadow-lg ${item.color}`}>
+              {/* COLORED BADGE */}
+              <div className={`w-12 h-12 mb-6 flex items-center justify-center text-white text-xs font-bold rounded-xl transition-all duration-700 group-hover:rotate-[360deg] group-hover:rounded-full shadow-lg ${item.color}`}>
                 {item.number}
               </div>
 
@@ -120,12 +118,12 @@ const OurValues = () => {
                 {item.title}
               </h4>
               
-              <p className="text-[11px] text-slate-500 leading-relaxed font-light line-clamp-3 px-2">
-                {item.desc}
+              <p className="text-[11px] text-slate-500 leading-relaxed font-light line-clamp-4 px-2 italic">
+                "{item.desc}"
               </p>
 
-              {/* BOTTOM ACCENT */}
-              <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-0 group-hover:w-full transition-all duration-700 ${item.color}`} />
+              {/* INTERACTIVE HOVER ACCENT */}
+              <div className={`absolute bottom-0 left-0 h-1 w-0 group-hover:w-full transition-all duration-700 ${item.color}`} />
             </div>
           ))}
         </div>
