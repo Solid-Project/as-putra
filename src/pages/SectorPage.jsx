@@ -2,16 +2,16 @@
 import React from 'react';
 import HeroSector from '@/components/sector/HeroSector';
 import IntroSection from '@/components/sector/IntroSection';
-import FirstLayout from '@/components/sector/FirstLayout';
-import SecondLayout from '@/components/sector/SecondLayout';
-import ThirdLayout from '@/components/sector/ThirdLayout';
-import FourthLayout from '@/components/sector/FourthLayout';
-import FifthLayout from '@/components/sector/FifthLayout';
-import SixLayout from '@/components/sector/SixLayout';
-import SevenLayout from '@/components/sector/SevenLayout';
-import EightLayout from '@/components/sector/EightLayout';
-import NineLayout from '@/components/sector/NineLayout';
-import TenLayout from '@/components/sector/TenLayout';
+import FirstLayout from '@/components/sector/Layout1';
+import SecondLayout from '@/components/sector/Layout2';
+import ThirdLayout from '@/components/sector/Layout3';
+import FourthLayout from '@/components/sector/Layout4';
+import FifthLayout from '@/components/sector/Layout5';
+import SixLayout from '@/components/sector/Layout6';
+import SevenLayout from '@/components/sector/Layout7';
+import EightLayout from '@/components/sector/Layout8';
+import NineLayout from '@/components/sector/Layout9';
+import TenLayout from '@/components/sector/Layout10';
 import { sectorData } from '@/components/data/SectorData';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
 
