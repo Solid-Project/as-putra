@@ -21,7 +21,7 @@ const DEFAULT_DATA = {
   ]
 };
 
-const SecondLayout = ({ data }) => {
+const Layout2 = ({ data }) => {
   const displayData = { ...DEFAULT_DATA, ...data };
   
   const sectionRef = useRef(null);
@@ -35,9 +35,6 @@ const SecondLayout = ({ data }) => {
     let ctx = gsap.context(() => {
       
       // --- REFINED LIVE PARALLAX (Lebih Berat & Ke Bawah) ---
-      // Start: Elemen berada agak di bawah (y: 80-150)
-      // End: Elemen bergerak pelan ke atas sedikit saja
-
       // 1. Kolom Kiri (Teks)
       gsap.fromTo(leftColRef.current, 
         { y: 50 }, 
@@ -55,9 +52,9 @@ const SecondLayout = ({ data }) => {
 
       // 2. Kolom Tengah (Counter Card) - Efek Floating yang lebih tenang
       gsap.fromTo(centerColRef.current, 
-        { y: 120 }, // Mulai lebih rendah
+        { y: 120 },
         {
-          y: -80,  // Berakhir tidak terlalu tinggi
+          y: -80,
           ease: "none",
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -179,4 +176,4 @@ const SecondLayout = ({ data }) => {
   );
 };
 
-export default SecondLayout;
+export default Layout2;

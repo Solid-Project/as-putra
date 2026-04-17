@@ -55,7 +55,7 @@ const HeroCarousel = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. Animasi Title (Sesuai HeroNews)
+      // 1. Animasi Title
       gsap.fromTo(titleRef.current, { y: 50, opacity: 0 }, {
         y: 0,
         opacity: 1,
@@ -71,7 +71,7 @@ const HeroCarousel = () => {
         }
       });
 
-      // 2. Animasi Line (Sesuai HeroNews)
+      // 2. Animasi Line
       gsap.fromTo(lineRef.current, { width: 0 }, {
         width: 80,
         duration: 0.6,
@@ -86,7 +86,7 @@ const HeroCarousel = () => {
         }
       });
 
-      // 3. Animasi Subtitle (Sesuai HeroNews)
+      // 3. Animasi Subtitle
       gsap.fromTo(subtitleRef.current, { y: 20, opacity: 0 }, {
         y: 0,
         opacity: 1,
@@ -102,7 +102,7 @@ const HeroCarousel = () => {
         }
       });
 
-      // 4. Animasi Buttons Stagger (Sesuai HeroNews)
+      // 4. Animasi Buttons Stagger
       gsap.fromTo(contentRef.current.querySelectorAll("a"), { y: 30, opacity: 0 }, {
         y: 0,
         opacity: 1,
@@ -131,10 +131,11 @@ const HeroCarousel = () => {
   return (
     <section
       ref={sectionRef}
-      className="section min-h-screen relative flex items-center justify-center text-center overflow-hidden bg-black"
+      className="section relative flex items-center justify-center text-center overflow-hidden bg-black"
       id="hero-section"
       data-theme="dark"
       data-title="AS Putra"
+      style={{ minHeight: "100vh", height: "100vh", maxHeight: "100vh" }}
     >
       {/* BACKGROUND LAYER */}
       <div ref={bgRef} className="absolute inset-0 z-0 scale-110">
@@ -151,48 +152,61 @@ const HeroCarousel = () => {
                 src={slide.src}
                 poster={slide.poster}
                 muted loop autoPlay playsInline
-                className="w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
               />
             ) : (
               <div
-                className="w-full h-full bg-cover bg-center"
+                className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
                 style={{ backgroundImage: `url(${slide.src})` }}
               />
             )}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/50" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/50" />
           </div>
         ))}
       </div>
 
-      {/* CONTENT LAYER */}
-      <div ref={contentRef} className="relative z-10 px-5">
+      {/* CONTENT LAYER - Responsive padding */}
+      <div ref={contentRef} className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-8 md:px-12 lg:px-16">
         <h1
           ref={titleRef}
-          className="font-['Playfair_Display'] text-4xl md:text-5xl lg:text-6xl text-white mb-4 drop-shadow-lg leading-[1.1]"
+          className="font-['Playfair_Display'] text-white drop-shadow-lg leading-tight"
+          style={{
+            fontSize: "clamp(2.5rem, 8vw, 5rem)",
+            marginBottom: "clamp(0.75rem, 2vw, 1rem)"
+          }}
         >
-          Membangun <br /> Masa Depan
+          Membangun <br className="sm:hidden" /> Masa Depan
         </h1>
 
         <div
           ref={lineRef}
-          className="h-0.5 bg-[var(--color-utama)] mx-auto mb-10"
-          style={{ width: 0 }}
+          className="h-0.5 bg-[var(--color-utama)] mx-auto"
+          style={{ 
+            width: 0,
+            marginBottom: "clamp(1.5rem, 4vw, 2.5rem)"
+          }}
         />
 
         <p
           ref={subtitleRef}
-          className="text-white/95 max-w-[600px] mx-auto mb-10 text-lg leading-relaxed"
+          className="text-white/95 mx-auto leading-relaxed"
+          style={{
+            fontSize: "clamp(0.95rem, 3vw, 1.125rem)",
+            maxWidth: "clamp(280px, 90%, 600px)",
+            marginBottom: "clamp(1.5rem, 4vw, 2.5rem)"
+          }}
         >
           Ekosistem bisnis terintegrasi yang berfokus pada keberlanjutan 
           dan nilai jangka panjang untuk kemajuan bangsa.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-5 justify-center">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 justify-center">
           <Link
             to="/sector"
-            className="group relative px-8 py-3.5 bg-[var(--color-utama)] text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[var(--color-utama)]/30 hover:-translate-y-0.5"
+            className="group relative px-6 sm:px-8 py-3 sm:py-3.5 bg-[var(--color-utama)] text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[var(--color-utama)]/30 hover:-translate-y-0.5"
+            style={{ fontSize: "clamp(0.875rem, 2.5vw, 1rem)" }}
           >
-            <span className="relative z-10 flex items-center gap-2">
+            <span className="relative z-10 flex items-center justify-center gap-2">
               Sektor Kami
               <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -203,9 +217,10 @@ const HeroCarousel = () => {
 
           <Link
             to="/about"
-            className="group relative px-8 py-3.5 bg-white/20 backdrop-blur-sm border border-white/40 text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:bg-white/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-white/20"
+            className="group relative px-6 sm:px-8 py-3 sm:py-3.5 bg-white/20 backdrop-blur-sm border border-white/40 text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:bg-white/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-white/20"
+            style={{ fontSize: "clamp(0.875rem, 2.5vw, 1rem)" }}
           >
-            <span className="relative z-10 flex items-center gap-2">
+            <span className="relative z-10 flex items-center justify-center gap-2">
               Tentang Kami
               <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -215,11 +230,15 @@ const HeroCarousel = () => {
         </div>
       </div>
 
-      {/* SCROLL INDICATOR */}
+      {/* SCROLL INDICATOR - Responsive position */}
       <button
         ref={scrollBtnRef}
         onClick={scrollToNext}
-        className="absolute bottom-12 right-[10%] z-20 hidden lg:flex flex-col items-center gap-2 group cursor-pointer"
+        className="absolute z-20 hidden md:flex flex-col items-center gap-2 group cursor-pointer"
+        style={{
+          bottom: "clamp(1.5rem, 5vh, 3rem)",
+          right: "clamp(1.5rem, 5vw, 10%)"
+        }}
       >
         <span className="vertical-text text-[11px] font-black uppercase tracking-[0.5em] text-white/40 group-hover:text-[var(--color-utama)] transition-colors duration-500 mb-4">
           Scroll
@@ -229,16 +248,34 @@ const HeroCarousel = () => {
           {[1, 2, 3].map((i) => (
             <svg
               key={i}
-              className={`w-8 h-8 text-[var(--color-utama)] animate-bounce opacity-${100 - (i * 20)}`}
+              className="w-8 h-8 text-[var(--color-utama)] animate-bounce"
+              style={{ opacity: 1 - (i * 0.2) }}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
-              style={{ animationDelay: `${i * 0.2}s` }}
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
             </svg>
           ))}
         </div>
+      </button>
+
+      {/* Mobile Scroll Indicator - Simple version */}
+      <button
+        onClick={scrollToNext}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 md:hidden flex flex-col items-center gap-1 group cursor-pointer"
+      >
+        <span className="text-[10px] font-medium uppercase tracking-widest text-white/50 group-hover:text-[var(--color-utama)] transition-colors duration-500">
+          Scroll
+        </span>
+        <svg
+          className="w-5 h-5 text-white/60 group-hover:text-[var(--color-utama)] animate-bounce transition-colors duration-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+        </svg>
       </button>
     </section>
   );

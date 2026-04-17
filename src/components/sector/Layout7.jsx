@@ -5,7 +5,7 @@ import { ArrowRightIcon, ArrowLeftIcon, BuildingOffice2Icon } from "@heroicons/r
 
 gsap.registerPlugin(ScrollTrigger);
 
-const SevenLayout = () => {
+const Layout7 = () => {
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
   const mainCardRef = useRef(null);
@@ -162,4 +162,4 @@ const SevenLayout = () => {
   );
 };
 
-export default SevenLayout;
+export default Layout7;

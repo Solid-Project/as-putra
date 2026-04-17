@@ -8,7 +8,7 @@ import {
 
 gsap.registerPlugin(ScrollTrigger);
 
-const SixLayout = () => {
+const Layout6 = () => {
   const sectionRef = useRef(null);
   const leftColRef = useRef(null);
   const midColRef = useRef(null);
@@ -151,4 +151,4 @@ const SixLayout = () => {
   );
 };
 
-export default SixLayout;
+export default Layout6;

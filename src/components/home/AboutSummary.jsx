@@ -29,7 +29,7 @@ const cards = [
   },
 ];
 
-// Sub-komponen Counter yang dioptimasi (Tanpa useState = No Re-render)
+// Sub-komponen Counter
 const Counter = ({ target, suffix, label, parentRef }) => {
   const numberRef = useRef(null);
 
@@ -43,12 +43,10 @@ const Counter = ({ target, suffix, label, parentRef }) => {
         scrollTrigger: {
           trigger: parentRef.current,
           start: "top 85%",
-          // Animasinya akan reset saat discroll balik ke atas (Play - Reverse - Play - Reverse)
           toggleActions: "play reverse play reverse", 
         },
         onUpdate: () => {
           if (numberRef.current) {
-            // Update teks langsung ke DOM, sangat ringan untuk CPU
             numberRef.current.innerText = Math.floor(obj.value).toLocaleString();
           }
         },
@@ -58,11 +56,24 @@ const Counter = ({ target, suffix, label, parentRef }) => {
   }, [target, parentRef]);
 
   return (
-    <div className="text-center px-4">
-      <h3 className="text-3xl md:text-5xl text-[var(--color-utama)] font-bold mb-1">
+    <div className="text-center" style={{ paddingLeft: "clamp(0.5rem, 2vw, 1rem)", paddingRight: "clamp(0.5rem, 2vw, 1rem)" }}>
+      <h3 
+        className="font-bold"
+        style={{ 
+          color: "var(--color-utama)",
+          fontSize: "clamp(1.8rem, 5vw, 3rem)",
+          marginBottom: "clamp(0.15rem, 0.5vh, 0.25rem)",
+        }}
+      >
         <span ref={numberRef}>0</span>{suffix}
       </h3>
-      <p className="text-[var(--color-teks-muted)] text-[10px] md:text-xs font-semibold uppercase tracking-widest">
+      <p 
+        className="font-semibold uppercase tracking-widest"
+        style={{ 
+          color: "var(--color-teks-muted)",
+          fontSize: "clamp(0.6rem, 1.5vw, 0.75rem)",
+        }}
+      >
         {label}
       </p>
     </div>
@@ -74,7 +85,6 @@ const AboutSummary = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Reveal Animation: Pakai scrub: 1 agar gerakan lebih halus/tidak kaku
       gsap.fromTo(".reveal-content", 
         { y: 30, opacity: 0 },
         { 
@@ -97,37 +107,230 @@ const AboutSummary = () => {
   return (
     <section
       ref={sectionRef}
-      className="section relative min-h-screen flex flex-col justify-center bg-white px-[5%] py-12 md:py-16 overflow-hidden"
-      id="about-summary"
+      className="section relative flex flex-col justify-center overflow-hidden"
+      id="about-summary" 
+      data-title="About Summary"
+      style={{
+        minHeight: "100vh",
+        height: "auto",
+        backgroundColor: "var(--color-bg-light)",
+        paddingTop: "clamp(2rem, 5vh, 3.5rem)",
+        paddingBottom: "clamp(2rem, 5vh, 3.5rem)",
+        paddingLeft: "clamp(1rem, 4vw, 5%)",
+        paddingRight: "clamp(1rem, 4vw, 5%)",
+      }}
     >
-      <div className="max-w-[1200px] mx-auto w-full flex flex-col h-full">
+      {/* SHAPE DEKORATIF - Mengisi ruang kosong */}
+      
+      {/* Shape 1: Lingkaran besar di pojok kiri atas */}
+      <div 
+        className="absolute pointer-events-none"
+        style={{
+          top: "-5%",
+          left: "-3%",
+          width: "clamp(200px, 35vw, 450px)",
+          height: "clamp(200px, 35vw, 450px)",
+          borderRadius: "50%",
+          backgroundColor: "var(--color-utama)",
+          opacity: 0.04,
+          zIndex: 0,
+        }}
+      />
+
+      {/* Shape 2: Lingkaran di pojok kanan bawah */}
+      <div 
+        className="absolute pointer-events-none"
+        style={{
+          bottom: "-5%",
+          right: "-3%",
+          width: "clamp(180px, 30vw, 400px)",
+          height: "clamp(180px, 30vw, 400px)",
+          borderRadius: "50%",
+          backgroundColor: "var(--color-aksen)",
+          opacity: 0.05,
+          zIndex: 0,
+        }}
+      />
+
+      {/* Shape 3: Garis-garis diagonal pattern */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          opacity: 0.02,
+          zIndex: 0,
+          backgroundImage: `
+            repeating-linear-gradient(45deg, 
+              var(--color-utama) 0px, 
+              var(--color-utama) 1px, 
+              transparent 1px, 
+              transparent 20px
+            )
+          `,
+        }}
+      />
+
+      {/* Shape 4: Kotak dekoratif di kanan atas */}
+      <div 
+        className="absolute pointer-events-none hidden lg:block"
+        style={{
+          top: "15%",
+          right: "8%",
+          width: "clamp(60px, 12vw, 120px)",
+          height: "clamp(60px, 12vw, 120px)",
+          border: "2px solid var(--color-utama)",
+          opacity: 0.08,
+          transform: "rotate(15deg)",
+          zIndex: 0,
+        }}
+      />
+
+      {/* Shape 5: Kotak dekoratif di kiri bawah */}
+      <div 
+        className="absolute pointer-events-none hidden lg:block"
+        style={{
+          bottom: "12%",
+          left: "6%",
+          width: "clamp(50px, 10vw, 100px)",
+          height: "clamp(50px, 10vw, 100px)",
+          border: "2px solid var(--color-aksen)",
+          opacity: 0.1,
+          transform: "rotate(25deg)",
+          zIndex: 0,
+        }}
+      />
+
+      {/* Shape 6: Titik-titik dekoratif */}
+      <div 
+        className="absolute pointer-events-none hidden md:block"
+        style={{
+          top: "40%",
+          left: "3%",
+          zIndex: 0,
+        }}
+      >
+        {[...Array(3)].map((_, i) => (
+          <div
+            key={i}
+            style={{
+              width: "clamp(4px, 1vw, 8px)",
+              height: "clamp(4px, 1vw, 8px)",
+              borderRadius: "50%",
+              backgroundColor: i % 2 === 0 ? "var(--color-utama)" : "var(--color-aksen)",
+              opacity: 0.15,
+              marginBottom: "clamp(8px, 2vw, 15px)",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Shape 7: Garis horizontal dekoratif */}
+      <div 
+        className="absolute pointer-events-none hidden xl:block"
+        style={{
+          bottom: "20%",
+          right: "5%",
+          width: "clamp(80px, 15vw, 150px)",
+          height: "2px",
+          backgroundColor: "var(--color-utama)",
+          opacity: 0.1,
+          zIndex: 0,
+        }}
+      />
+
+      <div 
+        className="mx-auto w-full flex flex-col h-full relative"
+        style={{ 
+          maxWidth: "clamp(300px, 100%, 1200px)",
+          zIndex: 1,
+        }}
+      >
         
         {/* --- HEADER --- */}
-        <div className="reveal-content text-center mb-8 md:mb-12" style={{ willChange: "transform, opacity" }}>
-          <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl text-[var(--color-teks)] mb-3">
+        <div 
+          className="reveal-content text-center"
+          style={{ 
+            willChange: "transform, opacity",
+            marginBottom: "clamp(1.5rem, 4vh, 2.5rem)",
+          }}
+        >
+          <h2 
+            className="font-['Playfair_Display']"
+            style={{ 
+              color: "var(--color-teks)",
+              fontSize: "clamp(1.8rem, 5vw, 2.5rem)",
+              marginBottom: "clamp(0.5rem, 1.5vh, 0.75rem)",
+            }}
+          >
             Budaya & Nilai Kami
           </h2>
-          <div className="h-0.5 bg-[var(--color-utama)] mx-auto mb-4 w-16" />
-          <p className="text-[var(--color-teks-muted)] max-w-[700px] mx-auto text-sm md:text-base leading-relaxed">
+          <div 
+            style={{ 
+              backgroundColor: "var(--color-utama)",
+              height: "clamp(1.5px, 0.3vw, 2.5px)",
+              width: "clamp(40px, 10vw, 60px)",
+              marginLeft: "auto",
+              marginRight: "auto",
+              marginBottom: "clamp(0.75rem, 2vh, 1rem)",
+            }}
+          />
+          <p 
+            className="mx-auto leading-relaxed"
+            style={{ 
+              color: "var(--color-teks-muted)",
+              fontSize: "clamp(0.8rem, 2vw, 1rem)",
+              maxWidth: "clamp(280px, 90%, 700px)",
+            }}
+          >
             Fondasi yang membentuk identitas kami dalam berkarya dan memberikan dampak positif.
           </p>
         </div>
 
         {/* --- CARDS --- */}
-        <div className="grid md:grid-cols-3 gap-6 mb-10 md:mb-14">
+        <div 
+          className="grid md:grid-cols-3"
+          style={{ 
+            gap: "clamp(1rem, 2.5vw, 1.5rem)",
+            marginBottom: "clamp(1.5rem, 4vh, 2.5rem)",
+          }}
+        >
           {cards.map((item, idx) => (
             <div
               key={idx}
-              className="reveal-content flex flex-col text-center p-8 rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
-              style={{ willChange: "transform, opacity" }}
+              className="reveal-content flex flex-col text-center border shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
+              style={{ 
+                willChange: "transform, opacity",
+                backgroundColor: "var(--color-bg-light)",
+                borderColor: "rgba(0,0,0,0.05)",
+                borderRadius: "clamp(12px, 2.5vw, 16px)",
+                padding: "clamp(1.25rem, 3.5vw, 2rem)",
+              }}
             >
-              <div className="text-4xl text-[var(--color-utama)] mb-4">
+              <div 
+                style={{ 
+                  color: "var(--color-utama)",
+                  fontSize: "clamp(1.8rem, 4.5vw, 2.5rem)",
+                  marginBottom: "clamp(0.75rem, 2vh, 1rem)",
+                }}
+              >
                 {item.icon}
               </div>
-              <h3 className="text-xl font-bold text-[var(--color-teks)] mb-3">
+              <h3 
+                className="font-bold"
+                style={{ 
+                  color: "var(--color-teks)",
+                  fontSize: "clamp(1.1rem, 2.5vw, 1.25rem)",
+                  marginBottom: "clamp(0.5rem, 1.5vh, 0.75rem)",
+                }}
+              >
                 {item.title}
               </h3>
-              <p className="text-[var(--color-teks-muted)] text-sm leading-relaxed flex-grow italic">
+              <p 
+                className="leading-relaxed flex-grow italic"
+                style={{ 
+                  color: "var(--color-teks-muted)",
+                  fontSize: "clamp(0.75rem, 1.8vw, 0.875rem)",
+                }}
+              >
                 "{item.desc}"
               </p>
             </div>
@@ -135,8 +338,22 @@ const AboutSummary = () => {
         </div>
 
         {/* --- STATS SECTION --- */}
-        <div className="reveal-content border-t border-gray-100 pt-8 md:pt-12" style={{ willChange: "transform, opacity" }}>
-          <div className="flex flex-wrap justify-center gap-y-8 gap-x-12 md:gap-x-20">
+        <div 
+          className="reveal-content"
+          style={{ 
+            willChange: "transform, opacity",
+            borderTopWidth: "clamp(1px, 0.2vw, 1.5px)",
+            borderTopStyle: "solid",
+            borderTopColor: "rgba(0,0,0,0.05)",
+            paddingTop: "clamp(1.5rem, 4vh, 2.5rem)",
+          }}
+        >
+          <div 
+            className="flex flex-wrap justify-center items-center"
+            style={{ 
+              gap: "clamp(1.5rem, 5vw, 3rem)",
+            }}
+          >
             {stats.map((stat, idx) => (
               <Counter
                 key={idx}

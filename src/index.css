@@ -1,16 +1,23 @@
 /* global.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 :root {
-  --color-utama: #2563eb;
-  --color-utama-hover: #1d4ed8;
-  --color-bg-light: #f8faff;
-  --color-aksen: #3b82f6;
-  --color-teks: #1e293b;
+  --color-utama: #1e3a8a;           /* Biru dongker */
+  --color-utama-hover: #172554;     /* Lebih gelap */
+  --color-bg-light: #ffffff;        /* Putih */
+  --color-aksen: #facc15;           /* Kuning */
+  --color-teks: #0f172a;            /* Hitam kebiruan */
   --color-teks-muted: #64748b;
-  --color-bg-alt: #f0f4ff;
-  --color-footer-bg: #0f172a;
-  --color-footer-teks: #94a3b8;
+  --color-bg-alt: #fefce8;          /* Putih kekuningan */
+  --color-footer-bg: #020617;       /* Super dark navy */
+  --color-footer-teks: #e2e8f0;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 .section-navigation {
@@ -129,4 +136,9 @@
 .gooey-filter {
   filter: url("#goo");
   transition: filter 0.5s ease; /* Transisi halus saat filter aktif/mati */
+}
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--color-teks);
+  background-color: var(--color-bg-light);
 }

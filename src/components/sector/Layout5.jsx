@@ -10,7 +10,7 @@ import {
 
 gsap.registerPlugin(ScrollTrigger);
 
-const FifthLayout = () => {
+const Layout5 = () => {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const leftColRef = useRef(null);
@@ -179,4 +179,4 @@ const FifthLayout = () => {
   );
 };
 
-export default FifthLayout;
+export default Layout5;

@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const EightLayout = () => {
+const Layout8 = () => {
   const sectionRef = useRef(null);
   const imageRef = useRef(null);
   const cardRef = useRef(null);
@@ -139,4 +139,4 @@ const EightLayout = () => {
   );
 };
 
-export default EightLayout;
+export default Layout8;

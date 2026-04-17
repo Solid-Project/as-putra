@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const NineLayout = () => {
+const Layout9 = () => {
   const sectionRef = useRef(null);
   const imageRef = useRef(null);
   const titleRef = useRef(null);
@@ -154,4 +154,4 @@ const NineLayout = () => {
   );
 };
 
-export default NineLayout;
+export default Layout9;

@@ -6,7 +6,7 @@ import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const TenLayout = () => {
+const Layout10 = () => {
   const sectionRef = useRef(null);
   const parallaxBgRef = useRef(null);
   const cardRef = useRef(null);
@@ -155,4 +155,4 @@ const TenLayout = () => {
   );
 };
 
-export default TenLayout;
+export default Layout10;

@@ -1,129 +1,135 @@
 import { useEffect, useRef, useState } from "react";
-import Lenis from "@studio-freight/lenis";
 
 const useFullPageSnap = () => {
   const sectionsRef = useRef([]);
+  const activeIndexRef = useRef(0);
   const isAnimating = useRef(false);
+  const touchStartY = useRef(0);
+
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 2.2,
-      easing: (t) => 1 - Math.pow(1 - t, 5),
-      smooth: true,
-      smoothTouch: true
-    });
+    sectionsRef.current = Array.from(
+      document.querySelectorAll(".section")
+    );
 
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
-    // ambil semua section
-    const getSections = () => {
-      sectionsRef.current = Array.from(
-        document.querySelectorAll(".section")
-      );
+    // 🔥 easing natural (smooth & tidak kaku)
+    const easeOutExpo = (t) => {
+      return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
     };
 
-    // 🔥 ACTIVE SECTION PALING AKURAT (VISIBLE AREA)
-    const getActiveSectionIndex = () => {
-      let maxVisible = 0;
-      let index = 0;
+    // 🔥 ANIMASI SCROLL NATURAL
+    const smoothScrollTo = (targetY) => {
+      const startY = window.scrollY;
+      const distance = targetY - startY;
 
-      sectionsRef.current.forEach((section, i) => {
-        const rect = section.getBoundingClientRect();
+      let startTime = null;
 
-        const visibleTop = Math.max(rect.top, 0);
-        const visibleBottom = Math.min(
-          rect.bottom,
-          window.innerHeight
-        );
+      // 🔥 durasi adaptif (biar tidak terasa dipaksa)
+      const baseDuration = 1200;
+      const extra = Math.min(Math.abs(distance) * 0.3, 600);
+      const duration = baseDuration + extra;
 
-        const visibleHeight = Math.max(
-          0,
-          visibleBottom - visibleTop
-        );
+      isAnimating.current = true;
 
-        if (visibleHeight > maxVisible + 10) {
-          maxVisible = visibleHeight;
-          index = i;
+      const animation = (currentTime) => {
+        if (!startTime) startTime = currentTime;
+
+        const elapsed = currentTime - startTime;
+        let progress = Math.min(elapsed / duration, 1);
+
+        const eased = easeOutExpo(progress);
+
+        window.scrollTo(0, startY + distance * eased);
+
+        if (progress < 1) {
+          requestAnimationFrame(animation);
+        } else {
+          // 🔥 snap halus biar presisi
+          window.scrollTo(0, targetY);
+          isAnimating.current = false;
         }
-      });
+      };
 
-      return index;
+      requestAnimationFrame(animation);
     };
 
-    // update active index (sinkron dengan Lenis)
-    const updateActive = () => {
-      const index = getActiveSectionIndex();
-      setActiveIndex((prev) =>
-        prev === index ? prev : index
-      );
-    };
-
-    // scroll ke section
+    // 🔥 pindah section
     const scrollToIndex = (index) => {
       if (index < 0 || index >= sectionsRef.current.length)
         return;
 
-      isAnimating.current = true;
+      if (isAnimating.current) return;
 
-      lenis.scrollTo(sectionsRef.current[index], {
-        duration: 2.2,
-        lock: true
-      });
+      activeIndexRef.current = index;
+      setActiveIndex(index);
 
+      const targetY =
+        sectionsRef.current[index].offsetTop;
+
+      // 🔥 micro delay biar natural (tidak kaget)
       setTimeout(() => {
-        isAnimating.current = false;
-      }, 1600);
+        smoothScrollTo(targetY);
+      }, 40);
     };
 
-    // handle wheel
+    // 🔥 WHEEL (desktop)
     const handleWheel = (e) => {
       if (isAnimating.current) return;
-      if (Math.abs(e.deltaY) < 20) return;
+
+      e.preventDefault();
+
+      if (Math.abs(e.deltaY) < 30) return;
 
       const direction = e.deltaY > 0 ? 1 : -1;
-      const nextIndex = activeIndex + direction;
 
-      if (
-        nextIndex < 0 ||
-        nextIndex >= sectionsRef.current.length
-      )
-        return;
-
-      scrollToIndex(nextIndex);
+      scrollToIndex(activeIndexRef.current + direction);
     };
 
-    // keyboard
+    // 🔥 TOUCH (mobile)
+    const handleTouchStart = (e) => {
+      touchStartY.current = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e) => {
+      if (isAnimating.current) return;
+
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaY = touchStartY.current - touchEndY;
+
+      if (Math.abs(deltaY) < 50) return;
+
+      const direction = deltaY > 0 ? 1 : -1;
+
+      scrollToIndex(activeIndexRef.current + direction);
+    };
+
+    // 🔥 KEYBOARD
     const handleKey = (e) => {
       if (isAnimating.current) return;
 
       if (e.key === "ArrowDown") {
-        scrollToIndex(activeIndex + 1);
+        scrollToIndex(activeIndexRef.current + 1);
       } else if (e.key === "ArrowUp") {
-        scrollToIndex(activeIndex - 1);
+        scrollToIndex(activeIndexRef.current - 1);
       }
     };
 
-    setTimeout(() => {
-      getSections();
-      updateActive();
-    }, 100);
+    window.addEventListener("wheel", handleWheel, {
+      passive: false,
+    });
 
-    lenis.on("scroll", updateActive);
-
-    window.addEventListener("wheel", handleWheel);
     window.addEventListener("keydown", handleKey);
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchend", handleTouchEnd);
 
     return () => {
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("keydown", handleKey);
-      lenis.destroy();
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [activeIndex]);
+  }, []);
 
   return { activeIndex };
 };

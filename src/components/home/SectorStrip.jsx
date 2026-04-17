@@ -19,8 +19,7 @@ const SectorStrip = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       
-      // 1. ANIMASI ENTRANCE (ASLI KAMU)
-      // Kita buat trigger animasi masuk ini selesai tepat di posisi y: 0
+      // 1. ANIMASI ENTRANCE
       gsap.fromTo(itemsRef.current,
         { 
           y: 100,
@@ -38,17 +37,15 @@ const SectorStrip = () => {
           ease: "power3.out",
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 85%", // Mulai muncul sebelum section masuk penuh
+            start: "top 85%",
           }
         }
       );
 
-      // 2. LIVE PARALLAX (DIPERBAIKI AGAR SEJAJAR SAAT AKTIF)
+      // 2. LIVE PARALLAX
       itemsRef.current.forEach((el, idx) => {
         if (!el) return;
         
-        // Offset range yang sama (60px)
-        // Kita gunakan start dan end yang simetris dari tengah (0)
         const range = 60;
         const fromY = idx % 2 === 0 ? range : -range;
         const toY = idx % 2 === 0 ? -range : range;
@@ -60,7 +57,6 @@ const SectorStrip = () => {
             ease: "none",
             scrollTrigger: {
               trigger: sectionRef.current,
-              // KUNCI UTAMA: start dan end harus simetris terhadap viewport
               start: "top bottom",
               end: "bottom top",
               scrub: 1,
@@ -69,7 +65,7 @@ const SectorStrip = () => {
         );
       });
 
-      // 3. HOVER INTERACTION (ASLI KAMU)
+      // 3. HOVER INTERACTION
       itemsRef.current.forEach(el => {
         if (!el) return;
         const handleMouseEnter = () => {
@@ -102,22 +98,64 @@ const SectorStrip = () => {
   return (
     <section
       ref={sectionRef}
-      className="section min-h-screen flex items-center justify-center bg-white overflow-hidden"
-      id="sector-strip" data-title="Sektor Usaha" data-theme="light"
+      className="section overflow-hidden"
+      id="sector-strip" 
+      data-title="Sektor Usaha" 
+      data-theme="light"
+      style={{ 
+        backgroundColor: "var(--color-bg-light)",
+        minHeight: "100vh",
+        height: "auto",
+        display: "flex",
+      }}
     >
-      {/* GRID FIT TANPA ROUNDED & TANPA GAP */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 w-full h-auto md:h-[630px] max-w-[1400px] mx-auto">
+      {/* GRID - FULL FIT, TANPA GAP, TANPA PADDING */}
+      <div 
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 w-full"
+        style={{ margin: 0 }}
+      >
         {sectors.map((sector, idx) => (
           <div
             key={idx}
             ref={(el) => (itemsRef.current[idx] = el)}
-            className="relative bg-cover bg-center p-8 flex flex-col justify-center text-white transition-all duration-300 cursor-pointer h-full"
+            className="relative bg-cover bg-center flex flex-col justify-center text-white transition-all duration-300 cursor-pointer"
             style={{
-              backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${sector.bg})`
+              backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${sector.bg})`,
+              padding: "clamp(1.25rem, 4vw, 2rem)",
+              minHeight: "100%",
             }}
           >
-            <h3 className="text-xl font-bold mb-3">{sector.name}</h3>
-            <p className="text-sm opacity-90">{sector.desc}</p>
+            {/* Judul - DIPERBESAR */}
+            <h3 
+              className="font-bold"
+              style={{
+                fontSize: "clamp(1.5rem, 4vw, 2.2rem)",
+                marginBottom: "clamp(0.75rem, 2vh, 1.25rem)",
+              }}
+            >
+              {sector.name}
+            </h3>
+            
+            {/* Deskripsi - DIPERBESAR */}
+            <p 
+              className="opacity-90 leading-relaxed"
+              style={{
+                fontSize: "clamp(0.9rem, 2.2vw, 1.1rem)",
+                maxWidth: "95%",
+              }}
+            >
+              {sector.desc}
+            </p>
+            
+            {/* Garis aksen */}
+            <div 
+              style={{
+                width: "clamp(40px, 10vw, 60px)",
+                height: "clamp(2px, 0.5vw, 4px)",
+                backgroundColor: "var(--color-aksen)",
+                marginTop: "clamp(1rem, 2.5vh, 1.5rem)",
+              }}
+            />
           </div>
         ))}
       </div>
