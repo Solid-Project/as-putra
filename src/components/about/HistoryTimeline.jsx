@@ -8,33 +8,63 @@ gsap.registerPlugin(ScrollTrigger);
 const timelineData = [
   {
     year: "1984",
-    title: "Awal Mula",
-    desc: "Dimulainya proyek perintis oleh H. Dudung Dulajid. Dengan visi yang kuat, fondasi bisnis mulai diletakkan di Kuningan, berfokus pada pengembangan ekonomi pedesaan.",
+    title: "Awal Mula & Fondasi",
+    desc: "H. Dudung Dulajid memulai usaha peternakan ayam petelur di Kuningan dengan 1.000 ekor ayam, sekaligus membangun fondasi ekonomi pedesaan yang mandiri.",
     position: "left",
   },
   {
-    year: "1990",
-    title: "Fokus Peternakan",
-    desc: "Mulai merambah ke penyebaran dan memperluas sektor ayam ras petelur dan pedaging. Periode ini menandai pertumbuhan signifikan dalam kapasitas produksi dan kemitraan dengan peternak lokal.",
+    year: "1985",
+    title: "Lahirnya AS Putra",
+    desc: "Pemanfaatan dedak menjadi komoditas bernilai tinggi melahirkan nama 'AS Putra' sebagai simbol dedikasi dan visi jangka panjang.",
     position: "right",
   },
   {
+    year: "1997",
+    title: "Tangguh di Masa Krisis",
+    desc: "Di tengah krisis moneter, perusahaan tetap stabil berkat disiplin finansial tanpa hutang dan komitmen kuat terhadap kepercayaan mitra.",
+    position: "left",
+  },
+  {
     year: "2000",
-    title: "Diversifikasi Bisnis",
-    desc: "Memasuki milenium baru, AS PUTRA mulai berekspansi ke sektor lain di luar agribisnis. Konstruksi dan infrastruktur mulai menjadi pilar baru pertumbuhan perusahaan.",
+    title: "Awal Diversifikasi",
+    desc: "Memasuki era baru, AS Putra mulai berekspansi ke luar sektor peternakan, termasuk ke industri otomotif melalui AS Putra Motor.",
+    position: "right",
+  },
+  {
+    year: "2006",
+    title: "Ekspansi Energi & Pariwisata",
+    desc: "Perusahaan merambah sektor energi melalui SPBU dan mengembangkan bisnis hospitality seperti hotel dan resort di berbagai lokasi strategis.",
     position: "left",
   },
   {
     year: "2010",
-    title: "Inovasi & Pelayanan",
-    desc: "Memperkuat divisi logistik dan transportasi (PT Andeff) serta mulai memasuki industri perhotelan untuk mendukung pariwisata daerah. Teknologi mulai diintegrasikan ke dalam operasional.",
+    title: "Penguatan Agribisnis Terintegrasi",
+    desc: "Pengembangan ekosistem peternakan modern melalui hatchery, closed house farm, dan kemitraan peternak lokal.",
     position: "right",
   },
   {
-    year: "2020",
-    title: "Visi Global & Berkelanjutan",
-    desc: "Di bawah kepemimpinan Aif Arifin Sidhik, grup bertransformasi menjadi konglomerasi modern. Fokus pada keberlanjutan, energi terbarukan, dan ekspansi pasar yang lebih luas.",
+    year: "2016",
+    title: "Pengembangan Properti & Infrastruktur",
+    desc: "Melalui ASP Land dan TB AS Putra, perusahaan mulai membangun kawasan dan memperkuat sektor konstruksi sebagai penunjang ekosistem bisnis.",
     position: "left",
+  },
+  {
+    year: "2020",
+    title: "Ekspansi Ritel & Gaya Hidup",
+    desc: "Masuk ke sektor ritel modern, kuliner, kesehatan, dan lifestyle melalui berbagai brand seperti Ayamku, AS Putra Mart, dan klinik estetika.",
+    position: "right",
+  },
+  {
+    year: "2023",
+    title: "Penguatan Logistik Nasional",
+    desc: "Memperluas jaringan distribusi melalui PT Andeff dan Windu Transport untuk mendukung rantai pasok yang terintegrasi.",
+    position: "left",
+  },
+  {
+    year: "Sekarang",
+    title: "Holding Modern & Berkelanjutan",
+    desc: "AS Putra Group berkembang menjadi holding company dengan berbagai sektor bisnis yang terintegrasi, membawa visi 'Tumbuh Bersama' untuk masa depan.",
+    position: "right",
   },
 ];
 
@@ -42,12 +72,13 @@ const HistoryTimeline = () => {
   const sectionRef = useRef(null);
   const lineRef = useRef(null);
   const floatRef = useRef(null);
+  const cardsAnimated = useRef(new Set());
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Animasi floating shapes
       const shapes = floatRef.current?.children;
       if (shapes) {
+        // SHAPE ANIMATIONS - INFINITE LOOP (tetap)
         if (shapes[0]) {
           gsap.to(shapes[0], {
             y: 30,
@@ -94,92 +125,145 @@ const HistoryTimeline = () => {
         }
       }
 
-      // Animasi garis timeline
+      // GARIS TIMELINE ANIMATION
       if (lineRef.current) {
         gsap.fromTo(
           lineRef.current,
           { scaleY: 0, transformOrigin: "top center" },
           {
             scaleY: 1,
-            duration: 1.2,
+            duration: 1,
             ease: "power2.out",
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top 80%",
               toggleActions: "play none none none",
             },
-          },
+          }
         );
       }
 
-      // Animasi untuk setiap card
+      // CARD ANIMATIONS - SETIAP CARD MUNCUL SATU PER SATU
       const cards = document.querySelectorAll(".timeline-card");
 
       cards.forEach((card) => {
+        // Cegah double animation
+        if (cardsAnimated.current.has(card)) return;
+        
         const circle = card.querySelector(".timeline-circle");
         const content = card.querySelector(".timeline-content");
         const position = card.getAttribute("data-position");
 
         if (!circle || !content) return;
 
-        // Set initial state
+        // Set initial state (hidden)
         gsap.set(circle, { scale: 0, opacity: 0 });
         gsap.set(content, { opacity: 0, x: position === "left" ? -40 : 40 });
 
-        // Buat timeline animasi
-        const tl = gsap.timeline({
+        // Buat timeline animasi untuk card ini
+        const cardTl = gsap.timeline({
           scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-            toggleActions: "play none none none",
+            trigger: card,          // Trigger saat card masuk viewport
+            start: "top 85%",       // Saat top card mencapai 85% dari viewport
+            end: "bottom 70%",
+            toggleActions: "play none none none", // Hanya play sekali
           },
         });
 
-        tl.to(circle, {
+        // Animasi circle (pop effect)
+        cardTl.to(circle, {
           scale: 1,
           opacity: 1,
           duration: 0.5,
           ease: "back.out(1.5)",
-        }).to(
+        });
+
+        // Animasi content (slide in)
+        cardTl.to(
           content,
           {
             x: 0,
             opacity: 1,
-            duration: 0.7,
+            duration: 0.6,
             ease: "power3.out",
           },
-          "-=0.3",
+          "-=0.3"
         );
+
+        cardsAnimated.current.add(card);
       });
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      // Bersihkan ScrollTrigger
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.vars.trigger === sectionRef.current) {
+          trigger.kill();
+        }
+      });
+    };
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="section relative overflow-hidden bg-white"
+      className="section allow-scroll relative overflow-hidden"
       id="history-timeline"
       data-title="Sejarah Perusahaan"
       data-bg="light"
       style={{
+        backgroundColor: "var(--color-bg-light)",
         paddingTop: "clamp(3rem, 8vh, 5rem)",
         paddingBottom: "clamp(3rem, 8vh, 5rem)",
         paddingLeft: "clamp(1rem, 5vw, 2rem)",
         paddingRight: "clamp(1rem, 5vw, 2rem)",
       }}
     >
-      {/* BACKGROUND SHAPES - Floating decorative shapes */}
-      <div ref={floatRef} className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+      {/* BACKGROUND IMAGE */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: "url('/react/img/mission.webp')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          opacity: 0.08,
+          zIndex: 0,
+        }}
+      />
+
+      {/* OVERLAY GRADIENT */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            linear-gradient(
+              to bottom,
+              var(--color-bg-light) 0%,
+              rgba(255,255,255,0.85) 15%,
+              rgba(255,255,255,0.7) 50%,
+              rgba(255,255,255,0.85) 85%,
+              var(--color-bg-light) 100%
+            )
+          `,
+          zIndex: 1,
+        }}
+      />
+
+      {/* SEMUA SHAPE TETAP ADA */}
+      <div
+        ref={floatRef}
+        className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
+      >
         {/* Shape 1 - Circle besar blur */}
         <div
           className="absolute rounded-full blur-3xl"
           style={{
             backgroundColor: "var(--color-utama)",
-            opacity: 0.05,
-            width: "min(60vw, 500px)",
-            height: "min(60vw, 500px)",
+            opacity: 0.06,
+            width: "min(50vw, 450px)",
+            height: "min(50vw, 450px)",
             top: "-10%",
             right: "-5%",
           }}
@@ -190,7 +274,7 @@ const HistoryTimeline = () => {
           className="absolute rounded-full blur-2xl"
           style={{
             backgroundColor: "var(--color-aksen)",
-            opacity: 0.06,
+            opacity: 0.05,
             width: "min(40vw, 350px)",
             height: "min(40vw, 350px)",
             bottom: "-5%",
@@ -200,9 +284,10 @@ const HistoryTimeline = () => {
 
         {/* Shape 3 - Square rotated */}
         <div
-          className="absolute rotate-12 rounded-2xl opacity-40 hidden lg:block"
+          className="absolute rotate-12 rounded-2xl hidden lg:block"
           style={{
             border: "2px solid var(--color-utama)",
+            opacity: 0.2,
             width: "min(12vw, 100px)",
             height: "min(12vw, 100px)",
             top: "15%",
@@ -212,7 +297,7 @@ const HistoryTimeline = () => {
 
         {/* Shape 4 - Diamond */}
         <div
-          className="absolute rotate-45 opacity-30 hidden md:block"
+          className="absolute rotate-45 opacity-20 hidden md:block"
           style={{
             backgroundColor: "var(--color-aksen)",
             width: "min(8vw, 60px)",
@@ -224,19 +309,20 @@ const HistoryTimeline = () => {
 
         {/* Shape 5 - Dot pattern */}
         <div
-          className="absolute opacity-20 hidden md:block"
+          className="absolute opacity-15 hidden md:block"
           style={{
-            backgroundImage: "radial-gradient(var(--color-utama) 2px, transparent 2px)",
+            backgroundImage:
+              "radial-gradient(var(--color-utama) 2px, transparent 2px)",
             backgroundSize: "20px 20px",
-            width: "min(30vw, 200px)",
-            height: "min(30vw, 200px)",
+            width: "min(25vw, 180px)",
+            height: "min(25vw, 180px)",
             top: "30%",
             right: "15%",
           }}
         />
 
-        {/* Pattern grid - subtle */}
-        <div className="absolute inset-0 opacity-[0.015] pointer-events-none">
+        {/* Shape 6 - Grid pattern */}
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none">
           <div
             className="w-full h-full"
             style={{
@@ -244,7 +330,7 @@ const HistoryTimeline = () => {
                 linear-gradient(to right, var(--color-utama) 1px, transparent 1px),
                 linear-gradient(to bottom, var(--color-utama) 1px, transparent 1px)
               `,
-              backgroundSize: "clamp(20px, 5vw, 40px) clamp(20px, 5vw, 40px)",
+              backgroundSize: "clamp(30px, 5vw, 50px) clamp(30px, 5vw, 50px)",
             }}
           />
         </div>
@@ -302,88 +388,92 @@ const HistoryTimeline = () => {
             style={{
               color: "var(--color-teks-muted)",
               fontSize: "clamp(0.875rem, 2.5vw, 1rem)",
-              paddingLeft: "clamp(1rem, 5vw, 2rem)",
-              paddingRight: "clamp(1rem, 5vw, 2rem)",
             }}
           >
             Jejak langkah AS PUTRA dari masa ke masa.
           </p>
         </div>
 
-        {/* TIMELINE */}
+        {/* TIMELINE CARDS */}
         <div className="relative max-w-[1000px] mx-auto">
-          {/* Garis tengah - hidden di mobile */}
+          {/* Garis tengah */}
           <div
             ref={lineRef}
-            className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-[var(--color-utama)] top-0 bottom-0 hidden md:block"
-            style={{ transformOrigin: "top center" }}
+            className="absolute left-1/2 transform -translate-x-1/2 w-0.5 top-0 bottom-0 hidden md:block"
+            style={{
+              backgroundColor: "var(--color-utama)",
+              transformOrigin: "top center",
+            }}
           />
 
           {timelineData.map((item, idx) => (
             <div
               key={idx}
               data-position={item.position}
-              className={`timeline-card relative md:w-1/2 px-4 sm:px-6 md:px-8 mb-8 md:mb-12 ${
-                item.position === "left" 
-                  ? "md:left-0 md:text-right md:pr-12" 
+              className={`timeline-card relative md:w-1/2 px-4 sm:px-5 md:px-6 mb-6 md:mb-10 ${
+                item.position === "left"
+                  ? "md:left-0 md:text-right md:pr-12"
                   : "md:left-1/2 md:text-left md:pl-12"
               }`}
             >
-              {/* Bulatan - hanya di desktop */}
+              {/* Bulatan - hanya desktop */}
               <div
-                className={`timeline-circle hidden md:block absolute top-5 w-4 h-4 md:w-5 md:h-5 bg-white border-[3px] md:border-4 border-[var(--color-utama)] rounded-full z-10 shadow-md ${
-                  item.position === "left" ? "right-[-9px]" : "left-[-9px]"
+                className={`timeline-circle hidden md:block absolute top-5 w-4 h-4 md:w-5 md:h-5 rounded-full z-10 shadow-md ${
+                  item.position === "left" ? "right-[-10px]" : "left-[-10px]"
                 }`}
+                style={{
+                  backgroundColor: "var(--color-bg-light)",
+                  border: "3px solid var(--color-utama)",
+                  boxShadow: "0 0 0 2px var(--color-bg-light), 0 2px 8px rgba(0,0,0,0.1)",
+                }}
               />
 
-              {/* Konten Card */}
+              {/* Card Content */}
               <div
-                className="timeline-content bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 relative overflow-hidden opacity-0"
+                className="timeline-content rounded-xl shadow-lg transition-all duration-300 relative overflow-hidden"
                 style={{
+                  backgroundColor: "var(--color-bg-light)",
                   padding: "clamp(1rem, 4vw, 1.5rem)",
+                  border: "1px solid rgba(30, 58, 138, 0.1)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-5px)";
+                  e.currentTarget.style.boxShadow = "0 20px 30px -12px rgba(0, 0, 0, 0.15)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                {/* Header dengan tahun dan shape */}
+                {/* Tahun */}
                 <div
-                  className={`flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 ${
-                    item.position === "left" ? "md:flex-row-reverse" : "md:flex-row"
-                  }`}
+                  className="inline-flex items-center gap-2 mb-3"
+                  style={{
+                    borderLeft: `3px solid var(--color-utama)`,
+                    paddingLeft: "12px",
+                  }}
                 >
-                  {/* Tahun */}
                   <span
-                    className="text-[var(--color-utama)] font-bold leading-none"
+                    className="font-semibold tracking-wide"
                     style={{
-                      fontSize: "clamp(2rem, 8vw, 3rem)",
+                      color: "var(--color-utama)",
+                      fontSize: "clamp(0.9rem, 3vw, 1.1rem)",
                     }}
                   >
                     {item.year}
                   </span>
-
-                  {/* Shape container - responsive */}
-                  <div className="flex-1 w-full sm:w-auto flex items-center gap-2">
-                    <div className="flex-1 h-0.5 bg-gradient-to-r from-[var(--color-aksen)] to-transparent" />
-                    <div className="flex items-center gap-1.5 flex-shrink-0">
-                      <div
-                        className="rounded-full bg-[var(--color-aksen)]"
-                        style={{ width: "clamp(6px, 2vw, 8px)", height: "clamp(6px, 2vw, 8px)" }}
-                      />
-                      <div
-                        className="rounded-full border-2 border-[var(--color-aksen)]"
-                        style={{ width: "clamp(10px, 3vw, 12px)", height: "clamp(10px, 3vw, 12px)" }}
-                      />
-                      <div
-                        className="rounded-full bg-[var(--color-utama)]"
-                        style={{ width: "clamp(5px, 1.5vw, 6px)", height: "clamp(5px, 1.5vw, 6px)" }}
-                      />
-                    </div>
-                  </div>
+                  <div
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{ backgroundColor: "var(--color-aksen)" }}
+                  />
                 </div>
 
                 {/* Judul */}
                 <h3
-                  className="font-bold text-[var(--color-teks)] mt-4 mb-2"
+                  className="font-bold mb-2"
                   style={{
-                    fontSize: "clamp(1.125rem, 4vw, 1.25rem)",
+                    color: "var(--color-teks)",
+                    fontSize: "clamp(1rem, 3.5vw, 1.25rem)",
                   }}
                 >
                   {item.title}
@@ -391,22 +481,33 @@ const HistoryTimeline = () => {
 
                 {/* Deskripsi */}
                 <p
-                  className="text-[var(--color-teks-muted)] leading-relaxed"
+                  className="leading-relaxed"
                   style={{
+                    color: "var(--color-teks-muted)",
                     fontSize: "clamp(0.75rem, 2.5vw, 0.875rem)",
+                    lineHeight: "1.6",
                   }}
                 >
                   {item.desc}
                 </p>
 
-                {/* Shape background subtle - responsive */}
+                {/* Garis aksen samping */}
+                <div
+                  className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl"
+                  style={{
+                    backgroundColor: "var(--color-utama)",
+                    opacity: 0.15,
+                  }}
+                />
+
+                {/* Shape background subtle */}
                 <div
                   className={`absolute ${
                     item.position === "left" ? "-right-6 -bottom-6" : "-left-6 -bottom-6"
-                  } opacity-[0.04]`}
+                  } opacity-[0.04] pointer-events-none hidden sm:block`}
                   style={{
-                    width: "clamp(60px, 15vw, 96px)",
-                    height: "clamp(60px, 15vw, 96px)",
+                    width: "clamp(50px, 12vw, 80px)",
+                    height: "clamp(50px, 12vw, 80px)",
                   }}
                 >
                   <svg viewBox="0 0 100 100" className="w-full h-full">

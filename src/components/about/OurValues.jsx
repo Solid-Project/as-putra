@@ -48,40 +48,42 @@ const OurValues = () => {
       const shapes = floatRef.current?.children;
       if (!shapes) return;
 
+      // 🔥 PARALLAX SHAPES - RANGE DIPERBESAR
       if (shapes[0]) {
         gsap.to(shapes[0], {
-          yPercent: -50,
+          yPercent: -80, // dari -50 jadi -80
           ease: "none",
-          scrollTrigger: { trigger: sectionRef.current, scrub: 2 },
+          scrollTrigger: { trigger: sectionRef.current, scrub: 1.5 },
         });
       }
       if (shapes[1]) {
         gsap.to(shapes[1], {
-          yPercent: 30,
+          yPercent: 50, // dari 30 jadi 50
           rotate: 45,
           ease: "none",
-          scrollTrigger: { trigger: sectionRef.current, scrub: 1 },
+          scrollTrigger: { trigger: sectionRef.current, scrub: 1.5 },
         });
       }
       if (shapes[2]) {
         gsap.to(shapes[2], {
-          yPercent: -80,
+          yPercent: -120, // dari -80 jadi -120
           ease: "none",
           scrollTrigger: { trigger: sectionRef.current, scrub: 1.5 },
         });
       }
       if (shapes[3]) {
         gsap.to(shapes[3], {
-          yPercent: 40,
+          yPercent: 70, // dari 40 jadi 70
           ease: "none",
-          scrollTrigger: { trigger: sectionRef.current, scrub: 2.5 },
+          scrollTrigger: { trigger: sectionRef.current, scrub: 1.5 },
         });
       }
 
+      // 🔥 PARALLAX CARDS - RANGE DIPERBESAR
       cardsRef.current.forEach((card, idx) => {
         if (!card) return;
 
-        const range = 40;
+        const range = 70; // dari 40 jadi 70
         const startY = idx % 2 === 0 ? range : -range;
         const endY = idx % 2 === 0 ? -range : range;
 
@@ -95,8 +97,7 @@ const OurValues = () => {
               trigger: sectionRef.current,
               start: "top bottom",
               end: "bottom top",
-              scrub: 1.2,
-              invalidateOnRefresh: true,
+              scrub: 1.2, // sedikit dinaikkan
             },
           },
         );
@@ -109,23 +110,55 @@ const OurValues = () => {
   return (
     <section
       ref={sectionRef}
-      className="section relative overflow-hidden bg-gradient-to-b from-white to-gray-50"
+      className="section relative overflow-hidden"
       id="our-values"
       style={{
         minHeight: "auto",
         paddingTop: "clamp(3rem, 8vh, 6rem)",
         paddingBottom: "clamp(4rem, 10vh, 7rem)",
+        backgroundColor: "var(--color-bg-light)",
       }}
     >
-      {/* BACKGROUND SHAPES */}
-      <div ref={floatRef} className="absolute inset-0 pointer-events-none z-0">
+      {/* BACKGROUND IMAGE */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: "url('/react/img/mission.webp')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          opacity: 0.1,
+          zIndex: 0,
+        }}
+      />
+
+      {/* OVERLAY GRADIENT */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            linear-gradient(
+              to bottom,
+              var(--color-bg-light) 0%,
+              rgba(255,255,255,0.8) 15%,
+              rgba(255,255,255,0.6) 50%,
+              rgba(255,255,255,0.8) 85%,
+              var(--color-bg-light) 100%
+            )
+          `,
+          zIndex: 1,
+        }}
+      />
+
+      {/* BACKGROUND SHAPES - DENGAN PARALLAX */}
+      <div ref={floatRef} className="absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}>
         <div
           className="absolute rounded-full blur-3xl"
           style={{
             backgroundColor: "var(--color-utama)",
             opacity: 0.08,
-            width: "min(50vw, 400px)",
-            height: "min(50vw, 400px)",
+            width: "min(50vw, 450px)",
+            height: "min(50vw, 450px)",
             top: "10%",
             left: "-5%",
           }}
@@ -136,19 +169,19 @@ const OurValues = () => {
           style={{
             backgroundColor: "var(--color-aksen)",
             opacity: 0.06,
-            width: "min(40vw, 350px)",
-            height: "min(40vw, 350px)",
+            width: "min(40vw, 400px)",
+            height: "min(40vw, 400px)",
             bottom: "-5%",
             right: "-3%",
           }}
         />
 
         <div
-          className="absolute rotate-12 rounded-2xl opacity-60 hidden lg:block"
+          className="absolute rotate-12 rounded-2xl opacity-50 hidden lg:block"
           style={{
-            border: "1px solid var(--color-utama)",
-            width: "min(15vw, 120px)",
-            height: "min(15vw, 120px)",
+            border: "2px solid var(--color-utama)",
+            width: "min(15vw, 140px)",
+            height: "min(15vw, 140px)",
             top: "20%",
             right: "10%",
           }}
@@ -158,28 +191,41 @@ const OurValues = () => {
           className="absolute opacity-20 hidden md:block"
           style={{
             backgroundImage:
-              "radial-gradient(var(--color-utama) 1.5px, transparent 1.5px)",
-            backgroundSize: "15px 15px",
-            width: "min(25vw, 160px)",
-            height: "min(25vw, 160px)",
+              "radial-gradient(var(--color-utama) 2px, transparent 2px)",
+            backgroundSize: "20px 20px",
+            width: "min(25vw, 200px)",
+            height: "min(25vw, 200px)",
             bottom: "15%",
             left: "5%",
           }}
         />
       </div>
 
+      {/* GRID LINES */}
+      <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ zIndex: 2 }}>
+        <div
+          className="w-full h-full"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, var(--color-utama) 1px, transparent 1px),
+              linear-gradient(to bottom, var(--color-utama) 1px, transparent 1px)
+            `,
+            backgroundSize: "50px 50px",
+          }}
+        />
+      </div>
+
       <div 
-        className="mx-auto relative z-10"
+        className="mx-auto relative"
         style={{
           maxWidth: "1280px",
           paddingLeft: "clamp(1rem, 5vw, 2rem)",
           paddingRight: "clamp(1rem, 5vw, 2rem)",
+          zIndex: 10,
         }}
       >
         {/* HEADER */}
-        <div 
-          className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 mb-12 lg:mb-16"
-        >
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 mb-12 lg:mb-16">
           <div className="max-w-xl mx-auto lg:mx-0 text-center lg:text-left">
             <div className="flex items-center gap-3 mb-4 justify-center lg:justify-start">
               <div
@@ -220,7 +266,7 @@ const OurValues = () => {
           </p>
         </div>
 
-        {/* CARDS */}
+        {/* CARDS - DENGAN PARALLAX LEBIH TINGGI */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 md:gap-7 lg:gap-6">
           {values.map((item, idx) => {
             const IconComponent = item.icon;
@@ -237,7 +283,7 @@ const OurValues = () => {
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
-                    background: `linear-gradient(135deg, ${idx % 2 === 0 ? 'var(--color-utama)' : 'var(--color-aksen)'}05, transparent)`,
+                    background: `linear-gradient(135deg, ${idx % 2 === 0 ? 'var(--color-utama)' : 'var(--color-aksen)'}08, transparent)`,
                   }}
                 />
 

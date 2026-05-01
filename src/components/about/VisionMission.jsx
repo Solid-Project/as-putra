@@ -8,56 +8,82 @@ const VisionMission = () => {
   const sectionRef = useRef(null);
   const leftRef = useRef(null);
   const rightRef = useRef(null);
-  const bgRef = useRef(null);
   const floatRef = useRef(null);
+  const bgRef = useRef(null);
+  const ctxRef = useRef(null);
 
   useEffect(() => {
+    if (ctxRef.current) {
+      ctxRef.current.revert();
+    }
+
     const ctx = gsap.context(() => {
-      const entryTl = gsap.timeline({
+      
+      // ENTRANCE ANIMATION
+      const entranceTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 75%",
+          start: "top 80%",
+          once: true,
         },
       });
 
-      entryTl.from([leftRef.current, rightRef.current], {
-        y: 60,
+      entranceTl.from([leftRef.current, rightRef.current], {
+        y: 50,
         opacity: 0,
-        duration: 1,
-        stagger: 0.2,
+        duration: 0.8,
+        stagger: 0.15,
         ease: "power3.out",
       });
 
-      gsap.to(floatRef.current, {
-        yPercent: -25,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 2,
-        },
-      });
+      // PARALLAX FLOATING - TETAP
+      if (floatRef.current) {
+        gsap.to(floatRef.current, {
+          yPercent: -20,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1,
+          },
+        });
+      }
 
-      gsap.to(bgRef.current, {
-        yPercent: 10,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
+      // PARALLAX BACKGROUND - TETAP
+      if (bgRef.current) {
+        gsap.to(bgRef.current, {
+          yPercent: 10,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1,
+          },
+        });
+      }
+
     }, sectionRef);
 
-    return () => ctx.revert();
+    ctxRef.current = ctx;
+
+    return () => {
+      if (ctxRef.current) {
+        ctxRef.current.revert();
+      }
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.vars.trigger === sectionRef.current) {
+          trigger.kill();
+        }
+      });
+    };
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="section relative min-h-screen flex items-center px-6 md:px-12 py-20 overflow-hidden bg-white"
+      className="section relative min-h-screen flex items-center px-6 md:px-12 py-20 overflow-hidden"
       data-title="Visi & Misi"
       data-theme="light"
       style={{
@@ -65,10 +91,53 @@ const VisionMission = () => {
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
+        backgroundColor: "var(--color-bg-light)",
       }}
     >
+      {/* Overlay Gradient - TETAP */}
+      <div
+        className="absolute inset-0 -z-20"
+        style={{
+          background: `
+            linear-gradient(
+              to bottom,
+              var(--color-bg-light) 0%,
+              rgba(255,255,255,0.85) 15%,
+              rgba(255,255,255,0.7) 50%,
+              rgba(255,255,255,0.85) 85%,
+              var(--color-bg-light) 100%
+            )
+          `,
+        }}
+      />
 
-      {/* FLOATING */}
+      {/* LAYER BACKGROUND UNTUK PARALLAX - TETAP */}
+      <div
+        ref={bgRef}
+        className="absolute inset-0 -z-30 h-[110%] -top-[5%]"
+        style={{ willChange: "transform" }}
+      >
+        <img
+          src="/react/img/mission.webp"
+          alt="background"
+          className="w-full h-full object-cover opacity-20"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `
+              linear-gradient(
+                to bottom,
+                var(--color-bg-light),
+                rgba(255,255,255,0.6),
+                var(--color-bg-light)
+              )
+            `,
+          }}
+        />
+      </div>
+
+      {/* FLOATING DECORATIONS - TETAP */}
       <div
         ref={floatRef}
         className="absolute inset-0 z-0 pointer-events-none"
@@ -115,35 +184,7 @@ const VisionMission = () => {
         />
       </div>
 
-      {/* BACKGROUND */}
-      <div
-        ref={bgRef}
-        className="absolute inset-0 -z-20 h-[115%] -top-[5%]"
-        style={{ willChange: "transform" }}
-      >
-        <img
-          src="/react/img/mission.webp"
-          alt="background"
-          className="w-full h-full object-cover opacity-20"
-        />
-
-        {/* Overlay lebih smooth */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              linear-gradient(
-                to bottom,
-                var(--color-bg-light),
-                rgba(255,255,255,0.6),
-                var(--color-bg-light)
-              )
-            `,
-          }}
-        />
-      </div>
-
-      {/* GRID */}
+      {/* GRID LINES - TETAP */}
       <div className="absolute inset-0 -z-10 opacity-[0.08] pointer-events-none">
         <div
           className="w-full h-full"

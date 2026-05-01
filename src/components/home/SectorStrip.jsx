@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
+import peternakanImage from "@/assets/img/sector1.webp";
 gsap.registerPlugin(ScrollTrigger);
 
 const sectors = [
-  { name: 'Peternakan', desc: 'Breeding, hatchery, kemitraan, dan pengelolaan peternakan terpadu.', bg: '/react/img/peternakan.webp' },
+  { name: 'Peternakan', desc: 'Breeding, hatchery, kemitraan, dan pengelolaan peternakan terpadu.', bg: peternakanImage },
   { name: 'Hotel & Resort', desc: 'Layanan hospitality premium (Cordela, Bulak Laut, Amanara, Aston).', bg: '/react/img/hotel2.webp' },
   { name: 'Property', desc: 'Pengembangan hunian dan properti (Kuningan, Cirebon, Majalengka).', bg: '/react/img/property.webp' },
   { name: 'Retail', desc: 'Usaha ritel dan layanan pendukung kebutuhan hidup.', bg: 'https://plus.unsplash.com/premium_photo-1683121938935-118d0a16a469?q=80&w=1170&auto=format&fit=crop' },
@@ -19,7 +19,7 @@ const SectorStrip = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       
-      // 1. ANIMASI ENTRANCE
+      // 1. ANIMASI ENTRANCE - versi original
       gsap.fromTo(itemsRef.current,
         { 
           y: 100,
@@ -38,11 +38,12 @@ const SectorStrip = () => {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top 85%",
+            toggleActions: "play none none none",
           }
         }
       );
 
-      // 2. LIVE PARALLAX
+      // 2. LIVE PARALLAX - versi original dengan range lebih besar
       itemsRef.current.forEach((el, idx) => {
         if (!el) return;
         
@@ -59,13 +60,13 @@ const SectorStrip = () => {
               trigger: sectionRef.current,
               start: "top bottom",
               end: "bottom top",
-              scrub: 1,
+              scrub: 1.2,
             }
           }
         );
       });
 
-      // 3. HOVER INTERACTION
+      // 3. HOVER INTERACTION - versi original
       itemsRef.current.forEach(el => {
         if (!el) return;
         const handleMouseEnter = () => {
@@ -88,6 +89,11 @@ const SectorStrip = () => {
         };
         el.addEventListener('mouseenter', handleMouseEnter);
         el.addEventListener('mouseleave', handleMouseLeave);
+        
+        return () => {
+          el.removeEventListener('mouseenter', handleMouseEnter);
+          el.removeEventListener('mouseleave', handleMouseLeave);
+        };
       });
 
     }, sectionRef);
@@ -109,7 +115,6 @@ const SectorStrip = () => {
         display: "flex",
       }}
     >
-      {/* GRID - FULL FIT, TANPA GAP, TANPA PADDING */}
       <div 
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 w-full"
         style={{ margin: 0 }}
@@ -122,30 +127,39 @@ const SectorStrip = () => {
             style={{
               backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${sector.bg})`,
               padding: "clamp(1.25rem, 4vw, 2rem)",
-              minHeight: "100%",
+              minHeight: "clamp(350px, 45vh, 450px)",
+              height: "100%",
+              backgroundPosition: "center",
+              backgroundSize: "cover",
             }}
           >
-            {/* Judul - DIPERBESAR */}
+            {/* Judul */}
             <h3 
               className="font-bold"
               style={{
-                fontSize: "clamp(1.5rem, 4vw, 2.2rem)",
+                fontSize: "clamp(1.3rem, 3.5vw, 2rem)",
                 marginBottom: "clamp(0.75rem, 2vh, 1.25rem)",
               }}
             >
               {sector.name}
             </h3>
             
-            {/* Deskripsi - DIPERBESAR */}
-            <p 
-              className="opacity-90 leading-relaxed"
+            {/* Deskripsi dengan tinggi konsisten */}
+            <div
               style={{
-                fontSize: "clamp(0.9rem, 2.2vw, 1.1rem)",
-                maxWidth: "95%",
+                minHeight: "clamp(70px, 12vh, 90px)",
               }}
             >
-              {sector.desc}
-            </p>
+              <p 
+                className="opacity-90 leading-relaxed"
+                style={{
+                  fontSize: "clamp(0.85rem, 2vw, 1rem)",
+                  maxWidth: "95%",
+                }}
+              >
+                {sector.desc}
+              </p>
+            </div>
             
             {/* Garis aksen */}
             <div 

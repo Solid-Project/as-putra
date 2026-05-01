@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import careerBg from "@/assets/img/karir.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -125,7 +126,7 @@ const HeroCareer = () => {
       ref={sectionRef}
       className="section relative h-screen flex items-center justify-center text-center overflow-hidden"
       style={{
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('/react/img/team.webp')`,
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url(${careerBg})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}

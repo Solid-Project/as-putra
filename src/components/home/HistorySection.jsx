@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import sejarahImg from "@/assets/img/sejarah.webp";
+import sejarahImg from "@/assets/img/owner.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,50 +18,58 @@ const HistorySection = () => {
 
   // Efek mengetik - hanya sekali saat section masuk viewport
   useEffect(() => {
-    const section = sectionRef.current;
-    
-    const startTyping = () => {
-      if (hasTyped) return;
-      
-      let currentIndex = 0;
-      setDisplayText("");
-      setIsTyping(true);
+  const section = sectionRef.current;
+  if (!section) return;
 
-      const typingInterval = setInterval(() => {
-        if (currentIndex < fullText.length) {
-          setDisplayText(fullText.slice(0, currentIndex + 1));
-          currentIndex++;
-        } else {
-          clearInterval(typingInterval);
-          setIsTyping(false);
-          setHasTyped(true);
-        }
-      }, 120);
+  let typingInterval = null;
+  let isInside = false; // 🔥 tracking masuk/keluar section
 
-      return () => clearInterval(typingInterval);
-    };
+  const startTyping = () => {
+    let currentIndex = 0;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasTyped) {
-            startTyping();
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
+    setDisplayText("");
+    setIsTyping(true);
 
-    if (section) {
-      observer.observe(section);
-    }
+    typingInterval = setInterval(() => {
+      currentIndex++;
 
-    return () => {
-      if (section) {
-        observer.unobserve(section);
+      setDisplayText(fullText.slice(0, currentIndex));
+
+      if (currentIndex >= fullText.length) {
+        clearInterval(typingInterval);
+        setIsTyping(false);
       }
-    };
-  }, [hasTyped]);
+    }, 110);
+  };
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      // 🔥 masuk ke tengah section
+      if (entry.isIntersecting && !isInside) {
+        isInside = true;
+        startTyping();
+      }
+
+      // 🔥 keluar dari section → reset biar bisa ulang lagi
+      if (!entry.isIntersecting && isInside) {
+        isInside = false;
+
+        if (typingInterval) clearInterval(typingInterval);
+      }
+    },
+    {
+      threshold: 0,
+      rootMargin: "-40% 0px -40% 0px" // 🔥 area tengah viewport
+    }
+  );
+
+  observer.observe(section);
+
+  return () => {
+    observer.disconnect();
+    if (typingInterval) clearInterval(typingInterval);
+  };
+}, []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -202,60 +210,26 @@ const HistorySection = () => {
                 fontSize: "clamp(0.75rem, 1.8vw, 0.95rem)" 
               }}
             >
-              <p>
-                Didirikan oleh{" "}
-                <strong style={{ color: "var(--color-teks)" }}>
-                  H. Dudung Dulajid
-                </strong>
-                , AS PUTRA Group memulai perjalanannya di Kuningan dengan visi untuk memberdayakan ekonomi lokal melalui peternakan unggas.
-              </p>
-              <p>
-                Hari ini, perjuangan tersebut berlanjut di bawah kepemimpinan putranya,{" "}
-                <strong style={{ color: "var(--color-teks)" }}>
-                  H. Aif Arifin Sidhik
-                </strong>
-                . Sebagai CEO, Aif telah memperluas cakrawala grup ke berbagai bidang strategis.
-              </p>
-            </div>
-
-            <div style={{ marginTop: "clamp(1rem, 2.5vh, 1.5rem)" }}>
-              <Link
-                to="/about"
-                className="group relative inline-flex items-center gap-2 font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:-translate-y-1"
-                style={{
-                  backgroundColor: "var(--color-utama)",
-                  color: "white",
-                  paddingTop: "clamp(0.5rem, 1.5vh, 0.8rem)",
-                  paddingBottom: "clamp(0.5rem, 1.5vh, 0.8rem)",
-                  paddingLeft: "clamp(1rem, 3vw, 1.8rem)",
-                  paddingRight: "clamp(1rem, 3vw, 1.8rem)",
-                  fontSize: "clamp(0.75rem, 1.8vw, 0.95rem)",
-                  boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = `0 20px 25px -5px var(--color-utama)40`;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = `0 4px 6px -1px rgb(0 0 0 / 0.1)`;
-                }}
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  Baca Selengkapnya
-                  <svg 
-                    className="group-hover:translate-x-1 transition-transform duration-300"
-                    style={{ width: "clamp(12px, 1.5vw, 16px)", height: "clamp(12px, 1.5vw, 16px)" }}
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </span>
-                <div 
-                  className="absolute inset-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300"
-                  style={{ backgroundColor: "rgba(255,255,255,0.2)" }}
-                />
-              </Link>
+              <p
+  style={{
+    textAlign: "justify",
+    lineHeight: "1.8",
+  }}
+>
+  Didirikan oleh{" "}
+  <strong style={{ color: "var(--color-teks)" }}>
+    H. Dudung Dulajid
+  </strong>{" "}
+  pada tahun 1984 di Kuningan, AS PUTRA berawal dari usaha peternakan ayam petelur skala kecil dengan sekitar 1.000 ekor. Berbekal visi untuk membangun kemandirian ekonomi pedesaan, beliau tidak hanya fokus pada produksi, tetapi juga berinovasi mengolah dedak menjadi komoditas bernilai tinggi. Dari titik inilah nama “AS PUTRA” lahir sebagai simbol dedikasi dan harapan masa depan.{" "}
+  <br /><br />
+  Seiring berjalannya waktu, fondasi yang kuat tersebut membawa perusahaan mampu bertahan bahkan tumbuh di tengah krisis moneter 1997, berkat kedisiplinan dalam pengelolaan keuangan dan komitmen menjaga kepercayaan mitra. Memasuki era 2000-an, AS PUTRA mulai melakukan diversifikasi bisnis ke berbagai sektor strategis, memperluas peran dari sekadar usaha peternakan menjadi ekosistem agribisnis dan bisnis terintegrasi.{" "}
+  <br /><br />
+  Kini, estafet kepemimpinan dilanjutkan oleh putranya,{" "}
+  <strong style={{ color: "var(--color-teks)" }}>
+    H. Aif Arifin Sidhik
+  </strong>
+  , yang membawa perusahaan ke fase transformasi modern. Di bawah kepemimpinannya, AS PUTRA Group berkembang menjadi holding company yang menaungi berbagai sektor—mulai dari agribisnis, energi, properti, hingga ritel dan gaya hidup—dengan tetap berpegang pada nilai utama: tumbuh bersama dan memberikan dampak nyata bagi masyarakat.
+</p>
             </div>
           </div>
 
@@ -329,7 +303,7 @@ const HistorySection = () => {
                     fontSize: "clamp(0.6rem, 1.6vw, 0.8rem)" 
                   }}
                 >
-                  H. Dudung Dulajid & H. Aif Arifin Sidhik
+                  H. Dudung Dulajid
                 </p>
               </div>
             </div>

@@ -2,7 +2,13 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import heroVideo from "@/assets/202601251341.mp4";
-import useSectionAnimation, { sectionAnimations } from "@/hooks/useSectionAnimation"; // Import hook
+import useSectionAnimation, { sectionAnimations } from "@/hooks/useSectionAnimation";
+import carousel1 from "@/assets/img/Carousel/herocarousel1.webp";
+import carousel2 from "@/assets/img/Carousel/herocarousel2.webp";
+import carousel3 from "@/assets/img/Carousel/herocarousel3.webp";
+import carousel4 from "@/assets/img/Carousel/herocarousel4.jpg";
+import carousel5 from "@/assets/img/Carousel/herocarousel5.webp";
+import carousel6 from "@/assets/img/Carousel/herocarousel6.webp";
 
 const slides = [
   {
@@ -10,12 +16,12 @@ const slides = [
     src: heroVideo,
     poster: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1920&q=80",
   },
-  {
-    type: "image",
-    src: "https://plus.unsplash.com/premium_photo-1661930553507-59420df08d82?q=80&w=1074&auto=format&fit=crop",
-  },
-  { type: "image", src: "/react/img/prop2.webp" },
-  { type: "image", src: "/react/img/hotel2.webp" },
+  { type: "image", src: carousel1 },
+  { type: "image", src: carousel2 },
+  { type: "image", src: carousel3 },
+  { type: "image", src: carousel4 },
+  { type: "image", src: carousel5 },
+  { type: "image", src: carousel6 },
 ];
 
 const HeroCarousel = () => {

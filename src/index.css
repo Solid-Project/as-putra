@@ -17,7 +17,24 @@
 html, body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow-x: hidden;  /* Ganti dari overflow: hidden */
+  overflow-y: auto;    /* Tambahkan ini biar bisa scroll vertikal */
+  height: auto;        /* Pastikan height auto */
+  min-height: 100vh;   /* Biar full viewport */
+}
+
+/* Atau alternatifnya */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: auto;  /* Biar bisa scroll dua arah */
+}
+
+/* Atau pilihan ketiga - HAPUS overflow sama sekali */
+html, body {
+  margin: 0;
+  padding: 0;
+  /* overflow dihapus, default auto */
 }
 
 .section-navigation {
@@ -57,6 +74,11 @@ html, body {
   animation: fadeIn 0.6s ease-out forwards;
 }
 
+.parallax {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
 .animate-pulse {
   animation: pulse 4s ease-in-out infinite;
 }
@@ -65,7 +87,7 @@ html, body {
   animation-delay: 1s;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - Ini baru akan berfungsi setelah scroll aktif */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -132,11 +154,13 @@ html, body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
 /* Efek Meleleh */
 .gooey-filter {
   filter: url("#goo");
-  transition: filter 0.5s ease; /* Transisi halus saat filter aktif/mati */
+  transition: filter 0.5s ease;
 }
+
 body {
   font-family: 'Inter', sans-serif;
   color: var(--color-teks);

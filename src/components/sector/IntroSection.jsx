@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import livestockImg from '@/assets/img/Carousel/herocarousel6.webp';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,8 +13,8 @@ const IntroSection = ({ title, image }) => {
   const parallaxImgRef = useRef(null);
   const floatRef = useRef(null);
 
-  const displayTitle = title || "Finance Sector";
-  const displayImage = image || "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1200";
+  const displayTitle = title || "Livestock Sector";
+  const displayImage = image || livestockImg;
 
   useEffect(() => {
     const ctx = gsap.context(() => {

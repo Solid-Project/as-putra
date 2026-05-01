@@ -1,4 +1,5 @@
 // src/data/sectorData.js
+import imgPeternakan from '@/assets/img/sector1.webp';
 export const sectorData = [
   {
     id: 'peternakan',
@@ -6,7 +7,7 @@ export const sectorData = [
     title: 'Peternakan',
     subtitle: 'Pilar Utama Ketahanan Pangan',
     description: 'Fokus utama kami dalam mendukung ketahanan pangan melalui manajemen peternakan terintegrasi. Dengan teknologi modern dan kemitraan yang kuat, kami menghadirkan produk unggas berkualitas tinggi yang memenuhi standar nasional.',
-    image: '/react/img/peternakan.webp',
+    image: imgPeternakan,
     layout: 'layout1',
     order: 1,
     items: [
