@@ -99,7 +99,7 @@ const HeroSector = () => {
           ref={subtitleRef}
           className="text-white/95 max-w-[600px] mx-auto mb-10 text-lg md:text-xl font-light"
         >
-          Beragam lini usaha dalam satu ekosistem terintegrasi
+          AS Putra Group mengembangkan berbagai sektor usaha yang saling terhubung, membentuk ekosistem bisnis yang kuat, efisien, dan berkelanjutan. Setiap sektor tidak berdiri sendiri melainkan saling mendukung untuk menciptakan nilai yang lebih besar, dari produksi hingga distribusi, dari layanan hingga pengalaman.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-5 justify-center">

@@ -216,19 +216,17 @@ const HistorySection = () => {
     lineHeight: "1.8",
   }}
 >
-  Didirikan oleh{" "}
-  <strong style={{ color: "var(--color-teks)" }}>
-    H. Dudung Dulajid
-  </strong>{" "}
-  pada tahun 1984 di Kuningan, AS PUTRA berawal dari usaha peternakan ayam petelur skala kecil dengan sekitar 1.000 ekor. Berbekal visi untuk membangun kemandirian ekonomi pedesaan, beliau tidak hanya fokus pada produksi, tetapi juga berinovasi mengolah dedak menjadi komoditas bernilai tinggi. Dari titik inilah nama “AS PUTRA” lahir sebagai simbol dedikasi dan harapan masa depan.{" "}
-  <br /><br />
-  Seiring berjalannya waktu, fondasi yang kuat tersebut membawa perusahaan mampu bertahan bahkan tumbuh di tengah krisis moneter 1997, berkat kedisiplinan dalam pengelolaan keuangan dan komitmen menjaga kepercayaan mitra. Memasuki era 2000-an, AS PUTRA mulai melakukan diversifikasi bisnis ke berbagai sektor strategis, memperluas peran dari sekadar usaha peternakan menjadi ekosistem agribisnis dan bisnis terintegrasi.{" "}
-  <br /><br />
-  Kini, estafet kepemimpinan dilanjutkan oleh putranya,{" "}
-  <strong style={{ color: "var(--color-teks)" }}>
-    H. Aif Arifin Sidhik
-  </strong>
-  , yang membawa perusahaan ke fase transformasi modern. Di bawah kepemimpinannya, AS PUTRA Group berkembang menjadi holding company yang menaungi berbagai sektor—mulai dari agribisnis, energi, properti, hingga ritel dan gaya hidup—dengan tetap berpegang pada nilai utama: tumbuh bersama dan memberikan dampak nyata bagi masyarakat.
+  AS Putra adalah perusahaan yang berawal dari usaha peternakan ayam petelur
+  yang didirikan oleh Bapak H. Dudung Dulajid pada tahun 1985, dibangun dari
+  pemanfaatan sumber daya lokal dengan prinsip kejujuran, kerja keras, dan
+  konsistensi. Dalam perjalanannya, perusahaan berkembang dengan memperluas
+  bisnis ke sektor ayam broiler sejak tahun 1997, serta menunjukkan
+  ketangguhan dalam menghadapi dinamika industri, termasuk krisis ekonomi,
+  melalui pengelolaan yang disiplin dan komitmen terhadap kepercayaan mitra.
+  Kini, AS Putra telah bertransformasi menjadi grup usaha yang modern dan
+  terintegrasi, dengan lini bisnis yang mencakup peternakan, energi, properti,
+  dan hospitality, serta terus berinovasi untuk memberikan nilai berkelanjutan
+  bagi masyarakat dan mendukung ketahanan pangan nasional.
 </p>
             </div>
           </div>

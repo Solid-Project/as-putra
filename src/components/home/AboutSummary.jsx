@@ -281,7 +281,7 @@ const AboutSummary = () => {
               maxWidth: "clamp(280px, 90%, 700px)",
             }}
           >
-            Fondasi yang membentuk identitas kami dalam berkarya dan memberikan dampak positif.
+           Di AS Putra, budaya bukan sekadar prinsip yang tertulis tetapi cara kami berpikir, bekerja, dan berkembang bersama. Nilai-nilai ini menjadi pondasi dalam setiap keputusan, menggerakkan setiap sektor bisnis, dan menjaga arah pertumbuhan kami tetap konsisten. 
           </p>
         </div>
 

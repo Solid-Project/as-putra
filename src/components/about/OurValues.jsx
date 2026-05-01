@@ -13,32 +13,32 @@ const OurValues = () => {
   const values = [
     {
       number: "01",
-      title: "Integrated Synergy",
-      desc: "Kolaborasi lintas usaha yang saling menguatkan untuk menciptakan value lebih bagi seluruh pemangku kepentingan.",
+      title: "Berinovasi untuk Terus Bertumbuh",
+      desc: "Terbuka terhadap teknologi dan pembaruan di setiap lini usaha untuk meningkatkan kualitas dan efisiensi.",
       icon: Handshake,
     },
     {
       number: "02",
-      title: "Agile Empowerment",
-      desc: "Adaptif dan inovatif dalam merespon perubahan pasar serta memberdayakan setiap individu untuk berkembang.",
+      title: "Menjaga Amanah dengan Sepenuh Hati",
+      desc: "Menjalankan bisnis dengan jujur, bertanggung jawab, dan menjaga kualitas serta tujuan perusahaan.",
       icon: Zap,
     },
     {
       number: "03",
-      title: "Foundational Trust",
-      desc: "Integritas sebagai fondasi utama dalam setiap hubungan bisnis dan keputusan yang diambil.",
+      title: "Berkarya dengan Hati, Bekerja dengan Kebanggaan",
+      desc: "Bekerja dengan bangga, penuh tanggung jawab, dan memberikan kontribusi terbaik di setiap peran.",
       icon: Shield,
     },
     {
       number: "04",
-      title: "Purpose-Driven Impact",
-      desc: "Pertumbuhan berkelanjutan yang memberi dampak nyata bagi masyarakat dan lingkungan sekitar.",
+      title: "Tumbuh Bersama, Menguatkan Satu Sama Lain",
+      desc: "Membangun kolaborasi antar lini usaha dan lingkungan untuk menciptakan pertumbuhan yang berkelanjutan.",
       icon: Target,
     },
     {
       number: "05",
-      title: "Uncompromising Excellence",
-      desc: "Profesionalisme tinggi tanpa kompromi dalam memberikan pelayanan dan produk terbaik.",
+      title: "Memberi Dampak Nyata bagi Sesama",
+      desc: "Menghadirkan dampak positif bagi masyarakat dan lingkungan melalui setiap aktivitas bisnis.",
       icon: Trophy,
     },
   ];
@@ -250,7 +250,7 @@ const OurValues = () => {
                 fontSize: "clamp(2rem, 6vw, 3rem)",
               }}
             >
-              Our <span style={{ color: "var(--color-utama)" }}>Values</span>
+              The Principles That Guide Our <span style={{ color: "var(--color-utama)" }}>Growth</span>
             </h2>
           </div>
 
@@ -262,7 +262,7 @@ const OurValues = () => {
               fontSize: "clamp(0.875rem, 2vw, 1rem)",
             }}
           >
-            Prinsip fundamental yang menuntun setiap inovasi dan keputusan bisnis di AS Putra Group.
+           Nilai-nilai ini menjadi pondasi dalam setiap langkah AS Putra dalam bekerja, berinovasi, dan membangun setiap sektor bisnis secara berkelanjutan.
           </p>
         </div>
 

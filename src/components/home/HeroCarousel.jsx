@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 import heroVideo from "@/assets/202601251341.mp4";
-import useSectionAnimation, { sectionAnimations } from "@/hooks/useSectionAnimation";
 import carousel1 from "@/assets/img/Carousel/herocarousel1.webp";
 import carousel2 from "@/assets/img/Carousel/herocarousel2.webp";
 import carousel3 from "@/assets/img/Carousel/herocarousel3.webp";
@@ -10,12 +11,10 @@ import carousel4 from "@/assets/img/Carousel/herocarousel4.jpg";
 import carousel5 from "@/assets/img/Carousel/herocarousel5.webp";
 import carousel6 from "@/assets/img/Carousel/herocarousel6.webp";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const slides = [
-  {
-    type: "video",
-    src: heroVideo,
-    poster: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1920&q=80",
-  },
+  { type: "video", src: heroVideo },
   { type: "image", src: carousel1 },
   { type: "image", src: carousel2 },
   { type: "image", src: carousel3 },
@@ -28,180 +27,201 @@ const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isVideoReady, setIsVideoReady] = useState(false);
-  
+
   const videoRef = useRef(null);
   const contentRef = useRef(null);
   const intervalRef = useRef(null);
-  
-  // 🔥 PAKAI useSectionAnimation untuk title, line, subtitle
-  const titleRef = useSectionAnimation(
-    (element) => sectionAnimations.fadeInUp(element),
-    { delay: 100, threshold: 0.3, once: true }
-  );
-  
-  const lineRef = useSectionAnimation(
-    (element) => {
-      gsap.fromTo(element, 
-        { width: 0 }, 
-        { width: 80, duration: 0.5, ease: "back.out(1)" }
-      );
-    },
-    { delay: 150, threshold: 0.3, once: true }
-  );
-  
-  const subtitleRef = useSectionAnimation(
-    (element) => sectionAnimations.fadeInUp(element),
-    { delay: 200, threshold: 0.3, once: true }
-  );
-  
-  // 🔥 Untuk buttons dengan stagger
-  const buttonsRef = useSectionAnimation(
-    (element) => {
-      const buttons = element.querySelectorAll("a");
-      gsap.fromTo(buttons, 
-        { y: 30, opacity: 0 }, 
-        { y: 0, opacity: 1, stagger: 0.1, duration: 0.6, ease: "power2.out" }
-      );
-    },
-    { delay: 250, threshold: 0.3, once: true }
-  );
+  const ctxRef = useRef(null);
 
-  // Preload image berikutnya
-  const preloadNextImage = useCallback((nextIndex) => {
-    const nextSlide = slides[nextIndex % slides.length];
-    if (nextSlide.type === "image") {
-      const img = new Image();
-      img.src = nextSlide.src;
-    }
-  }, []);
+  // =========================
+  // REFS TEKS
+  // =========================
+  const titleRef = useRef(null);
+  const lineRef = useRef(null);
+  const subtitleRef = useRef(null);
+  const buttonsRef = useRef(null);
+  const scrollBtnRef = useRef(null);
 
-  // Change slide dengan smooth transition
-  const changeSlide = useCallback((newIndex) => {
-    if (isAnimating) return;
-    
-    setIsAnimating(true);
-    preloadNextImage(newIndex + 1);
-    
-    const currentSlide = document.querySelector(`.slide-${current}`);
-    const nextSlideEl = document.querySelector(`.slide-${newIndex}`);
-    
-    if (nextSlideEl) {
-      gsap.to(currentSlide, {
-        opacity: 0,
-        duration: 0.4,
-        ease: "power2.inOut",
-        onComplete: () => {
-          setCurrent(newIndex);
-          gsap.to(nextSlideEl, {
-            opacity: 1,
-            duration: 0.6,
-            ease: "power2.inOut",
-            onComplete: () => setIsAnimating(false)
-          });
-        }
-      });
-    } else {
-      setCurrent(newIndex);
-      setTimeout(() => setIsAnimating(false), 100);
-    }
-  }, [current, isAnimating, preloadNextImage]);
-
-  // Carousel autoplay
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      if (!isAnimating) {
-        changeSlide((current + 1) % slides.length);
-      }
-    }, 6000);
-    
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [current, isAnimating, changeSlide]);
-
-  // Handle video
-  useEffect(() => {
-    if (slides[current].type === "video" && videoRef.current && isVideoReady) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {});
-    }
-  }, [current, isVideoReady]);
-
-  // Scroll ke section berikutnya
+  // =========================
+  // SCROLL KE SECTION BERIKUTNYA
+  // =========================
   const scrollToNext = useCallback(() => {
-    const section = titleRef.current?.closest('.section');
+    const section = document.querySelector(".section");
     const nextSection = section?.nextElementSibling;
     if (nextSection) {
       nextSection.scrollIntoView({ behavior: "smooth" });
     }
-  }, [titleRef]);
+  }, []);
 
-  // Render slides dengan optimasi
-  const renderedSlides = useMemo(() => slides.map((slide, idx) => {
-    const isCurrent = idx === current;
-    const isNearby = Math.abs(idx - current) <= 1;
-    
-    if (!isCurrent && !isNearby) return null;
-    
-    return (
-      <div
-        key={idx}
-        className={`slide-${idx} absolute inset-0 transition-opacity duration-700 ${
-          isCurrent ? "opacity-100 z-10" : "opacity-0 z-0"
-        }`}
-      >
-        {slide.type === "video" ? (
-          <video
-            ref={idx === current ? videoRef : null}
-            src={slide.src}
-            poster={slide.poster}
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            className="absolute inset-0 w-full h-full object-cover"
-            onCanPlay={() => setIsVideoReady(true)}
-          />
-        ) : (
+  // =========================
+  // ANIMASI DENGAN GSAP + SCROLLTRIGGER
+  // =========================
+  useEffect(() => {
+    // Bersihkan ScrollTrigger sebelumnya
+    if (ctxRef.current) {
+      ctxRef.current.revert();
+    }
+
+    const section = document.querySelector(".section");
+
+    const ctx = gsap.context(() => {
+      // Buat timeline untuk entrance (sekali jalan, gak reverse)
+      const entranceTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top 85%",
+          once: true,
+        }
+      });
+
+      // 1. Animasi Title
+      entranceTimeline.fromTo(titleRef.current, 
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
+      );
+
+      // 2. Animasi Line
+      entranceTimeline.fromTo(lineRef.current, 
+        { width: 0 },
+        { width: 80, duration: 0.6, ease: "back.out(1.2)" },
+        "-=0.4"
+      );
+
+      // 3. Animasi Subtitle
+      entranceTimeline.fromTo(subtitleRef.current, 
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" },
+        "-=0.3"
+      );
+
+      // 4. Animasi Buttons Stagger
+      entranceTimeline.fromTo(contentRef.current.querySelectorAll("a"), 
+        { y: 30, opacity: 0 },
+        { 
+          y: 0, 
+          opacity: 1, 
+          stagger: 0.15, 
+          duration: 0.8, 
+          ease: "power3.out",
+        },
+        "-=0.2"
+      );
+
+      // Animasi Scroll Button
+      gsap.fromTo(scrollBtnRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 1, delay: 1.2, ease: "power2.out" }
+      );
+
+    });
+
+    ctxRef.current = ctx;
+
+    return () => {
+      if (ctxRef.current) {
+        ctxRef.current.revert();
+      }
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.vars.trigger === section) {
+          trigger.kill();
+        }
+      });
+    };
+  }, []);
+
+  // =========================
+  // AUTOPLAY SLIDES
+  // =========================
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      if (!isAnimating) {
+        setCurrent((prev) => (prev + 1) % slides.length);
+      }
+    }, 6000);
+
+    return () => clearInterval(intervalRef.current);
+  }, [isAnimating]);
+
+  // =========================
+  // VIDEO CONTROL
+  // =========================
+  useEffect(() => {
+    if (slides[current].type === "video" && videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(() => {});
+    }
+  }, [current]);
+
+  // =========================
+  // SLIDES RENDER
+  // =========================
+  const renderedSlides = useMemo(
+    () =>
+      slides.map((slide, idx) => {
+        const isActive = idx === current;
+
+        return (
           <div
-            className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${slide.src})` }}
-          />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60" />
-      </div>
-    );
-  }), [current]);
+            key={idx}
+            className={`absolute inset-0 transition-opacity duration-700 ${
+              isActive ? "opacity-100 z-10" : "opacity-0 z-0"
+            }`}
+          >
+            {slide.type === "video" ? (
+              <video
+                ref={idx === current ? videoRef : null}
+                src={slide.src}
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover"
+                onCanPlay={() => setIsVideoReady(true)}
+              />
+            ) : (
+              <div
+                className="w-full h-full bg-cover bg-center"
+                style={{ backgroundImage: `url(${slide.src})` }}
+              />
+            )}
+
+            <div className="absolute inset-0 bg-black/50" />
+          </div>
+        );
+      }),
+    [current]
+  );
 
   return (
     <section
-      className="section relative flex items-center justify-center text-center overflow-hidden bg-black"
+      className="section relative h-screen flex items-center justify-center text-center overflow-hidden bg-black"
       id="hero-section"
       data-theme="dark"
-      style={{ minHeight: "100vh", height: "100vh", maxHeight: "100vh" }}
     >
-      {/* Background Slides */}
+      {/* BACKGROUND SLIDES */}
       <div className="absolute inset-0 z-0">
         {renderedSlides}
       </div>
 
-      {/* Content - Gunakan refs dari useSectionAnimation */}
+      {/* CONTENT */}
       <div 
         ref={contentRef}
         className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-8 md:px-12 lg:px-16"
       >
+        {/* TITLE */}
         <h1
           ref={titleRef}
           className="font-['Playfair_Display'] text-white drop-shadow-lg leading-tight"
           style={{
             fontSize: "clamp(2rem, 6vw, 5rem)",
             marginBottom: "clamp(0.75rem, 2vw, 1rem)",
-            opacity: 0 // Awal invisible, nanti dianimasi oleh hook
+            opacity: 0,
+            transform: "translateY(50px)"
           }}
         >
           Membangun <br className="sm:hidden" /> Masa Depan
         </h1>
 
+        {/* LINE */}
         <div
           ref={lineRef}
           className="h-0.5 bg-[var(--color-utama)] mx-auto"
@@ -211,6 +231,7 @@ const HeroCarousel = () => {
           }}
         />
 
+        {/* SUBTITLE */}
         <p
           ref={subtitleRef}
           className="text-white/95 mx-auto leading-relaxed"
@@ -218,20 +239,24 @@ const HeroCarousel = () => {
             fontSize: "clamp(0.9rem, 2.5vw, 1.125rem)",
             maxWidth: "clamp(280px, 90%, 600px)",
             marginBottom: "clamp(1.5rem, 4vw, 2.5rem)",
-            opacity: 0
+            opacity: 0,
+            transform: "translateY(20px)"
           }}
         >
-          Ekosistem bisnis terintegrasi yang berfokus pada keberlanjutan 
-          dan nilai jangka panjang untuk kemajuan bangsa.
+          Bermula dari langkah sederhana, AS Putra berkembang menjadi perusahaan modern yang terus berinovasi dan berkontribusi dalam mendukung ketahanan pangan serta pembangunan berkelanjutan di Indonesia
         </p>
 
-        {/* Buttons container dengan ref untuk stagger animation */}
+        {/* BUTTONS */}
         <div ref={buttonsRef}>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 justify-center">
             <Link
               to="/sector"
               className="group relative px-6 sm:px-8 py-3 sm:py-3.5 bg-[var(--color-utama)] text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[var(--color-utama)]/30 hover:-translate-y-0.5"
-              style={{ fontSize: "clamp(0.875rem, 2.5vw, 1rem)" }}
+              style={{ 
+                fontSize: "clamp(0.875rem, 2.5vw, 1rem)",
+                opacity: 0,
+                transform: "translateY(30px)"
+              }}
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 Sektor Kami
@@ -245,7 +270,11 @@ const HeroCarousel = () => {
             <Link
               to="/about"
               className="group relative px-6 sm:px-8 py-3 sm:py-3.5 bg-white/20 backdrop-blur-sm border border-white/40 text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:bg-white/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-white/20"
-              style={{ fontSize: "clamp(0.875rem, 2.5vw, 1rem)" }}
+              style={{ 
+                fontSize: "clamp(0.875rem, 2.5vw, 1rem)",
+                opacity: 0,
+                transform: "translateY(30px)"
+              }}
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 Tentang Kami
@@ -258,11 +287,17 @@ const HeroCarousel = () => {
         </div>
       </div>
 
-      {/* Scroll Indicators */}
+      {/* SCROLL INDICATOR (DESKTOP) */}
       <button
+        ref={scrollBtnRef}
         onClick={scrollToNext}
         className="absolute z-20 hidden md:flex flex-col items-center gap-2 group cursor-pointer"
-        style={{ bottom: "clamp(1rem, 5vh, 3rem)", right: "clamp(1rem, 5vw, 10%)" }}
+        style={{ 
+          bottom: "clamp(1rem, 5vh, 3rem)", 
+          right: "clamp(1rem, 5vw, 10%)",
+          opacity: 0,
+          transform: "translateY(20px)"
+        }}
       >
         <span className="vertical-text text-[11px] font-black uppercase tracking-[0.5em] text-white/40 group-hover:text-[var(--color-utama)] transition-colors duration-500 mb-4">
           Scroll
@@ -283,6 +318,7 @@ const HeroCarousel = () => {
         </div>
       </button>
 
+      {/* SCROLL INDICATOR (MOBILE) */}
       <button
         onClick={scrollToNext}
         className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 md:hidden flex flex-col items-center gap-1 group cursor-pointer"

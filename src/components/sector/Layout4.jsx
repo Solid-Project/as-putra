@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import officeTalentImg from "@/assets/img/prop2.webp";
+import peternakanImg from "@/assets/img/sector-peternakan-2.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -77,7 +77,7 @@ const Layout4 = () => {
       <div className="w-full relative z-10">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-center">
 
-          {/* ✅ TEXT (KIRI) */}
+          {/* ✅ TEXT (KIRI) - KONTEN DIUBAH TENTANG PETERNAKAN */}
           <div
             ref={textGroupRef}
             className="lg:col-span-6 flex flex-col justify-center order-1"
@@ -85,23 +85,24 @@ const Layout4 = () => {
           >
             <div className="max-w-xl">
               <div className="inline-block px-4 py-1.5 mb-6 text-[10px] font-black tracking-[0.3em] uppercase bg-slate-900 text-white rounded-sm">
-                Growth Commitment
+                Peternakan Modern
               </div>
 
               <h2 className="font-['Playfair_Display'] text-4xl md:text-6xl lg:text-7xl text-slate-900 font-bold leading-[1.1] mb-8 tracking-tighter">
-                AS Putra Group: Komitmen Pertumbuhan
+                Peternakan <br />
+                <span className="text-[var(--color-utama)]">AS PUTRA</span>
               </h2>
 
               <div className="w-16 h-1.5 bg-[var(--color-utama)] mb-8"></div>
 
               <p className="text-slate-600 text-base md:text-lg leading-relaxed font-light border-l-2 border-slate-50 pl-6">
-                AS Putra Group berkomitmen untuk menyediakan peluang pengembangan
-                dan karir bagi setiap talenta di 10 sektor strategis.
+                AS Putra Group berkomitmen mengembangkan ekosistem peternakan modern terintegrasi 
+                melalui breeding, closed house system, dan kemitraan dengan 1.500+ peternak lokal.
               </p>
             </div>
           </div>
 
-          {/* ✅ IMAGE (KANAN) */}
+          {/* ✅ IMAGE (KANAN) - GAMBAR PETERNAKAN */}
           <div className="lg:col-span-6 flex justify-center lg:justify-end order-2">
             <div
               ref={imageFrameRef}
@@ -109,8 +110,8 @@ const Layout4 = () => {
               style={{ willChange: "transform, opacity" }}
             >
               <img
-                src={officeTalentImg}
-                alt="AS Putra Group Talents"
+                src={peternakanImg}
+                alt="Peternakan Modern AS PUTRA"
                 className="w-full h-full object-cover rounded-sm"
               />
             </div>

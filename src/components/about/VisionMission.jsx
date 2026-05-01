@@ -269,9 +269,7 @@ const VisionMission = () => {
               className="text-sm leading-relaxed"
               style={{ color: "var(--color-teks-muted)" }}
             >
-              Menjadi ekosistem bisnis terkemuka yang berlandaskan tata kelola
-              terbaik dan inovasi berkelanjutan bagi seluruh pemangku
-              kepentingan.
+              Membangun AS Putra menjadi perusahaan yang modern dan terpercaya, tempat kita semua tumbuh, bahagia, bangga berkarya, dan memberikan manfaat terluas bagi lingkungan.
             </p>
           </div>
 
@@ -296,10 +294,10 @@ const VisionMission = () => {
 
             <ul className="space-y-3">
               {[
-                "Menyatukan keunggulan untuk hasil terbaik",
-                "Berinovasi untuk pertumbuhan berkelanjutan",
-                "Membangun kemitraan yang terpercaya",
-                "Memberikan dampak yang bertanggung jawab",
+                "Modernisasi Berkelanjutan",
+                "Rumah Kedua yang Membanggakan",
+                "Sinergi Tanpa Batas",
+                "Berbagi Manfaat",
               ].map((item, i) => (
                 <li key={i} className="flex items-center gap-3">
                   <div

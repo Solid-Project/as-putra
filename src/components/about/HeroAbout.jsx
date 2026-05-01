@@ -125,7 +125,7 @@ const HeroAbout = () => {
           className="font-['Playfair_Display'] text-4xl md:text-5xl lg:text-6xl text-white mb-4 drop-shadow-lg"
           style={{ opacity: 0 }} // Initial state
         >
-          Tentang <br /> AS PUTRA Group
+          Dari Pondasi Sederhana Menuju Ekosistem Bisnis Terintegrasi
         </h1>
 
         {/* Line */}
@@ -141,7 +141,7 @@ const HeroAbout = () => {
           className="text-white/90 max-w-[600px] mx-auto mb-10 text-base sm:text-lg leading-relaxed"
           style={{ opacity: 0 }}
         >
-          Membangun masa depan melalui inovasi, integritas, dan komitmen berkelanjutan untuk kemajuan bangsa.
+          Berawal dari langkah kecil di Kuningan, AS Putra tumbuh menjadi grup usaha lintas sektor yang saling terhubung, menciptakan pertumbuhan berkelanjutan dan dampak nyata bagi masyarakat.
         </p>
 
         {/* Buttons */}

@@ -105,10 +105,35 @@ const Navbar = () => {
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+  const items = document.querySelectorAll(".sector-item");
+
+  if (menuOpen === false) return;
+
+  gsap.fromTo(
+    items,
+    { y: -10, opacity: 0 },
+    {
+      y: 0,
+      opacity: 1,
+      duration: 0.25,
+      stagger: 0.05,
+      ease: "power2.out",
+    }
+  );
+}, []);
+
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
   const closeMenu = () => setMenuOpen(false);
-
+  const sectors = [
+  { label: "Peternakan", path: "/sector/peternakan" },
+  { label: "Hospitality", path: "/sector/hospitality" },
+  { label: "Retail", path: "/sector/retail" },
+  { label: "Construction", path: "/sector/construction" },
+  { label: "Lifestyle", path: "/sector/lifestyle" },
+  { label: "Ekspedisi", path: "/sector/ekspedisi" }
+];
   // Theme mapping
   const textColorClass = textTheme === "dark" ? "text-white" : "text-[var(--color-teks)]";
   const logoTextColor = textTheme === "dark" ? "text-white" : "text-[var(--color-teks)]";
@@ -164,54 +189,45 @@ const Navbar = () => {
             </NavLink>
           </li>
           <li className="relative group">
-            <div className="flex items-center gap-1 cursor-pointer">
-              <NavLink
-                to="/sector"
-                className={({ isActive }) =>
-                  `text-xs lg:text-sm uppercase tracking-wide font-medium transition-all duration-500 ${hoverColorClass} ${
-                    isActive ? "text-[var(--color-utama)] border-b-2 border-[var(--color-utama)] pb-1" : textColorClass
-                  }`
-                }
-              >
-                Sektor Bisnis
-              </NavLink>
-              <span className={`${textColorClass} text-xs transition-transform duration-300 group-hover:rotate-180 hidden md:inline-block`}>
-                ▾
-              </span>
-            </div>
-            <ul className="hidden md:group-hover:block absolute top-full left-0 min-w-[200px] bg-white/95 backdrop-blur-md shadow-lg border border-[var(--color-teks-muted)]/10 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-              <li>
-                <Link to="/sector" className="block px-4 py-2 text-sm text-[var(--color-teks)] hover:text-[var(--color-utama)] hover:bg-[var(--color-bg-alt)] rounded-t-lg transition-all duration-300">
-                  Sektor Kami
-                </Link>
-              </li>
-              <li>
-                <Link to="/sector#peternakan" className="block px-4 py-2 text-sm text-[var(--color-teks)] hover:text-[var(--color-utama)] hover:bg-[var(--color-bg-alt)] transition-all duration-300">
-                  Peternakan
-                </Link>
-              </li>
-              <li>
-                <Link to="/sector#hotel" className="block px-4 py-2 text-sm text-[var(--color-teks)] hover:text-[var(--color-utama)] hover:bg-[var(--color-bg-alt)] transition-all duration-300">
-                  Hotel & Resort
-                </Link>
-              </li>
-              <li>
-                <Link to="/sector#property" className="block px-4 py-2 text-sm text-[var(--color-teks)] hover:text-[var(--color-utama)] hover:bg-[var(--color-bg-alt)] transition-all duration-300">
-                  Properti
-                </Link>
-              </li>
-              <li>
-                <Link to="/sector#retail" className="block px-4 py-2 text-sm text-[var(--color-teks)] hover:text-[var(--color-utama)] hover:bg-[var(--color-bg-alt)] transition-all duration-300">
-                  Retail
-                </Link>
-              </li>
-              <li>
-                <Link to="/sector#ekspedisi" className="block px-4 py-2 text-sm text-[var(--color-teks)] hover:text-[var(--color-utama)] hover:bg-[var(--color-bg-alt)] rounded-b-lg transition-all duration-300">
-                  Ekspedisi
-                </Link>
-              </li>
-            </ul>
-          </li>
+  <div className="flex items-center gap-1 cursor-pointer">
+    <span className={`text-xs lg:text-sm uppercase tracking-wide font-medium transition-all duration-500 ${textColorClass} hover:text-[var(--color-utama)]`}>
+      Sektor Bisnis
+    </span>
+
+    <span className="text-xs transition-transform duration-300 group-hover:rotate-180">
+      ▾
+    </span>
+  </div>
+
+  {/* DROPDOWN */}
+  <ul className="
+    absolute top-full left-0 mt-3 min-w-[230px]
+    bg-white/90 backdrop-blur-xl
+    border border-gray-100
+    shadow-xl rounded-xl overflow-hidden
+    opacity-0 invisible translate-y-2 scale-95
+    group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:scale-100
+    transition-all duration-300 origin-top
+  ">
+    {sectors.map((item, index) => (
+      <li key={item.path}>
+        <Link
+          to={item.path}
+          className="
+            block px-4 py-3 text-sm
+            text-[var(--color-teks)]
+            hover:bg-[var(--color-bg-alt)]
+            hover:text-[var(--color-utama)]
+            transition-all duration-200
+            border-b last:border-b-0 border-gray-100
+          "
+        >
+          {item.label}
+        </Link>
+      </li>
+    ))}
+  </ul>
+</li>
           <li>
             <NavLink
               to="/news"

@@ -16,24 +16,21 @@ const Layout5 = () => {
   const leftColRef = useRef(null);
   const rightGridRef = useRef(null);
   const statsRefs = useRef([]);
+  const hasAnimatedCounter = useRef(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       
-      // --- 1. EFEK LIVE PARALLAX: SHATTER TO REASSEMBLE (VERSI RAPI) ---
-      // Kita tidak pakai split teks lagi agar grid tetap aman.
-      // Kita buat elemen judul "datang" dari posisi berantakan ke 0 (Posisi Asli)
-      
+      // --- 1. EFEK LIVE PARALLAX: SHATTER TO REASSEMBLE ---
       const tlShatter = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top bottom", // Mulai gerak saat muncul di bawah
-          end: "top top",      // SELESAI & RAPI saat section aktif di layar
-          scrub: 1.5,          // Mengikuti scroll
+          start: "top bottom",
+          end: "top top",
+          scrub: 1.5,
         }
       });
 
-      // Efek: Judul datang dari posisi acak (Shatter) ke posisi 0 (Rapi)
       tlShatter.fromTo(titleRef.current, 
         { 
           x: -150, 
@@ -53,8 +50,6 @@ const Layout5 = () => {
       );
 
       // --- 2. LIVE PARALLAX: DUA ARAH (KIRI & KANAN) ---
-      
-      // Kolom Kiri (Narasi) - Bergerak halus
       gsap.fromTo(leftColRef.current, 
         { y: 80 }, 
         { 
@@ -68,7 +63,6 @@ const Layout5 = () => {
         }
       );
 
-      // Kolom Kanan (Grid Statistik) - Bergerak lebih cepat (Floating)
       gsap.fromTo(rightGridRef.current, 
         { y: 150 }, 
         { 
@@ -82,7 +76,7 @@ const Layout5 = () => {
         }
       );
 
-      // --- 3. ANIMASI COUNTER (Tetap Jalan Otomatis) ---
+      // --- 3. ANIMASI COUNTER (Berjalan Setiap Section Aktif) ---
       const statsData = [
         { target: 70, suffix: "" },
         { target: 5000, suffix: "+" },
@@ -90,28 +84,70 @@ const Layout5 = () => {
         { target: 6, suffix: "B" },
       ];
 
-      statsData.forEach((stat, idx) => {
-        const obj = { val: 0 };
-        gsap.to(obj, {
-          val: stat.target,
-          duration: 2,
-          ease: "expo.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 75%",
-          },
-          onUpdate: () => {
-            if (statsRefs.current[idx]) {
-              let value = stat.isDecimal ? obj.val.toFixed(1) : Math.floor(obj.val);
-              statsRefs.current[idx].innerText = value + stat.suffix;
-            }
-          },
+      // Reset counter ke 0 saat section masuk
+      const resetCounters = () => {
+        statsData.forEach((stat, idx) => {
+          if (statsRefs.current[idx]) {
+            statsRefs.current[idx].innerText = "0" + stat.suffix;
+          }
         });
+      };
+
+      // Animasi counter
+      const animateCounters = () => {
+        statsData.forEach((stat, idx) => {
+          const obj = { val: 0 };
+          gsap.killTweensOf(obj); // Hentikan animasi sebelumnya jika ada
+          gsap.to(obj, {
+            val: stat.target,
+            duration: 2,
+            ease: "expo.out",
+            onUpdate: () => {
+              if (statsRefs.current[idx]) {
+                let value = stat.isDecimal ? obj.val.toFixed(1) : Math.floor(obj.val);
+                statsRefs.current[idx].innerText = value + stat.suffix;
+              }
+            },
+          });
+        });
+      };
+
+      // ScrollTrigger untuk counter - berulang setiap section aktif
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top 75%",
+        onEnter: () => {
+          if (!hasAnimatedCounter.current) {
+            resetCounters();
+            animateCounters();
+            hasAnimatedCounter.current = true;
+          }
+        },
+        onLeaveBack: () => {
+          // Reset flag saat scroll ke atas
+          hasAnimatedCounter.current = false;
+          resetCounters();
+        },
+        onEnterBack: () => {
+          // Animasi lagi saat scroll ke bawah kembali
+          if (!hasAnimatedCounter.current) {
+            resetCounters();
+            animateCounters();
+            hasAnimatedCounter.current = true;
+          }
+        },
       });
 
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.vars.trigger === sectionRef.current) {
+          trigger.kill();
+        }
+      });
+    };
   }, []);
 
   return (
@@ -120,14 +156,13 @@ const Layout5 = () => {
       className="section min-h-screen flex items-center py-32 px-[8%] bg-white relative overflow-hidden"
       id="fifth-layout"
     >
-      {/* Dekorasi Background */}
+      {/* Dekorasi Background - TIDAK DIUBAH */}
       <div className="absolute top-0 right-0 w-1/4 h-full bg-slate-50/50 -z-0" />
 
       <div className="w-full grid lg:grid-cols-2 gap-24 items-center relative z-10">
         
-        {/* KOLOM KIRI: NARASI */}
+        {/* KOLOM KIRI: NARASI - TIDAK DIUBAH */}
         <div ref={leftColRef} className="max-w-[600px]">
-          {/* Judul ini yang akan "Shatter" tapi kembali ke posisi 0 yang RAPI */}
           <h2 
             ref={titleRef} 
             className="font-['Playfair_Display'] text-4xl md:text-5xl lg:text-6xl text-slate-900 leading-[1.1] mb-12 font-bold tracking-tighter"
@@ -140,33 +175,33 @@ const Layout5 = () => {
           </p>
         </div>
 
-        {/* KOLOM KANAN: GRID STATISTIK */}
+        {/* KOLOM KANAN: GRID STATISTIK - TIDAK DIUBAH */}
         <div ref={rightGridRef} className="grid grid-cols-2 gap-x-12 gap-y-24 relative">
-          {/* Garis Vertikal */}
+          {/* Garis Vertikal - TIDAK DIUBAH */}
           <div className="absolute left-1/2 top-0 w-[1px] h-full bg-blue-50 hidden md:block" />
 
-          {/* Item 1 */}
+          {/* Item 1 - TIDAK DIUBAH */}
           <div className="flex flex-col gap-6">
             <BuildingOffice2Icon className="w-10 h-10 text-blue-600/40" />
             <span ref={(el) => (statsRefs.current[0] = el)} className="text-6xl md:text-8xl font-['Playfair_Display'] font-bold text-slate-900 tracking-tighter">0</span>
             <span className="text-[10px] uppercase tracking-[0.4em] text-slate-400 font-black">Unit Bisnis</span>
           </div>
 
-          {/* Item 2 */}
+          {/* Item 2 - TIDAK DIUBAH */}
           <div className="flex flex-col gap-6 md:pl-12">
             <UsersIcon className="w-10 h-10 text-blue-600/40" />
             <span ref={(el) => (statsRefs.current[1] = el)} className="text-6xl md:text-8xl font-['Playfair_Display'] font-bold text-slate-900 tracking-tighter">0+</span>
             <span className="text-[10px] uppercase tracking-[0.4em] text-slate-400 font-black">Tenaga Kerja</span>
           </div>
 
-          {/* Item 3 */}
+          {/* Item 3 - TIDAK DIUBAH */}
           <div className="flex flex-col gap-6">
             <CircleStackIcon className="w-10 h-10 text-blue-600/40" />
             <span ref={(el) => (statsRefs.current[2] = el)} className="text-6xl md:text-8xl font-['Playfair_Display'] font-bold text-slate-900 tracking-tighter">0</span>
             <span className="text-[10px] uppercase tracking-[0.4em] text-slate-400 font-black">Triliun Omset</span>
           </div>
 
-          {/* Item 4 */}
+          {/* Item 4 - TIDAK DIUBAH */}
           <div className="flex flex-col gap-6 md:pl-12">
             <GlobeAltIcon className="w-10 h-10 text-blue-600/40" />
             <span ref={(el) => (statsRefs.current[3] = el)} className="text-6xl md:text-8xl font-['Playfair_Display'] font-bold text-slate-900 tracking-tighter">0</span>

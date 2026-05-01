@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import bgLayout from '@/assets/img/Carousel/herocarousel5.webp';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -87,14 +88,14 @@ const Layout8 = () => {
             <div className="overflow-hidden rounded-sm shadow-2xl aspect-[4/5] lg:aspect-[16/10]">
               <img 
                 ref={imageRef}
-                src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200" 
+                src={bgLayout} 
                 alt="Corporate" 
                 className="w-full h-full object-cover scale-110" // Scale sedikit agar tidak bocor saat parallax
               />
             </div>
             <div className="absolute -bottom-6 -left-6 bg-[var(--color-utama)] text-white p-8 hidden md:block shadow-xl">
                <p className="text-xs font-bold tracking-[0.3em] uppercase mb-2 opacity-80">Established Since</p>
-               <h4 className="text-4xl font-black font-['Playfair_Display']">1988</h4>
+               <h4 className="text-4xl font-black font-['Playfair_Display']">1985</h4>
             </div>
           </div>
 
