@@ -124,6 +124,7 @@ const Layout1 = () => {
       className="section relative w-full bg-white overflow-y-auto overflow-x-hidden"
       id={data.id}
       data-theme="light"
+      data-title={data.title}
       style={{
         height: "100vh",
         minHeight: "600px",

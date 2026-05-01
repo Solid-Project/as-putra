@@ -4,7 +4,8 @@ import HeroSector from '@/components/sector/HeroSector';
 import IntroSection from '@/components/sector/SectorRetail/IntroSection';
 import FirstLayout from '@/components/sector/SectorRetail/Layout1';
 import ThirdLayout from '@/components/sector/SectorRetail/Layout3';
-import NineLayout from '@/components/sector/SectorRetail/Layout9';
+import FourthLayout from '@/components/sector/SectorRetail/Layout4';
+import SeventhLayout from '@/components/sector/SectorRetail/Layout7';
 import { sectorData } from '@/components/data/SectorData';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
 
@@ -29,7 +30,7 @@ const RetailSectorPage = () => {
       <IntroSection/>
       {layout1Data && <FirstLayout data={layout1Data} />}
       <ThirdLayout />
-      <NineLayout/>
+      <SeventhLayout/>
     </main>
   );
 };

@@ -4,7 +4,7 @@ import HeroSector from '@/components/sector/HeroSector';
 import IntroSection from '@/components/sector/SectorHospitality/IntroSection';
 import FirstLayout from '@/components/sector/SectorHospitality/Layout1';
 import ThirdLayout from '@/components/sector/SectorHospitality/Layout3';
-import NineLayout from '@/components/sector/SectorHospitality/Layout9';
+import SevenLayout from '@/components/sector/SectorHospitality/Layout7';
 import { sectorData } from '@/components/data/SectorData';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
 
@@ -27,9 +27,9 @@ const HospitalitySectorPage = () => {
       </svg>
       <HeroSector />
       <IntroSection/>
-      {layout1Data && <FirstLayout data={layout1Data} />}
+      <FirstLayout />
       <ThirdLayout />
-      <NineLayout/>
+      <SevenLayout />
     </main>
   );
 };

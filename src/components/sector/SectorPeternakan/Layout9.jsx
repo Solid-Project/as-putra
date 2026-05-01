@@ -89,6 +89,8 @@ const Layout9 = () => {
       ref={sectionRef}
       className="section min-h-screen flex items-center py-24 bg-white relative overflow-hidden"
       id="nine-layout"
+      data-theme="light"
+      data-title="Anjawani Mitra Mandiri (AMM)"
     >
       <div className="container mx-auto px-[6%] relative z-10">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">

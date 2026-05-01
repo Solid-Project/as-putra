@@ -3,16 +3,13 @@ import React from 'react';
 import HeroSector from '@/components/sector/HeroSector';
 import IntroSection from '@/components/sector/SectorConstruction/IntroSection';
 import FirstLayout from '@/components/sector/SectorConstruction/Layout1';
-import ThirdLayout from '@/components/sector/SectorConstruction/Layout3';
-import NineLayout from '@/components/sector/SectorConstruction/Layout9';
-import { sectorData } from '@/components/data/SectorData';
+import FourthLayout from '@/components/sector/SectorConstruction/Layout4';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
 
 const ConstructionSectorPage = () => {
   useFullpageSnap({enabled: true});
 
   // Filter data berdasarkan layout
-  const layout1Data = sectorData.find(sector => sector.layout === 'layout1');
 
   return (
     <main className="overflow-x-hidden">
@@ -27,9 +24,8 @@ const ConstructionSectorPage = () => {
       </svg>
       <HeroSector />
       <IntroSection/>
-      {layout1Data && <FirstLayout data={layout1Data} />}
-      <ThirdLayout />
-      <NineLayout/>
+      <FirstLayout/>
+      <FourthLayout/>
     </main>
   );
 };

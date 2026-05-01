@@ -73,6 +73,7 @@ const Layout3 = () => {
       className="section relative min-h-screen w-full overflow-hidden flex items-center"
       id="three-layout"
       data-theme="dark"
+      data-title="Close House Farm"
       style={{
         backgroundColor: "var(--color-footer-bg)",
       }}

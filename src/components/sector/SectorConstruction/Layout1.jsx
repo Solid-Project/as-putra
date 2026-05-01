@@ -1,19 +1,33 @@
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import bgLayout from "@/assets/img/SectorPeternakanKedua.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Layout1 = ({ data }) => {
+const Layout1 = () => {
   const sectionRef = useRef(null);
   const imageFrameRef = useRef(null);
   const textGroupRef = useRef(null);
   const floatRef = useRef(null);
 
+  // =========================
+  // STATIC DATA (ARETHA FARM)
+  // =========================
+  const data = {
+    id: "aretha",
+    title: "Construction",
+    meta: "Corporate Overview",
+    image: bgLayout,
+    description: [
+      "Mendukung Pembangunan Infrastruktur dalam penyediaan material dan kebutuhan konstruksi untuk mendukung pembangunan regional.",
+    ],
+  };
+
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Animasi floating shapes  
       const shapes = floatRef.current?.children;
+
       if (shapes) {
         if (shapes[0]) {
           gsap.to(shapes[0], {
@@ -61,42 +75,50 @@ const Layout1 = ({ data }) => {
         }
       }
 
-      // TIMELINE PARALLAX
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top bottom",
           end: "bottom top",
           scrub: 2,
-          invalidateOnRefresh: true
-        }
+          invalidateOnRefresh: true,
+        },
       });
 
-      // ANIMASI GAMBAR
-      tl.fromTo(imageFrameRef.current, 
+      tl.fromTo(
+        imageFrameRef.current,
         { x: "-70%", opacity: 0 },
-        { x: "0%", opacity: 1, ease: "power2.inOut", duration: 1 }
+        { x: "0%", opacity: 1, ease: "power2.inOut", duration: 1 },
       )
-      .to(imageFrameRef.current, { duration: 0.8 }) 
-      .to(imageFrameRef.current, {
-        x: "70%", opacity: 0, ease: "power2.inOut", duration: 1 
-      });
+        .to(imageFrameRef.current, { duration: 0.8 })
+        .to(imageFrameRef.current, {
+          x: "70%",
+          opacity: 0,
+          ease: "power2.inOut",
+          duration: 1,
+        });
 
-      // ANIMASI TEKS
-      tl.fromTo(textGroupRef.current, 
+      tl.fromTo(
+        textGroupRef.current,
         { x: "70%", opacity: 0 },
         { x: "0%", opacity: 1, ease: "power2.inOut", duration: 1 },
-        0
+        0,
       )
-      .to(textGroupRef.current, { duration: 0.8 }, 1)
-      .to(textGroupRef.current, {
-        x: "-70%", opacity: 0, ease: "power2.inOut", duration: 1
-      }, ">");
-
+        .to(textGroupRef.current, { duration: 0.8 }, 1)
+        .to(
+          textGroupRef.current,
+          {
+            x: "-70%",
+            opacity: 0,
+            ease: "power2.inOut",
+            duration: 1,
+          },
+          ">",
+        );
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [data]);
+  }, []);
 
   return (
     <section
@@ -111,7 +133,10 @@ const Layout1 = ({ data }) => {
       }}
     >
       {/* BACKGROUND SHAPES */}
-      <div ref={floatRef} className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+      <div
+        ref={floatRef}
+        className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
+      >
         <div
           className="absolute rounded-full blur-3xl"
           style={{
@@ -137,7 +162,8 @@ const Layout1 = ({ data }) => {
         <div
           className="absolute opacity-20 hidden lg:block"
           style={{
-            backgroundImage: "radial-gradient(var(--color-utama) 2px, transparent 2px)",
+            backgroundImage:
+              "radial-gradient(var(--color-utama) 2px, transparent 2px)",
             backgroundSize: "clamp(20px, 4vw, 30px) clamp(20px, 4vw, 30px)",
             width: "min(25vw, 200px)",
             height: "min(25vw, 200px)",
@@ -170,7 +196,7 @@ const Layout1 = ({ data }) => {
       </div>
 
       {/* CONTENT */}
-      <div 
+      <div
         className="relative z-10 w-full h-full flex items-center"
         style={{
           paddingLeft: "clamp(1rem, 6%, 6rem)",
@@ -180,8 +206,7 @@ const Layout1 = ({ data }) => {
         }}
       >
         <div className="w-full grid lg:grid-cols-12 gap-6 lg:gap-12 xl:gap-16 items-center">
-          
-          {/* KOLOM KIRI: IMAGE - TANPA BORDER DAN TANPA DECORATIVE LINE */}
+          {/* IMAGE */}
           <div className="lg:col-span-6 flex justify-center lg:justify-start order-2 lg:order-1">
             <div
               ref={imageFrameRef}
@@ -197,30 +222,28 @@ const Layout1 = ({ data }) => {
                 src={data.image}
                 alt={data.title}
                 className="w-full h-full object-cover rounded-sm"
-                style={{
-                  objectPosition: "center 30%",
-                }}
+                style={{ objectPosition: "center 30%" }}
               />
             </div>
           </div>
 
-          {/* KOLOM KANAN: TEXT */}
-          <div 
-            ref={textGroupRef} 
+          {/* TEXT */}
+          <div
+            ref={textGroupRef}
             className="lg:col-span-6 flex flex-col justify-center order-1 lg:order-2"
           >
             <div className="max-w-xl mx-auto lg:mx-0">
-              <div 
+              <div
                 className="inline-block px-3 py-1 mb-4 text-[10px] font-black tracking-[0.3em] uppercase rounded-sm"
                 style={{
                   backgroundColor: "var(--color-teks)",
                   color: "white",
                 }}
               >
-                {data.meta || "Corporate Overview"}
+                {data.meta}
               </div>
-              
-              <h2 
+
+              <h2
                 className="font-['Playfair_Display'] font-bold leading-[1.1] mb-4 lg:mb-6 tracking-tighter"
                 style={{
                   color: "var(--color-teks)",
@@ -230,7 +253,7 @@ const Layout1 = ({ data }) => {
                 {data.title}
               </h2>
 
-              <div 
+              <div
                 className="mb-5 lg:mb-6"
                 style={{
                   width: "clamp(40px, 8vw, 60px)",
@@ -240,36 +263,18 @@ const Layout1 = ({ data }) => {
               />
 
               <div className="space-y-3 md:space-y-4">
-                {Array.isArray(data.description) ? (
-                  data.description.map((p, idx) => (
-                    <p 
-                      key={idx} 
-                      className="leading-relaxed font-light"
-                      style={{
-                        color: "var(--color-teks-muted)",
-                        fontSize: "clamp(0.8rem, 2vw, 1rem)",
-                        borderLeftWidth: "2px",
-                        borderLeftColor: "var(--color-bg-alt)",
-                        paddingLeft: "clamp(0.8rem, 2.5vw, 1.2rem)",
-                      }}
-                    >
-                      {p}
-                    </p>
-                  ))
-                ) : (
-                  <p 
-                    className="leading-relaxed font-light"
-                    style={{
-                      color: "var(--color-teks-muted)",
-                      fontSize: "clamp(0.8rem, 2vw, 1rem)",
-                      borderLeftWidth: "2px",
-                      borderLeftColor: "var(--color-bg-alt)",
-                      paddingLeft: "clamp(0.8rem, 2.5vw, 1.2rem)",
-                    }}
-                  >
-                    {data.description}
-                  </p>
-                )}
+                <p
+                  className="leading-relaxed font-light text-justify"
+                  style={{
+                    color: "var(--color-teks-muted)",
+                    fontSize: "clamp(0.8rem, 2vw, 1rem)",
+                    borderLeftWidth: "2px",
+                    borderLeftColor: "var(--color-bg-alt)",
+                    paddingLeft: "clamp(0.8rem, 2.5vw, 1.2rem)",
+                  }}
+                >
+                  {data.description}
+                </p>
               </div>
             </div>
           </div>

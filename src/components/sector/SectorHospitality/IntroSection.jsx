@@ -13,7 +13,7 @@ const IntroSection = ({ title, image }) => {
   const parallaxImgRef = useRef(null);
   const floatRef = useRef(null);
 
-  const displayTitle = title || "Sektor Kesehatan";
+  const displayTitle = title || "Sektor Hospitality";
   const displayImage = image || livestockImg;
 
   useEffect(() => {

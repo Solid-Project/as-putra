@@ -3,17 +3,12 @@ import React from 'react';
 import HeroSector from '@/components/sector/HeroSector';
 import IntroSection from '@/components/sector/SectorEkspedisi/IntroSection';
 import FirstLayout from '@/components/sector/SectorEkspedisi/Layout1';
-import ThirdLayout from '@/components/sector/SectorEkspedisi/Layout3';
-import NineLayout from '@/components/sector/SectorEkspedisi/Layout9';
-import { sectorData } from '@/components/data/SectorData';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
 
 const EkspedisiSectorPage = () => {
   useFullpageSnap({enabled: true});
 
-  // Filter data berdasarkan layout
-  const layout1Data = sectorData.find(sector => sector.layout === 'layout1');
-
+  // Filter data berdasarkan layou
   return (
     <main className="overflow-x-hidden">
       <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style={{ display: 'none' }}>
@@ -27,9 +22,7 @@ const EkspedisiSectorPage = () => {
       </svg>
       <HeroSector />
       <IntroSection/>
-      {layout1Data && <FirstLayout data={layout1Data} />}
-      <ThirdLayout />
-      <NineLayout/>
+      <FirstLayout/>
     </main>
   );
 };
