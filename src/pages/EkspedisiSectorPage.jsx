@@ -1,6 +1,5 @@
 // src/pages/SectorPage.jsx
 import React from 'react';
-import HeroSector from '@/components/sector/HeroSector';
 import IntroSection from '@/components/sector/SectorEkspedisi/IntroSection';
 import FirstLayout from '@/components/sector/SectorEkspedisi/Layout1';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
@@ -20,7 +19,6 @@ const EkspedisiSectorPage = () => {
           </filter>
         </defs>
       </svg>
-      <HeroSector />
       <IntroSection/>
       <FirstLayout/>
     </main>

@@ -1,19 +1,13 @@
 // src/pages/SectorPage.jsx
 import React from 'react';
-import HeroSector from '@/components/sector/HeroSector';
 import IntroSection from '@/components/sector/SectorHospitality/IntroSection';
 import FirstLayout from '@/components/sector/SectorHospitality/Layout1';
 import ThirdLayout from '@/components/sector/SectorHospitality/Layout3';
 import SevenLayout from '@/components/sector/SectorHospitality/Layout7';
-import { sectorData } from '@/components/data/SectorData';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
 
 const HospitalitySectorPage = () => {
   useFullpageSnap({enabled: true});
-
-  // Filter data berdasarkan layout
-  const layout1Data = sectorData.find(sector => sector.layout === 'layout1');
-
   return (
     <main className="overflow-x-hidden">
       <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style={{ display: 'none' }}>
@@ -25,7 +19,6 @@ const HospitalitySectorPage = () => {
           </filter>
         </defs>
       </svg>
-      <HeroSector />
       <IntroSection/>
       <FirstLayout />
       <ThirdLayout />

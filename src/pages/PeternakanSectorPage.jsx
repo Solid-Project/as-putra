@@ -1,6 +1,5 @@
 // src/pages/SectorPage.jsx
 import React from 'react';
-import HeroSector from '@/components/sector/HeroSector';
 import IntroSection from '@/components/sector/SectorPeternakan/IntroSection';
 import FirstLayout from '@/components/sector/SectorPeternakan/Layout1';
 import ThirdLayout from '@/components/sector/SectorPeternakan/Layout3';
@@ -25,7 +24,6 @@ const PeternakanSectorPage = () => {
           </filter>
         </defs>
       </svg>
-      <HeroSector />
       <IntroSection/>
       {layout1Data && <FirstLayout data={layout1Data} />}
       <ThirdLayout />
