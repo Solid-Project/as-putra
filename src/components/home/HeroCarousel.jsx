@@ -14,7 +14,7 @@ import carousel6 from "@/assets/img/Carousel/herocarousel6.webp";
 gsap.registerPlugin(ScrollTrigger);
 
 const slides = [
-  { type: "video", src: heroVideo },
+  // { type: "video", src: heroVideo },
   { type: "image", src: carousel1 },
   { type: "image", src: carousel2 },
   { type: "image", src: carousel3 },
@@ -243,7 +243,7 @@ const HeroCarousel = () => {
             transform: "translateY(20px)"
           }}
         >
-          Bermula dari langkah sederhana, AS Putra berkembang menjadi perusahaan modern yang terus berinovasi dan berkontribusi dalam mendukung ketahanan pangan serta pembangunan berkelanjutan di Indonesia
+          Menciptakan ekosistem bisnis yang modern dan tangguh. Sebuah sinergi tanpa batas untuk memberi dampak nyata bagi negeri.
         </p>
 
         {/* BUTTONS */}
