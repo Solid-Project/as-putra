@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import sejarahImg from "@/assets/img/owner.jpg";
 
-const HistorySection = () => {
+const HistorySection = ({ activeIndex }) => {
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
   const imageRef = useRef(null);
@@ -10,110 +10,57 @@ const HistorySection = () => {
   const [isTyping, setIsTyping] = useState(false);
   const typingIntervalRef = useRef(null);
   const animationFrameRef = useRef(null);
-  const observerRef = useRef(null);
   const currentIndexRef = useRef(0);
   const isMountedRef = useRef(true);
 
   const fullText = "Our History";
-
-  // Fungsi untuk memulai efek mengetik
-  const startTyping = useCallback(() => {
-    // Bersihkan interval yang sedang berjalan
-    if (typingIntervalRef.current) {
-      clearInterval(typingIntervalRef.current);
-      typingIntervalRef.current = null;
-    }
-
-    if (!isMountedRef.current) return;
-    
-    // Reset state
-    currentIndexRef.current = 0;
-    setDisplayText("");
-    setIsTyping(true);
-
-    // Fungsi untuk mengetik huruf berikutnya
-    const typeNextChar = () => {
-      if (!isMountedRef.current) {
-        if (typingIntervalRef.current) {
-          clearInterval(typingIntervalRef.current);
-          typingIntervalRef.current = null;
-        }
-        return;
-      }
-      
-      currentIndexRef.current++;
-      const newText = fullText.slice(0, currentIndexRef.current);
-      setDisplayText(newText);
-
-      if (currentIndexRef.current >= fullText.length) {
-        // Selesai mengetik
-        if (typingIntervalRef.current) {
-          clearInterval(typingIntervalRef.current);
-          typingIntervalRef.current = null;
-        }
-        setIsTyping(false);
-      }
-    };
-
-    // Mulai interval typing
-    typingIntervalRef.current = setInterval(typeNextChar, 110);
-  }, [fullText]);
-
-  // Reset dan mulai ulang typing
-  const resetAndStartTyping = useCallback(() => {
-    // Hentikan interval yang sedang berjalan
-    if (typingIntervalRef.current) {
-      clearInterval(typingIntervalRef.current);
-      typingIntervalRef.current = null;
-    }
-    
-    // Reset semua state
-    currentIndexRef.current = 0;
-    setDisplayText("");
-    setIsTyping(false);
-    
-    // Mulai typing baru
-    setTimeout(() => {
-      if (isMountedRef.current) {
-        startTyping();
-      }
-    }, 150);
-  }, [startTyping]);
-
+  const SECTION_INDEX = 1;
   // Efek untuk observer - jalan setiap kali section active
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
+  if (activeIndex !== SECTION_INDEX) return;
 
-    // Bersihkan observer sebelumnya
-    if (observerRef.current) {
-      observerRef.current.disconnect();
+  let isCancelled = false;
+
+  // stop interval lama
+  if (typingIntervalRef.current) {
+    clearInterval(typingIntervalRef.current);
+    typingIntervalRef.current = null;
+  }
+
+  // reset index (INI AMAN karena bukan state React)
+  currentIndexRef.current = 0;
+
+  // set state DI LUAR LOOP
+  setDisplayText("Our History");
+  setIsTyping(true);
+
+  const typeNextChar = () => {
+    if (isCancelled || !isMountedRef.current) return;
+
+    currentIndexRef.current += 1;
+
+    const text = fullText.slice(0, currentIndexRef.current);
+
+    setDisplayText(text);
+
+    if (currentIndexRef.current >= fullText.length) {
+      clearInterval(typingIntervalRef.current);
+      typingIntervalRef.current = null;
+      setIsTyping(false);
     }
+  };
 
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            console.log("Section visible, starting typing effect"); // Debug
-            // Reset dan mulai typing dari awal setiap kali section terlihat
-            resetAndStartTyping();
-          }
-        });
-      },
-      { threshold: 0.3, rootMargin: "50px" }
-    );
+  typingIntervalRef.current = setInterval(typeNextChar, 110);
 
-    observerRef.current.observe(section);
+  return () => {
+    isCancelled = true;
 
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-      if (typingIntervalRef.current) {
-        clearInterval(typingIntervalRef.current);
-      }
-    };
-  }, [resetAndStartTyping]);
+    if (typingIntervalRef.current) {
+      clearInterval(typingIntervalRef.current);
+      typingIntervalRef.current = null;
+    }
+  };
+}, [activeIndex]);
 
   // Efek Parallax
   const updateParallax = useCallback(() => {

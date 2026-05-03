@@ -8,14 +8,14 @@ import useFullpageSnap from '@/hooks/useFullPageSnap';
 
 const AboutPage = () => {
   // Fullpage snap with enabled config
-  useFullpageSnap({ enabled: true });
+  const { activeIndex } = useFullpageSnap({ enabled: true });
 
   return (
     <main className="overflow-x-hidden">
-      <HeroAbout />
-      <VisionMission />
-      <OurValues />
-      <HistoryTimeline />
+      <HeroAbout activeIndex={activeIndex} />
+      <VisionMission activeIndex={activeIndex} />
+      <OurValues activeIndex={activeIndex} />
+      <HistoryTimeline activeIndex={activeIndex} />
     </main>
   );
 };

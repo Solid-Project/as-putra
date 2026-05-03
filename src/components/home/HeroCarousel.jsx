@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -21,7 +27,7 @@ const slides = [
   { type: "image", src: carousel6 },
 ];
 
-const HeroCarousel = () => {
+const HeroCarousel = ({ activeIndex }) => {
   const [current, setCurrent] = useState(0);
   const isAnimatingRef = useRef(false);
   const [isVideoReady, setIsVideoReady] = useState(false);
@@ -38,6 +44,7 @@ const HeroCarousel = () => {
   const subtitleRef = useRef(null);
   const buttonsRef = useRef(null);
   const scrollBtnRef = useRef(null);
+  const SECTION_INDEX = 0; // ⚠️ Hero biasanya index pertama
 
   // Scroll ke section berikutnya
   const scrollToNext = useCallback(() => {
@@ -65,115 +72,110 @@ const HeroCarousel = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
-    
+
     intervalRef.current = setInterval(() => {
-      if (!isAnimatingRef.current && !document.hidden) { // Cek jika tab visible
-        setCurrent((prev) => (prev + 1) % slides.length);
-      }
-    }, 6000);
-    
+  if (!isReadyRef.current) return;
+
+  if (!isAnimatingRef.current && !document.hidden) {
+    setCurrent((prev) => (prev + 1) % slides.length);
+  }
+}, 6000);
+
     setIsAutoPlaying(true);
   }, []);
 
-  // Animasi dengan GSAP + ScrollTrigger
+  const isReadyRef = useRef(false);
+
   useEffect(() => {
     if (ctxRef.current) {
       ctxRef.current.revert();
     }
 
+    // ❌ kalau bukan section aktif → STOP
+    if (activeIndex !== SECTION_INDEX) {
+      isReadyRef.current = false;
+
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+
+      return;
+    }
+
     const ctx = gsap.context(() => {
-      // Timeline entrance
-      const entranceTimeline = gsap.timeline({
+      const tl = gsap.timeline({
         onComplete: () => {
-          // Start autoplay setelah animasi selesai
-          startAutoPlay();
-        }
+          isReadyRef.current = true;
+          startAutoPlay(); // 🔥 autoplay hanya saat aktif
+        },
       });
 
-      // Animasi Title
-      if (titleRef.current) {
-        entranceTimeline.fromTo(titleRef.current, 
-          { y: 50, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
-        );
-      }
-
-      // Animasi Line
-      if (lineRef.current) {
-        entranceTimeline.fromTo(lineRef.current, 
+      tl.fromTo(
+        titleRef.current,
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
+      )
+        .fromTo(
+          lineRef.current,
           { width: 0 },
           { width: 80, duration: 0.6, ease: "back.out(1.2)" },
-          "-=0.4"
-        );
-      }
-
-      // Animasi Subtitle
-      if (subtitleRef.current) {
-        entranceTimeline.fromTo(subtitleRef.current, 
+          "-=0.4",
+        )
+        .fromTo(
+          subtitleRef.current,
           { y: 20, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" },
-          "-=0.3"
-        );
-      }
-
-      // Animasi Buttons
-      if (buttonsRef.current?.children) {
-        entranceTimeline.fromTo(buttonsRef.current.children, 
+          "-=0.3",
+        )
+        .fromTo(
+          buttonsRef.current.children,
           { y: 30, opacity: 0 },
-          { 
-            y: 0, 
-            opacity: 1, 
-            stagger: 0.15, 
-            duration: 0.8, 
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.15,
+            duration: 0.8,
             ease: "power3.out",
           },
-          "-=0.2"
+          "-=0.2",
         );
-      }
 
-      // Animasi Scroll Button
-      if (scrollBtnRef.current) {
-        gsap.fromTo(scrollBtnRef.current,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 1, delay: 1.2, ease: "power2.out" }
-        );
-      }
+      gsap.fromTo(
+        scrollBtnRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 1, delay: 1.2 },
+      );
     });
 
     ctxRef.current = ctx;
 
-    // Cleanup saat komponen unmount
     return () => {
-      if (ctxRef.current) {
-        ctxRef.current.revert();
-      }
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+      if (ctxRef.current) ctxRef.current.revert();
     };
-  }, [startAutoPlay]);
+  }, [activeIndex, startAutoPlay]);
 
   // Video control
   useEffect(() => {
     if (slides[current].type === "video" && videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(err => {
+      videoRef.current.play().catch((err) => {
         // Handle autoplay policy
         console.log("Video autoplay failed:", err);
       });
-      
+
       // Set timeout untuk video ended
       const handleVideoEnded = () => {
         if (isAutoPlaying) {
           setCurrent((prev) => (prev + 1) % slides.length);
         }
       };
-      
-      videoRef.current.addEventListener('ended', handleVideoEnded);
-      
+
+      videoRef.current.addEventListener("ended", handleVideoEnded);
+
       return () => {
         if (videoRef.current) {
-          videoRef.current.removeEventListener('ended', handleVideoEnded);
+          videoRef.current.removeEventListener("ended", handleVideoEnded);
         }
       };
     }
@@ -194,11 +196,11 @@ const HeroCarousel = () => {
         }
       }
     };
-    
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [isAutoPlaying, startAutoPlay]);
 
@@ -214,11 +216,11 @@ const HeroCarousel = () => {
           <div
             key={idx}
             className={`absolute inset-0 transition-all duration-1000 ease-in-out will-change-transform ${
-              isActive 
-                ? "opacity-100 z-10 transform scale-100" 
+              isActive
+                ? "opacity-100 z-10 transform scale-100"
                 : isPrev || isNext
-                ? "opacity-0 z-0 transform scale-105"
-                : "opacity-0 z-0 transform scale-95"
+                  ? "opacity-0 z-0 transform scale-105"
+                  : "opacity-0 z-0 transform scale-95"
             }`}
           >
             {slide.type === "video" ? (
@@ -243,7 +245,7 @@ const HeroCarousel = () => {
           </div>
         );
       }),
-    [current]
+    [current],
   );
 
   return (
@@ -253,9 +255,7 @@ const HeroCarousel = () => {
       data-theme="dark"
     >
       {/* Background Slides */}
-      <div className="absolute inset-0 z-0">
-        {renderedSlides}
-      </div>
+      <div className="absolute inset-0 z-0">{renderedSlides}</div>
 
       {/* Loading indicator jika video belum ready */}
       {!isVideoReady && slides[current].type === "video" && (
@@ -265,7 +265,7 @@ const HeroCarousel = () => {
       )}
 
       {/* Content */}
-      <div 
+      <div
         ref={contentRef}
         className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-8 md:px-12 lg:px-16"
       >
@@ -285,9 +285,9 @@ const HeroCarousel = () => {
         <div
           ref={lineRef}
           className="h-0.5 bg-[var(--color-utama)] mx-auto"
-          style={{ 
+          style={{
             width: 0,
-            marginBottom: "clamp(1.5rem, 4vw, 2.5rem)"
+            marginBottom: "clamp(1.5rem, 4vw, 2.5rem)",
           }}
         />
 
@@ -301,7 +301,9 @@ const HeroCarousel = () => {
             marginBottom: "clamp(1.5rem, 4vw, 2.5rem)",
           }}
         >
-          Bermula dari langkah sederhana, AS Putra berkembang menjadi perusahaan modern yang terus berinovasi dan berkontribusi dalam mendukung ketahanan pangan serta pembangunan berkelanjutan di Indonesia
+          Bermula dari langkah sederhana, AS Putra berkembang menjadi perusahaan
+          modern yang terus berinovasi dan berkontribusi dalam mendukung
+          ketahanan pangan serta pembangunan berkelanjutan di Indonesia
         </p>
 
         {/* Buttons */}
@@ -310,15 +312,25 @@ const HeroCarousel = () => {
             <Link
               to="/sector"
               className="group relative px-6 sm:px-8 py-3 sm:py-3.5 bg-[var(--color-utama)] text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[var(--color-utama)]/30 hover:-translate-y-0.5"
-              style={{ 
+              style={{
                 fontSize: "clamp(0.875rem, 2.5vw, 1rem)",
               }}
               onClick={stopAutoPlay} // Stop autoplay saat navigasi
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 Sektor Kami
-                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                <svg
+                  className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
                 </svg>
               </span>
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
@@ -327,15 +339,25 @@ const HeroCarousel = () => {
             <Link
               to="/about"
               className="group relative px-6 sm:px-8 py-3 sm:py-3.5 bg-white/20 backdrop-blur-sm border border-white/40 text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:bg-white/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-white/20"
-              style={{ 
+              style={{
                 fontSize: "clamp(0.875rem, 2.5vw, 1rem)",
               }}
               onClick={stopAutoPlay} // Stop autoplay saat navigasi
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 Tentang Kami
-                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                <svg
+                  className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
                 </svg>
               </span>
             </Link>
@@ -351,11 +373,11 @@ const HeroCarousel = () => {
           scrollToNext();
         }}
         className="absolute z-20 hidden md:flex flex-col items-center gap-2 group cursor-pointer"
-        style={{ 
-          bottom: "clamp(1rem, 5vh, 3rem)", 
+        style={{
+          bottom: "clamp(1rem, 5vh, 3rem)",
           right: "clamp(1rem, 5vw, 10%)",
           transform: "translateY(20px)",
-          opacity: 0
+          opacity: 0,
         }}
       >
         <span className="vertical-text text-[11px] font-black uppercase tracking-[0.5em] text-white/40 group-hover:text-[var(--color-utama)] transition-colors duration-500 mb-4">
@@ -366,12 +388,20 @@ const HeroCarousel = () => {
             <svg
               key={i}
               className="w-6 h-6 text-[var(--color-utama)]"
-              style={{ opacity: 1 - (i * 0.2), animation: `bounce 1.5s ease-in-out ${i * 0.1}s infinite` }}
+              style={{
+                opacity: 1 - i * 0.2,
+                animation: `bounce 1.5s ease-in-out ${i * 0.1}s infinite`,
+              }}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2.5}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           ))}
         </div>
@@ -385,16 +415,33 @@ const HeroCarousel = () => {
         }}
         className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 md:hidden flex flex-col items-center gap-1 group cursor-pointer"
       >
-        <span className="text-[10px] font-medium uppercase tracking-widest text-white/50">Scroll</span>
-        <svg className="w-5 h-5 text-white/60 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+        <span className="text-[10px] font-medium uppercase tracking-widest text-white/50">
+          Scroll
+        </span>
+        <svg
+          className="w-5 h-5 text-white/60 animate-bounce"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2.5}
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
       <style jsx>{`
         @keyframes bounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(10px); }
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(10px);
+          }
         }
       `}</style>
     </section>

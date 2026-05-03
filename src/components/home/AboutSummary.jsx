@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const stats = [
   { target: 40, suffix: "+", label: "Tahun Pengalaman" },
@@ -28,70 +28,69 @@ const cards = [
 // Counter dengan requestAnimationFrame yang efficient dan reset setiap section active
 const Counter = ({ target, suffix, label, shouldAnimate }) => {
   const [count, setCount] = useState(0);
-  const elementRef = useRef(null);
   const animationRef = useRef(null);
-  const hasAnimatedRef = useRef(false);
+  const hasStartedRef = useRef(false);
 
   useEffect(() => {
-    // Reset counter ketika shouldAnimate berubah menjadi false (section tidak aktif)
-    if (!shouldAnimate) {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
-      }
+  // 🔥 HANDLE RESET (tanpa setState sync)
+  if (!shouldAnimate) {
+    hasStartedRef.current = false;
+
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
+    }
+
+    // defer reset supaya tidak sync dalam effect
+    requestAnimationFrame(() => {
       setCount(0);
-      hasAnimatedRef.current = false;
-      return;
+    });
+
+    return;
+  }
+
+  if (hasStartedRef.current) return;
+  hasStartedRef.current = true;
+
+  let startTime = null;
+  const duration = 2000;
+
+  const animate = (timestamp) => {
+    if (!startTime) startTime = timestamp;
+
+    const progress = Math.min((timestamp - startTime) / duration, 1);
+    const easeOut = 1 - Math.pow(1 - progress, 3);
+
+    const value = Math.floor(target * easeOut);
+    setCount(value);
+
+    if (progress < 1) {
+      animationRef.current = requestAnimationFrame(animate);
     }
+  };
 
-    // Jika harus animasi dan belum pernah animasi
-    if (shouldAnimate && !hasAnimatedRef.current) {
-      hasAnimatedRef.current = true;
-      
-      let startTime = null;
-      const startValue = 0;
-      const duration = 2000;
+  animationRef.current = requestAnimationFrame(animate);
 
-      const animateValue = (timestamp) => {
-        if (!startTime) startTime = timestamp;
-        const progress = Math.min((timestamp - startTime) / duration, 1);
-        const easeOut = 1 - Math.pow(1 - progress, 3);
-        const currentValue = Math.floor(startValue + (target - startValue) * easeOut);
-        setCount(currentValue);
-
-        if (progress < 1) {
-          animationRef.current = requestAnimationFrame(animateValue);
-        } else {
-          animationRef.current = null;
-        }
-      };
-
-      animationRef.current = requestAnimationFrame(animateValue);
+  return () => {
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
     }
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
-      }
-    };
-  }, [target, shouldAnimate]);
+  };
+}, [shouldAnimate, target]);
 
   return (
-    <div className="text-center" style={{ paddingLeft: "clamp(0.5rem, 2vw, 1rem)", paddingRight: "clamp(0.5rem, 2vw, 1rem)" }}>
-      <h3 
-        className="font-bold"
-        style={{ 
+    <div className="text-center">
+      <h3
+        style={{
           color: "var(--color-utama)",
           fontSize: "clamp(1.8rem, 5vw, 3rem)",
-          marginBottom: "clamp(0.15rem, 0.5vh, 0.25rem)",
         }}
       >
-        {count.toLocaleString()}{suffix}
+        {count.toLocaleString()}
+        {suffix}
       </h3>
-      <p 
-        className="font-semibold uppercase tracking-widest"
-        style={{ 
+      <p
+        style={{
           color: "var(--color-teks-muted)",
           fontSize: "clamp(0.6rem, 1.5vw, 0.75rem)",
         }}
@@ -102,53 +101,18 @@ const Counter = ({ target, suffix, label, shouldAnimate }) => {
   );
 };
 
-const AboutSummary = () => {
+const AboutSummary = ({ activeIndex }) => {
   const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [shouldAnimateStats, setShouldAnimateStats] = useState(false);
-  const observerRef = useRef(null);
+  const SECTION_INDEX = 2; // misalnya urutan setelah history
 
   // Trigger reveal dengan IntersectionObserver yang lebih akurat
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    // Bersihkan observer sebelumnya
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Section visible - trigger animasi
-            setIsVisible(true);
-            setShouldAnimateStats(true);
-          } else {
-            // Section tidak visible - reset animasi stats
-            setIsVisible(false);
-            setShouldAnimateStats(false);
-          }
-        });
-      },
-      { threshold: 0.2, rootMargin: "0px 0px -50px 0px" }
-    );
-
-    observerRef.current.observe(section);
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []);
+  const isActive = activeIndex === SECTION_INDEX;
 
   return (
     <section
       ref={sectionRef}
       className="section relative flex flex-col justify-center overflow-hidden"
-      id="about-summary" 
+      id="about-summary"
       data-title="About Summary"
       style={{
         minHeight: "100vh",
@@ -161,9 +125,9 @@ const AboutSummary = () => {
       }}
     >
       {/* SHAPE DEKORATIF */}
-      
+
       {/* Shape 1: Lingkaran besar di pojok kiri atas */}
-      <div 
+      <div
         className="absolute pointer-events-none"
         style={{
           top: "-5%",
@@ -178,7 +142,7 @@ const AboutSummary = () => {
       />
 
       {/* Shape 2: Lingkaran di pojok kanan bawah */}
-      <div 
+      <div
         className="absolute pointer-events-none"
         style={{
           bottom: "-5%",
@@ -193,7 +157,7 @@ const AboutSummary = () => {
       />
 
       {/* Shape 3: Garis-garis diagonal pattern */}
-      <div 
+      <div
         className="absolute inset-0 pointer-events-none"
         style={{
           opacity: 0.02,
@@ -210,7 +174,7 @@ const AboutSummary = () => {
       />
 
       {/* Shape 4: Kotak dekoratif di kanan atas */}
-      <div 
+      <div
         className="absolute pointer-events-none hidden lg:block"
         style={{
           top: "15%",
@@ -225,7 +189,7 @@ const AboutSummary = () => {
       />
 
       {/* Shape 5: Kotak dekoratif di kiri bawah */}
-      <div 
+      <div
         className="absolute pointer-events-none hidden lg:block"
         style={{
           bottom: "12%",
@@ -240,7 +204,7 @@ const AboutSummary = () => {
       />
 
       {/* Shape 6: Titik-titik dekoratif */}
-      <div 
+      <div
         className="absolute pointer-events-none hidden md:block"
         style={{
           top: "40%",
@@ -255,7 +219,8 @@ const AboutSummary = () => {
               width: "clamp(4px, 1vw, 8px)",
               height: "clamp(4px, 1vw, 8px)",
               borderRadius: "50%",
-              backgroundColor: i % 2 === 0 ? "var(--color-utama)" : "var(--color-aksen)",
+              backgroundColor:
+                i % 2 === 0 ? "var(--color-utama)" : "var(--color-aksen)",
               opacity: 0.15,
               marginBottom: "clamp(8px, 2vw, 15px)",
             }}
@@ -264,7 +229,7 @@ const AboutSummary = () => {
       </div>
 
       {/* Shape 7: Garis horizontal dekoratif */}
-      <div 
+      <div
         className="absolute pointer-events-none hidden xl:block"
         style={{
           bottom: "20%",
@@ -277,27 +242,27 @@ const AboutSummary = () => {
         }}
       />
 
-      <div 
+      <div
         className="mx-auto w-full flex flex-col h-full relative"
-        style={{ 
+        style={{
           maxWidth: "clamp(300px, 100%, 1200px)",
           zIndex: 1,
         }}
       >
-        
         {/* --- HEADER --- */}
-        <div 
+        <div
           className="text-center"
-          style={{ 
-            transform: isVisible ? "translateY(0)" : "translateY(30px)",
-            opacity: isVisible ? 1 : 0,
-            transition: "transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.6s ease",
+          style={{
+            transform: isActive ? "translateY(0)" : "translateY(30px)",
+            opacity: isActive ? 1 : 0,
+            transition:
+              "transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.6s ease",
             marginBottom: "clamp(1.5rem, 4vh, 2.5rem)",
           }}
         >
-          <h2 
+          <h2
             className="font-['Playfair_Display']"
-            style={{ 
+            style={{
               color: "var(--color-teks)",
               fontSize: "clamp(1.8rem, 5vw, 2.5rem)",
               marginBottom: "clamp(0.5rem, 1.5vh, 0.75rem)",
@@ -305,8 +270,8 @@ const AboutSummary = () => {
           >
             Budaya & Nilai Kami
           </h2>
-          <div 
-            style={{ 
+          <div
+            style={{
               backgroundColor: "var(--color-utama)",
               height: "clamp(1.5px, 0.3vw, 2.5px)",
               width: "clamp(40px, 10vw, 60px)",
@@ -315,22 +280,25 @@ const AboutSummary = () => {
               marginBottom: "clamp(0.75rem, 2vh, 1rem)",
             }}
           />
-          <p 
+          <p
             className="mx-auto leading-relaxed"
-            style={{ 
+            style={{
               color: "var(--color-teks-muted)",
               fontSize: "clamp(0.8rem, 2vw, 1rem)",
               maxWidth: "clamp(280px, 90%, 700px)",
             }}
           >
-            Di AS Putra, budaya bukan sekadar prinsip yang tertulis tetapi cara kami berpikir, bekerja, dan berkembang bersama. Nilai-nilai ini menjadi pondasi dalam setiap keputusan, menggerakkan setiap sektor bisnis, dan menjaga arah pertumbuhan kami tetap konsisten. 
+            Di AS Putra, budaya bukan sekadar prinsip yang tertulis tetapi cara
+            kami berpikir, bekerja, dan berkembang bersama. Nilai-nilai ini
+            menjadi pondasi dalam setiap keputusan, menggerakkan setiap sektor
+            bisnis, dan menjaga arah pertumbuhan kami tetap konsisten.
           </p>
         </div>
 
         {/* --- CARDS --- */}
-        <div 
+        <div
           className="grid md:grid-cols-3"
-          style={{ 
+          style={{
             gap: "clamp(1rem, 2.5vw, 1.5rem)",
             marginBottom: "clamp(1.5rem, 4vh, 2.5rem)",
           }}
@@ -339,19 +307,19 @@ const AboutSummary = () => {
             <div
               key={idx}
               className="flex flex-col text-center border shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
-              style={{ 
-                transform: isVisible ? "translateY(0)" : "translateY(30px)",
-                opacity: isVisible ? 1 : 0,
+              style={{
+                transform: isActive ? "translateY(0)" : "translateY(30px)",
+                opacity: isActive ? 1 : 0,
                 transition: `transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.6s ease`,
-                transitionDelay: isVisible ? `${idx * 100}ms` : "0ms",
+                transitionDelay: isActive ? `${idx * 100}ms` : "0ms",
                 backgroundColor: "var(--color-bg-light)",
                 borderColor: "rgba(0,0,0,0.05)",
                 borderRadius: "clamp(12px, 2.5vw, 16px)",
                 padding: "clamp(1.25rem, 3.5vw, 2rem)",
               }}
             >
-              <div 
-                style={{ 
+              <div
+                style={{
                   color: "var(--color-utama)",
                   fontSize: "clamp(1.8rem, 4.5vw, 2.5rem)",
                   marginBottom: "clamp(0.75rem, 2vh, 1rem)",
@@ -359,9 +327,9 @@ const AboutSummary = () => {
               >
                 {item.icon}
               </div>
-              <h3 
+              <h3
                 className="font-bold"
-                style={{ 
+                style={{
                   color: "var(--color-teks)",
                   fontSize: "clamp(1.1rem, 2.5vw, 1.25rem)",
                   marginBottom: "clamp(0.5rem, 1.5vh, 0.75rem)",
@@ -369,9 +337,9 @@ const AboutSummary = () => {
               >
                 {item.title}
               </h3>
-              <p 
+              <p
                 className="leading-relaxed flex-grow"
-                style={{ 
+                style={{
                   color: "var(--color-teks-muted)",
                   fontSize: "clamp(0.75rem, 1.8vw, 0.875rem)",
                   fontStyle: "normal",
@@ -384,11 +352,12 @@ const AboutSummary = () => {
         </div>
 
         {/* --- STATS SECTION --- */}
-        <div 
-          style={{ 
-            transform: isVisible ? "translateY(0)" : "translateY(30px)",
-            opacity: isVisible ? 1 : 0,
-            transition: "transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.6s ease",
+        <div
+          style={{
+            transform: isActive ? "translateY(0)" : "translateY(30px)",
+            opacity: isActive ? 1 : 0,
+            transition:
+              "transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.6s ease",
             transitionDelay: "300ms",
             borderTopWidth: "clamp(1px, 0.2vw, 1.5px)",
             borderTopStyle: "solid",
@@ -396,9 +365,9 @@ const AboutSummary = () => {
             paddingTop: "clamp(1.5rem, 4vh, 2.5rem)",
           }}
         >
-          <div 
+          <div
             className="flex flex-wrap justify-center items-center"
-            style={{ 
+            style={{
               gap: "clamp(1.5rem, 5vw, 3rem)",
             }}
           >
@@ -408,12 +377,11 @@ const AboutSummary = () => {
                 target={stat.target}
                 suffix={stat.suffix}
                 label={stat.label}
-                shouldAnimate={shouldAnimateStats}
+                shouldAnimate={isActive}
               />
             ))}
           </div>
         </div>
-
       </div>
     </section>
   );

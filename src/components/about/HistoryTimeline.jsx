@@ -1,9 +1,6 @@
 // src/components/about/HistoryTimeline.jsx
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const timelineData = [
   {
@@ -68,176 +65,76 @@ const timelineData = [
   },
 ];
 
-const HistoryTimeline = () => {
+const HistoryTimeline = ({ activeIndex }) => {
   const sectionRef = useRef(null);
   const lineRef = useRef(null);
   const floatRef = useRef(null);
   const headerRef = useRef(null);
   const headerSubRef = useRef(null);
   const headerTitleRef = useRef(null);
-  const hasAnimatedRef = useRef(false);
-  const cardsAnimTriggeredRef = useRef(new Set());
+  const cardsRef = useRef([]);
+
+  const SECTION_INDEX = 3; // sesuaikan urutan kamu
+  const isActive = activeIndex === SECTION_INDEX;
 
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
+    if (!isActive) return;
 
-    // Bersihkan ScrollTrigger sebelumnya
-    ScrollTrigger.getAll().forEach(trigger => {
-      if (trigger.vars.trigger === section) {
-        trigger.kill();
-      }
-    });
+    const cards = cardsRef.current;
 
-    // SET INITIAL STATE - HEADER HIDDEN
-    gsap.set([headerRef.current, headerSubRef.current, headerTitleRef.current], {
-      y: 30,
-      opacity: 0
-    });
+    if (!cards || cards.length === 0) return;
 
-    // INTERSECTION OBSERVER UNTUK DETEKSI SECTION AKTIF
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasAnimatedRef.current) {
-            hasAnimatedRef.current = true;
-            
-            // HEADER ANIMATION
-            gsap.to([headerRef.current, headerSubRef.current, headerTitleRef.current], {
-              y: 0,
-              opacity: 1,
-              stagger: 0.1,
-              duration: 0.7,
-              ease: "power3.out",
-              overwrite: true
-            });
-
-            // GARIS TIMELINE ANIMATION
-            if (lineRef.current) {
-              gsap.fromTo(lineRef.current,
-                { scaleY: 0, transformOrigin: "top center" },
-                {
-                  scaleY: 1,
-                  duration: 1,
-                  ease: "power2.out",
-                  overwrite: true
-                }
-              );
-            }
-
-            // ANIMASI SEMUA CARD
-            const cards = document.querySelectorAll("#history-timeline .timeline-card");
-            cards.forEach((card, idx) => {
-              if (cardsAnimTriggeredRef.current.has(card)) return;
-              
-              const circle = card.querySelector(".timeline-circle");
-              const content = card.querySelector(".timeline-content");
-              const position = card.getAttribute("data-position");
-
-              if (!content) return;
-
-              // Set initial state
-              gsap.set(content, { opacity: 0, x: position === "left" ? -30 : 30 });
-              if (circle) gsap.set(circle, { scale: 0, opacity: 0 });
-
-              // Animasi dengan delay bertahap
-              setTimeout(() => {
-                if (circle) {
-                  gsap.to(circle, {
-                    scale: 1,
-                    opacity: 1,
-                    duration: 0.4,
-                    ease: "back.out(1.2)",
-                    overwrite: true
-                  });
-                }
-                
-                gsap.to(content, {
-                  x: 0,
-                  opacity: 1,
-                  duration: 0.5,
-                  ease: "power3.out",
-                  delay: circle ? 0.1 : 0,
-                  overwrite: true
-                });
-              }, idx * 100);
-              
-              cardsAnimTriggeredRef.current.add(card);
-            });
-          } else if (!entry.isIntersecting && hasAnimatedRef.current) {
-            // RESET SAAT SECTION KELUAR
-            hasAnimatedRef.current = false;
-            cardsAnimTriggeredRef.current.clear();
-            
-            gsap.set([headerRef.current, headerSubRef.current, headerTitleRef.current], {
-              y: 30,
-              opacity: 0
-            });
-            
-            if (lineRef.current) {
-              gsap.set(lineRef.current, { scaleY: 0 });
-            }
-            
-            const cards = document.querySelectorAll("#history-timeline .timeline-card");
-            cards.forEach((card) => {
-              const content = card.querySelector(".timeline-content");
-              const circle = card.querySelector(".timeline-circle");
-              const position = card.getAttribute("data-position");
-              
-              gsap.set(content, { opacity: 0, x: position === "left" ? -30 : 30 });
-              if (circle) gsap.set(circle, { scale: 0, opacity: 0 });
-            });
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    observer.observe(section);
-
-    // SHAPE ANIMATIONS - INFINITE LOOP
-    const shapes = floatRef.current?.children;
-    if (shapes) {
-      const animateShape = (el, y, x, rotate, duration) => {
-        if (!el) return;
-        gsap.to(el, {
-          y: y,
-          x: x,
-          rotate: rotate,
-          duration: duration,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          overwrite: true
-        });
-      };
-
-      if (shapes[0]) animateShape(shapes[0], 20, 15, 8, 8);
-      if (shapes[1]) animateShape(shapes[1], -25, -10, -10, 10);
-      if (shapes[2]) animateShape(shapes[2], 15, -8, 5, 7);
-      if (shapes[3]) animateShape(shapes[3], -15, 20, -3, 9);
-    }
-
-    return () => {
-      observer.disconnect();
-      ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.vars.trigger === section) {
-          trigger.kill();
-        }
+    const ctx = gsap.context(() => {
+      // INITIAL STATE
+      gsap.set(cards, {
+        opacity: 0,
+        x: (i) => (i % 2 === 0 ? -30 : 30),
       });
-      gsap.killTweensOf([
-        headerRef.current, 
-        headerSubRef.current, 
-        headerTitleRef.current,
-        lineRef.current
-      ]);
-      if (floatRef.current?.children) {
-        Array.from(floatRef.current.children).forEach(child => {
-          gsap.killTweensOf(child);
-        });
-      }
-    };
-  }, []);
+
+      gsap.set(lineRef.current, {
+        scaleY: 0,
+        transformOrigin: "top center",
+      });
+
+      gsap.set(
+        [headerRef.current, headerSubRef.current, headerTitleRef.current],
+        { opacity: 0, y: 30 },
+      );
+
+      // ANIMATION
+      const tl = gsap.timeline();
+
+      tl.to([headerRef.current, headerSubRef.current, headerTitleRef.current], {
+        opacity: 1,
+        y: 0,
+        stagger: 0.1,
+        duration: 0.6,
+        ease: "power3.out",
+      })
+        .to(
+          lineRef.current,
+          {
+            scaleY: 1,
+            duration: 0.8,
+            ease: "power2.out",
+          },
+          "-=0.3",
+        )
+        .to(
+          cards,
+          {
+            opacity: 1,
+            x: 0,
+            stagger: 0.1,
+            duration: 0.6,
+            ease: "power3.out",
+          },
+          "-=0.4",
+        );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [isActive]);
 
   return (
     <section
@@ -369,7 +266,10 @@ const HistoryTimeline = () => {
       <div className="relative z-10 max-w-[1200px] mx-auto">
         {/* HEADER */}
         <div ref={headerRef} className="text-center mb-12 lg:mb-16">
-          <div ref={headerSubRef} className="flex items-center justify-center gap-3 mb-4">
+          <div
+            ref={headerSubRef}
+            className="flex items-center justify-center gap-3 mb-4"
+          >
             <div
               className="h-0.5 rounded-full"
               style={{
@@ -441,6 +341,9 @@ const HistoryTimeline = () => {
           {timelineData.map((item, idx) => (
             <div
               key={idx}
+              ref={(el) => {
+                if (el) cardsRef.current[idx] = el;
+              }}
               data-position={item.position}
               className={`timeline-card relative md:w-1/2 px-4 sm:px-5 md:px-6 mb-6 md:mb-10 ${
                 item.position === "left"
@@ -456,9 +359,8 @@ const HistoryTimeline = () => {
                 style={{
                   backgroundColor: "var(--color-bg-light)",
                   border: "3px solid var(--color-utama)",
-                  boxShadow: "0 0 0 2px var(--color-bg-light), 0 2px 8px rgba(0,0,0,0.1)",
-                  scale: 0,
-                  opacity: 0,
+                  boxShadow:
+                    "0 0 0 2px var(--color-bg-light), 0 2px 8px rgba(0,0,0,0.1)",
                 }}
               />
 
@@ -468,12 +370,11 @@ const HistoryTimeline = () => {
                 style={{
                   backgroundColor: "var(--color-bg-light)",
                   padding: "clamp(1rem, 4vw, 1.5rem)",
-                  border: "1px solid rgba(30, 58, 138, 0.1)",
-                  opacity: 0,
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "translateY(-4px)";
-                  e.currentTarget.style.boxShadow = "0 15px 30px -12px rgba(0, 0, 0, 0.15)";
+                  e.currentTarget.style.boxShadow =
+                    "0 15px 30px -12px rgba(0, 0, 0, 0.15)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "translateY(0)";
@@ -520,13 +421,12 @@ const HistoryTimeline = () => {
                   style={{
                     color: "var(--color-teks-muted)",
                     fontSize: "clamp(0.75rem, 2.5vw, 0.875rem)",
-                    lineHeight: "1.6",
                   }}
                 >
                   {item.desc}
                 </p>
 
-                {/* Garis aksen samping */}
+                {/* Garis aksen */}
                 <div
                   className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl"
                   style={{

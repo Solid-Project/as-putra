@@ -10,15 +10,15 @@ import NewsTeaser from "@/components/home/NewsTeaser";
 import useFullpageSnap from "@/hooks/useFullPageSnap";
 
 const HomePage = () => {
-    useFullpageSnap({ enabled: true });
+  const { activeIndex } = useFullpageSnap({ enabled: true });
 
   return (
     <main className="relative">
-      <HeroCarousel />
-      <HistorySection />
-      <AboutSummary/>
-      <SectorStrip />
-      <NewsTeaser />
+      <HeroCarousel activeIndex={activeIndex} />
+      <HistorySection activeIndex={activeIndex} />
+      <AboutSummary activeIndex={activeIndex} />
+      <SectorStrip activeIndex={activeIndex} />
+      <NewsTeaser activeIndex={activeIndex} />
     </main>
   );
 };
