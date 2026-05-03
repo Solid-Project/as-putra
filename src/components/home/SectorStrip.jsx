@@ -2,177 +2,204 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import peternakanImage from "@/assets/img/sector1.webp";
+
 gsap.registerPlugin(ScrollTrigger);
 
 const sectors = [
   { name: 'Peternakan', desc: 'Breeding, hatchery, kemitraan, dan pengelolaan peternakan terpadu.', bg: peternakanImage },
-  { name: 'Hotel & Resort', desc: 'Layanan hospitality premium (Cordela, Bulak Laut, Amanara, Aston).', bg: '/react/img/hotel2.webp' },
-  { name: 'Property', desc: 'Pengembangan hunian dan properti (Kuningan, Cirebon, Majalengka).', bg: '/react/img/property.webp' },
-  { name: 'Retail', desc: 'Usaha ritel dan layanan pendukung kebutuhan hidup.', bg: 'https://plus.unsplash.com/premium_photo-1683121938935-118d0a16a469?q=80&w=1170&auto=format&fit=crop' },
-  { name: 'Ekspedisi', desc: 'Solusi logistik dan transportasi yang andal.', bg: 'https://plus.unsplash.com/premium_photo-1661963219843-f1a50a6cfcd3?q=80&w=1170&auto=format&fit=crop' }
+  { name: 'Hotel & Resort', desc: 'Layanan hospitality premium (Cordela, Bulak Laut, Amanara, Aston).', bg: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1170&auto=format&fit=crop' },
+  { name: 'Property', desc: 'Pengembangan hunian dan properti (Kuningan, Cirebon, Majalengka).', bg: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1170&auto=format&fit=crop' },
+  { name: 'Retail', desc: 'Usaha ritel dan layanan pendukung kebutuhan hidup.', bg: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1170&auto=format&fit=crop' },
+  { name: 'Ekspedisi', desc: 'Solusi logistik dan transportasi yang andal.', bg: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1170&auto=format&fit=crop' }
 ];
 
 const SectorStrip = () => {
   const sectionRef = useRef(null);
-  const itemsRef = useRef([]);
+  const cardsRef = useRef([]);
+  const hasAnimatedRef = useRef(false);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    // BERSIHAN SCROLLTRIGGER SEBELUMNYA
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+    // SET INITIAL STATE - SEMUA CARD HIDDEN
+    gsap.set(cardsRef.current, {
+      opacity: 0,
+      y: 80
+    });
+
+    // FUNGSI UNTUK ANIMASI MASUK
+    const animateEntrance = () => {
+      if (hasAnimatedRef.current) return;
+      hasAnimatedRef.current = true;
       
-      // 1. ANIMASI ENTRANCE - versi original
-      gsap.fromTo(itemsRef.current,
-        { 
-          y: 100,
-          opacity: 0,
-          scale: 0.9,
-          rotateX: 10
-        },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          rotateX: 0,
-          stagger: 0.15,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 85%",
-            toggleActions: "play none none none",
+      gsap.to(cardsRef.current, {
+        opacity: 1,
+        y: 0,
+        stagger: 0.1,
+        duration: 0.8,
+        ease: "power3.out",
+      });
+    };
+
+    // FUNGSI UNTUK RESET
+    const resetAnimation = () => {
+      hasAnimatedRef.current = false;
+      gsap.set(cardsRef.current, {
+        opacity: 0,
+        y: 80
+      });
+    };
+
+    // INTERSECTION OBSERVER - SOLUSI UNTUK SCROLL DARI BAWAH
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Section masuk viewport - jalanin animasi
+            animateEntrance();
+          } else {
+            // Section keluar viewport - reset
+            resetAnimation();
+          }
+        });
+      },
+      { threshold: 0.2 } // 20% section visible
+    );
+
+    observer.observe(section);
+
+    // PARALLAX EFFECT - PAKAI SCROLLTRIGGER TAPI TIDAK MENGANGGU
+    cardsRef.current.forEach((card, idx) => {
+      if (!card) return;
+      
+      const isEven = idx % 2 === 0;
+      const range = 50;
+      
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          const moveY = isEven ? progress * range : -progress * range;
+          // Hanya update transform jika card sudah visible
+          if (card.style.opacity !== '0') {
+            card.style.transform = `translateY(${moveY}px)`;
           }
         }
-      );
-
-      // 2. LIVE PARALLAX - versi original dengan range lebih besar
-      itemsRef.current.forEach((el, idx) => {
-        if (!el) return;
-        
-        const range = 60;
-        const fromY = idx % 2 === 0 ? range : -range;
-        const toY = idx % 2 === 0 ? -range : range;
-
-        gsap.fromTo(el, 
-          { y: fromY }, 
-          {
-            y: toY,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1.2,
-            }
-          }
-        );
       });
+    });
 
-      // 3. HOVER INTERACTION - versi original
-      itemsRef.current.forEach(el => {
-        if (!el) return;
-        const handleMouseEnter = () => {
-          gsap.to(el, { 
-            scale: 1.05, 
-            zIndex: 10, 
-            boxShadow: "0 20px 40px rgba(0,0,0,0.3)", 
-            duration: 0.4, 
-            ease: "power2.out" 
-          });
-        };
-        const handleMouseLeave = () => {
-          gsap.to(el, { 
-            scale: 1, 
-            zIndex: 1, 
-            boxShadow: "0 0 0 rgba(0,0,0,0)", 
-            duration: 0.4, 
-            ease: "power2.out" 
-          });
-        };
-        el.addEventListener('mouseenter', handleMouseEnter);
-        el.addEventListener('mouseleave', handleMouseLeave);
-        
-        return () => {
-          el.removeEventListener('mouseenter', handleMouseEnter);
-          el.removeEventListener('mouseleave', handleMouseLeave);
-        };
+    // HOVER EFFECT
+    const handleMouseEnter = (card) => {
+      card.style.transform = `${card.style.transform} scale(1.02)`;
+      card.style.zIndex = '10';
+      card.style.boxShadow = '0 20px 40px rgba(0,0,0,0.3)';
+      card.style.transition = 'all 0.3s ease';
+    };
+    
+    const handleMouseLeave = (card) => {
+      card.style.transform = card.style.transform.replace(' scale(1.02)', '');
+      card.style.zIndex = '1';
+      card.style.boxShadow = 'none';
+    };
+
+    const mouseHandlers = cardsRef.current.map(card => {
+      if (!card) return null;
+      const onEnter = () => handleMouseEnter(card);
+      const onLeave = () => handleMouseLeave(card);
+      card.addEventListener('mouseenter', onEnter);
+      card.addEventListener('mouseleave', onLeave);
+      return { card, onEnter, onLeave };
+    });
+
+    return () => {
+      observer.disconnect();
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      mouseHandlers.forEach(handler => {
+        if (handler?.card) {
+          handler.card.removeEventListener('mouseenter', handler.onEnter);
+          handler.card.removeEventListener('mouseleave', handler.onLeave);
+        }
       });
-
-    }, sectionRef);
-
-    return () => ctx.revert();
+    };
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="section overflow-hidden"
-      id="sector-strip" 
-      data-title="Sektor Usaha" 
-      data-theme="light"
+      className="section"
+      id="sector-strip"
       style={{ 
         backgroundColor: "var(--color-bg-light)",
-        minHeight: "100vh",
-        height: "auto",
+        height: "100vh",
+        width: "100%",
         display: "flex",
+        alignItems: "center",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
-      <div 
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 w-full"
-        style={{ margin: 0 }}
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 w-full h-full">
         {sectors.map((sector, idx) => (
           <div
             key={idx}
-            ref={(el) => (itemsRef.current[idx] = el)}
-            className="relative bg-cover bg-center flex flex-col justify-center text-white transition-all duration-300 cursor-pointer"
+            ref={el => { if (el) cardsRef.current[idx] = el; }}
+            className="relative flex flex-col justify-center text-white cursor-pointer"
             style={{
-              backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${sector.bg})`,
-              padding: "clamp(1.25rem, 4vw, 2rem)",
-              minHeight: "clamp(350px, 45vh, 450px)",
-              height: "100%",
-              backgroundPosition: "center",
+              backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${sector.bg})`,
               backgroundSize: "cover",
+              backgroundPosition: "center",
+              padding: "clamp(1rem, 2vw, 2rem)",
+              height: "100%",
+              width: "100%",
+              willChange: "transform, opacity",
             }}
           >
-            {/* Judul */}
             <h3 
               className="font-bold"
               style={{
-                fontSize: "clamp(1.3rem, 3.5vw, 2rem)",
-                marginBottom: "clamp(0.75rem, 2vh, 1.25rem)",
+                fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)",
+                marginBottom: "clamp(0.5rem, 1.5vh, 1rem)",
               }}
             >
               {sector.name}
             </h3>
             
-            {/* Deskripsi dengan tinggi konsisten */}
-            <div
+            <p 
+              className="opacity-90 leading-relaxed"
               style={{
-                minHeight: "clamp(70px, 12vh, 90px)",
+                fontSize: "clamp(0.75rem, 1.5vw, 0.9rem)",
+                maxWidth: "90%",
               }}
             >
-              <p 
-                className="opacity-90 leading-relaxed"
-                style={{
-                  fontSize: "clamp(0.85rem, 2vw, 1rem)",
-                  maxWidth: "95%",
-                }}
-              >
-                {sector.desc}
-              </p>
-            </div>
+              {sector.desc}
+            </p>
             
-            {/* Garis aksen */}
             <div 
+              className="sector-line"
               style={{
-                width: "clamp(40px, 10vw, 60px)",
-                height: "clamp(2px, 0.5vw, 4px)",
+                width: "clamp(30px, 8vw, 50px)",
+                height: "3px",
                 backgroundColor: "var(--color-aksen)",
-                marginTop: "clamp(1rem, 2.5vh, 1.5rem)",
+                marginTop: "clamp(0.75rem, 2vh, 1.25rem)",
+                transition: "width 0.3s ease",
               }}
             />
           </div>
         ))}
       </div>
+
+      <style>{`
+        [class*="grid"] > div:hover .sector-line {
+          width: clamp(50px, 12vw, 70px);
+        }
+      `}</style>
     </section>
   );
 };

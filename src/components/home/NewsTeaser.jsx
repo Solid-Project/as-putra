@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 
@@ -19,51 +19,125 @@ const NewsTeaser = () => {
   const cardsRef = useRef([]);
   const headerRef = useRef(null);
   const buttonRef = useRef(null);
-  const hasAnimated = useRef(false);
+  const observerRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const animationsRef = useRef([]);
+  const hasAnimatedRef = useRef(false);
 
+  // Reset semua animasi
+  const resetAnimations = useCallback(() => {
+    // Kill semua animasi yang sedang berjalan
+    animationsRef.current.forEach(anim => {
+      if (anim && anim.kill) anim.kill();
+    });
+    animationsRef.current = [];
+
+    // Reset styles ke state awal (hidden) - hanya jika element masih ada
+    if (headerRef.current && headerRef.current._gsap) {
+      gsap.set(headerRef.current, { clearProps: "all" });
+    }
+    if (cardsRef.current.length) {
+      cardsRef.current.forEach(card => {
+        if (card && card._gsap) {
+          gsap.set(card, { clearProps: "all" });
+        }
+      });
+    }
+    if (buttonRef.current && buttonRef.current._gsap) {
+      gsap.set(buttonRef.current, { clearProps: "all" });
+    }
+  }, []);
+
+  // Start animasi
+  const startAnimations = useCallback(() => {
+    if (!isVisible) return;
+    if (hasAnimatedRef.current) return;
+    
+    hasAnimatedRef.current = true;
+
+    // Filter element yang valid (tidak null)
+    const validCards = cardsRef.current.filter(card => card !== null);
+    
+    // Animate header
+    if (headerRef.current) {
+      const headerAnim = gsap.fromTo(headerRef.current,
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
+      );
+      animationsRef.current.push(headerAnim);
+    }
+
+    // Animate cards dengan stagger
+    if (validCards.length > 0) {
+      const cardsAnim = gsap.fromTo(validCards,
+        { y: 80, opacity: 0, scale: 0.95 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          stagger: 0.15,
+          duration: 0.9,
+          ease: "back.out(0.3)"
+        }
+      );
+      animationsRef.current.push(cardsAnim);
+    }
+
+    // Animate button
+    if (buttonRef.current) {
+      const buttonAnim = gsap.fromTo(buttonRef.current,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, delay: 0.6, ease: "power3.out" }
+      );
+      animationsRef.current.push(buttonAnim);
+    }
+  }, [isVisible]);
+
+  // Setup observer untuk mendeteksi section visible
   useEffect(() => {
-    if (hasAnimated.current) return;
+    const section = sectionRef.current;
+    if (!section) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
+    // Cleanup observer sebelumnya
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
 
-        hasAnimated.current = true;
-
-        // Animate header
-        gsap.fromTo(headerRef.current,
-          { y: 50, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
-        );
-
-        // Animate cards
-        gsap.fromTo(cardsRef.current,
-          { y: 80, opacity: 0, scale: 0.95 },
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            stagger: 0.15,
-            duration: 0.9,
-            ease: "back.out(0.3)"
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimatedRef.current) {
+            setIsVisible(true);
           }
-        );
-
-        // Animate button
-        gsap.fromTo(buttonRef.current,
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, delay: 0.6, ease: "power3.out" }
-        );
+        });
       },
       { threshold: 0.2 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    observerRef.current.observe(section);
 
-    return () => observer.disconnect();
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+      // Kill all animations on unmount
+      animationsRef.current.forEach(anim => {
+        if (anim && anim.kill) anim.kill();
+      });
+    };
   }, []);
+
+  // Jalankan animasi ketika isVisible berubah
+  useEffect(() => {
+    if (isVisible) {
+      // Delay kecil untuk memastikan DOM siap
+      const timeoutId = setTimeout(() => {
+        startAnimations();
+      }, 100);
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isVisible, startAnimations]);
 
   return (
     <section
@@ -142,7 +216,9 @@ const NewsTeaser = () => {
               <Link
                 key={item.id}
                 to={`/news/${item.id}`}
-                ref={el => cardsRef.current[idx] = el}
+                ref={el => {
+                  if (el) cardsRef.current[idx] = el;
+                }}
                 className="group bg-white rounded-xl shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden"
                 style={{
                   display: "block",

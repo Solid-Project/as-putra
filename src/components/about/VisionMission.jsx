@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import bgImage from "@/assets/img/mission.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,74 +10,79 @@ const VisionMission = () => {
   const leftRef = useRef(null);
   const rightRef = useRef(null);
   const floatRef = useRef(null);
-  const bgRef = useRef(null);
-  const ctxRef = useRef(null);
+  const hasAnimatedRef = useRef(false);
 
   useEffect(() => {
-    if (ctxRef.current) {
-      ctxRef.current.revert();
+    const section = sectionRef.current;
+    if (!section) return;
+
+    // Bersihkan semua ScrollTrigger sebelumnya
+    ScrollTrigger.getAll().forEach(trigger => {
+      if (trigger.vars.trigger === section) {
+        trigger.kill();
+      }
+    });
+
+    // SET INITIAL STATE - HIDDEN
+    gsap.set([leftRef.current, rightRef.current], {
+      y: 50,
+      opacity: 0
+    });
+
+    // INTERSECTION OBSERVER UNTUK DETEKSI SECTION AKTIF
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimatedRef.current) {
+            hasAnimatedRef.current = true;
+            
+            // ENTRANCE ANIMATION
+            gsap.to([leftRef.current, rightRef.current], {
+              y: 0,
+              opacity: 1,
+              stagger: 0.15,
+              duration: 0.8,
+              ease: "power3.out",
+              overwrite: true
+            });
+          } else if (!entry.isIntersecting && hasAnimatedRef.current) {
+            // RESET SAAT SECTION KELUAR
+            hasAnimatedRef.current = false;
+            gsap.set([leftRef.current, rightRef.current], {
+              y: 50,
+              opacity: 0
+            });
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(section);
+
+    // PARALLAX FLOATING 
+    if (floatRef.current) {
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          const moveY = -15 * progress;
+          floatRef.current.style.transform = `translate3d(0, ${moveY}%, 0)`;
+        }
+      });
     }
 
-    const ctx = gsap.context(() => {
-      
-      // ENTRANCE ANIMATION
-      const entranceTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          once: true,
-        },
-      });
-
-      entranceTl.from([leftRef.current, rightRef.current], {
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: "power3.out",
-      });
-
-      // PARALLAX FLOATING - TETAP
-      if (floatRef.current) {
-        gsap.to(floatRef.current, {
-          yPercent: -20,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1,
-          },
-        });
-      }
-
-      // PARALLAX BACKGROUND - TETAP
-      if (bgRef.current) {
-        gsap.to(bgRef.current, {
-          yPercent: 10,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1,
-          },
-        });
-      }
-
-    }, sectionRef);
-
-    ctxRef.current = ctx;
-
     return () => {
-      if (ctxRef.current) {
-        ctxRef.current.revert();
-      }
-      ScrollTrigger.getAll().forEach((trigger) => {
-        if (trigger.vars.trigger === sectionRef.current) {
+      observer.disconnect();
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.vars.trigger === section) {
           trigger.kill();
         }
       });
+      gsap.killTweensOf([leftRef.current, rightRef.current]);
     };
   }, []);
 
@@ -87,57 +93,41 @@ const VisionMission = () => {
       data-title="Visi & Misi"
       data-theme="light"
       style={{
-        backgroundImage: "url('/react/img/mission.webp')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
         backgroundColor: "var(--color-bg-light)",
+        position: "relative",
       }}
     >
-      {/* Overlay Gradient - TETAP */}
+      {/* BACKGROUND IMAGE UTAMA */}
       <div
-        className="absolute inset-0 -z-20"
+        className="absolute inset-0 w-full h-full"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          opacity: 0.2,
+          zIndex: 0,
+        }}
+      />
+
+      {/* Overlay Gradient tipis biar image tetap keliatan */}
+      <div
+        className="absolute inset-0 z-0"
         style={{
           background: `
             linear-gradient(
               to bottom,
-              var(--color-bg-light) 0%,
-              rgba(255,255,255,0.85) 15%,
-              rgba(255,255,255,0.7) 50%,
-              rgba(255,255,255,0.85) 85%,
-              var(--color-bg-light) 100%
+              rgba(255,255,255,0.85) 0%,
+              rgba(255,255,255,0.7) 30%,
+              rgba(255,255,255,0.6) 50%,
+              rgba(255,255,255,0.7) 70%,
+              rgba(255,255,255,0.85) 100%
             )
           `,
         }}
       />
 
-      {/* LAYER BACKGROUND UNTUK PARALLAX - TETAP */}
-      <div
-        ref={bgRef}
-        className="absolute inset-0 -z-30 h-[110%] -top-[5%]"
-        style={{ willChange: "transform" }}
-      >
-        <img
-          src="/react/img/mission.webp"
-          alt="background"
-          className="w-full h-full object-cover opacity-20"
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              linear-gradient(
-                to bottom,
-                var(--color-bg-light),
-                rgba(255,255,255,0.6),
-                var(--color-bg-light)
-              )
-            `,
-          }}
-        />
-      </div>
-
-      {/* FLOATING DECORATIONS - TETAP */}
+      {/* FLOATING DECORATIONS */}
       <div
         ref={floatRef}
         className="absolute inset-0 z-0 pointer-events-none"
@@ -145,7 +135,7 @@ const VisionMission = () => {
       >
         <div
           className="absolute top-[15%] right-[10%] w-32 h-32 border-[12px] rounded-full"
-          style={{ borderColor: "var(--color-utama)", opacity: 0.08 }}
+          style={{ borderColor: "var(--color-utama)", opacity: 0.1 }}
         />
 
         <div
@@ -158,7 +148,7 @@ const VisionMission = () => {
           height="80"
           viewBox="0 0 80 80"
           fill="none"
-          className="absolute top-[45%] left-[15%] opacity-[0.1] -rotate-12"
+          className="absolute top-[45%] left-[15%] opacity-[0.08] -rotate-12"
         >
           <path
             d="M40 10L70 70H10L40 10Z"
@@ -167,7 +157,7 @@ const VisionMission = () => {
           />
         </svg>
 
-        <div className="absolute top-[55%] right-[18%] w-24 h-24 opacity-[0.05]">
+        <div className="absolute top-[55%] right-[18%] w-24 h-24 opacity-[0.06]">
           <div
             className="w-full h-full"
             style={{
@@ -184,8 +174,8 @@ const VisionMission = () => {
         />
       </div>
 
-      {/* GRID LINES - TETAP */}
-      <div className="absolute inset-0 -z-10 opacity-[0.08] pointer-events-none">
+      {/* GRID LINES - tipis aja, bukan background utama */}
+      <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none">
         <div
           className="w-full h-full"
           style={{
@@ -193,7 +183,7 @@ const VisionMission = () => {
               linear-gradient(to right, var(--color-utama) 1px, transparent 1px),
               linear-gradient(to bottom, var(--color-utama) 1px, transparent 1px)
             `,
-            backgroundSize: "50px 50px",
+            backgroundSize: "60px 60px",
           }}
         />
       </div>
@@ -248,13 +238,13 @@ const VisionMission = () => {
 
           {/* VISION */}
           <div
-            className="relative group bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border overflow-hidden transition-all duration-300 hover:-translate-y-1"
+            className="relative group bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
             style={{
-              borderColor: "rgba(255,255,255,0.6)",
+              borderColor: "rgba(255,255,255,0.3)",
             }}
           >
             <div
-              className="absolute top-0 left-0 w-1.5 h-full"
+              className="absolute top-0 left-0 w-1.5 h-full rounded-l-2xl"
               style={{ backgroundColor: "var(--color-utama)" }}
             />
 
@@ -275,13 +265,13 @@ const VisionMission = () => {
 
           {/* MISSION */}
           <div
-            className="relative group bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border overflow-hidden transition-all duration-300 hover:-translate-y-1"
+            className="relative group bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
             style={{
-              borderColor: "rgba(255,255,255,0.6)",
+              borderColor: "rgba(255,255,255,0.3)",
             }}
           >
             <div
-              className="absolute top-0 left-0 w-1.5 h-full"
+              className="absolute top-0 left-0 w-1.5 h-full rounded-l-2xl"
               style={{ backgroundColor: "var(--color-aksen)" }}
             />
 
@@ -299,9 +289,9 @@ const VisionMission = () => {
                 "Sinergi Tanpa Batas",
                 "Berbagi Manfaat",
               ].map((item, i) => (
-                <li key={i} className="flex items-center gap-3">
+                <li key={i} className="flex items-center gap-3 group/item">
                   <div
-                    className="w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-bold"
+                    className="w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-bold transition-all duration-300 group-hover/item:scale-110"
                     style={{
                       backgroundColor: "var(--color-bg-alt)",
                       color: "var(--color-utama)",
@@ -311,7 +301,7 @@ const VisionMission = () => {
                   </div>
 
                   <span
-                    className="text-sm font-medium"
+                    className="text-sm font-medium transition-all duration-300 group-hover/item:pl-1"
                     style={{ color: "var(--color-teks-muted)" }}
                   >
                     {item}

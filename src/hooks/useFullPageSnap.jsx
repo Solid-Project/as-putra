@@ -1,283 +1,207 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+gsap.registerPlugin(ScrollToPlugin);
 
 const useFullPageSnap = () => {
-  const sectionsRef = useRef([]);
-  const activeIndexRef = useRef(0);
-  const isAnimating = useRef(false);
-  const touchStartY = useRef(0);
-  const animationIdRef = useRef(null);
-  const wheelLockRef = useRef(false);
-  const lastWheelTime = useRef(0);
-  const scrollTimeoutRef = useRef(null);
-  const isManualScrolling = useRef(false);
+  const allSectionsRef = useRef([]); // Semua section
+  const snapSectionsRef = useRef([]); // Hanya section yang di-snap
+  const indexRef = useRef(0);
+  const lockRef = useRef(false);
+  const wheelTimeoutRef = useRef(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // 🔥 stop animasi
-  const stopCurrentAnimation = useCallback(() => {
-    if (animationIdRef.current) {
-      cancelAnimationFrame(animationIdRef.current);
-      animationIdRef.current = null;
-    }
-    isAnimating.current = false;
-  }, []);
-
-  // 🔥 easing premium (berat & natural)
-  const easePremium = (t) => {
-    const start = Math.pow(t, 1.8);
-    const mid = 1 - Math.pow(1 - t, 3);
-    return start * 0.4 + mid * 0.6;
+  const getAllSections = () => {
+    return Array.from(document.querySelectorAll(".section"));
   };
 
-  // 🔥 smooth scroll TANPA kejut
-  const smoothScrollTo = useCallback((targetY, onUpdate, customDuration = 1800) => {
-  stopCurrentAnimation();
-
-  const startY = window.scrollY;
-  const distance = targetY - startY;
-
-  if (Math.abs(distance) < 2) {
-    window.scrollTo(0, targetY);
-    isAnimating.current = false;
-    isManualScrolling.current = false;
-    return;
-  }
-
-  let startTime = null;
-  const duration = customDuration;
-
-  isAnimating.current = true;
-  isManualScrolling.current = true;
-
-  const animate = (time) => {
-    if (!startTime) startTime = time;
-
-    const elapsed = time - startTime;
-    let progress = Math.min(elapsed / duration, 1);
-
-    // 🔥 EASING KONTINU (NO BREAK, NO HOLD)
-    const eased = 1 - Math.pow(1 - progress, 3.2);
-
-    // 🔥 tambahan "feather" biar akhir super halus TANPA nahan
-    const feather = 1 - 0.015 * Math.sin(progress * Math.PI);
-
-    const currentY = startY + distance * eased * feather;
-
-    window.scrollTo(0, currentY);
-
-    if (onUpdate) onUpdate(progress);
-
-    if (progress < 1) {
-      animationIdRef.current = requestAnimationFrame(animate);
-    } else {
-      // 🔥 TANPA HOLD / TANPA DELAY
-      window.scrollTo(0, targetY);
-
-      isAnimating.current = false;
-      isManualScrolling.current = false;
-      animationIdRef.current = null;
-    }
+  const getSnapSections = () => {
+    return Array.from(document.querySelectorAll(".section:not(.no-snap)"));
   };
 
-  animationIdRef.current = requestAnimationFrame(animate);
-}, [stopCurrentAnimation]);
-
-  // 🔥 pindah section
-  const scrollToIndex = useCallback((index, onUpdate, skipLock = false) => {
-    if (isAnimating.current) return;
-    if (index < 0 || index >= sectionsRef.current.length) return;
-    if (!skipLock && wheelLockRef.current) return;
-
-    const target = sectionsRef.current[index];
-    if (!target) return;
-
-    activeIndexRef.current = index;
-    setActiveIndex(index);
-
-    smoothScrollTo(target.offsetTop, onUpdate);
-
-    if (!skipLock) {
-      wheelLockRef.current = true;
-      setTimeout(() => {
-        wheelLockRef.current = false;
-      }, 800);
-    }
-  }, [smoothScrollTo]);
-
-  // 🔥 deteksi section aktif
-  const getCurrentSectionIndex = useCallback(() => {
-    const scrollPos = window.scrollY + window.innerHeight / 2;
-
-    for (let i = sectionsRef.current.length - 1; i >= 0; i--) {
-      const sec = sectionsRef.current[i];
-      if (!sec) continue;
-
-      const top = sec.offsetTop;
-      const bottom = top + sec.offsetHeight;
-
-      if (scrollPos >= top && scrollPos < bottom) return i;
-    }
-
-    return 0;
+  // Cek apakah section memiliki class no-snap
+  const isNoSnapSection = useCallback((element) => {
+    return element?.classList?.contains("no-snap") || false;
   }, []);
 
-  const updateActiveIndex = useCallback(() => {
-    if (isManualScrolling.current) return;
+  // Cek apakah section saat ini adalah no-snap
+  const isCurrentSectionNoSnap = useCallback(() => {
+    const currentSection = allSectionsRef.current[indexRef.current];
+    return isNoSnapSection(currentSection);
+  }, [isNoSnapSection]);
 
-    const idx = getCurrentSectionIndex();
-    if (idx !== activeIndexRef.current) {
-      activeIndexRef.current = idx;
-      setActiveIndex(idx);
-    }
-  }, [getCurrentSectionIndex]);
+  const scrollToSection = useCallback((index, immediate = false) => {
+    const sections = snapSectionsRef.current;
+    if (!sections.length) return;
+    if (index < 0 || index >= sections.length) return;
+    if (lockRef.current && !immediate) return;
 
-  const isInFooterArea = useCallback(() => {
-    const footer = document.querySelector("footer");
-    if (!footer) return false;
+    lockRef.current = true;
+    
+    // Update index berdasarkan snap sections
+    const targetSection = sections[index];
+    const targetIndexInAllSections = allSectionsRef.current.findIndex(s => s === targetSection);
+    indexRef.current = targetIndexInAllSections;
+    setActiveIndex(targetIndexInAllSections);
 
-    const footerTop = footer.offsetTop;
-    return window.scrollY + window.innerHeight > footerTop + 50;
+    const scrollConfig = {
+      duration: immediate ? 0.8 : 1.2,
+      ease: "power2.inOut",
+      scrollTo: {
+        y: targetSection,
+        autoKill: false,
+        offsetY: 0
+      },
+      onComplete: () => {
+        setTimeout(() => {
+          lockRef.current = false;
+        }, 100);
+      },
+      onUpdate: () => {
+        if (window.scrollY < 0 || window.scrollY > document.body.scrollHeight - window.innerHeight) {
+          lockRef.current = false;
+        }
+      }
+    };
+
+    gsap.to(window, scrollConfig);
   }, []);
 
-  const snapBackToLastSection = useCallback(() => {
-    if (isAnimating.current) return;
+  // Scroll ke section berikutnya/sebelumnya (hanya snap sections)
+  const scrollToAdjacentSnap = useCallback((direction) => {
+    const currentSnapIndex = snapSectionsRef.current.findIndex(s => s === allSectionsRef.current[indexRef.current]);
+    
+    let nextSnapIndex = direction === 'down' 
+      ? currentSnapIndex + 1 
+      : currentSnapIndex - 1;
+    
+    if (nextSnapIndex >= 0 && nextSnapIndex < snapSectionsRef.current.length) {
+      scrollToSection(nextSnapIndex);
+      return true;
+    }
+    return false;
+  }, [scrollToSection]);
 
-    const last = sectionsRef.current[sectionsRef.current.length - 1];
-    if (!last) return;
-
-    smoothScrollTo(last.offsetTop, null, 900);
-
-    setTimeout(() => {
-      activeIndexRef.current = sectionsRef.current.length - 1;
-      setActiveIndex(sectionsRef.current.length - 1);
-    }, 950);
-  }, [smoothScrollTo]);
-
-  // 🔥 wheel
+  // Handler untuk wheel event
   const handleWheel = useCallback((e) => {
-    const now = Date.now();
-
-    if (now - lastWheelTime.current < 200 && isAnimating.current) {
-      e.preventDefault();
+    // Jika section saat ini adalah no-snap, biarkan scroll normal
+    if (isCurrentSectionNoSnap()) {
+      // Biarkan browser handle scroll normal
       return;
     }
 
-    lastWheelTime.current = now;
-
-    if (isAnimating.current) {
+    if (lockRef.current) {
       e.preventDefault();
       return;
     }
 
     const delta = e.deltaY;
-    if (Math.abs(delta) < 50) return;
+    const absDelta = Math.abs(delta);
+    
+    if (absDelta < 50) return;
 
-    const down = delta > 0;
-    const up = delta < 0;
-
-    if (up && isInFooterArea()) {
-      e.preventDefault();
-      snapBackToLastSection();
-      return;
+    if (wheelTimeoutRef.current) {
+      clearTimeout(wheelTimeoutRef.current);
     }
 
-    const current = getCurrentSectionIndex();
-    const next = down ? current + 1 : current - 1;
+    e.preventDefault();
 
-    if (next >= 0 && next < sectionsRef.current.length) {
+    wheelTimeoutRef.current = setTimeout(() => {
+      const direction = delta > 0 ? 'down' : 'up';
+      scrollToAdjacentSnap(direction);
+      wheelTimeoutRef.current = null;
+    }, 100);
+  }, [scrollToAdjacentSnap, isCurrentSectionNoSnap]);
+
+  // Handler untuk keyboard
+  const handleKeyDown = useCallback((e) => {
+    if (isCurrentSectionNoSnap()) return;
+    if (lockRef.current) return;
+    
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
-      scrollToIndex(next);
+      const direction = e.key === 'ArrowDown' ? 'down' : 'up';
+      scrollToAdjacentSnap(direction);
     }
-  }, [scrollToIndex, snapBackToLastSection, isInFooterArea, getCurrentSectionIndex]);
+  }, [scrollToAdjacentSnap, isCurrentSectionNoSnap]);
 
-  // 🔥 touch
-  const handleTouchStart = useCallback((e) => {
-    touchStartY.current = e.touches[0].clientY;
+  // Update sections saat resize
+  const handleResize = useCallback(() => {
+    allSectionsRef.current = getAllSections();
+    snapSectionsRef.current = getSnapSections();
   }, []);
 
-  const handleTouchEnd = useCallback((e) => {
-    if (isAnimating.current) return;
-
-    const delta = touchStartY.current - e.changedTouches[0].clientY;
-    if (Math.abs(delta) < 50) return;
-
-    const down = delta > 0;
-
-    if (!down && isInFooterArea()) {
-      snapBackToLastSection();
-      return;
-    }
-
-    const current = getCurrentSectionIndex();
-    const next = down ? current + 1 : current - 1;
-
-    if (next >= 0 && next < sectionsRef.current.length) {
-      scrollToIndex(next);
-    }
-  }, [scrollToIndex, snapBackToLastSection, isInFooterArea, getCurrentSectionIndex]);
-
-  // 🔥 keyboard
-  const handleKeyDown = useCallback((e) => {
-    if (isAnimating.current || wheelLockRef.current) return;
-
-    const current = getCurrentSectionIndex();
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      scrollToIndex(current + 1);
-    }
-
-    if (e.key === "ArrowUp") {
-      e.preventDefault();
-      scrollToIndex(current - 1);
-    }
-  }, [scrollToIndex, getCurrentSectionIndex]);
-
-  // 🔥 init
+  // Update active index saat scroll manual (di no-snap section)
   useEffect(() => {
-    const updateSections = () => {
-      const all = Array.from(document.querySelectorAll(".section"));
-
-      sectionsRef.current = all.filter(
-        (el) => !el.closest("footer") && el.tagName !== "FOOTER"
-      );
-
-      const idx = getCurrentSectionIndex();
-      activeIndexRef.current = idx;
-      setActiveIndex(idx);
-    };
-
     const handleScroll = () => {
-      if (!isManualScrolling.current && !isAnimating.current) {
-        clearTimeout(scrollTimeoutRef.current);
-        scrollTimeoutRef.current = setTimeout(updateActiveIndex, 100);
+      if (lockRef.current) return;
+      
+      const scrollPosition = window.scrollY + window.innerHeight / 3;
+      let newIndex = 0;
+      
+      for (let i = 0; i < allSectionsRef.current.length; i++) {
+        const section = allSectionsRef.current[i];
+        if (!section) continue;
+        
+        const sectionTop = section.offsetTop;
+        const sectionBottom = sectionTop + section.offsetHeight;
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+          newIndex = i;
+          break;
+        }
+      }
+      
+      if (newIndex !== indexRef.current) {
+        indexRef.current = newIndex;
+        setActiveIndex(newIndex);
       }
     };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-    updateSections();
+  useEffect(() => {
+    // Inisialisasi sections
+    allSectionsRef.current = getAllSections();
+    snapSectionsRef.current = getSnapSections();
+    
+    // Update initial index
+    const currentScrollY = window.scrollY;
+    let initialIndex = 0;
+    for (let i = 0; i < allSectionsRef.current.length; i++) {
+      const section = allSectionsRef.current[i];
+      if (section && section.offsetTop <= currentScrollY + 100) {
+        initialIndex = i;
+      }
+    }
+    indexRef.current = initialIndex;
+    setActiveIndex(initialIndex);
 
-    const observer = new MutationObserver(updateSections);
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    window.addEventListener("scroll", handleScroll);
     window.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("touchstart", handleTouchStart, { passive: true });
-    window.addEventListener("touchend", handleTouchEnd, { passive: true });
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchend", handleTouchEnd);
-      observer.disconnect();
-      clearTimeout(scrollTimeoutRef.current);
-      stopCurrentAnimation();
+      window.removeEventListener("resize", handleResize);
+      
+      if (wheelTimeoutRef.current) {
+        clearTimeout(wheelTimeoutRef.current);
+      }
+      
+      gsap.killTweensOf(window);
     };
-  }, [handleWheel, handleKeyDown, handleTouchStart, handleTouchEnd, updateActiveIndex, getCurrentSectionIndex, stopCurrentAnimation]);
+  }, [handleWheel, handleKeyDown, handleResize]);
 
-  return { activeIndex, scrollToIndex };
+  return { 
+    activeIndex, 
+    scrollToSection: (index) => scrollToSection(index),
+  };
 };
 
 export default useFullPageSnap;

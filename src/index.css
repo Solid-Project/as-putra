@@ -1,110 +1,73 @@
-/* global.css */
+/* =========================
+   FONT
+========================= */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
+/* =========================
+   ROOT COLOR
+========================= */
 :root {
-  --color-utama: #1e3a8a;           /* Biru dongker */
-  --color-utama-hover: #172554;     /* Lebih gelap */
-  --color-bg-light: #ffffff;        /* Putih */
-  --color-aksen: #facc15;           /* Kuning */
-  --color-teks: #0f172a;            /* Hitam kebiruan */
+  --color-utama: #1e3a8a;
+  --color-utama-hover: #172554;
+  --color-bg-light: #ffffff;
+  --color-aksen: #facc15;
+  --color-teks: #0f172a;
   --color-teks-muted: #64748b;
-  --color-bg-alt: #fefce8;          /* Putih kekuningan */
-  --color-footer-bg: #020617;       /* Super dark navy */
+  --color-bg-alt: #fefce8;
+  --color-footer-bg: #020617;
   --color-footer-teks: #e2e8f0;
 }
 
+/* =========================
+   GLOBAL RESET (CRITICAL FIX)
+========================= */
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;  /* Ganti dari overflow: hidden */
-  overflow-y: auto;    /* Tambahkan ini biar bisa scroll vertikal */
-  height: auto;        /* Pastikan height auto */
-  min-height: 100vh;   /* Biar full viewport */
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: auto;
+  min-height: 100%;
+  font-family: 'Inter', sans-serif;
+  color: var(--color-teks);
+  background-color: var(--color-bg-light);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Atau alternatifnya */
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow: auto;  /* Biar bisa scroll dua arah */
-}
-
-/* Atau pilihan ketiga - HAPUS overflow sama sekali */
-html, body {
-  margin: 0;
-  padding: 0;
-  /* overflow dihapus, default auto */
-}
-
-.section-navigation {
-  position: fixed;
-  left: 24px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(1.1);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.6s ease-out forwards;
-}
-
-.parallax {
+/* =========================
+   SECTION BASE
+========================= */
+.section {
+  position: relative;
+  width: 100%;
   will-change: transform;
-  backface-visibility: hidden;
 }
 
-.animate-pulse {
-  animation: pulse 4s ease-in-out infinite;
-}
-
-.delay-1000 {
-  animation-delay: 1s;
-}
-
-/* Custom Scrollbar - Ini baru akan berfungsi setelah scroll aktif */
+/* =========================
+   SCROLLBAR CLEAN
+========================= */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
-  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #2563eb, #7c3aed);
+  background: rgba(0, 0, 0, 0.4);
 }
 
+/* =========================
+   NAV DOT
+========================= */
 .nav-dot {
   width: 10px;
   height: 10px;
@@ -126,13 +89,27 @@ html, body {
   transform: scale(1.3);
 }
 
-/* Untuk mode gelap (opsional) */
-@media (prefers-color-scheme: dark) {
-  .nav-dot {
-    background-color: rgba(255, 255, 255, 0.3);
+/* =========================
+   ANIMATIONS (SAFE)
+========================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* =========================
+   ARROW ANIMATION
+========================= */
 @keyframes arrow-fade {
   0% { opacity: 0.1; transform: translateY(-5px); }
   50% { opacity: 1; transform: translateY(0); }
@@ -143,26 +120,34 @@ html, body {
 .animate-arrow-2 { animation: arrow-fade 2s infinite 0.2s; }
 .animate-arrow-3 { animation: arrow-fade 2s infinite 0.4s; }
 
-.vertical-text {
-  writing-mode: vertical-lr;
-}
-
+/* =========================
+   SCROLL HIDE UTILITY
+========================= */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-/* Efek Meleleh */
-.gooey-filter {
-  filter: url("#goo");
-  transition: filter 0.5s ease;
+/* =========================
+   PARALLAX SAFE MODE
+========================= */
+.parallax {
+  will-change: transform;
+  transform: translateZ(0);
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  color: var(--color-teks);
-  background-color: var(--color-bg-light);
+/* =========================
+   ACCESSIBILITY
+========================= */
+button {
+  outline: none;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--color-utama);
+  outline-offset: 2px;
 }

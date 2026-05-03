@@ -1,8 +1,4 @@
-import React, { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import React, { useEffect, useRef, useState, useCallback } from "react";
 
 const stats = [
   { target: 40, suffix: "+", label: "Tahun Pengalaman" },
@@ -29,31 +25,57 @@ const cards = [
   },
 ];
 
-// Sub-komponen Counter
-const Counter = ({ target, suffix, label, parentRef }) => {
-  const numberRef = useRef(null);
+// Counter dengan requestAnimationFrame yang efficient dan reset setiap section active
+const Counter = ({ target, suffix, label, shouldAnimate }) => {
+  const [count, setCount] = useState(0);
+  const elementRef = useRef(null);
+  const animationRef = useRef(null);
+  const hasAnimatedRef = useRef(false);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const obj = { value: 0 };
-      gsap.to(obj, {
-        value: target,
-        duration: 2,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: parentRef.current,
-          start: "top 85%",
-          toggleActions: "play reverse play reverse", 
-        },
-        onUpdate: () => {
-          if (numberRef.current) {
-            numberRef.current.innerText = Math.floor(obj.value).toLocaleString();
-          }
-        },
-      });
-    });
-    return () => ctx.revert();
-  }, [target, parentRef]);
+    // Reset counter ketika shouldAnimate berubah menjadi false (section tidak aktif)
+    if (!shouldAnimate) {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
+      setCount(0);
+      hasAnimatedRef.current = false;
+      return;
+    }
+
+    // Jika harus animasi dan belum pernah animasi
+    if (shouldAnimate && !hasAnimatedRef.current) {
+      hasAnimatedRef.current = true;
+      
+      let startTime = null;
+      const startValue = 0;
+      const duration = 2000;
+
+      const animateValue = (timestamp) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const currentValue = Math.floor(startValue + (target - startValue) * easeOut);
+        setCount(currentValue);
+
+        if (progress < 1) {
+          animationRef.current = requestAnimationFrame(animateValue);
+        } else {
+          animationRef.current = null;
+        }
+      };
+
+      animationRef.current = requestAnimationFrame(animateValue);
+    }
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
+    };
+  }, [target, shouldAnimate]);
 
   return (
     <div className="text-center" style={{ paddingLeft: "clamp(0.5rem, 2vw, 1rem)", paddingRight: "clamp(0.5rem, 2vw, 1rem)" }}>
@@ -65,7 +87,7 @@ const Counter = ({ target, suffix, label, parentRef }) => {
           marginBottom: "clamp(0.15rem, 0.5vh, 0.25rem)",
         }}
       >
-        <span ref={numberRef}>0</span>{suffix}
+        {count.toLocaleString()}{suffix}
       </h3>
       <p 
         className="font-semibold uppercase tracking-widest"
@@ -82,26 +104,44 @@ const Counter = ({ target, suffix, label, parentRef }) => {
 
 const AboutSummary = () => {
   const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [shouldAnimateStats, setShouldAnimateStats] = useState(false);
+  const observerRef = useRef(null);
 
+  // Trigger reveal dengan IntersectionObserver yang lebih akurat
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(".reveal-content", 
-        { y: 30, opacity: 0 },
-        { 
-          y: 0, 
-          opacity: 1, 
-          stagger: 0.1, 
-          duration: 0.8, 
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 80%",
-            toggleActions: "play reverse play reverse",
+    const section = sectionRef.current;
+    if (!section) return;
+
+    // Bersihkan observer sebelumnya
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Section visible - trigger animasi
+            setIsVisible(true);
+            setShouldAnimateStats(true);
+          } else {
+            // Section tidak visible - reset animasi stats
+            setIsVisible(false);
+            setShouldAnimateStats(false);
           }
-        }
-      );
-    }, sectionRef);
-    return () => ctx.revert();
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -50px 0px" }
+    );
+
+    observerRef.current.observe(section);
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
   }, []);
 
   return (
@@ -120,7 +160,7 @@ const AboutSummary = () => {
         paddingRight: "clamp(1rem, 4vw, 5%)",
       }}
     >
-      {/* SHAPE DEKORATIF - Mengisi ruang kosong */}
+      {/* SHAPE DEKORATIF */}
       
       {/* Shape 1: Lingkaran besar di pojok kiri atas */}
       <div 
@@ -247,9 +287,11 @@ const AboutSummary = () => {
         
         {/* --- HEADER --- */}
         <div 
-          className="reveal-content text-center"
+          className="text-center"
           style={{ 
-            willChange: "transform, opacity",
+            transform: isVisible ? "translateY(0)" : "translateY(30px)",
+            opacity: isVisible ? 1 : 0,
+            transition: "transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.6s ease",
             marginBottom: "clamp(1.5rem, 4vh, 2.5rem)",
           }}
         >
@@ -281,7 +323,7 @@ const AboutSummary = () => {
               maxWidth: "clamp(280px, 90%, 700px)",
             }}
           >
-           Di AS Putra, budaya bukan sekadar prinsip yang tertulis tetapi cara kami berpikir, bekerja, dan berkembang bersama. Nilai-nilai ini menjadi pondasi dalam setiap keputusan, menggerakkan setiap sektor bisnis, dan menjaga arah pertumbuhan kami tetap konsisten. 
+            Di AS Putra, budaya bukan sekadar prinsip yang tertulis tetapi cara kami berpikir, bekerja, dan berkembang bersama. Nilai-nilai ini menjadi pondasi dalam setiap keputusan, menggerakkan setiap sektor bisnis, dan menjaga arah pertumbuhan kami tetap konsisten. 
           </p>
         </div>
 
@@ -296,9 +338,12 @@ const AboutSummary = () => {
           {cards.map((item, idx) => (
             <div
               key={idx}
-              className="reveal-content flex flex-col text-center border shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
+              className="flex flex-col text-center border shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
               style={{ 
-                willChange: "transform, opacity",
+                transform: isVisible ? "translateY(0)" : "translateY(30px)",
+                opacity: isVisible ? 1 : 0,
+                transition: `transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.6s ease`,
+                transitionDelay: isVisible ? `${idx * 100}ms` : "0ms",
                 backgroundColor: "var(--color-bg-light)",
                 borderColor: "rgba(0,0,0,0.05)",
                 borderRadius: "clamp(12px, 2.5vw, 16px)",
@@ -325,13 +370,14 @@ const AboutSummary = () => {
                 {item.title}
               </h3>
               <p 
-                className="leading-relaxed flex-grow italic"
+                className="leading-relaxed flex-grow"
                 style={{ 
                   color: "var(--color-teks-muted)",
                   fontSize: "clamp(0.75rem, 1.8vw, 0.875rem)",
+                  fontStyle: "normal",
                 }}
               >
-                "{item.desc}"
+                {item.desc}
               </p>
             </div>
           ))}
@@ -339,9 +385,11 @@ const AboutSummary = () => {
 
         {/* --- STATS SECTION --- */}
         <div 
-          className="reveal-content"
           style={{ 
-            willChange: "transform, opacity",
+            transform: isVisible ? "translateY(0)" : "translateY(30px)",
+            opacity: isVisible ? 1 : 0,
+            transition: "transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.6s ease",
+            transitionDelay: "300ms",
             borderTopWidth: "clamp(1px, 0.2vw, 1.5px)",
             borderTopStyle: "solid",
             borderTopColor: "rgba(0,0,0,0.05)",
@@ -360,7 +408,7 @@ const AboutSummary = () => {
                 target={stat.target}
                 suffix={stat.suffix}
                 label={stat.label}
-                parentRef={sectionRef}
+                shouldAnimate={shouldAnimateStats}
               />
             ))}
           </div>
