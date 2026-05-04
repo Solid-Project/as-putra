@@ -90,23 +90,33 @@ const CultureSection = () => {
     };
   }, []);
 
-  const cards = [
-    {
-      icon: "✦",
-      title: "Integritas",
-      desc: "Kami memegang komitmen untuk bekerja secara jujur, transparan, dan bertanggung jawab.",
-    },
-    {
-      icon: "★",
-      title: "Keunggulan",
-      desc: "Kami terus meningkatkan kualitas kerja melalui perbaikan berkelanjutan dan standar yang jelas.",
-    },
-    {
-      icon: "♥",
-      title: "Kolaborasi",
-      desc: "Kami percaya pertumbuhan yang berkelanjutan hanya bisa dicapai melalui kerja sama yang sehat.",
-    },
-  ];
+ const cards = [
+  {
+    icon: "✦",
+    title: "Inovatif",
+    desc: "“Berinovasi dan menjadi pelopor perkembangan.” Terbuka pada teknologi dan pembaruan di setiap lini usaha.",
+  },
+  {
+    icon: "★",
+    title: "Integrity",
+    desc: "“Menjaga Amanah dengan Sepenuh Hati.” Berintegritas dan konsisten dalam kualitas, perkembangan, dan tujuan perusahaan.",
+  },
+  {
+    icon: "♥",
+    title: "Berkarya dengan Hati",
+    desc: "“Memberi Makna dalam Setiap Tugas.” Bekerja dengan bangga dan rasa memiliki.",
+  },
+  {
+    icon: "⟡",
+    title: "Tumbuh Bersama",
+    desc: "“Bersinergi, Saling Menguatkan.” Saling dukung untuk berkembang antar setiap lini usaha serta lingkungan.",
+  },
+  {
+    icon: "✤",
+    title: "Berbagi Manfaat",
+    desc: "“Memberi Dampak Nyata bagi Sesama.” Usaha untuk kebaikan lingkungan dan masyarakat.",
+  },
+];
 
   return (
     <section

@@ -14,18 +14,28 @@ const stats = [
 const cards = [
   {
     icon: "✦",
-    title: "Integritas",
-    desc: "Kami menjunjung tinggi kejujuran dan standar moral dalam setiap keputusan. Integritas adalah fondasi kepercayaan yang kami bangun bersama mitra dan seluruh pemangku kepentingan untuk menciptakan ekosistem bisnis yang transparan dan akuntabel.",
+    title: "Inovatif",
+    desc: "“Berinovasi dan menjadi pelopor perkembangan.” Terbuka pada teknologi dan pembaruan di setiap lini usaha.",
   },
   {
     icon: "★",
-    title: "Keunggulan",
-    desc: "Berkomitmen untuk melampaui ekspektasi melalui inovasi berkelanjutan dan dedikasi terhadap kualitas. Kami percaya bahwa kesempurnaan adalah proses, itulah sebabnya kami terus mengasah keahlian dan mengadopsi teknologi mutakhir.",
+    title: "Integrity",
+    desc: "“Menjaga Amanah dengan Sepenuh Hati.” Berintegritas dan konsisten dalam kualitas, perkembangan, dan tujuan perusahaan.",
   },
   {
     icon: "♥",
-    title: "Kolaborasi",
-    desc: "Kekuatan kami terletak pada sinergi. Kami membina lingkungan kerja yang inklusif di mana setiap ide dihargai dan setiap individu diberdayakan. Melalui kerja sama lintas unit usaha, kami tumbuh bersama sebagai satu kesatuan.",
+    title: "Berkarya dengan Hati",
+    desc: "“Memberi Makna dalam Setiap Tugas.” Bekerja dengan bangga dan rasa memiliki.",
+  },
+  {
+    icon: "⟡",
+    title: "Tumbuh Bersama",
+    desc: "“Bersinergi, Saling Menguatkan.” Saling dukung untuk berkembang antar setiap lini usaha serta lingkungan.",
+  },
+  {
+    icon: "✤",
+    title: "Berbagi Manfaat",
+    desc: "“Memberi Dampak Nyata bagi Sesama.” Usaha untuk kebaikan lingkungan dan masyarakat.",
   },
 ];
 

@@ -7,7 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 const sectors = [
   { name: 'Peternakan', desc: 'Breeding, hatchery, kemitraan, dan pengelolaan peternakan terpadu.', bg: peternakanImage },
   { name: 'Hotel & Resort', desc: 'Layanan hospitality premium (Cordela, Bulak Laut, Amanara, Aston).', bg: '/react/img/hotel2.webp' },
-  { name: 'Property', desc: 'Pengembangan hunian dan properti (Kuningan, Cirebon, Majalengka).', bg: '/react/img/property.webp' },
+  { name: 'Property', desc: 'Pengembangan hunian dan properti (Kuningan, Cirebon, Majalengka).', bg: '/react/img/prop2.jpeg' },
   { name: 'Retail', desc: 'Usaha ritel dan layanan pendukung kebutuhan hidup.', bg: '/react/img/retail.webp' },
   { name: 'Ekspedisi', desc: 'Solusi logistik dan transportasi yang andal.', bg: '/react/img/transport.webp' }
 ];
