@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import livestockImg from '@/assets/img/Carousel/herocarousel6.webp';
+import livestockImg from '@/assets/img/SectorPeternakanKeempat.webp';
 
 gsap.registerPlugin(ScrollTrigger);
 
