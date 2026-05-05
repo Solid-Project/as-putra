@@ -8,31 +8,11 @@ gsap.registerPlugin(ScrollTrigger);
 const SECTION_INDEX = 3; // ⚠️ WAJIB SESUAI URUTAN DI HOMEPAGE
 
 const sectors = [
-  {
-    name: "Peternakan",
-    desc: "Breeding, hatchery, kemitraan, dan pengelolaan peternakan terpadu.",
-    bg: peternakanImage,
-  },
-  {
-    name: "Hotel & Resort",
-    desc: "Layanan hospitality premium.",
-    bg: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1170&auto=format&fit=crop",
-  },
-  {
-    name: "Property",
-    desc: "Pengembangan hunian dan properti.",
-    bg: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1170&auto=format&fit=crop",
-  },
-  {
-    name: "Retail",
-    desc: "Usaha ritel modern.",
-    bg: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1170&auto=format&fit=crop",
-  },
-  {
-    name: "Ekspedisi",
-    desc: "Solusi logistik terpercaya.",
-    bg: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1170&auto=format&fit=crop",
-  },
+  { name: 'Peternakan', desc: 'Breeding, hatchery, kemitraan, dan pengelolaan peternakan terpadu.', bg: peternakanImage },
+  { name: 'Hotel & Resort', desc: 'Layanan hospitality premium (Cordela, Bulak Laut, Amanara, Aston).', bg: '/react/img/hotel2.webp' },
+  { name: 'Property', desc: 'Pengembangan hunian dan properti (Kuningan, Cirebon, Majalengka).', bg: '/react/img/prop2.jpeg' },
+  { name: 'Retail', desc: 'Usaha ritel dan layanan pendukung kebutuhan hidup.', bg: '/react/img/retail.webp' },
+  { name: 'Ekspedisi', desc: 'Solusi logistik dan transportasi yang andal.', bg: '/react/img/transport.webp' }
 ];
 
 const SectorStrip = ({ activeIndex }) => {

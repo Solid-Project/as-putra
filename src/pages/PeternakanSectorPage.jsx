@@ -1,9 +1,16 @@
 // src/pages/SectorPage.jsx
 import React from 'react';
 import IntroSection from '@/components/sector/SectorPeternakan/IntroSection';
-import FirstLayout from '@/components/sector/SectorPeternakan/Layout1';
-import ThirdLayout from '@/components/sector/SectorPeternakan/Layout3';
+import TenLayout from '@/components/sector/SectorPeternakan/Layout10';
+import FirstLayout from '@/components/sector/SectorPeternakan/Section1';
+import SecondLayout from '@/components/sector/SectorPeternakan/Section2';
+import ThirdLayout from '@/components/sector/SectorPeternakan/Section3';
+import ForthLayout from '@/components/sector/SectorPeternakan/Layout3';
+import FifthLayout from '@/components/sector/SectorPeternakan/Section4';
+import SixLayout from '@/components/sector/SectorPeternakan/Section5';
+import SevenLayuout from '@/components/sector/SectorPeternakan/Section6';
 import NineLayout from '@/components/sector/SectorPeternakan/Layout9';
+import Closing from '@/components/sector/SectorPeternakan/closing';
 import { sectorData } from '@/components/data/SectorData';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
 
@@ -25,9 +32,16 @@ const PeternakanSectorPage = () => {
         </defs>
       </svg>
       <IntroSection/>
+      <TenLayout/>
       {layout1Data && <FirstLayout data={layout1Data} />}
+      <SecondLayout />
       <ThirdLayout />
+      <FifthLayout />
+      <ForthLayout />
       <NineLayout/>
+      <SixLayout/>
+      <SevenLayuout/>
+      <Closing/>
     </main>
   );
 };

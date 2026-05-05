@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import bgLayout from "@/assets/img/Carousel/herocarousel2.webp";
+import bgLayout from "@/assets/img/AMM.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -98,11 +98,14 @@ const Layout9 = () => {
           <div className="lg:col-span-7 relative">
             <div ref={titleRef} className="text-reveal relative z-0">
               <span className="text-[var(--color-utama)] font-black tracking-[0.4em] text-[10px] uppercase mb-6 block">
-                Excellence Standard
+                Kemitraan
               </span>
               <h2 className="font-['Playfair_Display'] text-6xl md:text-8xl text-slate-900 font-bold leading-[0.9] mb-12 tracking-tighter">
                 Anjawani Mitra Mandiri (AMM)
               </h2>
+                 <p className="text-slate-500 leading-relaxed font-light text-sm border-l border-slate-100 pl-6 group-hover:border-[var(--color-utama)] transition-all">
+                 "Katalisator pertumbuhan peternak rakyat. Berperan sebagai fasilitator strategis, kami mengedukasi dan membimbing mitra peternak untuk mengadopsi sistem manajemen modern, memastikan efisiensi dan daya saing di industri perunggasan."
+                </p>
             </div>
 
             <div
@@ -116,22 +119,23 @@ const Layout9 = () => {
               />
               <div className="absolute inset-0 bg-slate-900/5 mix-blend-multiply"></div>
             </div>
+          
           </div>
 
           {/* SISI KANAN: LIST DESKRIPSI */}
+        
           <div ref={listRef} className="lg:col-span-5 space-y-10 lg:mt-32">
+             
             <div className="text-reveal flex gap-6 group">
               <span className="text-2xl font-black text-slate-200 group-hover:text-[var(--color-utama)] transition-colors duration-500 font-['Playfair_Display']">
                 01
               </span>
               <div>
                 <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
-                  Wilayah Operasional : Bandung, Tegal, Kuningan, Cirebon, Subang, Majalengka
+                Pendampingan Ahli
                 </h3>
                 <p className="text-slate-500 leading-relaxed font-light text-sm border-l border-slate-100 pl-6 group-hover:border-[var(--color-utama)] transition-all">
-                  Jaringan operasional tersebar di berbagai wilayah strategis
-                  untuk memperkuat distribusi, efisiensi logistik, dan kedekatan
-                  dengan mitra serta pasar utama.
+                 Mengedukasi mitra secara berkelanjutan dalam penerapan standar manajemen peternakan modern.
                 </p>
               </div>
             </div>
@@ -142,12 +146,10 @@ const Layout9 = () => {
               </span>
               <div>
                 <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
-                  Sistem Kemitraan Peternakan
+                  Optimalisasi Efisiensi
                 </h3>
                 <p className="text-slate-500 leading-relaxed font-light text-sm border-l border-slate-100 pl-6 group-hover:border-[var(--color-utama)] transition-all">
-                  Model kemitraan peternakan terintegrasi yang menghubungkan
-                  peternak rakyat dengan sistem produksi modern untuk
-                  meningkatkan produktivitas, kualitas, dan keberlanjutan usaha.
+                  Memberikan dukungan strategis untuk meminimalisir risiko operasional dan memaksimalkan hasil panen.
                 </p>
               </div>
             </div>
@@ -158,12 +160,10 @@ const Layout9 = () => {
               </span>
               <div>
                 <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
-                  Pemberdayaan Peternak Rakyat dengan Sistem Modern
+                  Peningkatan Daya Saing
                 </h3>
                 <p className="text-slate-500 leading-relaxed font-light text-sm border-l border-slate-100 pl-6 group-hover:border-[var(--color-utama)] transition-all">
-                  Pengembangan ekosistem peternakan berkelanjutan dari hulu ke
-                  hilir yang mencakup pakan, budidaya, hingga distribusi untuk
-                  memperkuat ketahanan pangan nasional.
+                 Memastikan kualitas unggas dari peternak mitra memenuhi standar ketat pasar industri perunggasan nasional.
                 </p>
               </div>
             </div>
