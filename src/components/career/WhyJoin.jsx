@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { 
   ChartBarIcon, 
   UserGroupIcon, 
@@ -8,8 +7,6 @@ import {
   ArrowRightIcon,
   EnvelopeIcon
 } from "@heroicons/react/24/outline";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const whyJoinData = [
   {
@@ -35,57 +32,59 @@ const whyJoinData = [
   },
 ];
 
-const WhyJoin = () => {
+const WhyJoin = ({activeIndex}) => {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const cardsRef = useRef([]);
+  const SECTION_INDEX = 2; // sesuaikan urutan kamu
+  const isActive = activeIndex === SECTION_INDEX;
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Title Animation - SAMA DENGAN HISTORY TIMELINE
-      gsap.fromTo(
-        titleRef.current,
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: titleRef.current,
-            start: "top 85%",
-            end: "bottom 70%",
-            toggleActions: "play none none reverse",
-            immediateRender: false,
-            invalidateOnRefresh: true,
-          },
-        }
-      );
+  const ctx = gsap.context(() => {
+    const cards = cardsRef.current;
 
-      // Cards Animation
-      cardsRef.current.forEach((card, index) => {
-        gsap.fromTo(
-          card,
-          { y: 50, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            delay: index * 0.15,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 90%",
-              toggleActions: "play none none reverse",
-              immediateRender: false,
-            },
-          }
-        );
-      });
-    }, sectionRef);
+    // ❗ kalau tidak aktif → tampil normal
+    if (!isActive) {
+      gsap.set(titleRef.current, { y: 0, opacity: 1 });
+      gsap.set(cards, { y: 0, opacity: 1 });
+      return;
+    }
 
-    return () => ctx.revert();
-  }, []);
+    // 🔥 INITIAL STATE
+    gsap.set(titleRef.current, { y: 50, opacity: 0 });
+
+    gsap.set(cards, {
+      y: 50,
+      opacity: 0,
+      scale: 0.95,
+    });
+
+    // 🔥 TIMELINE
+    const tl = gsap.timeline();
+
+    tl.to(titleRef.current, {
+      y: 0,
+      opacity: 1,
+      duration: 0.7,
+      ease: "power3.out",
+    })
+    .to(
+      cards,
+      {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        stagger: 0.15,
+        duration: 0.6,
+        ease: "power3.out",
+      },
+      "-=0.3"
+    );
+
+  }, sectionRef);
+
+  return () => ctx.revert();
+}, [isActive]);
 
   return (
     <section

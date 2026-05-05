@@ -5,13 +5,13 @@ import WhyJoin from '@/components/career/WhyJoin';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
 
 const CareerPage = () => {
-  useFullpageSnap({ enabled: true });
+  const { activeIndex } = useFullpageSnap({ enabled: true });
 
   return (
     <main className="overflow-x-hidden">
-      <HeroCareer />
-      <CareerSection />
-      <WhyJoin />
+      <HeroCareer activeIndex={activeIndex}/>
+      <CareerSection activeIndex={activeIndex}/>
+      <WhyJoin activeIndex={activeIndex}/>
     </main>
   );
 };

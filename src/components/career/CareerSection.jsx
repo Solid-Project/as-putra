@@ -1,68 +1,55 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import CareerNavigator from "@/components/career/CareerNavigator";
 import EmployeeEvents from "@/components/career/EmployeeEvents";
 import PeopleDevelopment from "@/components/career/PeopleDevelopment";
 import CareerJobs from "@/components/career/CareerJobs";
 
-gsap.registerPlugin(ScrollTrigger);
-
-const CareerSection = () => {
+const CareerSection = ({ activeIndex }) => {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const navigatorRef = useRef(null);
   const [activeTab, setActiveTab] = useState("events");
+  const SECTION_INDEX = 1; // sesuaikan urutan kamu
+  const isActive = activeIndex === SECTION_INDEX;
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Animasi title - SAMA PERSIS DENGAN HISTORY TIMELINE
-      gsap.fromTo(titleRef.current,
-        { y: -50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 85%",
-            end: "bottom 70%",
-            toggleActions: "play none none reverse", // PENTING: bukan scrub: true
-            immediateRender: false,
-            invalidateOnRefresh: true,
-          }
-        }
-      );
+      // ❗ kalau tidak aktif → tampil normal (biar gak hilang)
+      if (!isActive) {
+        gsap.set(titleRef.current, { y: 0, opacity: 1 });
+        gsap.set(navigatorRef.current, { y: 0, opacity: 1 });
+        return;
+      }
 
-      // Animasi navigator
-      gsap.fromTo(navigatorRef.current,
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          delay: 0.3,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 85%",
-            end: "bottom 70%",
-            toggleActions: "play none none reverse", // PENTING: bukan scrub: true
-            immediateRender: false,
-            invalidateOnRefresh: true,
-          }
-        }
-      );
+      // 🔥 INITIAL STATE
+      gsap.set(titleRef.current, { y: -50, opacity: 0 });
+      gsap.set(navigatorRef.current, { y: 30, opacity: 0 });
+
+      // 🔥 ANIMATION
+      const tl = gsap.timeline();
+
+      tl.to(titleRef.current, {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: "power3.out",
+      }).to(navigatorRef.current, {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+        delay: 0.2,
+        ease: "power3.out",
+      });
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [isActive]);
 
   return (
-    <section 
-      ref={sectionRef} 
-      className="section no-snap py-20 px-5 bg-white"  // ← KUNCI: tambah "no-snap"
+    <section
+      ref={sectionRef}
+      className="section no-snap py-20 px-5 bg-white" // ← KUNCI: tambah "no-snap"
       id="career-section"
       data-title="Jenjang Karir"
       data-theme="light"
@@ -76,7 +63,8 @@ const CareerSection = () => {
           </h2>
           <div className="w-16 h-0.5 bg-[var(--color-utama)] mx-auto mb-4"></div>
           <p className="text-[var(--color-teks-muted)] max-w-[600px] mx-auto">
-            Jadilah bagian dari sesuatu yang lebih besar. Bentuk masa depan bersama tim kami yang dinamis.
+            Jadilah bagian dari sesuatu yang lebih besar. Bentuk masa depan
+            bersama tim kami yang dinamis.
           </p>
         </div>
 

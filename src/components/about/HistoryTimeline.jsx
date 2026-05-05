@@ -1,9 +1,6 @@
 // src/components/about/HistoryTimeline.jsx
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const timelineData = [
   {
@@ -68,152 +65,88 @@ const timelineData = [
   },
 ];
 
-const HistoryTimeline = () => {
+const HistoryTimeline = ({ activeIndex }) => {
   const sectionRef = useRef(null);
   const lineRef = useRef(null);
   const floatRef = useRef(null);
-  const cardsAnimated = useRef(new Set());
+  const headerRef = useRef(null);
+  const headerSubRef = useRef(null);
+  const headerTitleRef = useRef(null);
+  const cardsRef = useRef([]);
+
+  const SECTION_INDEX = 3; // sesuaikan urutan kamu
+  const isActive = activeIndex === SECTION_INDEX;
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const shapes = floatRef.current?.children;
-      if (shapes) {
-        // SHAPE ANIMATIONS - INFINITE LOOP (tetap)
-        if (shapes[0]) {
-          gsap.to(shapes[0], {
-            y: 30,
-            x: 20,
-            rotate: 10,
-            duration: 8,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-          });
-        }
-        if (shapes[1]) {
-          gsap.to(shapes[1], {
-            y: -40,
-            x: -15,
-            rotate: -15,
-            duration: 10,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-          });
-        }
-        if (shapes[2]) {
-          gsap.to(shapes[2], {
-            y: 25,
-            x: -10,
-            rotate: 8,
-            duration: 7,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-          });
-        }
-        if (shapes[3]) {
-          gsap.to(shapes[3], {
-            y: -20,
-            x: 25,
-            rotate: -5,
-            duration: 9,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-          });
-        }
-      }
+    if (!isActive) return;
 
-      // GARIS TIMELINE ANIMATION
-      if (lineRef.current) {
-        gsap.fromTo(
+    const cards = cardsRef.current;
+
+    if (!cards || cards.length === 0) return;
+
+    const ctx = gsap.context(() => {
+      // INITIAL STATE
+      gsap.set(cards, {
+        opacity: 0,
+        x: (i) => (i % 2 === 0 ? -30 : 30),
+      });
+
+      gsap.set(lineRef.current, {
+        scaleY: 0,
+        transformOrigin: "top center",
+      });
+
+      gsap.set(
+        [headerRef.current, headerSubRef.current, headerTitleRef.current],
+        { opacity: 0, y: 30 },
+      );
+
+      // ANIMATION
+      const tl = gsap.timeline();
+
+      tl.to([headerRef.current, headerSubRef.current, headerTitleRef.current], {
+        opacity: 1,
+        y: 0,
+        stagger: 0.1,
+        duration: 0.6,
+        ease: "power3.out",
+      })
+        .to(
           lineRef.current,
-          { scaleY: 0, transformOrigin: "top center" },
           {
             scaleY: 1,
-            duration: 1,
+            duration: 0.8,
             ease: "power2.out",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 80%",
-              toggleActions: "play none none none",
-            },
-          }
-        );
-      }
-
-      // CARD ANIMATIONS - SETIAP CARD MUNCUL SATU PER SATU
-      const cards = document.querySelectorAll(".timeline-card");
-
-      cards.forEach((card) => {
-        // Cegah double animation
-        if (cardsAnimated.current.has(card)) return;
-        
-        const circle = card.querySelector(".timeline-circle");
-        const content = card.querySelector(".timeline-content");
-        const position = card.getAttribute("data-position");
-
-        if (!circle || !content) return;
-
-        // Set initial state (hidden)
-        gsap.set(circle, { scale: 0, opacity: 0 });
-        gsap.set(content, { opacity: 0, x: position === "left" ? -40 : 40 });
-
-        // Buat timeline animasi untuk card ini
-        const cardTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: card,          // Trigger saat card masuk viewport
-            start: "top 85%",       // Saat top card mencapai 85% dari viewport
-            end: "bottom 70%",
-            toggleActions: "play none none none", // Hanya play sekali
           },
-        });
-
-        // Animasi circle (pop effect)
-        cardTl.to(circle, {
-          scale: 1,
-          opacity: 1,
-          duration: 0.5,
-          ease: "back.out(1.5)",
-        });
-
-        // Animasi content (slide in)
-        cardTl.to(
-          content,
+          "-=0.3",
+        )
+        .to(
+          cards,
           {
-            x: 0,
             opacity: 1,
+            x: 0,
+            stagger: 0.1,
             duration: 0.6,
             ease: "power3.out",
           },
-          "-=0.3"
+          "-=0.4",
         );
-
-        cardsAnimated.current.add(card);
-      });
     }, sectionRef);
 
-    return () => {
-      ctx.revert();
-      // Bersihkan ScrollTrigger
-      ScrollTrigger.getAll().forEach((trigger) => {
-        if (trigger.vars.trigger === sectionRef.current) {
-          trigger.kill();
-        }
-      });
-    };
-  }, []);
+    return () => ctx.revert();
+  }, [isActive]);
 
   return (
     <section
       ref={sectionRef}
-      className="section allow-scroll relative overflow-hidden"
+      className="section no-snap relative overflow-visible"
       id="history-timeline"
       data-title="Sejarah Perusahaan"
       data-bg="light"
       style={{
         backgroundColor: "var(--color-bg-light)",
+        minHeight: "100vh",
+        height: "auto",
         paddingTop: "clamp(3rem, 8vh, 5rem)",
         paddingBottom: "clamp(3rem, 8vh, 5rem)",
         paddingLeft: "clamp(1rem, 5vw, 2rem)",
@@ -228,7 +161,7 @@ const HistoryTimeline = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          opacity: 0.08,
+          opacity: 0.06,
           zIndex: 0,
         }}
       />
@@ -241,9 +174,9 @@ const HistoryTimeline = () => {
             linear-gradient(
               to bottom,
               var(--color-bg-light) 0%,
-              rgba(255,255,255,0.85) 15%,
-              rgba(255,255,255,0.7) 50%,
-              rgba(255,255,255,0.85) 85%,
+              rgba(255,255,255,0.9) 15%,
+              rgba(255,255,255,0.75) 50%,
+              rgba(255,255,255,0.9) 85%,
               var(--color-bg-light) 100%
             )
           `,
@@ -251,78 +184,72 @@ const HistoryTimeline = () => {
         }}
       />
 
-      {/* SEMUA SHAPE TETAP ADA */}
+      {/* SHAPES */}
       <div
         ref={floatRef}
         className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
       >
-        {/* Shape 1 - Circle besar blur */}
         <div
           className="absolute rounded-full blur-3xl"
           style={{
             backgroundColor: "var(--color-utama)",
-            opacity: 0.06,
-            width: "min(50vw, 450px)",
-            height: "min(50vw, 450px)",
+            opacity: 0.05,
+            width: "min(40vw, 350px)",
+            height: "min(40vw, 350px)",
             top: "-10%",
             right: "-5%",
           }}
         />
 
-        {/* Shape 2 - Circle aksen */}
         <div
           className="absolute rounded-full blur-2xl"
           style={{
             backgroundColor: "var(--color-aksen)",
-            opacity: 0.05,
-            width: "min(40vw, 350px)",
-            height: "min(40vw, 350px)",
+            opacity: 0.04,
+            width: "min(35vw, 300px)",
+            height: "min(35vw, 300px)",
             bottom: "-5%",
             left: "-10%",
           }}
         />
 
-        {/* Shape 3 - Square rotated */}
         <div
           className="absolute rotate-12 rounded-2xl hidden lg:block"
           style={{
-            border: "2px solid var(--color-utama)",
-            opacity: 0.2,
-            width: "min(12vw, 100px)",
-            height: "min(12vw, 100px)",
+            border: "1px solid var(--color-utama)",
+            opacity: 0.15,
+            width: "min(10vw, 80px)",
+            height: "min(10vw, 80px)",
             top: "15%",
-            left: "5%",
+            left: "3%",
           }}
         />
 
-        {/* Shape 4 - Diamond */}
         <div
-          className="absolute rotate-45 opacity-20 hidden md:block"
+          className="absolute rotate-45 opacity-15 hidden md:block"
           style={{
             backgroundColor: "var(--color-aksen)",
-            width: "min(8vw, 60px)",
-            height: "min(8vw, 60px)",
+            width: "min(6vw, 50px)",
+            height: "min(6vw, 50px)",
             bottom: "20%",
-            right: "8%",
+            right: "5%",
           }}
         />
 
-        {/* Shape 5 - Dot pattern */}
         <div
-          className="absolute opacity-15 hidden md:block"
+          className="absolute opacity-10 hidden md:block"
           style={{
             backgroundImage:
-              "radial-gradient(var(--color-utama) 2px, transparent 2px)",
+              "radial-gradient(var(--color-utama) 1px, transparent 1px)",
             backgroundSize: "20px 20px",
-            width: "min(25vw, 180px)",
-            height: "min(25vw, 180px)",
+            width: "min(20vw, 150px)",
+            height: "min(20vw, 150px)",
             top: "30%",
-            right: "15%",
+            right: "10%",
           }}
         />
 
-        {/* Shape 6 - Grid pattern */}
-        <div className="absolute inset-0 opacity-[0.02] pointer-events-none">
+        <div className="absolute inset-0 opacity-[0.015] pointer-events-none">
           <div
             className="w-full h-full"
             style={{
@@ -330,7 +257,7 @@ const HistoryTimeline = () => {
                 linear-gradient(to right, var(--color-utama) 1px, transparent 1px),
                 linear-gradient(to bottom, var(--color-utama) 1px, transparent 1px)
               `,
-              backgroundSize: "clamp(30px, 5vw, 50px) clamp(30px, 5vw, 50px)",
+              backgroundSize: "50px 50px",
             }}
           />
         </div>
@@ -338,8 +265,11 @@ const HistoryTimeline = () => {
 
       <div className="relative z-10 max-w-[1200px] mx-auto">
         {/* HEADER */}
-        <div className="text-center mb-12 lg:mb-16">
-          <div className="flex items-center justify-center gap-3 mb-4">
+        <div ref={headerRef} className="text-center mb-12 lg:mb-16">
+          <div
+            ref={headerSubRef}
+            className="flex items-center justify-center gap-3 mb-4"
+          >
             <div
               className="h-0.5 rounded-full"
               style={{
@@ -363,6 +293,7 @@ const HistoryTimeline = () => {
           </div>
 
           <h2
+            ref={headerTitleRef}
             className="font-['Playfair_Display'] font-bold"
             style={{
               color: "var(--color-teks)",
@@ -395,7 +326,7 @@ const HistoryTimeline = () => {
         </div>
 
         {/* TIMELINE CARDS */}
-        <div className="relative max-w-[1000px] mx-auto">
+        <div className="relative max-w-[1000px] mx-auto pb-10">
           {/* Garis tengah */}
           <div
             ref={lineRef}
@@ -403,12 +334,16 @@ const HistoryTimeline = () => {
             style={{
               backgroundColor: "var(--color-utama)",
               transformOrigin: "top center",
+              scaleY: 0,
             }}
           />
 
           {timelineData.map((item, idx) => (
             <div
               key={idx}
+              ref={(el) => {
+                if (el) cardsRef.current[idx] = el;
+              }}
               data-position={item.position}
               className={`timeline-card relative md:w-1/2 px-4 sm:px-5 md:px-6 mb-6 md:mb-10 ${
                 item.position === "left"
@@ -416,15 +351,16 @@ const HistoryTimeline = () => {
                   : "md:left-1/2 md:text-left md:pl-12"
               }`}
             >
-              {/* Bulatan - hanya desktop */}
+              {/* Bulatan */}
               <div
-                className={`timeline-circle hidden md:block absolute top-5 w-4 h-4 md:w-5 md:h-5 rounded-full z-10 shadow-md ${
+                className={`timeline-circle hidden md:block absolute top-5 w-4 h-4 md:w-5 md:h-5 rounded-full z-10 ${
                   item.position === "left" ? "right-[-10px]" : "left-[-10px]"
                 }`}
                 style={{
                   backgroundColor: "var(--color-bg-light)",
                   border: "3px solid var(--color-utama)",
-                  boxShadow: "0 0 0 2px var(--color-bg-light), 0 2px 8px rgba(0,0,0,0.1)",
+                  boxShadow:
+                    "0 0 0 2px var(--color-bg-light), 0 2px 8px rgba(0,0,0,0.1)",
                 }}
               />
 
@@ -434,11 +370,11 @@ const HistoryTimeline = () => {
                 style={{
                   backgroundColor: "var(--color-bg-light)",
                   padding: "clamp(1rem, 4vw, 1.5rem)",
-                  border: "1px solid rgba(30, 58, 138, 0.1)",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-5px)";
-                  e.currentTarget.style.boxShadow = "0 20px 30px -12px rgba(0, 0, 0, 0.15)";
+                  e.currentTarget.style.transform = "translateY(-4px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 15px 30px -12px rgba(0, 0, 0, 0.15)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "translateY(0)";
@@ -485,35 +421,19 @@ const HistoryTimeline = () => {
                   style={{
                     color: "var(--color-teks-muted)",
                     fontSize: "clamp(0.75rem, 2.5vw, 0.875rem)",
-                    lineHeight: "1.6",
                   }}
                 >
                   {item.desc}
                 </p>
 
-                {/* Garis aksen samping */}
+                {/* Garis aksen */}
                 <div
                   className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl"
                   style={{
                     backgroundColor: "var(--color-utama)",
-                    opacity: 0.15,
+                    opacity: 0.12,
                   }}
                 />
-
-                {/* Shape background subtle */}
-                <div
-                  className={`absolute ${
-                    item.position === "left" ? "-right-6 -bottom-6" : "-left-6 -bottom-6"
-                  } opacity-[0.04] pointer-events-none hidden sm:block`}
-                  style={{
-                    width: "clamp(50px, 12vw, 80px)",
-                    height: "clamp(50px, 12vw, 80px)",
-                  }}
-                >
-                  <svg viewBox="0 0 100 100" className="w-full h-full">
-                    <circle cx="50" cy="50" r="50" fill="var(--color-aksen)" />
-                  </svg>
-                </div>
               </div>
             </div>
           ))}

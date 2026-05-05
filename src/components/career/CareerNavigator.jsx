@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from "react";
-import gsap from "gsap";
+import React, { useRef } from "react";
 import { 
   CalendarIcon, 
   AcademicCapIcon, 
@@ -13,23 +12,7 @@ const CareerNavigator = ({ activeTab, setActiveTab }) => {
     { id: "careers", label: "Pengembangan Karir & Loker", icon: BriefcaseIcon },
   ];
 
-  const activeIndicatorRef = useRef(null);
   const buttonsRef = useRef([]);
-
-  useEffect(() => {
-    // Animasi active indicator
-    const activeButton = buttonsRef.current.find(
-      (btn) => btn?.dataset.id === activeTab
-    );
-    if (activeButton && activeIndicatorRef.current) {
-      gsap.to(activeIndicatorRef.current, {
-        width: activeButton.offsetWidth,
-        x: activeButton.offsetLeft,
-        duration: 0.4,
-        ease: "power2.out",
-      });
-    }
-  }, [activeTab]);
 
   return (
     <div className="relative">
@@ -37,18 +20,18 @@ const CareerNavigator = ({ activeTab, setActiveTab }) => {
         {tabs.map((tab, index) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
-          
+
           return (
             <button
               key={tab.id}
               ref={(el) => (buttonsRef.current[index] = el)}
-              data-id={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`
                 relative px-6 py-3 rounded-full font-medium transition-all duration-300
-                ${isActive
-                  ? "text-white bg-[var(--color-utama)] shadow-md"
-                  : "text-[var(--color-teks-muted)] hover:text-[var(--color-teks)] bg-[var(--color-bg-alt)] hover:bg-gray-100"
+                ${
+                  isActive
+                    ? "text-white bg-[var(--color-utama)] shadow-md scale-105"
+                    : "text-[var(--color-teks-muted)] hover:text-[var(--color-teks)] bg-[var(--color-bg-alt)] hover:bg-gray-100 hover:-translate-y-0.5"
                 }
               `}
             >
@@ -61,12 +44,6 @@ const CareerNavigator = ({ activeTab, setActiveTab }) => {
           );
         })}
       </div>
-      {/* Active Indicator */}
-      <div
-        ref={activeIndicatorRef}
-        className="absolute bottom-0 left-0 h-0.5 bg-[var(--color-utama)] rounded-full transition-all duration-300"
-        style={{ width: 0 }}
-      />
     </div>
   );
 };

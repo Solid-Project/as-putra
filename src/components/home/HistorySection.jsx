@@ -1,111 +1,120 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import sejarahImg from "@/assets/img/owner.jpg";
 
-gsap.registerPlugin(ScrollTrigger);
-
-const HistorySection = () => {
+const HistorySection = ({ activeIndex }) => {
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
   const imageRef = useRef(null);
   const [displayText, setDisplayText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [hasTyped, setHasTyped] = useState(false);
+  const typingIntervalRef = useRef(null);
+  const animationFrameRef = useRef(null);
+  const currentIndexRef = useRef(0);
+  const isMountedRef = useRef(true);
 
   const fullText = "Our History";
-
-  // Efek mengetik - hanya sekali saat section masuk viewport
+  const SECTION_INDEX = 1;
+  // Efek untuk observer - jalan setiap kali section active
   useEffect(() => {
-  const section = sectionRef.current;
-  if (!section) return;
+  if (activeIndex !== SECTION_INDEX) return;
 
-  let typingInterval = null;
-  let isInside = false; // 🔥 tracking masuk/keluar section
+  let isCancelled = false;
 
-  const startTyping = () => {
-    let currentIndex = 0;
+  // stop interval lama
+  if (typingIntervalRef.current) {
+    clearInterval(typingIntervalRef.current);
+    typingIntervalRef.current = null;
+  }
 
-    setDisplayText("");
-    setIsTyping(true);
+  // reset index (INI AMAN karena bukan state React)
+  currentIndexRef.current = 0;
 
-    typingInterval = setInterval(() => {
-      currentIndex++;
+  // set state DI LUAR LOOP
+  setDisplayText("Our History");
+  setIsTyping(true);
 
-      setDisplayText(fullText.slice(0, currentIndex));
+  const typeNextChar = () => {
+    if (isCancelled || !isMountedRef.current) return;
 
-      if (currentIndex >= fullText.length) {
-        clearInterval(typingInterval);
-        setIsTyping(false);
-      }
-    }, 110);
+    currentIndexRef.current += 1;
+
+    const text = fullText.slice(0, currentIndexRef.current);
+
+    setDisplayText(text);
+
+    if (currentIndexRef.current >= fullText.length) {
+      clearInterval(typingIntervalRef.current);
+      typingIntervalRef.current = null;
+      setIsTyping(false);
+    }
   };
 
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      // 🔥 masuk ke tengah section
-      if (entry.isIntersecting && !isInside) {
-        isInside = true;
-        startTyping();
-      }
-
-      // 🔥 keluar dari section → reset biar bisa ulang lagi
-      if (!entry.isIntersecting && isInside) {
-        isInside = false;
-
-        if (typingInterval) clearInterval(typingInterval);
-      }
-    },
-    {
-      threshold: 0,
-      rootMargin: "-40% 0px -40% 0px" // 🔥 area tengah viewport
-    }
-  );
-
-  observer.observe(section);
+  typingIntervalRef.current = setInterval(typeNextChar, 110);
 
   return () => {
-    observer.disconnect();
-    if (typingInterval) clearInterval(typingInterval);
+    isCancelled = true;
+
+    if (typingIntervalRef.current) {
+      clearInterval(typingIntervalRef.current);
+      typingIntervalRef.current = null;
+    }
   };
-}, []);
+}, [activeIndex]);
+
+  // Efek Parallax
+  const updateParallax = useCallback(() => {
+    if (!contentRef.current || !imageRef.current || !sectionRef.current) return;
+    
+    const rect = sectionRef.current.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const sectionHeight = rect.height;
+    
+    let progress = 0;
+    const scrollPercentage = (viewportHeight - rect.top) / (viewportHeight + sectionHeight);
+    progress = Math.max(0, Math.min(1, scrollPercentage));
+    
+    const easedProgress = progress < 0.5 
+      ? 4 * progress * progress * progress 
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+    
+    const contentY = -80 + (easedProgress * 160);
+    const imageY = 80 - (easedProgress * 160);
+    
+    contentRef.current.style.transform = `translate3d(0, ${contentY}px, 0)`;
+    imageRef.current.style.transform = `translate3d(0, ${imageY}px, 0)`;
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+    
+    animationFrameRef.current = requestAnimationFrame(() => {
+      updateParallax();
+    });
+  }, [updateParallax]);
 
   useEffect(() => {
-    const section = sectionRef.current;
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(contentRef.current, 
-        { y: 60 }, 
-        {
-          y: -60,
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1,
-          }
-        }
-      );
-
-      gsap.fromTo(imageRef.current, 
-        { y: -60 }, 
-        {
-          y: 60,
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.2,
-          }
-        }
-      );
-    }, section);
-
-    return () => ctx.revert();
-  }, []);
+    isMountedRef.current = true;
+    updateParallax();
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+    
+    return () => {
+      isMountedRef.current = false;
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+      
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      if (typingIntervalRef.current) {
+        clearInterval(typingIntervalRef.current);
+      }
+    };
+  }, [handleScroll, updateParallax]);
 
   return (
     <section
@@ -118,6 +127,7 @@ const HistorySection = () => {
         height: "100vh",
         maxHeight: "100vh",
         background: `linear-gradient(to bottom, var(--color-bg-light), var(--color-bg-alt))`,
+        overflow: 'hidden',
       }}
     >
       {/* Decorative Background */}
@@ -128,6 +138,7 @@ const HistorySection = () => {
           opacity: 0.05,
           width: "clamp(200px, 40vw, 500px)",
           height: "clamp(200px, 40vw, 500px)",
+          willChange: 'transform',
         }}
       />
       <div 
@@ -137,17 +148,19 @@ const HistorySection = () => {
           opacity: 0.05,
           width: "clamp(200px, 40vw, 500px)",
           height: "clamp(200px, 40vw, 500px)",
+          willChange: 'transform',
         }}
       />
 
-      {/* Container yang mengisi penuh tinggi section */}
+      {/* Container */}
       <div 
-        className="w-full h-full flex flex-col justify-center"
+        className="w-full h-full flex flex-col justify-center relative"
         style={{
           paddingTop: "clamp(0.5rem, 2vh, 1.5rem)",
           paddingBottom: "clamp(0.5rem, 2vh, 1.5rem)",
           paddingLeft: "clamp(1rem, 4vw, 2.5rem)",
           paddingRight: "clamp(1rem, 4vw, 2.5rem)",
+          overflow: 'visible',
         }}
       >
         <div 
@@ -157,7 +170,14 @@ const HistorySection = () => {
           }}
         >
           {/* TEXT CONTENT */}
-          <div ref={contentRef} className="order-2 md:order-1">
+          <div 
+            ref={contentRef} 
+            className="order-2 md:order-1 relative"
+            style={{ 
+              willChange: 'transform',
+              transform: 'translate3d(0, 0, 0)',
+            }}
+          >
             <div style={{ marginBottom: "clamp(0.25rem, 1vh, 0.75rem)" }}>
               <div className="inline-flex items-center min-h-[1.5rem]">
                 <span
@@ -165,21 +185,19 @@ const HistorySection = () => {
                   style={{
                     color: "var(--color-utama)",
                     fontSize: "clamp(0.65rem, 1.8vw, 0.9rem)",
-                    paddingRight: !isTyping && displayText ? "clamp(3px, 0.8vw, 6px)" : "0",
-                    borderRightWidth: !isTyping && displayText ? "clamp(1.5px, 0.3vw, 2.5px)" : "0",
-                    borderRightStyle: "solid",
-                    borderRightColor: "var(--color-utama)",
                   }}
                 >
                   {displayText || "\u00A0"}
                 </span>
                 {isTyping && (
                   <span 
-                    className="ml-1 animate-blink"
+                    className="ml-1"
                     style={{ 
                       backgroundColor: "var(--color-utama)",
                       width: "clamp(1.5px, 0.25vw, 2px)",
                       height: "clamp(0.8rem, 2.2vw, 1.1rem)",
+                      animation: 'blink 0.8s step-end infinite',
+                      display: 'inline-block',
                     }}
                   />
                 )}
@@ -211,28 +229,36 @@ const HistorySection = () => {
               }}
             >
               <p
-  style={{
-    textAlign: "justify",
-    lineHeight: "1.8",
-  }}
->
-  AS Putra adalah perusahaan yang berawal dari usaha peternakan ayam petelur
-  yang didirikan oleh Bapak H. Dudung Dulajid pada tahun 1985, dibangun dari
-  pemanfaatan sumber daya lokal dengan prinsip kejujuran, kerja keras, dan
-  konsistensi. Dalam perjalanannya, perusahaan berkembang dengan memperluas
-  bisnis ke sektor ayam broiler sejak tahun 1997, serta menunjukkan
-  ketangguhan dalam menghadapi dinamika industri, termasuk krisis ekonomi,
-  melalui pengelolaan yang disiplin dan komitmen terhadap kepercayaan mitra.
-  Kini, AS Putra telah bertransformasi menjadi grup usaha yang modern dan
-  terintegrasi, dengan lini bisnis yang mencakup peternakan, energi, properti,
-  dan hospitality, serta terus berinovasi untuk memberikan nilai berkelanjutan
-  bagi masyarakat dan mendukung ketahanan pangan nasional.
-</p>
+                style={{
+                  textAlign: "justify",
+                  lineHeight: "1.8",
+                }}
+              >
+                AS Putra adalah perusahaan yang berawal dari usaha peternakan ayam petelur
+                yang didirikan oleh Bapak H. Dudung Dulajid pada tahun 1985, dibangun dari
+                pemanfaatan sumber daya lokal dengan prinsip kejujuran, kerja keras, dan
+                konsistensi. Dalam perjalanannya, perusahaan berkembang dengan memperluas
+                bisnis ke sektor ayam broiler sejak tahun 1997, serta menunjukkan
+                ketangguhan dalam menghadapi dinamika industri, termasuk krisis ekonomi,
+                melalui pengelolaan yang disiplin dan komitmen terhadap kepercayaan mitra.
+                Kini, AS Putra telah bertransformasi menjadi grup usaha yang modern dan
+                terintegrasi, dengan lini bisnis yang mencakup peternakan, energi, properti,
+                dan hospitality, serta terus berinovasi untuk memberikan nilai berkelanjutan
+                bagi masyarakat dan mendukung ketahanan pangan nasional.
+              </p>
             </div>
           </div>
 
           {/* IMAGE CONTENT */}
-          <div ref={imageRef} className="relative group order-1 md:order-2">
+          <div 
+            ref={imageRef} 
+            className="relative group order-1 md:order-2"
+            style={{ 
+              willChange: 'transform',
+              transform: 'translate3d(0, 0, 0)',
+            }}
+          >
+            {/* Decorative circles */}
             <div 
               className="absolute rounded-full z-0"
               style={{
@@ -260,6 +286,7 @@ const HistorySection = () => {
               }}
             />
 
+            {/* Image container */}
             <div 
               className="relative z-10 overflow-hidden shadow-2xl transition-all duration-500 group-hover:shadow-3xl group-hover:scale-[1.01]"
               style={{ 
@@ -267,6 +294,7 @@ const HistorySection = () => {
                 maxWidth: "90%",
                 marginLeft: "auto",
                 marginRight: "auto",
+                transform: 'translate3d(0, 0, 0)',
               }}
             >
               <img
@@ -276,10 +304,13 @@ const HistorySection = () => {
                 style={{ 
                   aspectRatio: "4/3", 
                   objectFit: "cover",
+                  willChange: 'transform',
                 }}
+                loading="eager"
               />
             </div>
 
+            {/* Caption */}
             <div 
               className="relative z-10 text-center"
               style={{ marginTop: "clamp(0.5rem, 2vh, 1rem)" }}
@@ -287,7 +318,7 @@ const HistorySection = () => {
               <div 
                 className="inline-block backdrop-blur-sm rounded-full shadow-md"
                 style={{
-                  backgroundColor: "rgba(255,255,255,0.8)",
+                  backgroundColor: "rgba(255,255,255,0.9)",
                   paddingTop: "clamp(0.25rem, 1vh, 0.4rem)",
                   paddingBottom: "clamp(0.25rem, 1vh, 0.4rem)",
                   paddingLeft: "clamp(0.7rem, 2.5vw, 1.2rem)",
@@ -295,7 +326,7 @@ const HistorySection = () => {
                 }}
               >
                 <p 
-                  className="font-medium whitespace-nowrap"
+                  className="font-medium"
                   style={{ 
                     color: "var(--color-utama)",
                     fontSize: "clamp(0.6rem, 1.6vw, 0.8rem)" 
@@ -313,9 +344,6 @@ const HistorySection = () => {
         @keyframes blink { 
           0%, 100% { opacity: 1; } 
           50% { opacity: 0; } 
-        }
-        .animate-blink { 
-          animation: blink 0.8s step-end infinite; 
         }
       `}</style>
     </section>

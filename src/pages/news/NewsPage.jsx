@@ -6,12 +6,12 @@ import useFullpageSnap from '@/hooks/useFullPageSnap';
 
 const NewsPage = () => {
   // Fullpage snap dengan konfigurasi aktif
-  useFullpageSnap({ enabled: true });
+  const { activeIndex } = useFullpageSnap({ enabled: true });
 
   return (
     <main className="overflow-x-hidden">
-      <HeroNews />
-      <NewsSection />
+      <HeroNews activeIndex={activeIndex}/>
+      <NewsSection activeIndex={activeIndex}/>
     </main>
   );
 };

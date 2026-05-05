@@ -1,8 +1,4 @@
-import React, { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import React, { useEffect, useRef, useState } from "react";
 
 const stats = [
   { target: 40, suffix: "+", label: "Tahun Pengalaman" },
@@ -39,47 +35,72 @@ const cards = [
   },
 ];
 
-// Sub-komponen Counter
-const Counter = ({ target, suffix, label, parentRef }) => {
-  const numberRef = useRef(null);
+// Counter dengan requestAnimationFrame yang efficient dan reset setiap section active
+const Counter = ({ target, suffix, label, shouldAnimate }) => {
+  const [count, setCount] = useState(0);
+  const animationRef = useRef(null);
+  const hasStartedRef = useRef(false);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const obj = { value: 0 };
-      gsap.to(obj, {
-        value: target,
-        duration: 2,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: parentRef.current,
-          start: "top 85%",
-          toggleActions: "play reverse play reverse", 
-        },
-        onUpdate: () => {
-          if (numberRef.current) {
-            numberRef.current.innerText = Math.floor(obj.value).toLocaleString();
-          }
-        },
-      });
+  // 🔥 HANDLE RESET (tanpa setState sync)
+  if (!shouldAnimate) {
+    hasStartedRef.current = false;
+
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
+    }
+
+    // defer reset supaya tidak sync dalam effect
+    requestAnimationFrame(() => {
+      setCount(0);
     });
-    return () => ctx.revert();
-  }, [target, parentRef]);
+
+    return;
+  }
+
+  if (hasStartedRef.current) return;
+  hasStartedRef.current = true;
+
+  let startTime = null;
+  const duration = 2000;
+
+  const animate = (timestamp) => {
+    if (!startTime) startTime = timestamp;
+
+    const progress = Math.min((timestamp - startTime) / duration, 1);
+    const easeOut = 1 - Math.pow(1 - progress, 3);
+
+    const value = Math.floor(target * easeOut);
+    setCount(value);
+
+    if (progress < 1) {
+      animationRef.current = requestAnimationFrame(animate);
+    }
+  };
+
+  animationRef.current = requestAnimationFrame(animate);
+
+  return () => {
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
+  };
+}, [shouldAnimate, target]);
 
   return (
-    <div className="text-center" style={{ paddingLeft: "clamp(0.5rem, 2vw, 1rem)", paddingRight: "clamp(0.5rem, 2vw, 1rem)" }}>
-      <h3 
-        className="font-bold"
-        style={{ 
+    <div className="text-center">
+      <h3
+        style={{
           color: "var(--color-utama)",
           fontSize: "clamp(1.8rem, 5vw, 3rem)",
-          marginBottom: "clamp(0.15rem, 0.5vh, 0.25rem)",
         }}
       >
-        <span ref={numberRef}>0</span>{suffix}
+        {count.toLocaleString()}
+        {suffix}
       </h3>
-      <p 
-        className="font-semibold uppercase tracking-widest"
-        style={{ 
+      <p
+        style={{
           color: "var(--color-teks-muted)",
           fontSize: "clamp(0.6rem, 1.5vw, 0.75rem)",
         }}
@@ -90,35 +111,18 @@ const Counter = ({ target, suffix, label, parentRef }) => {
   );
 };
 
-const AboutSummary = () => {
+const AboutSummary = ({ activeIndex }) => {
   const sectionRef = useRef(null);
+  const SECTION_INDEX = 2; // misalnya urutan setelah history
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(".reveal-content", 
-        { y: 30, opacity: 0 },
-        { 
-          y: 0, 
-          opacity: 1, 
-          stagger: 0.1, 
-          duration: 0.8, 
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 80%",
-            toggleActions: "play reverse play reverse",
-          }
-        }
-      );
-    }, sectionRef);
-    return () => ctx.revert();
-  }, []);
+  // Trigger reveal dengan IntersectionObserver yang lebih akurat
+  const isActive = activeIndex === SECTION_INDEX;
 
   return (
     <section
       ref={sectionRef}
       className="section relative flex flex-col justify-center overflow-hidden"
-      id="about-summary" 
+      id="about-summary"
       data-title="About Summary"
       style={{
         minHeight: "100vh",
@@ -130,10 +134,10 @@ const AboutSummary = () => {
         paddingRight: "clamp(1rem, 4vw, 5%)",
       }}
     >
-      {/* SHAPE DEKORATIF - Mengisi ruang kosong */}
-      
+      {/* SHAPE DEKORATIF */}
+
       {/* Shape 1: Lingkaran besar di pojok kiri atas */}
-      <div 
+      <div
         className="absolute pointer-events-none"
         style={{
           top: "-5%",
@@ -148,7 +152,7 @@ const AboutSummary = () => {
       />
 
       {/* Shape 2: Lingkaran di pojok kanan bawah */}
-      <div 
+      <div
         className="absolute pointer-events-none"
         style={{
           bottom: "-5%",
@@ -163,7 +167,7 @@ const AboutSummary = () => {
       />
 
       {/* Shape 3: Garis-garis diagonal pattern */}
-      <div 
+      <div
         className="absolute inset-0 pointer-events-none"
         style={{
           opacity: 0.02,
@@ -180,7 +184,7 @@ const AboutSummary = () => {
       />
 
       {/* Shape 4: Kotak dekoratif di kanan atas */}
-      <div 
+      <div
         className="absolute pointer-events-none hidden lg:block"
         style={{
           top: "15%",
@@ -195,7 +199,7 @@ const AboutSummary = () => {
       />
 
       {/* Shape 5: Kotak dekoratif di kiri bawah */}
-      <div 
+      <div
         className="absolute pointer-events-none hidden lg:block"
         style={{
           bottom: "12%",
@@ -210,7 +214,7 @@ const AboutSummary = () => {
       />
 
       {/* Shape 6: Titik-titik dekoratif */}
-      <div 
+      <div
         className="absolute pointer-events-none hidden md:block"
         style={{
           top: "40%",
@@ -225,7 +229,8 @@ const AboutSummary = () => {
               width: "clamp(4px, 1vw, 8px)",
               height: "clamp(4px, 1vw, 8px)",
               borderRadius: "50%",
-              backgroundColor: i % 2 === 0 ? "var(--color-utama)" : "var(--color-aksen)",
+              backgroundColor:
+                i % 2 === 0 ? "var(--color-utama)" : "var(--color-aksen)",
               opacity: 0.15,
               marginBottom: "clamp(8px, 2vw, 15px)",
             }}
@@ -234,7 +239,7 @@ const AboutSummary = () => {
       </div>
 
       {/* Shape 7: Garis horizontal dekoratif */}
-      <div 
+      <div
         className="absolute pointer-events-none hidden xl:block"
         style={{
           bottom: "20%",
@@ -247,25 +252,27 @@ const AboutSummary = () => {
         }}
       />
 
-      <div 
+      <div
         className="mx-auto w-full flex flex-col h-full relative"
-        style={{ 
+        style={{
           maxWidth: "clamp(300px, 100%, 1200px)",
           zIndex: 1,
         }}
       >
-        
         {/* --- HEADER --- */}
-        <div 
-          className="reveal-content text-center"
-          style={{ 
-            willChange: "transform, opacity",
+        <div
+          className="text-center"
+          style={{
+            transform: isActive ? "translateY(0)" : "translateY(30px)",
+            opacity: isActive ? 1 : 0,
+            transition:
+              "transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.6s ease",
             marginBottom: "clamp(1.5rem, 4vh, 2.5rem)",
           }}
         >
-          <h2 
+          <h2
             className="font-['Playfair_Display']"
-            style={{ 
+            style={{
               color: "var(--color-teks)",
               fontSize: "clamp(1.8rem, 5vw, 2.5rem)",
               marginBottom: "clamp(0.5rem, 1.5vh, 0.75rem)",
@@ -273,8 +280,8 @@ const AboutSummary = () => {
           >
             Budaya & Nilai Kami
           </h2>
-          <div 
-            style={{ 
+          <div
+            style={{
               backgroundColor: "var(--color-utama)",
               height: "clamp(1.5px, 0.3vw, 2.5px)",
               width: "clamp(40px, 10vw, 60px)",
@@ -283,22 +290,25 @@ const AboutSummary = () => {
               marginBottom: "clamp(0.75rem, 2vh, 1rem)",
             }}
           />
-          <p 
+          <p
             className="mx-auto leading-relaxed"
-            style={{ 
+            style={{
               color: "var(--color-teks-muted)",
               fontSize: "clamp(0.8rem, 2vw, 1rem)",
               maxWidth: "clamp(280px, 90%, 700px)",
             }}
           >
-           Di AS Putra, budaya bukan sekadar prinsip yang tertulis tetapi cara kami berpikir, bekerja, dan berkembang bersama. Nilai-nilai ini menjadi pondasi dalam setiap keputusan, menggerakkan setiap sektor bisnis, dan menjaga arah pertumbuhan kami tetap konsisten. 
+            Di AS Putra, budaya bukan sekadar prinsip yang tertulis tetapi cara
+            kami berpikir, bekerja, dan berkembang bersama. Nilai-nilai ini
+            menjadi pondasi dalam setiap keputusan, menggerakkan setiap sektor
+            bisnis, dan menjaga arah pertumbuhan kami tetap konsisten.
           </p>
         </div>
 
         {/* --- CARDS --- */}
-        <div 
+        <div
           className="grid md:grid-cols-3"
-          style={{ 
+          style={{
             gap: "clamp(1rem, 2.5vw, 1.5rem)",
             marginBottom: "clamp(1.5rem, 4vh, 2.5rem)",
           }}
@@ -306,17 +316,20 @@ const AboutSummary = () => {
           {cards.map((item, idx) => (
             <div
               key={idx}
-              className="reveal-content flex flex-col text-center border shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
-              style={{ 
-                willChange: "transform, opacity",
+              className="flex flex-col text-center border shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
+              style={{
+                transform: isActive ? "translateY(0)" : "translateY(30px)",
+                opacity: isActive ? 1 : 0,
+                transition: `transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.6s ease`,
+                transitionDelay: isActive ? `${idx * 100}ms` : "0ms",
                 backgroundColor: "var(--color-bg-light)",
                 borderColor: "rgba(0,0,0,0.05)",
                 borderRadius: "clamp(12px, 2.5vw, 16px)",
                 padding: "clamp(1.25rem, 3.5vw, 2rem)",
               }}
             >
-              <div 
-                style={{ 
+              <div
+                style={{
                   color: "var(--color-utama)",
                   fontSize: "clamp(1.8rem, 4.5vw, 2.5rem)",
                   marginBottom: "clamp(0.75rem, 2vh, 1rem)",
@@ -324,9 +337,9 @@ const AboutSummary = () => {
               >
                 {item.icon}
               </div>
-              <h3 
+              <h3
                 className="font-bold"
-                style={{ 
+                style={{
                   color: "var(--color-teks)",
                   fontSize: "clamp(1.1rem, 2.5vw, 1.25rem)",
                   marginBottom: "clamp(0.5rem, 1.5vh, 0.75rem)",
@@ -334,33 +347,37 @@ const AboutSummary = () => {
               >
                 {item.title}
               </h3>
-              <p 
-                className="leading-relaxed flex-grow italic"
-                style={{ 
+              <p
+                className="leading-relaxed flex-grow"
+                style={{
                   color: "var(--color-teks-muted)",
                   fontSize: "clamp(0.75rem, 1.8vw, 0.875rem)",
+                  fontStyle: "normal",
                 }}
               >
-                "{item.desc}"
+                {item.desc}
               </p>
             </div>
           ))}
         </div>
 
         {/* --- STATS SECTION --- */}
-        <div 
-          className="reveal-content"
-          style={{ 
-            willChange: "transform, opacity",
+        <div
+          style={{
+            transform: isActive ? "translateY(0)" : "translateY(30px)",
+            opacity: isActive ? 1 : 0,
+            transition:
+              "transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.6s ease",
+            transitionDelay: "300ms",
             borderTopWidth: "clamp(1px, 0.2vw, 1.5px)",
             borderTopStyle: "solid",
             borderTopColor: "rgba(0,0,0,0.05)",
             paddingTop: "clamp(1.5rem, 4vh, 2.5rem)",
           }}
         >
-          <div 
+          <div
             className="flex flex-wrap justify-center items-center"
-            style={{ 
+            style={{
               gap: "clamp(1.5rem, 5vw, 3rem)",
             }}
           >
@@ -370,12 +387,11 @@ const AboutSummary = () => {
                 target={stat.target}
                 suffix={stat.suffix}
                 label={stat.label}
-                parentRef={sectionRef}
+                shouldAnimate={isActive}
               />
             ))}
           </div>
         </div>
-
       </div>
     </section>
   );
