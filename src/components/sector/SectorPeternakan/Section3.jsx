@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import bgLayout from '@/assets/img/ASPCH.webp';
+import bgLayout from '@/assets/img/ASCH.webp';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -48,21 +48,6 @@ const Section3 = () => {
         }
       );
 
-      // --- ANIMASI MASUK (ONCE) ---
-      // Tetap jalankan animasi stagger stats saat pertama kali muncul
-      gsap.fromTo(statsRef.current.children, 
-        { opacity: 0, y: 20 }, 
-        { 
-          opacity: 1, 
-          y: 0, 
-          stagger: 0.1, 
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: statsRef.current,
-            start: "top 85%",
-          }
-        }
-      );
     }, sectionRef);
 
     return () => ctx.revert();
@@ -95,7 +80,7 @@ const Section3 = () => {
             </div>
             <div className="absolute -bottom-6 -left-6 bg-[var(--color-utama)] text-white p-8 hidden md:block shadow-xl">
                <p className="text-xs font-bold tracking-[0.3em] uppercase mb-2 opacity-80">Established Since</p>
-               <h4 className="text-4xl font-black font-['Playfair_Display']">1985</h4>
+               <h4 className="text-4xl font-black font-['Playfair_Display']">1984</h4>
             </div>
           </div>
 

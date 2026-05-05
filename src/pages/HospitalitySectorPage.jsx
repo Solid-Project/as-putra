@@ -1,9 +1,15 @@
 // src/pages/SectorPage.jsx
 import React from 'react';
 import IntroSection from '@/components/sector/SectorHospitality/IntroSection';
-import FirstLayout from '@/components/sector/SectorHospitality/Layout1';
-import ThirdLayout from '@/components/sector/SectorHospitality/Layout3';
-import SevenLayout from '@/components/sector/SectorHospitality/Layout7';
+import FirstLayout from '@/components/sector/SectorHospitality/Section1';
+import SecondLayout from '@/components/sector/SectorHospitality/Section2';
+import ThirdLayout from '@/components/sector/SectorHospitality/Section3';
+import ForthLayout from '@/components/sector/SectorHospitality/Section4';
+import FifthLayout from '@/components/sector/SectorHospitality/Section5';
+import SixLayout from '@/components/sector/SectorHospitality/Section6';
+import SevenLayout from '@/components/sector/SectorHospitality/Section7';
+import Closing from '@/components/sector/SectorHospitality/Closing';
+
 import useFullpageSnap from '@/hooks/useFullPageSnap';
 
 const HospitalitySectorPage = () => {
@@ -21,8 +27,13 @@ const HospitalitySectorPage = () => {
       </svg>
       <IntroSection/>
       <FirstLayout />
+      <SecondLayout />
       <ThirdLayout />
+      <ForthLayout />
+      <FifthLayout />
+      <SixLayout />
       <SevenLayout />
+      <Closing />
     </main>
   );
 };
