@@ -37,8 +37,6 @@ function App() {
         <Route path="/sector/ekspedisi" element={<EkspedisiSectorPage />} />
         <Route path="/event/:id" element={<EventDetailPage />} />
       </Routes>
-
-      <Footer />
     </div>
   );
 }

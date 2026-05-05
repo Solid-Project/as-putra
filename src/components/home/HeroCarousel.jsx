@@ -5,29 +5,24 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import { Link } from "react-router-dom";
+import { data, Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import heroVideo from "@/assets/202601251341.mp4";
-import carousel1 from "@/assets/img/Carousel/herocarousel1.webp";
-import carousel2 from "@/assets/img/Carousel/herocarousel2.webp";
-import carousel3 from "@/assets/img/Carousel/herocarousel3.webp";
-import carousel4 from "@/assets/img/Carousel/herocarousel4.jpg";
-import carousel5 from "@/assets/img/Carousel/herocarousel5.webp";
-import carousel6 from "@/assets/img/Carousel/herocarousel6.webp";
 
-const slides = [
-  // { type: "video", src: heroVideo },
-  { type: "image", src: carousel1 },
-  { type: "image", src: carousel2 },
-  { type: "image", src: carousel3 },
-  { type: "image", src: carousel4 },
-  { type: "image", src: carousel5 },
-  { type: "image", src: carousel6 },
-];
 
-const HeroCarousel = ({ activeIndex }) => {
+
+const HeroCarousel = ({ activeIndex, data}) => {
+  let slides = [];
+
+  data.layout_data.forEach((item) => {
+    slides.push({
+      type: item.type,
+      src: item.path
+    })
+  })
+
+
   const [current, setCurrent] = useState(0);
   const isAnimatingRef = useRef(false);
   const [isVideoReady, setIsVideoReady] = useState(false);
@@ -234,7 +229,7 @@ const HeroCarousel = ({ activeIndex }) => {
               />
             ) : (
               <img
-                src={slide.src}
+                src={`http://localhost:8000/storage/${slide.src}`}
                 alt={`Slide ${idx + 1}`}
                 className="w-full h-full object-cover"
                 loading={idx === 0 ? "eager" : "lazy"}
