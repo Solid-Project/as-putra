@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import bgLayout from "@/assets/img/Carousel/herocarousel2.webp";
+import bgLayout from "@/assets/img/ayamku2.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -96,10 +96,10 @@ const Layout9 = () => {
           <div className="lg:col-span-7 relative">
             <div ref={titleRef} className="text-reveal relative z-0">
               <span className="text-[var(--color-utama)] font-black tracking-[0.4em] text-[10px] uppercase mb-6 block">
-                Excellence Standard
+              AYAMKU
               </span>
               <h2 className="font-['Playfair_Display'] text-6xl md:text-8xl text-slate-900 font-bold leading-[0.9] mb-12 tracking-tighter">
-                Anjawani Mitra Mandiri (AMM)
+             Jaringan Outlet Terintegrasi
               </h2>
             </div>
 
@@ -124,12 +124,10 @@ const Layout9 = () => {
               </span>
               <div>
                 <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
-                  Wilayah Operasional : Bandung, Tegal, Kuningan, Cirebon, Subang, Majalengka
+                 Jantung Kota
                 </h3>
                 <p className="text-slate-500 leading-relaxed font-light text-sm border-l border-slate-100 pl-6 group-hover:border-[var(--color-utama)] transition-all">
-                  Jaringan operasional tersebar di berbagai wilayah strategis
-                  untuk memperkuat distribusi, efisiensi logistik, dan kedekatan
-                  dengan mitra serta pasar utama.
+                  Melayani pusat aktivitas di Panorama, Winduhaji, Awirarangan, Juanda, dan Pasar Baru.
                 </p>
               </div>
             </div>
@@ -140,12 +138,10 @@ const Layout9 = () => {
               </span>
               <div>
                 <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
-                  Sistem Kemitraan Peternakan
+                  Kawasan Strategis
                 </h3>
                 <p className="text-slate-500 leading-relaxed font-light text-sm border-l border-slate-100 pl-6 group-hover:border-[var(--color-utama)] transition-all">
-                  Model kemitraan peternakan terintegrasi yang menghubungkan
-                  peternak rakyat dengan sistem produksi modern untuk
-                  meningkatkan produktivitas, kualitas, dan keberlanjutan usaha.
+                  Menjangkau wilayah dinamis seperti Bojong, ASP Land, Kadugede, dan Cikaso.
                 </p>
               </div>
             </div>
@@ -156,12 +152,10 @@ const Layout9 = () => {
               </span>
               <div>
                 <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
-                  Pemberdayaan Peternak Rakyat dengan Sistem Modern
+                Ekspansi Terluas
                 </h3>
                 <p className="text-slate-500 leading-relaxed font-light text-sm border-l border-slate-100 pl-6 group-hover:border-[var(--color-utama)] transition-all">
-                  Pengembangan ekosistem peternakan berkelanjutan dari hulu ke
-                  hilir yang mencakup pakan, budidaya, hingga distribusi untuk
-                  memperkuat ketahanan pangan nasional.
+                 Tersebar luas hingga ke Mandirancan, Pramuka, dan Bandorasa.
                 </p>
               </div>
             </div>

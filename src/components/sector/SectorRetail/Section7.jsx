@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import peternakanImg from "@/assets/img/sector-peternakan-2.webp";
+import peternakanImg from "@/assets/img/tokoasputra.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -85,19 +85,18 @@ const Layout4 = () => {
           >
             <div className="max-w-xl">
               <div className="inline-block px-4 py-1.5 mb-6 text-[10px] font-black tracking-[0.3em] uppercase bg-slate-900 text-white rounded-sm">
-                Peternakan Modern
+                TOKO
               </div>
 
               <h2 className="font-['Playfair_Display'] text-4xl md:text-6xl lg:text-7xl text-slate-900 font-bold leading-[1.1] mb-8 tracking-tighter">
-                Peternakan <br />
+              
                 <span className="text-[var(--color-utama)]">AS PUTRA</span>
               </h2>
 
               <div className="w-16 h-1.5 bg-[var(--color-utama)] mb-8"></div>
 
               <p className="text-slate-600 text-base md:text-lg leading-relaxed font-light border-l-2 border-slate-50 pl-6">
-                AS Putra Group berkomitmen mengembangkan ekosistem peternakan modern terintegrasi 
-                melalui breeding, closed house system, dan kemitraan dengan 1.500+ peternak lokal.
+              Mendefinisikan ulang pengalaman berbelanja harian Anda. Berlokasi di Winduhaji, AS Putra Mart adalah manifestasi toko kelontong modern yang mengedepankan kenyamanan, kebersihan, dan penataan ruang yang sistematis.
               </p>
             </div>
           </div>

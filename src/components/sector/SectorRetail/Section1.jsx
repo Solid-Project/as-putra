@@ -111,16 +111,16 @@ const Section1 = () => {
           {/* KOLOM KIRI: JUDUL RAKSASA (Parallax Sumbu Y) */}
           <div ref={titleRef} className="lg:col-span-6 flex flex-col gap-2 z-20">
             <span className="text-white lg:text-slate-500 font-bold tracking-[0.4em] text-[10px] uppercase mb-8 block opacity-90 lg:opacity-100">
-              Future Vision
+             AS Putra
             </span>
             <h1 className="font-['Playfair_Display'] text-7xl md:text-8xl lg:text-[9rem] text-white font-black leading-[0.85] tracking-tighter">
-               Visi.
+               Retail
             </h1>
             <h1 className="font-['Playfair_Display'] text-7xl md:text-8xl lg:text-[9rem] text-white font-black leading-[0.85] tracking-tighter">
-               Global.
+               &
             </h1>
             <h1 className="font-['Playfair_Display'] text-7xl md:text-8xl lg:text-[9rem] text-white font-black leading-[0.85] tracking-tighter">
-               Mandiri.
+               Distribusi
             </h1>
           </div>
 
@@ -131,21 +131,14 @@ const Section1 = () => {
               className="bg-white p-12 md:p-16 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] rounded-sm border-t-2 border-[var(--color-utama)]"
             >
               <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl text-slate-900 font-bold mb-8 leading-tight tracking-tight">
-                Membangun Kemandirian Nasional Melalui Sektor Terintegrasi.
+               Menjembatani kualitas dari hulu hingga ke tangan konsumen.
               </h2>
               <p className="text-slate-500 text-lg leading-relaxed font-light mb-12 border-l border-slate-100 pl-8">
-                Hingga tahun 2030, AS Putra Group berkomitmen untuk menjadikan setiap unit bisnis sebagai model operasional yang efisien dan berkelanjutan demi mendukung kedaulatan ekonomi Indonesia.
+              Sektor retail AS Putra Group beroperasi untuk memastikan ketersediaan produk berkualitas tinggi di masyarakat, mengorkestrasi ekosistem distribusi yang efisien dengan standar pelayanan modern dan terpercaya. 
               </p>
 
               {/* Minimalist CTA Link */}
-              <Link 
-                to="/vision" 
-                className="group inline-flex items-center gap-4 text-[var(--color-utama)] font-bold tracking-[0.2em] text-[10px] uppercase"
-              >
-                 Pelajari Road Map Visi Kami
-                 <div className="w-8 group-hover:w-16 h-[1.5px] bg-[var(--color-utama)] transition-all duration-500"></div>
-                 <ArrowLongRightIcon className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-              </Link>
+              
             </div>
           </div>
 
