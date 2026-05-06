@@ -1,7 +1,7 @@
 // src/pages/SectorPage.jsx
 import React from 'react';
 import IntroSection from '@/components/sector/SectorRetail/IntroSection';
-import FirstLayout from '@/components/sector/SectorRetail/Layout1';
+import FirstLayout from '@/components/sector/SectorRetail/Section1';
 import ThirdLayout from '@/components/sector/SectorRetail/Layout3';
 import FourthLayout from '@/components/sector/SectorRetail/Layout4';
 import SeventhLayout from '@/components/sector/SectorRetail/Layout7';
