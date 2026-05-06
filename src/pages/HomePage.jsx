@@ -1,72 +1,63 @@
 // src/pages/HomePage.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import HistorySection from "@/components/home/HistorySection";
 import CultureSection from "@/components/home/CultureSection";
 import StatsSection from "@/components/home/StatsSection";
-import AboutSummary from "@/components/home/AboutSummary";
+import CardSection from "@/components/home/AboutSummary";
 import SectorStrip from "@/components/home/SectorStrip";
 import NewsTeaser from "@/components/home/NewsTeaser";
 import useFullpageSnap from "@/hooks/useFullPageSnap";
-import { useEffect, useState } from "react";
 import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
+import HeroSkeleton from "@/components/skeleton/HeroSkeleton";
 
+const API_URL = "http://localhost:8000/";
 
-const API_URL = "http://localhost:8000/"
+const COMPONENT_MAP = {
+  HeroCarousel,
+  HistorySection,
+  CardSection,
+  SectorStrip,
+  NewsTeaser,
+};
 
 const HomePage = () => {
   const { activeIndex } = useFullpageSnap({ enabled: true });
   const data = usePageData();
+  return (
+    <main className="relative bg-black">
+      <Navbar />
 
-  let el = [];
+      {/* 1. LOADING STATE */}
+      {!data ? (
+        <HeroSkeleton />
+      ) : (
+        <>
+          {/* 2. CONTENT */}
+          {data.data?.map((section, index) => {
+            const Component = COMPONENT_MAP[section.layout_name];
+            if (!Component) return null;
 
-  if (data && data.data?.length > 0) {
-    data.data.forEach((element) => {
-      switch (element.layout_name) {
-        case "HeroCarousel":
-          el.push(
-            <HeroCarousel 
-            key={element.id}
-            activeIndex={element.section_order} data={element}/>
-          );
-          break;
+            return (
+              <Component
+                key={section.id}
+                data={section}
+                isActive={activeIndex === index}
+                index={index}
+              />
+            );
+          })}
 
-        default:
-          break;
-      }
-    });
-  }
-  if (el.length > 0){
-    return (
-    <main className="relative">
-      {el}
-      <Footer />
+          {/* 3. FOOTER SELALU DI AKHIR */}
+          <Footer />
+        </>
+      )}
     </main>
-    
   );
-  } else {
-    return <div></div>
-  }
-
-  
-
-  
-  
-  
-
-  // return (
-  //   <main className="relative">
-
-  //     {/* <HeroCarousel activeIndex={activeIndex} /> */}
-  //     {/* <HistorySection activeIndex={activeIndex} /> */}
-  //     {/* <AboutSummary activeIndex={activeIndex} /> */}
-  //     {/* <SectorStrip activeIndex={activeIndex} /> */}
-  //     {/* <NewsTeaser activeIndex={activeIndex} /> */}
-  //   </main>
-  // );
 };
 
-function usePageData(){
+function usePageData() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -85,6 +76,5 @@ function usePageData(){
 
   return data;
 }
-
 
 export default HomePage;
