@@ -130,9 +130,10 @@ const Navbar = () => {
   { label: "Peternakan", path: "/sector/peternakan" },
   { label: "Hospitality", path: "/sector/hospitality" },
   { label: "Retail", path: "/sector/retail" },
-  { label: "Construction", path: "/sector/construction" },
   { label: "Lifestyle", path: "/sector/lifestyle" },
-  { label: "Ekspedisi", path: "/sector/ekspedisi" }
+  { label: "Education", path: "/sector/Education" },
+  { label: "Ekspedisi", path: "/sector/ekspedisi" },
+  { label: "Otomotif & Energy", path: "/sector/others" }
 ];
   // Theme mapping
   const textColorClass = textTheme === "dark" ? "text-white" : "text-[var(--color-teks)]";

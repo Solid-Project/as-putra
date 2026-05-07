@@ -10,62 +10,63 @@ const Section2 = () => {
   const imageFrameRef = useRef(null);
   const textGroupRef = useRef(null);
 
-  useEffect(() => {
+ useEffect(() => {
     const ctx = gsap.context(() => {
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top bottom",
           end: "bottom top",
-          scrub: 2,
+          scrub: 1.5, // 1.5 adalah 'sweet spot' biar mulus tapi nggak terlalu delay
           invalidateOnRefresh: true,
         }
       });
 
-      // ✅ IMAGE (KANAN → MASUK DARI KANAN)
+      // Bikin variabel biar gampang kalau mau ganti-ganti
+      const easeType = "sine.inOut"; // 'sine' paling smooth & natural untuk animasi berbasis scroll (scrub)
+      const jarak = "40%"; // Kurangi dari 70% ke 40% biar pergerakannya anggun dan nggak buru-buru
+
+      // --- FASE 1: MASUK BERSAMAAN ---
+      // Gambar masuk dari kanan
       tl.fromTo(
         imageFrameRef.current,
-        { x: "70%", opacity: 0 },
-        {
-          x: "0%",
-          opacity: 1,
-          ease: "power2.inOut",
-          duration: 1,
-        }
-      )
-      .to(imageFrameRef.current, { duration: 0.8 })
-      .to(imageFrameRef.current, {
-        x: "-70%",
-        opacity: 0,
-        ease: "power2.inOut",
-        duration: 1,
-      });
+        { x: jarak, opacity: 0 },
+        { x: "0%", opacity: 1, ease: easeType, duration: 1 },
+        "masuk" // Label posisi timeline biar barengan
+      );
 
-      // ✅ TEXT (KIRI → MASUK DARI KIRI)
+      // Teks masuk dari kiri
       tl.fromTo(
         textGroupRef.current,
-        { x: "-70%", opacity: 0 },
-        {
-          x: "0%",
-          opacity: 1,
-          ease: "power2.inOut",
-          duration: 1,
-        },
-        0
-      )
-      .to(textGroupRef.current, { duration: 0.8 }, 1)
-      .to(textGroupRef.current, {
-        x: "70%",
-        opacity: 0,
-        ease: "power2.inOut",
-        duration: 1,
-      }, ">");
+        { x: `-${jarak}`, opacity: 0 },
+        { x: "0%", opacity: 1, ease: easeType, duration: 1 },
+        "masuk" // Gunakan label yang sama persis
+      );
+
+      // --- FASE 2: WAKTU DIAM (RUANG BACA) ---
+      // Tween kosong ini berfungsi menahan animasi biar elemen nggak langsung ngilang pas di-scroll
+      tl.to({}, { duration: 1.5 });
+
+      // --- FASE 3: KELUAR BERSAMAAN ---
+      // Gambar keluar ke kiri
+      tl.to(
+        imageFrameRef.current,
+        { x: `-${jarak}`, opacity: 0, ease: easeType, duration: 1 },
+        "keluar"
+      );
+
+      // Teks keluar ke kanan
+      tl.to(
+        textGroupRef.current,
+        { x: jarak, opacity: 0, ease: easeType, duration: 1 },
+        "keluar"
+      );
 
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, []); // Pastikan ada dependency array kosong atau state yang relevan di sini
+  
 
   return (
     <section
