@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { gsap } from "gsap";
 import useNavbarTheme from "@/hooks/useNavbarTheme";
-import logo from "@/assets/logo-new.jpg";
+import logoIcon from "@/assets/FA_DESIGN_LOGO_ICON_ASPUTRA_GROUP_MAIN01.png";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -151,9 +151,9 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 sm:gap-3 group" onClick={closeMenu}>
           <img
-            src={logo}
+            src={logoIcon}
             alt="AS PUTRA"
-            className="w-8 h-8 sm:w-9 md:w-10 sm:h-9 md:h-10 rounded-full object-cover transition-all duration-300 group-hover:scale-105"
+            className="w-8 h-8 sm:w-9 md:w-10 sm:h-9 md:h-10 object-cover transition-all duration-300 group-hover:scale-105"
           />
           <span
             className={`font-bold tracking-[0.15em] text-xs sm:text-sm transition-all duration-300 ${logoTextColor} group-hover:tracking-[0.2em]`}
@@ -344,14 +344,12 @@ const Navbar = () => {
         >
           {/* Header Panel */}
           <div className="flex items-center justify-between p-5 border-b border-gray-100">
-            <img src={logo} alt="AS PUTRA" className="w-10 h-10 rounded-full object-cover" />
+            <img src={logoIcon} alt="AS PUTRA" className="w-10 h-10  object-cover" />
             <button
               onClick={closeMenu}
-              className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+              className="w-8 h-8 flex items-center justify-center  bg-gray-100 hover:bg-gray-200 transition-colors"
             >
-              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+            
             </button>
           </div>
 
