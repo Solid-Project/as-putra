@@ -32,7 +32,7 @@ function App() {
         <Route path="/sector/peternakan" element={<PeternakanSectorPage />} />
         <Route path="/sector/hospitality" element={<HospitalitySectorPage />} />
         <Route path="/sector/retail" element={<RetailSectorPage />} />
-        <Route path="/sector/education" element={<ConstructionSectorPage />} />
+        <Route path="/sector/education" element={<EducationSectorPage />} />
         <Route path="/sector/lifestyle" element={<LifestyleSectorPage />} />
         <Route path="/sector/ekspedisi" element={<EkspedisiSectorPage />} />
         <Route path="/sector/others" element={<EkspedisiSectorPage />} />

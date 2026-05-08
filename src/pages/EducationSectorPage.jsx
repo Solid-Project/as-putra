@@ -1,8 +1,8 @@
 // src/pages/SectorPage.jsx
 import React from 'react';
-import IntroSection from '@/components/sector/SectorConstruction/IntroSection';
-import FirstLayout from '@/components/sector/SectorConstruction/Layout1';
-import FourthLayout from '@/components/sector/SectorConstruction/Layout4';
+import IntroSection from '@/components/sector/SectorEducation/IntroSection';
+import FirstLayout from '@/components/sector/SectorEducation/Section1';
+import FourthLayout from '@/components/sector/SectorEducation/Layout4';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
 
 const ConstructionSectorPage = () => {
