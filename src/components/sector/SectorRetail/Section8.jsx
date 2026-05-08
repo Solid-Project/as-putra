@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import bgLayout from '@/assets/img/tokoceha.webp';
+import bgLayout from '@/assets/img/retail.webp';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,12 +15,12 @@ const Layout1 = () => {
   // STATIC DATA (ARETHA FARM)
   // =========================
   const data = {
-    id: "aretha",
-    title: "Retail",
-    meta: "Corporate Overview",
+    id: "AS Putra",
+    title: "Solusi Kebutuhan Harian Terpadu",
+    meta: "Toko AS Putra",
     image: bgLayout,
     description: [
-      "Sektor retail menjadi bagian penting dalam distribusi produk AS Putra, khususnya hasil peternakan, agar dapat langsung diakses oleh masyarakat dengan kualitas terjaga.",
+      "Menyediakan komoditas pokok dan kebutuhan rumah tangga secara komprehensif. Kami berdedikasi untuk menghadirkan produk dengan ketersediaan yang selalu prima demi memastikan kepuasan dan efisiensi belanja setiap pelanggan. langsung dari peternakan ke meja makan Anda. Berpusat di kawasan strategis Awirarangan, Ceha hadir sebagai pusat distribusi utama untuk Telur Premium dan Ayam Potong Segar.",
     ],
   };
 

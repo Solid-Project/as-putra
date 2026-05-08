@@ -1,8 +1,14 @@
 // src/pages/SectorPage.jsx
 import React from 'react';
 import IntroSection from '@/components/sector/SectorLifestyle/IntroSection';
-import FirstLayout from '@/components/sector/SectorLifestyle/Layout1';
-import FourthLayout from '@/components/sector/SectorLifestyle/Layout4';
+import FirstLayout from '@/components/sector/SectorLifestyle/Section1';
+import SecondLayout from '@/components/sector/SectorLifestyle/Section2';
+import ThirdLayout from '@/components/sector/SectorLifestyle/Section3';
+import FourthLayout from '@/components/sector/SectorLifestyle/Section4';
+import Fifth from '@/components/sector/SectorLifestyle/Section5';
+import SixLayout from '@/components/sector/SectorLifestyle/Section6';
+import SevenLayout from '@/components/sector/SectorLifestyle/Section7';
+import EightLayout from '@/components/sector/SectorLifestyle/Section8';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
 
 const LifestyleSectorPage = () => {
@@ -21,7 +27,13 @@ const LifestyleSectorPage = () => {
       </svg>
       <IntroSection/>
       <FirstLayout/>
+      <SecondLayout/>
+      <ThirdLayout/>
       <FourthLayout/>
+      <Fifth/>
+      <SixLayout/>
+      <SevenLayout/>
+      <EightLayout/>
     </main>
   );
 };

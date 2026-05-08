@@ -1,14 +1,12 @@
 // src/pages/SectorPage.jsx
 import React from 'react';
-import IntroSection from '@/components/sector/SectorConstruction/IntroSection';
-import FirstLayout from '@/components/sector/SectorConstruction/Layout1';
-import FourthLayout from '@/components/sector/SectorConstruction/Layout4';
+import IntroSection from '@/components/sector/SectorLifestyle/IntroSection';
+import FirstLayout from '@/components/sector/SectorLifestyle/Layout1';
+import FourthLayout from '@/components/sector/SectorLifestyle/Layout4';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
 
-const ConstructionSectorPage = () => {
+const LifestyleSectorPage = () => {
   useFullpageSnap({enabled: true});
-
-  // Filter data berdasarkan layout
 
   return (
     <main className="overflow-x-hidden">
@@ -28,4 +26,4 @@ const ConstructionSectorPage = () => {
   );
 };
 
-export default ConstructionSectorPage;
+export default LifestyleSectorPage;

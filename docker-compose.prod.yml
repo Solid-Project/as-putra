@@ -1,0 +1,17 @@
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: asputra-app-prod
+    ports:
+      - "80"
+    restart: unless-stopped
+    networks:
+      - shared-network
+
+networks:
+  shared-network:
+    external: true
+
+

@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import peternakanImg from "@/assets/img/aretha.jpg";
+import peternakanImg from "@/assets/img/sector-peternakan-2.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Section2 = () => {
+const Layout4 = () => {
   const sectionRef = useRef(null);
   const imageFrameRef = useRef(null);
   const textGroupRef = useRef(null);
@@ -86,18 +86,19 @@ const Section2 = () => {
           >
             <div className="max-w-xl">
               <div className="inline-block px-4 py-1.5 mb-6 text-[10px] font-black tracking-[0.3em] uppercase bg-slate-900 text-white rounded-sm">
-                Hatchery
+                Sector Konstruksi
               </div>
 
               <h2 className="font-['Playfair_Display'] text-4xl md:text-6xl lg:text-7xl text-slate-900 font-bold leading-[1.1] mb-8 tracking-tighter">
-                Aretha Farm<br />
-    
+                TB. AS Putra<br />
+                <span className="text-[var(--color-utama)]">AS PUTRA</span>
               </h2>
 
               <div className="w-16 h-1.5 bg-[var(--color-utama)] mb-8"></div>
 
               <p className="text-slate-600 text-base md:text-lg leading-relaxed font-light border-l-2 border-slate-50 pl-6">
-                Fasilitas penetasan canggih berteknologi tinggi. Aretha Hatchery berfokus pada produksi Day-Old Chicken (DOC) dan Hatching Eggs unggulan, membangun fondasi yang kuat bagi ekosistem peternakan yang tangguh dan berkelanjutan.
+               Menyediakan berbagai alat dan bahan bangunan dengan pilihan lengkap untuk mendukung kebutuhan konstruksi. TB. AS Putra berlokasi di Jl. Jend. Sudirman, Winduhaji, Kec. Kuningan, Kabupaten Kuningan, Jawa Barat
+
               </p>
             </div>
           </div>
@@ -123,4 +124,4 @@ const Section2 = () => {
   );
 };
 
-export default Section2;
+export default Layout4;

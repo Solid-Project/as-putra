@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import bgOffice from "@/assets/img/SectorPeternakanKeempat.webp";
+import bgOffice from "@/assets/img/Carousel/herocarousel3.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -125,7 +125,7 @@ const Layout3 = () => {
             >
               <span style={{ color: "var(--color-utama)" }}>AS Putra</span>{" "}
               <br />
-              Unit Usaha Produk
+              Hadir Lebih Dekat, Melayani Lebih Baik
             </h2>
 
             <div
@@ -142,12 +142,7 @@ const Layout3 = () => {
               style={{ gap: "clamp(1.5rem, 3vh, 2rem)" }}
             >
               <div className="group transition-all duration-300">
-                <span
-                  className="font-black block mb-2 tracking-widest text-xs uppercase"
-                  style={{ color: "var(--color-teks)" }}
-                >
-                  01. Ceha
-                </span>
+               
 
                 <p
                   className="font-light transition-colors"
@@ -158,53 +153,13 @@ const Layout3 = () => {
                     paddingLeft: "clamp(1rem, 3vw, 1.5rem)",
                   }}
                 >
-                  Pusat produk telur dan ayam segar berkualitas, menghadirkan kebutuhan pangan yang aman, higienis, dan terpercaya untuk masyarakat yang berlokasi di Jl. Jend. Sudirman, Awirarangan, Kec. Kuningan, Kabupaten Kuningan, Jawa Barat 45511
+                 Dari pemenuhan gizi keluarga, kebutuhan harian, hingga dukungan material konstruksi. Lini retail AS Putra Group terus berekspansi dengan satu komitmen absolut: menjadi ekosistem niaga yang memberikan kemudahan dan meningkatkan kualitas hidup masyarakat.
                 </p>
               </div>
 
-              <div className="group transition-all duration-300">
-                <span
-                  className="font-black block mb-2 tracking-widest text-xs uppercase"
-                  style={{ color: "var(--color-teks)" }}
-                >
-                  02. Ayamku
-                </span>
+            
 
-                <p
-                  className="font-light transition-colors"
-                  style={{
-                    color: "var(--color-teks-muted)",
-                    borderLeftWidth: "2px",
-                    borderLeftColor: "var(--color-bg-alt)",
-                    paddingLeft: "clamp(1rem, 3vw, 1.5rem)",
-                  }}
-                >
-                  Outlet fried chicken yang menyajikan ayam goreng berkualitas dengan rasa konsisten dan harga terjangkau. Beberapa Outlet Tersebar di berbagai lokasi strategis di Kuningan, mencakup lebih dari 10 outlet aktif.
-
-                </p>
-              </div>
-
-              <div className="group transition-all duration-300">
-                <span
-                  className="font-black block mb-2 tracking-widest text-xs uppercase"
-                  style={{ color: "var(--color-teks)" }}
-                >
-                  03. AS Putra Mart
-                </span>
-
-                <p
-                  className="font-light transition-colors"
-                  style={{
-                    color: "var(--color-teks-muted)",
-                    borderLeftWidth: "2px",
-                    borderLeftColor: "var(--color-bg-alt)",
-                    paddingLeft: "clamp(1rem, 3vw, 1.5rem)",
-                  }}
-                >
-                  Toko kelontongan modern yang menyediakan berbagai kebutuhan harian dengan produk lengkap dan kualitas terjaga. Toko Kelontongan ini berlokasi di Jl. Jend. Sudirman, Winduhaji, Kec. Kuningan, Kabupaten Kuningan, Jawa Barat 45511
-
-                </p>
-              </div>
+              
             </div>
           </div>
         </div>

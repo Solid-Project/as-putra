@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import bgLayout from "@/assets/img/SectorPeternakanKedua.webp";
+import bgLayout from "@/assets/img/tgw2.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,17 +17,10 @@ const Layout1 = () => {
   const data = {
     id: "aretha",
     title: "The Good Wife",
-    meta: "Corporate Overview",
+    meta: "Women's Private Gym",
     image: bgLayout,
     description: [
-      {
-        title:
-          "Gym khusus wanita dengan fasilitas lengkap untuk mendukung kebugaran dan kenyamanan berolahraga.",
-        location:
-          "Jl. Ir. H. Juanda No.51, RW.04, Kuningan, Kec. Kuningan, Kabupaten Kuningan, Jawa Barat 45511",
-        program:
-          "Berbagai kelas olahraga khusus wanita seperti zumba, pilates, dan k-pop dance, yang dirancang untuk menunjang gaya hidup sehat dan aktif.",
-      },
+     'Definisi kenyamanan dalam berolahraga. Berlokasi di jantung Kuningan, The Good Wife hadir sebagai private sanctuary khusus wanita yang dilengkapi fasilitas kebugaran lengkap untuk mendukung gaya hidup sehat Anda dengan privasi maksimal.'
     ],
   };
 
@@ -283,8 +276,8 @@ const Layout1 = () => {
                   }}
                 >
                   <span className="italic">{data.description[0].title}</span>{" "}
-                  Berlokasi di {data.description[0].location}, tempat ini
-                  menghadirkan {data.description[0].program}
+                      Definisi kenyamanan dalam berolahraga. Berlokasi di jantung Kuningan, The Good Wife hadir sebagai private sanctuary khusus wanita yang dilengkapi fasilitas kebugaran lengkap untuk mendukung gaya hidup sehat Anda dengan privasi maksimal.
+
                 </p>
               </div>
             </div>

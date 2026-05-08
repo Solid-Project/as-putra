@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import peternakanImg from "@/assets/img/sector-peternakan-2.webp";
+import peternakanImg from "@/assets/img/ceha2.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,62 +10,63 @@ const Layout4 = () => {
   const imageFrameRef = useRef(null);
   const textGroupRef = useRef(null);
 
-  useEffect(() => {
+ useEffect(() => {
     const ctx = gsap.context(() => {
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top bottom",
           end: "bottom top",
-          scrub: 2,
+          scrub: 1.5, // 1.5 adalah 'sweet spot' biar mulus tapi nggak terlalu delay
           invalidateOnRefresh: true,
         }
       });
 
-      // ✅ IMAGE (KANAN → MASUK DARI KANAN)
+      // Bikin variabel biar gampang kalau mau ganti-ganti
+      const easeType = "sine.inOut"; // 'sine' paling smooth & natural untuk animasi berbasis scroll (scrub)
+      const jarak = "40%"; // Kurangi dari 70% ke 40% biar pergerakannya anggun dan nggak buru-buru
+
+      // --- FASE 1: MASUK BERSAMAAN ---
+      // Gambar masuk dari kanan
       tl.fromTo(
         imageFrameRef.current,
-        { x: "70%", opacity: 0 },
-        {
-          x: "0%",
-          opacity: 1,
-          ease: "power2.inOut",
-          duration: 1,
-        }
-      )
-      .to(imageFrameRef.current, { duration: 0.8 })
-      .to(imageFrameRef.current, {
-        x: "-70%",
-        opacity: 0,
-        ease: "power2.inOut",
-        duration: 1,
-      });
+        { x: jarak, opacity: 0 },
+        { x: "0%", opacity: 1, ease: easeType, duration: 1 },
+        "masuk" // Label posisi timeline biar barengan
+      );
 
-      // ✅ TEXT (KIRI → MASUK DARI KIRI)
+      // Teks masuk dari kiri
       tl.fromTo(
         textGroupRef.current,
-        { x: "-70%", opacity: 0 },
-        {
-          x: "0%",
-          opacity: 1,
-          ease: "power2.inOut",
-          duration: 1,
-        },
-        0
-      )
-      .to(textGroupRef.current, { duration: 0.8 }, 1)
-      .to(textGroupRef.current, {
-        x: "70%",
-        opacity: 0,
-        ease: "power2.inOut",
-        duration: 1,
-      }, ">");
+        { x: `-${jarak}`, opacity: 0 },
+        { x: "0%", opacity: 1, ease: easeType, duration: 1 },
+        "masuk" // Gunakan label yang sama persis
+      );
+
+      // --- FASE 2: WAKTU DIAM (RUANG BACA) ---
+      // Tween kosong ini berfungsi menahan animasi biar elemen nggak langsung ngilang pas di-scroll
+      tl.to({}, { duration: 1.5 });
+
+      // --- FASE 3: KELUAR BERSAMAAN ---
+      // Gambar keluar ke kiri
+      tl.to(
+        imageFrameRef.current,
+        { x: `-${jarak}`, opacity: 0, ease: easeType, duration: 1 },
+        "keluar"
+      );
+
+      // Teks keluar ke kanan
+      tl.to(
+        textGroupRef.current,
+        { x: jarak, opacity: 0, ease: easeType, duration: 1 },
+        "keluar"
+      );
 
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, []); // Pastikan ada dependency array kosong atau state yang relevan di sini
+  
 
   return (
     <section
@@ -85,19 +86,17 @@ const Layout4 = () => {
           >
             <div className="max-w-xl">
               <div className="inline-block px-4 py-1.5 mb-6 text-[10px] font-black tracking-[0.3em] uppercase bg-slate-900 text-white rounded-sm">
-                Peternakan Modern
+              CEHA
               </div>
 
               <h2 className="font-['Playfair_Display'] text-4xl md:text-6xl lg:text-7xl text-slate-900 font-bold leading-[1.1] mb-8 tracking-tighter">
-                Rimala <br />
-                <span className="text-[var(--color-utama)]">AS PUTRA</span>
+                  Standar Mutu & Nutrisi Terjaga 
               </h2>
 
               <div className="w-16 h-1.5 bg-[var(--color-utama)] mb-8"></div>
 
               <p className="text-slate-600 text-base md:text-lg leading-relaxed font-light border-l-2 border-slate-50 pl-6">
-                Klinik dermatologi dan estetika yang menghadirkan layanan perawatan kulit modern dengan tenaga profesional dan teknologi terkini, untuk mendukung kesehatan serta penampilan yang optimal. yang berlokasi di Jl. RE. Martadinata, Ancaran, Kec. Kuningan, Kabupaten Kuningan, Jawa Barat
-
+              Kami menerapkan kontrol kualitas yang ketat pada setiap rantai pasok pangan. Memastikan setiap potongan ayam dan telur yang dipasarkan memiliki tingkat higienitas maksimal dan mempertahankan nilai gizi optimalnya.
               </p>
             </div>
           </div>

@@ -13,4 +13,7 @@ export default defineConfig({
     },
   },
   base: '/react/',
+  server: {
+    allowedHosts: ['asputra.andrey.id'],
+  },
 });

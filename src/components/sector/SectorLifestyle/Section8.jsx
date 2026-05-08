@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import bgOffice from "@/assets/img/Carousel/herocarousel5.webp"; 
+import bgOffice from "@/assets/img/lifestyle.webp"; 
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -113,8 +113,8 @@ const Layout3 = () => {
                 fontSize: "clamp(2rem, 6vw, 3.5rem)",
               }}
             >
-              Peternakan <br />
-              <span style={{ color: "var(--color-utama)" }}>AS PUTRA</span>
+            
+              <span style={{ color: "var(--color-utama)" }}>Harmoni Gaya Hidup & Kesehatan</span>
             </h2>
 
             <div 
@@ -128,12 +128,7 @@ const Layout3 = () => {
 
             <div className="space-y-6" style={{ gap: "clamp(1.5rem, 3vh, 2rem)" }}>
               <div className="group transition-all duration-300">
-                <span 
-                  className="font-black block mb-2 tracking-widest text-xs uppercase"
-                  style={{ color: "var(--color-teks)" }}
-                >
-                  01. Breeding & Hatchery Modern
-                </span>
+             
                 <p 
                   className="font-light transition-colors"
                   style={{
@@ -143,68 +138,16 @@ const Layout3 = () => {
                     paddingLeft: "clamp(1rem, 3vw, 1.5rem)",
                   }}
                 >
-                  Fasilitas pembibitan dan penetasan telur modern dengan teknologi mutakhir untuk menghasilkan bibit unggul berkualitas.
+                Dari kebugaran fisik, perawatan estetika, hingga dukungan kesehatan harian. Sektor Lifestyle AS Putra Group terus bergerak mendampingi setiap langkah Anda menuju kualitas hidup yang lebih baik, lebih sehat, dan lebih percaya diri.
                 </p>
               </div>
 
-              <div className="group transition-all duration-300">
-                <span 
-                  className="font-black block mb-2 tracking-widest text-xs uppercase"
-                  style={{ color: "var(--color-teks)" }}
-                >
-                  02. Closed House System
-                </span>
-                <p 
-                  className="font-light transition-colors"
-                  style={{
-                    color: "var(--color-teks-muted)",
-                    borderLeftWidth: "2px",
-                    borderLeftColor: "var(--color-bg-alt)",
-                    paddingLeft: "clamp(1rem, 3vw, 1.5rem)",
-                  }}
-                >
-                  Sistem peternakan modern dengan kontrol suhu dan kelembaban otomatis untuk kesejahteraan ternak dan produktivitas optimal.
-                </p>
-              </div>
-
-              <div className="group transition-all duration-300">
-                <span 
-                  className="font-black block mb-2 tracking-widest text-xs uppercase"
-                  style={{ color: "var(--color-teks)" }}
-                >
-                  03. Kemitraan Peternak Lokal
-                </span>
-                <p 
-                  className="font-light transition-colors"
-                  style={{
-                    color: "var(--color-teks-muted)",
-                    borderLeftWidth: "2px",
-                    borderLeftColor: "var(--color-bg-alt)",
-                    paddingLeft: "clamp(1rem, 3vw, 1.5rem)",
-                  }}
-                >
-                  Memberdayakan lebih dari 1.500 peternak lokal melalui program kemitraan berkelanjutan dan pendampingan teknis.
-                </p>
-              </div>
+             
             </div>
 
             {/* CTA & PAGINATION */}
             <div className="mt-8 flex flex-col" style={{ gap: "clamp(1.5rem, 4vh, 2.5rem)" }}>
-              <Link
-                to="/sector"
-                className="group flex items-center gap-4 transition-colors duration-300 uppercase tracking-[0.3em] text-[10px] font-black"
-                style={{ color: "var(--color-teks-muted)" }}
-              >
-                <span 
-                  className="transition-all duration-500"
-                  style={{
-                    width: "clamp(24px, 5vw, 32px)",
-                    height: "1px",
-                    backgroundColor: "var(--color-teks-muted)",
-                  }}
-                />
-                Explore Corporate
-              </Link>
+             
 
               <div className="flex gap-4">
                 {[0, 1, 2].map((dot) => (

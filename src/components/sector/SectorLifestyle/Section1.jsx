@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
-import bgLayout from '@/assets/img/retail2.webp';
+import bgLayout from '@/assets/img/tgw1.webp';
+
+
 gsap.registerPlugin(ScrollTrigger);
 
-const Section1 = () => {
+const Layout10 = () => {
   const sectionRef = useRef(null);
   const parallaxBgRef = useRef(null);
   const cardRef = useRef(null);
@@ -96,8 +98,8 @@ const Section1 = () => {
       <div className="absolute top-0 left-0 w-full lg:w-3/5 h-[130%] -z-0 overflow-hidden">
         <img 
           ref={parallaxBgRef}
-          src={bgLayout} 
-          alt="AS Putra Visionary Team" 
+          src= {bgLayout}
+          alt="Modern Farm" 
           className="w-full h-full object-cover origin-top scale-110" 
         />
         {/* Overlay Gradasi agar Sejajar dengan Grid Putih di Kanan */}
@@ -111,16 +113,16 @@ const Section1 = () => {
           {/* KOLOM KIRI: JUDUL RAKSASA (Parallax Sumbu Y) */}
           <div ref={titleRef} className="lg:col-span-6 flex flex-col gap-2 z-20">
             <span className="text-white lg:text-slate-500 font-bold tracking-[0.4em] text-[10px] uppercase mb-8 block opacity-90 lg:opacity-100">
-             AS Putra
+              AS PUTRA
             </span>
             <h1 className="font-['Playfair_Display'] text-7xl md:text-8xl lg:text-[9rem] text-white font-black leading-[0.85] tracking-tighter">
-               Retail
+               LIFESTYLE 
             </h1>
             <h1 className="font-['Playfair_Display'] text-7xl md:text-8xl lg:text-[9rem] text-white font-black leading-[0.85] tracking-tighter">
-               &
+               & 
             </h1>
             <h1 className="font-['Playfair_Display'] text-7xl md:text-8xl lg:text-[9rem] text-white font-black leading-[0.85] tracking-tighter">
-               Distribusi
+               WELLNESS
             </h1>
           </div>
 
@@ -131,14 +133,14 @@ const Section1 = () => {
               className="bg-white p-12 md:p-16 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] rounded-sm border-t-2 border-[var(--color-utama)]"
             >
               <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl text-slate-900 font-bold mb-8 leading-tight tracking-tight">
-               Menjembatani kualitas dari hulu hingga ke tangan konsumen.
+             Membawa dedikasi pada kualitas hidup ke dimensi yang lebih personal. 
               </h2>
               <p className="text-slate-500 text-lg leading-relaxed font-light mb-12 border-l border-slate-100 pl-8">
-              Sektor retail AS Putra Group beroperasi untuk memastikan ketersediaan produk berkualitas tinggi di masyarakat, mengorkestrasi ekosistem distribusi yang efisien dengan standar pelayanan modern dan terpercaya. 
+               Sektor Lifestyle AS Putra Group hadir untuk menjawab kebutuhan masyarakat modern akan perawatan diri, kebugaran, dan kesehatan melalui inovasi pelayanan yang profesional dan eksklusif.
               </p>
 
               {/* Minimalist CTA Link */}
-              
+           
             </div>
           </div>
 
@@ -148,4 +150,4 @@ const Section1 = () => {
   );
 };
 
-export default Section1;
+export default Layout10;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "@/assets/logo-new.jpg";
+import logo from "@/assets/FA_DESIGN_LOGO_MAINLOGO_FORMAT01_ASPUTRA_GROUP_MAIN01.png";
 
 const Footer = () => {
   return (
