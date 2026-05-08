@@ -1,0 +1,19 @@
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: react-app-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - react_node_modules:/app/node_modules
+
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+    restart: unless-stopped
+
+volumes:
+  react_node_modules:
