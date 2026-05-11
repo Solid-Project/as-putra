@@ -5,404 +5,130 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 gsap.registerPlugin(ScrollToPlugin);
 
 const useFullPageSnap = () => {
-  const allSectionsRef = useRef([]);
-  const snapSectionsRef = useRef([]);
+  const allSectionsRef = useRef([]); // Semua (Section + Footer)
+  const navSectionsRef = useRef([]); // Hanya Section (untuk navigasi)
   const indexRef = useRef(0);
   const lockRef = useRef(false);
-  const wheelTimeoutRef = useRef(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const getAllSections = () =>
-    Array.from(document.querySelectorAll(".section"));
+  // Selector baru: Navigasi hanya untuk .section yang BUKAN .footer
+  const getNavSections = () => Array.from(document.querySelectorAll(".section:not(.footer-snap)"));
+  const getAllElements = () => Array.from(document.querySelectorAll(".section, .footer-snap"));
 
-  const getSnapSections = () =>
-    Array.from(document.querySelectorAll(".section:not(.no-snap)"));
+  const isNoSnap = (el) => el?.classList?.contains("no-snap") || false;
+  const isFooter = (el) => el?.classList?.contains("footer-snap") || false;
 
-  const isNoSnapSection = useCallback((el) => {
-    return el?.classList?.contains("no-snap") || false;
-  }, []);
-
-  const getCurrentSectionIndex = () => {
-    const all = allSectionsRef.current;
-    const pos = window.scrollY + window.innerHeight / 2;
-
-    for (let i = 0; i < all.length; i++) {
-      const el = all[i];
-      if (!el) continue;
-
-      const top = el.offsetTop;
-      const bottom = top + el.offsetHeight;
-
-      if (pos >= top && pos < bottom) {
-        return i;
-      }
-    }
-
-    return 0;
-  };
-
-  const scrollToSection = useCallback((snapIndex, immediate = false) => {
-    const sections = snapSectionsRef.current;
-    if (!sections.length) return;
-    if (snapIndex < 0 || snapIndex >= sections.length) return;
-    if (lockRef.current && !immediate) return;
+  const scrollToElement = useCallback((targetEl, realIdx, isNavigational = true) => {
+    if (!targetEl || lockRef.current) return;
 
     lockRef.current = true;
-
-    const targetSection = sections[snapIndex];
-    const realIndex = allSectionsRef.current.findIndex(
-      (s) => s === targetSection,
-    );
-
-    indexRef.current = realIndex;
-    setActiveIndex(realIndex);
+    
+    // Jika itu section navigasi, update activeIndex. Jika footer, tetap di index terakhir.
+    if (isNavigational) {
+      setActiveIndex(realIdx);
+    }
+    indexRef.current = realIdx;
 
     gsap.to(window, {
       duration: 0.8,
       ease: "power2.inOut",
-      overwrite: "auto",
-      scrollTo: {
-        y: targetSection,
-        autoKill: false,
-      },
+      scrollTo: { y: targetEl, autoKill: false },
       onComplete: () => {
-        // 🔥 sync parallax
-        if (window.ScrollTrigger) {
-          window.ScrollTrigger.refresh();
-        }
-
-        setTimeout(() => {
-          lockRef.current = false;
-        }, 200);
-      },
-      onUpdate: () => {
-        const maxScroll =
-          document.documentElement.scrollHeight - window.innerHeight;
-
-        if (window.scrollY <= 0 || window.scrollY >= maxScroll) {
-          lockRef.current = false;
-        }
+        if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+        setTimeout(() => { lockRef.current = false; }, 300);
       },
     });
   }, []);
 
-  useEffect(() => {
-    allSectionsRef.current = getAllSections();
-    snapSectionsRef.current = getSnapSections();
-  }, []);
-
-  const scrollToAdjacentSnap = useCallback(
-    (direction) => {
-      const all = allSectionsRef.current;
-      const snaps = snapSectionsRef.current;
-      const realIndex = getCurrentSectionIndex();
-      const current = all[realIndex];
-
-      let currentSnapIndex = snaps.findIndex((s) => s === current);
-
-      // 🔥 HANDLE FOOTER / NO-SNAP
-      if (currentSnapIndex === -1) {
-        const currentAllIndex = realIndex;
-
-        if (direction === "up") {
-          for (let i = currentAllIndex - 1; i >= 0; i--) {
-            const idx = snaps.findIndex((s) => s === all[i]);
-            if (idx !== -1) {
-              scrollToSection(idx);
-              return true;
-            }
-          }
-        }
-
-        if (direction === "down") {
-          for (let i = currentAllIndex + 1; i < all.length; i++) {
-            const idx = snaps.findIndex((s) => s === all[i]);
-            if (idx !== -1) {
-              scrollToSection(idx);
-              return true;
-            }
-          }
-        }
-
-        return false;
-      }
-
-      let next =
-        direction === "down" ? currentSnapIndex + 1 : currentSnapIndex - 1;
-
-      if (next >= 0 && next < snaps.length) {
-        scrollToSection(next);
-        return true;
-      }
-
-      return false;
-    },
-    [scrollToSection],
-  );
-
-  const handleWheel = useCallback(
-  (e) => {
+  const handleWheel = useCallback((e) => {
     if (lockRef.current) {
       e.preventDefault();
       return;
     }
 
     const delta = e.deltaY;
-    const abs = Math.abs(delta);
-    if (abs < 60) return;
+    if (Math.abs(delta) < 40) return;
 
     const direction = delta > 0 ? "down" : "up";
+    const all = getAllElements();
+    const scrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
 
-    const all = allSectionsRef.current;
-    const snaps = snapSectionsRef.current;
+    // Cari elemen saat ini
+    let currentIndex = 0;
+    all.forEach((el, i) => {
+      if (scrollY >= el.offsetTop - 100) currentIndex = i;
+    });
 
-    // 🔥 pakai posisi REAL (bukan indexRef doang)
-    const pos = window.scrollY + window.innerHeight / 2;
-
-    let realIndex = 0;
-    for (let i = 0; i < all.length; i++) {
-      const el = all[i];
-      if (!el) continue;
-
-      const top = el.offsetTop;
-      const bottom = top + el.offsetHeight;
-
-      if (pos >= top && pos < bottom) {
-        realIndex = i;
-        break;
-      }
-    }
-
-    const current = all[realIndex];
+    const currentEl = all[currentIndex];
 
     // =========================================================
-    // 🔥 CASE 1: lagi di NO-SNAP → cari SNAP terdekat
+    // 🔥 LOGIKA FOOTER ATAU NO-SNAP
     // =========================================================
-    if (isNoSnapSection(current)) {
-      if (direction === "up") {
-        for (let i = realIndex - 1; i >= 0; i--) {
-          if (!isNoSnapSection(all[i])) {
-            e.preventDefault();
+    if (isNoSnap(currentEl) || isFooter(currentEl)) {
+      const rect = currentEl.getBoundingClientRect();
 
-            lockRef.current = true;
-
-            gsap.to(window, {
-              duration: 0.8,
-              ease: "power2.inOut",
-              scrollTo: {
-                y: all[i],
-                autoKill: false,
-              },
-              onComplete: () => {
-                indexRef.current = i;
-                setActiveIndex(i);
-                lockRef.current = false;
-              },
-            });
-
-            return;
-          }
+      if (direction === "up" && rect.top >= -10) {
+        e.preventDefault();
+        const prevEl = all[currentIndex - 1];
+        if (prevEl) {
+          // Balik ke section sebelumnya (bisa snap atau no-snap)
+          const isNav = !isFooter(prevEl);
+          // Cari index navigasi yang sesuai
+          const navIdx = getNavSections().indexOf(prevEl);
+          scrollToElement(prevEl, navIdx !== -1 ? navIdx : activeIndex, isNav);
         }
+        return;
       }
-
-      if (direction === "down") {
-        for (let i = realIndex + 1; i < all.length; i++) {
-          if (!isNoSnapSection(all[i])) {
-            e.preventDefault();
-
-            lockRef.current = true;
-
-            gsap.to(window, {
-              duration: 0.8,
-              ease: "power2.inOut",
-              scrollTo: {
-                y: all[i],
-                autoKill: false,
-              },
-              onComplete: () => {
-                indexRef.current = i;
-                setActiveIndex(i);
-                lockRef.current = false;
-              },
-            });
-
-            return;
-          }
+      
+      if (direction === "down" && rect.bottom <= windowHeight + 10) {
+        const nextEl = all[currentIndex + 1];
+        if (nextEl) {
+          e.preventDefault();
+          const navIdx = getNavSections().indexOf(nextEl);
+          scrollToElement(nextEl, navIdx !== -1 ? navIdx : activeIndex, !isFooter(nextEl));
         }
+        return;
       }
-
-      // gak ada snap → bebas scroll
-      return;
+      return; // Biarkan native scroll
     }
 
     // =========================================================
-    // 🔥 CASE 2: normal SNAP → SNAP berikutnya
-    // =========================================================
-    const currentSnapIndex = snaps.findIndex((s) => s === current);
-
-    let nextSnapIndex =
-      direction === "down"
-        ? currentSnapIndex + 1
-        : currentSnapIndex - 1;
-
-    if (nextSnapIndex >= 0 && nextSnapIndex < snaps.length) {
-      e.preventDefault();
-      scrollToSection(nextSnapIndex);
-      return;
-    }
-
-    // =========================================================
-    // 🔥 CASE 3: dari SNAP ke NO-SNAP (footer dll)
+    // 🔥 LOGIKA SNAP BIASA
     // =========================================================
     if (direction === "down") {
-      for (let i = realIndex + 1; i < all.length; i++) {
-        if (isNoSnapSection(all[i])) {
-          e.preventDefault();
-
-          lockRef.current = true;
-
-          gsap.to(window, {
-            duration: 0.8,
-            ease: "power2.inOut",
-            scrollTo: {
-              y: all[i],
-              autoKill: false,
-            },
-            onComplete: () => {
-              indexRef.current = i;
-              setActiveIndex(i);
-              lockRef.current = false;
-            },
-          });
-
-          return;
-        }
-      }
-    }
-
-    if (direction === "up") {
-      for (let i = realIndex - 1; i >= 0; i--) {
-        if (isNoSnapSection(all[i])) {
-          e.preventDefault();
-
-          lockRef.current = true;
-
-          gsap.to(window, {
-            duration: 0.8,
-            ease: "power2.inOut",
-            scrollTo: {
-              y: all[i],
-              autoKill: false,
-            },
-            onComplete: () => {
-              indexRef.current = i;
-              setActiveIndex(i);
-              lockRef.current = false;
-            },
-          });
-
-          return;
-        }
-      }
-    }
-  },
-  [scrollToSection, isNoSnapSection],
-);
-
-  const handleKeyDown = useCallback(
-    (e) => {
-      const current = allSectionsRef.current[indexRef.current];
-      if (isNoSnapSection(current)) return;
-      if (lockRef.current) return;
-
-      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      const nextEl = all[currentIndex + 1];
+      if (nextEl) {
         e.preventDefault();
-        const dir = e.key === "ArrowDown" ? "down" : "up";
-        scrollToAdjacentSnap(dir);
+        const navIdx = getNavSections().indexOf(nextEl);
+        scrollToElement(nextEl, navIdx !== -1 ? navIdx : activeIndex, !isFooter(nextEl));
       }
-    },
-    [scrollToAdjacentSnap, isNoSnapSection],
-  );
-
-  const handleResize = useCallback(() => {
-    allSectionsRef.current = getAllSections();
-    snapSectionsRef.current = getSnapSections();
-
-    if (window.ScrollTrigger) {
-      requestAnimationFrame(() => {
-        window.ScrollTrigger.refresh();
-      });
+    } else {
+      const prevEl = all[currentIndex - 1];
+      if (prevEl) {
+        e.preventDefault();
+        const navIdx = getNavSections().indexOf(prevEl);
+        scrollToElement(prevEl, navIdx !== -1 ? navIdx : 0, !isFooter(prevEl));
+      }
     }
-  }, []);
+  }, [scrollToElement, activeIndex]);
 
-  // update index saat scroll bebas (footer)
   useEffect(() => {
-    const handleScroll = () => {
-      if (lockRef.current) return;
-
-      const pos = window.scrollY + window.innerHeight / 3;
-
-      for (let i = 0; i < allSectionsRef.current.length; i++) {
-        const s = allSectionsRef.current[i];
-        if (!s) continue;
-
-        const top = s.offsetTop;
-        const bottom = top + s.offsetHeight;
-
-        if (pos >= top && pos < bottom) {
-          if (i !== indexRef.current) {
-            indexRef.current = i;
-            setActiveIndex(i);
-          }
-          break;
-        }
-      }
+    const init = () => {
+      allSectionsRef.current = getAllElements();
+      navSectionsRef.current = getNavSections();
     };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    allSectionsRef.current = getAllSections();
-    snapSectionsRef.current = getSnapSections();
-
-    // init index
-    const y = window.scrollY;
-    let idx = 0;
-
-    for (let i = 0; i < allSectionsRef.current.length; i++) {
-      const s = allSectionsRef.current[i];
-      if (s && s.offsetTop <= y + 100) {
-        idx = i;
-      }
-    }
-
-    indexRef.current = idx;
-    setActiveIndex(idx);
-
+    setTimeout(init, 500);
     window.addEventListener("wheel", handleWheel, { passive: false });
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("resize", handleResize);
-
+    window.addEventListener("resize", init);
     return () => {
       window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("resize", handleResize);
-
-      if (wheelTimeoutRef.current) {
-        clearTimeout(wheelTimeoutRef.current);
-      }
-
-      gsap.killTweensOf(window);
+      window.removeEventListener("resize", init);
     };
-  }, [handleWheel, handleKeyDown, handleResize]);
+  }, [handleWheel]);
 
-  return {
-    activeIndex,
-    scrollToSection,
-  };
+  return { activeIndex, scrollToSection: (idx) => scrollToElement(getNavSections()[idx], idx, true) };
 };
 
 export default useFullPageSnap;

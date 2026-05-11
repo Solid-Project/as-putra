@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
-import sejarahImg from "@/assets/img/owner.jpg";
+import logoAsliUrl from "@/assets/logo.jpg";
 
-const HistorySection = ({ activeIndex }) => {
+const HistorySection = ({ data, isActive, index }) => {
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
+  const bgLogoRef = useRef(null);
   const imageRef = useRef(null);
+
   const [displayText, setDisplayText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const typingIntervalRef = useRef(null);
@@ -13,338 +14,162 @@ const HistorySection = ({ activeIndex }) => {
   const currentIndexRef = useRef(0);
   const isMountedRef = useRef(true);
 
-  const fullText = "Our History";
-  const SECTION_INDEX = 1;
-  // Efek untuk observer - jalan setiap kali section active
+  // Logic Typing Effect
   useEffect(() => {
-  if (activeIndex !== SECTION_INDEX) return;
-
-  let isCancelled = false;
-
-  // stop interval lama
-  if (typingIntervalRef.current) {
-    clearInterval(typingIntervalRef.current);
-    typingIntervalRef.current = null;
-  }
-
-  // reset index (INI AMAN karena bukan state React)
-  currentIndexRef.current = 0;
-
-  // set state DI LUAR LOOP
-  setDisplayText("Our History");
-  setIsTyping(true);
-
-  const typeNextChar = () => {
-    if (isCancelled || !isMountedRef.current) return;
-
-    currentIndexRef.current += 1;
-
-    const text = fullText.slice(0, currentIndexRef.current);
-
-    setDisplayText(text);
-
-    if (currentIndexRef.current >= fullText.length) {
-      clearInterval(typingIntervalRef.current);
-      typingIntervalRef.current = null;
-      setIsTyping(false);
+    if (!isActive || !data?.subtitle) {
+      setDisplayText("");
+      return;
     }
-  };
 
-  typingIntervalRef.current = setInterval(typeNextChar, 110);
+    let isCancelled = false;
+    const fullText = data.subtitle;
 
-  return () => {
-    isCancelled = true;
+    if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+    
+    currentIndexRef.current = 0;
+    setDisplayText("");
+    setIsTyping(true);
 
-    if (typingIntervalRef.current) {
-      clearInterval(typingIntervalRef.current);
-      typingIntervalRef.current = null;
-    }
-  };
-}, [activeIndex]);
+    typingIntervalRef.current = setInterval(() => {
+      if (isCancelled || !isMountedRef.current) return;
+      currentIndexRef.current += 1;
+      const nextText = fullText.slice(0, currentIndexRef.current);
+      setDisplayText(nextText);
 
-  // Efek Parallax
+      if (currentIndexRef.current >= fullText.length) {
+        clearInterval(typingIntervalRef.current);
+        typingIntervalRef.current = null;
+        setIsTyping(false);
+      }
+    }, 80);
+
+    return () => {
+      isCancelled = true;
+      if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+    };
+  }, [isActive, data?.subtitle]);
+
+  // Logic Parallax yang lebih subtle agar tidak mendorong konten keluar viewport
   const updateParallax = useCallback(() => {
     if (!contentRef.current || !imageRef.current || !sectionRef.current) return;
-    
     const rect = sectionRef.current.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
-    const sectionHeight = rect.height;
+    const scrollPercentage = (viewportHeight - rect.top) / (viewportHeight + rect.height);
+    const progress = Math.max(0, Math.min(1, scrollPercentage));
     
-    let progress = 0;
-    const scrollPercentage = (viewportHeight - rect.top) / (viewportHeight + sectionHeight);
-    progress = Math.max(0, Math.min(1, scrollPercentage));
-    
-    const easedProgress = progress < 0.5 
-      ? 4 * progress * progress * progress 
-      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-    
-    const contentY = -80 + (easedProgress * 160);
-    const imageY = 80 - (easedProgress * 160);
+    // Range pergerakan diperkecil agar tetap di dalam 100vh
+    const contentY = -15 + (progress * 30);
+    const imageY = 15 - (progress * 30);
     
     contentRef.current.style.transform = `translate3d(0, ${contentY}px, 0)`;
     imageRef.current.style.transform = `translate3d(0, ${imageY}px, 0)`;
   }, []);
 
   const handleScroll = useCallback(() => {
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
-    }
-    
-    animationFrameRef.current = requestAnimationFrame(() => {
-      updateParallax();
-    });
+    if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+    animationFrameRef.current = requestAnimationFrame(updateParallax);
   }, [updateParallax]);
 
   useEffect(() => {
     isMountedRef.current = true;
-    updateParallax();
-    
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll);
+    updateParallax();
     
     return () => {
       isMountedRef.current = false;
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
-      
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-      if (typingIntervalRef.current) {
-        clearInterval(typingIntervalRef.current);
-      }
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
     };
   }, [handleScroll, updateParallax]);
+
+  if (!data) return null;
+
+  const imageUrl = data.layout_data?.image 
+    ? `${import.meta.env.VITE_API_URL}/storage/${data.layout_data.image}`
+    : null;
 
   return (
     <section
       ref={sectionRef}
-      className="section relative overflow-hidden flex items-center"
-      id="history-section" 
-      data-theme="light" 
-      data-title="Sejarah Kami"
-      style={{
-        height: "100vh",
-        maxHeight: "100vh",
-        background: `linear-gradient(to bottom, var(--color-bg-light), var(--color-bg-alt))`,
-        overflow: 'hidden',
-      }}
+      className="section relative w-full h-[100vh] flex items-center justify-center bg-[#0F1A3E] overflow-hidden"
+      id={`section-${index}`}
+      data-title={data?.title || "History"}
     >
-      {/* Decorative Background */}
-      <div 
-        className="absolute top-0 right-0 rounded-full blur-3xl -z-10"
-        style={{
-          backgroundColor: "var(--color-utama)",
-          opacity: 0.05,
-          width: "clamp(200px, 40vw, 500px)",
-          height: "clamp(200px, 40vw, 500px)",
-          willChange: 'transform',
-        }}
-      />
-      <div 
-        className="absolute bottom-0 left-0 rounded-full blur-3xl -z-10"
-        style={{
-          backgroundColor: "var(--color-utama)",
-          opacity: 0.05,
-          width: "clamp(200px, 40vw, 500px)",
-          height: "clamp(200px, 40vw, 500px)",
-          willChange: 'transform',
-        }}
-      />
+      {/* Background Decor */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none -z-0">
+        <img src={logoAsliUrl} alt="" className="w-[80%] h-auto rotate-12 scale-110" />
+      </div>
 
-      {/* Container */}
-      <div 
-        className="w-full h-full flex flex-col justify-center relative"
-        style={{
-          paddingTop: "clamp(0.5rem, 2vh, 1.5rem)",
-          paddingBottom: "clamp(0.5rem, 2vh, 1.5rem)",
-          paddingLeft: "clamp(1rem, 4vw, 2.5rem)",
-          paddingRight: "clamp(1rem, 4vw, 2.5rem)",
-          overflow: 'visible',
-        }}
-      >
-        <div 
-          className="max-w-[1300px] mx-auto w-full grid md:grid-cols-2 items-center"
-          style={{
-            gap: "clamp(1rem, 3vw, 2.5rem)",
-          }}
-        >
+      {/* Main Content Container - Menggunakan h-full agar grid bisa mengatur ruang dengan baik */}
+      <div className="w-full max-w-[1300px] h-full max-h-[85vh] mx-auto px-6 md:px-12 z-10 flex items-center">
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
+          
           {/* TEXT CONTENT */}
-          <div 
-            ref={contentRef} 
-            className="order-2 md:order-1 relative"
-            style={{ 
-              willChange: 'transform',
-              transform: 'translate3d(0, 0, 0)',
-            }}
-          >
-            <div style={{ marginBottom: "clamp(0.25rem, 1vh, 0.75rem)" }}>
-              <div className="inline-flex items-center min-h-[1.5rem]">
-                <span
-                  className="font-semibold tracking-wider uppercase"
-                  style={{
-                    color: "var(--color-utama)",
-                    fontSize: "clamp(0.65rem, 1.8vw, 0.9rem)",
-                  }}
-                >
-                  {displayText || "\u00A0"}
-                </span>
-                {isTyping && (
-                  <span 
-                    className="ml-1"
-                    style={{ 
-                      backgroundColor: "var(--color-utama)",
-                      width: "clamp(1.5px, 0.25vw, 2px)",
-                      height: "clamp(0.8rem, 2.2vw, 1.1rem)",
-                      animation: 'blink 0.8s step-end infinite',
-                      display: 'inline-block',
-                    }}
-                  />
-                )}
-              </div>
+          <div ref={contentRef} className="order-2 md:order-1 will-change-transform flex flex-col justify-center">
+            {/* Typing Subtitle */}
+            <div className="flex items-center mb-3 h-4">
+              <span className="text-[#FFC700] font-black tracking-[0.4em] uppercase text-[10px] md:text-xs">
+                {displayText || "\u00A0"}
+              </span>
+              {isTyping && <div className="w-[1.5px] h-3 bg-[#FFC700] ml-2 animate-blink" />}
             </div>
 
-            <h2 
-              className="font-['Playfair_Display'] leading-tight font-bold"
-              style={{
-                color: "var(--color-teks)",
-                fontSize: "clamp(1.6rem, 5vw, 2.8rem)",
-                marginBottom: "clamp(0.5rem, 1.5vh, 1rem)",
-              }}
-            >
-              Sejarah{" "}
-              <span 
-                className="relative inline-block"
-                style={{ color: "var(--color-utama)" }}
-              >
-                AS PUTRA
-              </span>
+            {/* Judul Utama - Ukuran yang "Safe" untuk layar laptop/tablet */}
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-['Playfair_Display'] font-bold text-white mb-4 leading-tight">
+              {data.title} <br/>
+              <span className="text-[#FFC700] italic">{data.more_text}</span>
             </h2>
 
-            <div 
-              className="space-y-[clamp(0.35rem,1vh,0.75rem)] leading-relaxed"
-              style={{ 
-                color: "var(--color-teks-muted)",
-                fontSize: "clamp(0.75rem, 1.8vw, 0.95rem)" 
-              }}
-            >
-              <p
-                style={{
-                  textAlign: "justify",
-                  lineHeight: "1.8",
-                }}
-              >
-                AS Putra adalah perusahaan yang berawal dari usaha peternakan ayam petelur
-                yang didirikan oleh Bapak H. Dudung Dulajid pada tahun 1985, dibangun dari
-                pemanfaatan sumber daya lokal dengan prinsip kejujuran, kerja keras, dan
-                konsistensi. Dalam perjalanannya, perusahaan berkembang dengan memperluas
-                bisnis ke sektor ayam broiler sejak tahun 1997, serta menunjukkan
-                ketangguhan dalam menghadapi dinamika industri, termasuk krisis ekonomi,
-                melalui pengelolaan yang disiplin dan komitmen terhadap kepercayaan mitra.
-                Kini, AS Putra telah bertransformasi menjadi grup usaha yang modern dan
-                terintegrasi, dengan lini bisnis yang mencakup peternakan, energi, properti,
-                dan hospitality, serta terus berinovasi untuk memberikan nilai berkelanjutan
-                bagi masyarakat dan mendukung ketahanan pangan nasional.
+            {/* Deskripsi - Menggunakan clamp untuk membatasi tinggi teks */}
+            <div className="max-w-xl">
+              <p className="text-gray-400 leading-relaxed text-justify text-sm md:text-base border-l border-[#FFC700]/30 pl-5 opacity-90 line-clamp-[8] md:line-clamp-none">
+                {data.description}
               </p>
             </div>
           </div>
 
           {/* IMAGE CONTENT */}
-          <div 
-            ref={imageRef} 
-            className="relative group order-1 md:order-2"
-            style={{ 
-              willChange: 'transform',
-              transform: 'translate3d(0, 0, 0)',
-            }}
-          >
-            {/* Decorative circles */}
-            <div 
-              className="absolute rounded-full z-0"
-              style={{
-                borderWidth: "clamp(1px, 0.25vw, 2px)",
-                borderStyle: "solid",
-                borderColor: "var(--color-utama)",
-                opacity: 0.2,
-                width: "clamp(50px, 16vw, 110px)",
-                height: "clamp(50px, 16vw, 110px)",
-                top: "clamp(-8px, -2vw, -18px)",
-                right: "clamp(-8px, -2vw, -18px)",
-              }}
-            />
-            <div 
-              className="absolute rounded-full z-0"
-              style={{
-                borderWidth: "clamp(1px, 0.25vw, 2px)",
-                borderStyle: "solid",
-                borderColor: "var(--color-utama)",
-                opacity: 0.2,
-                width: "clamp(65px, 20vw, 140px)",
-                height: "clamp(65px, 20vw, 140px)",
-                bottom: "clamp(-8px, -2vw, -18px)",
-                left: "clamp(-8px, -2vw, -18px)",
-              }}
-            />
-
-            {/* Image container */}
-            <div 
-              className="relative z-10 overflow-hidden shadow-2xl transition-all duration-500 group-hover:shadow-3xl group-hover:scale-[1.01]"
-              style={{ 
-                borderRadius: "clamp(10px, 2vw, 16px)",
-                maxWidth: "90%",
-                marginLeft: "auto",
-                marginRight: "auto",
-                transform: 'translate3d(0, 0, 0)',
-              }}
-            >
-              <img
-                src={sejarahImg}
-                alt="H. Dudung Dulajid & H. Aif Arifin Sidhik"
-                className="w-full relative z-0 transition-transform duration-700 group-hover:scale-105"
-                style={{ 
-                  aspectRatio: "4/3", 
-                  objectFit: "cover",
-                  willChange: 'transform',
-                }}
-                loading="eager"
-              />
-            </div>
-
-            {/* Caption */}
-            <div 
-              className="relative z-10 text-center"
-              style={{ marginTop: "clamp(0.5rem, 2vh, 1rem)" }}
-            >
-              <div 
-                className="inline-block backdrop-blur-sm rounded-full shadow-md"
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.9)",
-                  paddingTop: "clamp(0.25rem, 1vh, 0.4rem)",
-                  paddingBottom: "clamp(0.25rem, 1vh, 0.4rem)",
-                  paddingLeft: "clamp(0.7rem, 2.5vw, 1.2rem)",
-                  paddingRight: "clamp(0.7rem, 2.5vw, 1.2rem)",
-                }}
-              >
-                <p 
-                  className="font-medium"
-                  style={{ 
-                    color: "var(--color-utama)",
-                    fontSize: "clamp(0.6rem, 1.6vw, 0.8rem)" 
-                  }}
+          <div ref={imageRef} className="order-1 md:order-2 relative group will-change-transform flex justify-center items-center">
+            {/* Frame & Image Container - Dibatasi tinggi maksimalnya */}
+            <div className="relative w-full max-w-[420px]">
+              <div className="absolute -inset-3 border border-[#FFC700]/20 rounded-2xl -z-10 translate-x-3 translate-y-3" />
+              
+              <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-2">
+                <div 
+                  className="overflow-hidden rounded-xl"
+                  style={{ clipPath: "polygon(0 0, 100% 0, 100% 94%, 94% 100%, 0 100%)" }}
                 >
-                  H. Dudung Dulajid
-                </p>
+                  {imageUrl ? (
+                    <img
+                      src={imageUrl}
+                      alt={data.layout_data?.caption || "Gallery"}
+                      className="w-full aspect-square md:aspect-[4/5] object-cover transition-transform duration-1000 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="w-full aspect-square bg-[#1a2a4e] flex items-center justify-center text-gray-500 italic text-xs">
+                      AS PUTRA
+                    </div>
+                  )}
+                </div>
               </div>
+
+              {/* Caption Box - Dibuat lebih kecil agar tidak makan tempat */}
+              {data.layout_data?.caption && (
+                <div className="absolute -bottom-3 -right-2 z-20 bg-[#FFC700] text-[#0F1A3E] px-5 py-2.5 shadow-xl rounded-tr-[20px] rounded-bl-[20px]">
+                  <p className="font-black text-[8px] uppercase tracking-widest leading-none mb-1 opacity-70">Legacy</p>
+                  <p className="font-bold text-xs md:text-sm whitespace-nowrap">{data.layout_data.caption}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
 
       <style>{`
-        @keyframes blink { 
-          0%, 100% { opacity: 1; } 
-          50% { opacity: 0; } 
-        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .animate-blink { animation: blink 0.8s step-end infinite; }
       `}</style>
     </section>
   );

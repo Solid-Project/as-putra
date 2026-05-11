@@ -1,152 +1,108 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import peternakanImage from "@/assets/img/sector1.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const SECTION_INDEX = 3; // ⚠️ WAJIB SESUAI URUTAN DI HOMEPAGE
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-const sectors = [
-  { name: 'Peternakan', desc: 'Breeding, hatchery, kemitraan, dan pengelolaan peternakan terpadu.', bg: peternakanImage },
-  { name: 'Hotel & Resort', desc: 'Layanan hospitality premium (Cordela, Bulak Laut, Amanara, Aston).', bg: '/react/img/hotel2.webp' },
-  { name: 'Property', desc: 'Pengembangan hunian dan properti (Kuningan, Cirebon, Majalengka).', bg: '/react/img/prop2.jpeg' },
-  { name: 'Retail', desc: 'Usaha ritel dan layanan pendukung kebutuhan hidup.', bg: '/react/img/retail.webp' },
-  { name: 'Ekspedisi', desc: 'Solusi logistik dan transportasi yang andal.', bg: '/react/img/transport.webp' }
-];
-
-const SectorStrip = ({ activeIndex }) => {
+const SectorStrip = ({ data, isActive, index }) => {
   const sectionRef = useRef(null);
-  const cardsRef = useRef([]);
+  const bgRefs = useRef([]);
+  
+  const sectors = data?.layout_data || [];
 
-  const isReadyRef = useRef(false);
+  const getFullImageUrl = (path) => {
+    if (!path) return "";
+    const cleanBase = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
+    return `${cleanBase}/storage/${path}`;
+  };
 
   useEffect(() => {
-    const cards = cardsRef.current;
-    if (!cards.length) return;
+    const bgs = bgRefs.current.filter(Boolean);
+    
+    if (bgs.length > 0) {
+      const ctx = gsap.context(() => {
+        bgs.forEach((bg) => {
+          gsap.fromTo(bg, 
+            { y: "-10%" }, 
+            {
+              y: "10%", 
+              ease: "none",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.2,
+              }
+            }
+          );
+        });
+      }, sectionRef);
 
-    // 🔥 RESET GLOBAL (AMAN)
-    isReadyRef.current = false;
-
-    if (activeIndex === SECTION_INDEX) {
-      // reset posisi
-      gsap.set(cards, { y: 0 });
-
-      gsap.fromTo(
-        cards,
-        { opacity: 0, y: 80 },
-        {
-          opacity: 1,
-          y: 0,
-          stagger: 0.1,
-          duration: 0.8,
-          ease: "power3.out",
-          onComplete: () => {
-            isReadyRef.current = true;
-          },
-        },
-      );
-    } else {
-      gsap.set(cards, { opacity: 0, y: 80 });
+      return () => ctx.revert();
     }
-  }, [activeIndex]);
-  // =============================
-  // 🎯 ANIMASI MASUK (SNAP BASED)
-  // =============================
-  useEffect(() => {
-    const cards = cardsRef.current;
-    if (!cards.length) return;
+  }, [sectors]);
 
-    if (activeIndex === SECTION_INDEX) {
-      // 🔥 RESET DULU semua transform
-      gsap.set(cards, { y: 0 });
+  if (!sectors.length) return null;
 
-      // baru animasi masuk
-      gsap.fromTo(
-        cards,
-        { opacity: 0, y: 80 },
-        {
-          opacity: 1,
-          y: 0,
-          stagger: 0.1,
-          duration: 0.8,
-          ease: "power3.out",
-        },
-      );
-    } else {
-      gsap.set(cards, { opacity: 0, y: 80 });
-    }
-  }, [activeIndex]);
-
-  // =============================
-  // 🌊 PARALLAX (SCROLLTRIGGER)
-  // =============================
-  useEffect(() => {
-    const triggers = [];
-
-    cardsRef.current.forEach((card, idx) => {
-      if (!card) return;
-
-      const isEven = idx % 2 === 0;
-      const range = 50;
-
-      const t = ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: 1,
-        onUpdate: (self) => {
-          // 🔥 INI DIA LETAKNYA
-          if (!isReadyRef.current) return;
-
-          const move = isEven ? self.progress * range : -self.progress * range;
-
-          gsap.set(card, { y: move });
-        },
-      });
-
-      triggers.push(t);
-    });
-
-    return () => triggers.forEach((t) => t.kill());
-  }, [activeIndex]);
-
-  // =============================
-  // 🎯 RENDER
-  // =============================
   return (
     <section
       ref={sectionRef}
       className="section"
-      data-title="Sektor Usaha"
-      data-theme="dark"
       style={{
         height: "100vh",
+        width: "100%",
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
+        backgroundColor: "#0F1A3E",
+        position: "relative",
       }}
+      id={`section-${index}`}
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 w-full h-full">
-        {sectors.map((sector, idx) => (
+      <div 
+        className="grid w-full h-full" 
+        style={{ 
+          gridTemplateColumns: `repeat(${sectors.length}, 1fr)`,
+          position: "relative"
+        }}
+      >
+        {sectors.map((item, idx) => (
           <div
-            key={idx}
-            ref={(el) => (cardsRef.current[idx] = el)}
-            className="relative flex flex-col justify-center text-white group"
-            style={{
-              backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${sector.bg})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              padding: "clamp(1rem, 2vw, 2rem)",
-              willChange: "transform, opacity",
-              transition: "all 0.3s ease",
+            key={item.id || idx}
+            className="relative flex flex-col justify-center text-white border-r border-white/10 last:border-none"
+            style={{ 
+              padding: "2.5rem 2rem", // Padding disesuaikan agar teks panjang tidak mepet
+              height: "100%", 
+              overflow: "hidden",
+              backgroundColor: "#1a1a1a" 
             }}
           >
-            <h3 className="font-bold text-lg mb-2">{sector.name}</h3>
+            {/* BACKGROUND LAYER PARALAKS */}
+            <div className="absolute inset-0 z-0">
+              <div 
+                ref={(el) => (bgRefs.current[idx] = el)}
+                className="absolute inset-x-0 h-[120%] top-[-10%]" 
+                style={{
+                  backgroundImage: `linear-gradient(rgba(15, 26, 62, 0.5), rgba(15, 26, 62, 0.85)), url(${getFullImageUrl(item.image)})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              />
+            </div>
 
-            <p className="text-sm opacity-90 mb-3">{sector.desc}</p>
-
-            <div className="h-[3px] w-10 bg-[var(--color-aksen)] group-hover:w-16 transition-all duration-300" />
+            {/* CONTENT - Teks tampil utuh */}
+            <div className="relative z-10 pointer-events-none">
+              <h3 className="font-bold text-xl md:text-2xl mb-4 uppercase tracking-tight leading-tight">
+                {item.title}
+              </h3>
+              {/* Teks Deskripsi Panjang */}
+              <p className="text-sm opacity-90 mb-6 leading-relaxed whitespace-normal break-words">
+                {item.description}
+              </p>
+              <div className="h-[3px] w-12 bg-yellow-500 shadow-lg shadow-yellow-500/20" />
+            </div>
           </div>
         ))}
       </div>

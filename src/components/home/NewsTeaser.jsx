@@ -1,6 +1,7 @@
-import React, { useEffect, useRef} from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
+import logoIcon from "@/assets/logo.jpg";
 
 const news = [
   {
@@ -9,8 +10,7 @@ const news = [
     title: "Pemberdayaan Peternak Mandiri",
     date: "24 Jan 2026",
     desc: "Mendampingi 100+ peternak lokal Kuningan dengan pelatihan manajemen modern.",
-    image:
-      "https://images.unsplash.com/photo-1589922583749-6b8473a85048?q=80&w=687&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1589922583749-6b8473a85048?q=80&w=687&auto=format&fit=crop",
   },
   {
     id: "csr-2",
@@ -18,8 +18,7 @@ const news = [
     title: "AS PUTRA Green: 5000 Pohon",
     date: "20 Jan 2026",
     desc: "Aksi nyata pelestarian lingkungan dengan menanam 5000 bibit pohon pelindung.",
-    image:
-      "https://plus.unsplash.com/premium_photo-1681140560806-928e9b8a9a20?q=80&w=1170&auto=format&fit=crop",
+    image: "https://plus.unsplash.com/premium_photo-1681140560806-928e9b8a9a20?q=80&w=1170&auto=format&fit=crop",
   },
   {
     id: "comm-1",
@@ -27,265 +26,145 @@ const news = [
     title: "Kolaborasi Riset Pakan IPB",
     date: "10 Jan 2026",
     desc: "Kerjasama strategis dengan universitas terkemuka untuk pakan ramah lingkungan.",
-    image:
-      "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=600&q=80",
   },
 ];
 
 const categoryConfig = {
-  csr: { label: "CSR", icon: "🌱", color: "#10B981" },
-  event: { label: "Acara", icon: "🎉", color: "#F59E0B" },
-  achievement: { label: "Prestasi", icon: "🏆", color: "#EF4444" },
+  csr: { label: "CSR", icon: "🌱" },
+  event: { label: "Acara", icon: "🎉" },
+  achievement: { label: "Prestasi", icon: "🏆" },
 };
 
-const NewsTeaser = ({ activeIndex }) => {
+const NewsTeaser = ({ activeIndex, index }) => {
   const sectionRef = useRef(null);
   const cardsRef = useRef([]);
   const headerRef = useRef(null);
   const buttonRef = useRef(null);
-  const SECTION_INDEX = 3; // sesuaikan urutan
-  const isActive = activeIndex === SECTION_INDEX;
+  
+  const isActive = activeIndex === index;
+
   useEffect(() => {
-  if (!isActive) return;
+    if (!isActive) return;
 
-  const ctx = gsap.context(() => {
-    const validCards = cardsRef.current.filter(Boolean);
+    const ctx = gsap.context(() => {
+      const validCards = cardsRef.current.filter(Boolean);
 
-    gsap.fromTo(headerRef.current,
-      { y: 50, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
-    );
+      gsap.fromTo(headerRef.current,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
+      );
 
-    gsap.fromTo(validCards,
-      { y: 80, opacity: 0, scale: 0.95 },
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        stagger: 0.15,
-        duration: 0.9,
-        ease: "back.out(0.3)"
-      }
-    );
+      gsap.fromTo(validCards,
+        { y: 40, opacity: 0, scale: 0.98 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          stagger: 0.1,
+          duration: 0.7,
+          ease: "power2.out",
+          delay: 0.2
+        }
+      );
 
-    gsap.fromTo(buttonRef.current,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.6, delay: 0.6 }
-    );
-  }, sectionRef);
+      gsap.fromTo(buttonRef.current,
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, delay: 0.5 }
+      );
+    }, sectionRef);
 
-  return () => ctx.revert(); // 🔥 AUTO RESET SEMUA
-}, [isActive]);
+    return () => ctx.revert();
+  }, [isActive]);
 
   return (
     <section
       ref={sectionRef}
-      className="section"
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "var(--color-bg-light)",
-        paddingTop: "clamp(2rem, 5vh, 3rem)",
-        paddingBottom: "clamp(2rem, 5vh, 3rem)",
-        paddingLeft: "clamp(1rem, 4vw, 2.5rem)",
-        paddingRight: "clamp(1rem, 4vw, 2.5rem)",
-        position: "relative",
-        overflow: "hidden",
-      }}
+      className="section relative w-full h-[100vh] flex items-center justify-center bg-[#0F1A3E] overflow-hidden"
+      id={`section-${index}`}
     >
-      {/* Background decoration with aksen color */}
-      <div
-        style={{
-          position: "absolute",
-          top: "-50%",
-          right: "-20%",
-          width: "60%",
-          height: "100%",
-          background:
-            "radial-gradient(circle, rgba(250, 204, 21, 0.05) 0%, rgba(250, 204, 21, 0) 70%)",
-          borderRadius: "50%",
-          pointerEvents: "none",
-        }}
-      />
+      {/* Background Decor - Sama dengan Culture/History */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.025] pointer-events-none -z-0">
+        <img src={logoIcon} alt="" className="w-[85%] h-auto rotate-[-12deg] scale-110" />
+      </div>
 
-      <div
-        className="w-full mx-auto"
-        style={{
-          maxWidth: "1200px",
-          width: "100%",
-          margin: "0 auto",
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
-        {/* HEADER */}
-        <div
-          ref={headerRef}
-          style={{
-            textAlign: "center",
-            marginBottom: "clamp(2rem, 5vh, 3rem)",
-          }}
-        >
-          <h2
-            style={{
-              fontSize: "clamp(1.8rem, 5vw, 2.5rem)",
-              fontWeight: "bold",
-              color: "var(--color-teks)",
-              marginBottom: "0.75rem",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            Berita &amp; Artikel Terbaru
-          </h2>
-          <div
-            style={{
-              width: "60px",
-              height: "4px",
-              background:
-                "linear-gradient(90deg, var(--color-utama), var(--color-aksen))",
-              margin: "0 auto 1rem auto",
-              borderRadius: "2px",
-            }}
-          />
-          <p
-            style={{
-              color: "var(--color-teks-muted)",
-              maxWidth: "600px",
-              margin: "0 auto",
-              fontSize: "clamp(0.9rem, 3vw, 1rem)",
-              lineHeight: "1.6",
-            }}
-          >
-            Update terbaru tentang kegiatan dan perkembangan{" "}
-            <strong style={{ color: "var(--color-utama)" }}>
-              AS PUTRA Group
-            </strong>
-          </p>
+      {/* Main Container - Dibatasi max-h agar muat satu layar */}
+      <div className="w-full max-w-[1300px] h-full max-h-[90vh] mx-auto px-6 md:px-12 z-10 flex flex-col justify-center">
+        
+        {/* HEADER - Dibuat lebih compact */}
+        <div ref={headerRef} className="mb-10 lg:mb-14">
+          <span className="text-[#FFC700] font-black tracking-[0.4em] uppercase text-[10px] md:text-xs block mb-3">
+            Latest Updates
+          </span>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-['Playfair_Display'] font-bold text-white leading-tight">
+              Berita & <span className="text-[#FFC700] italic">Artikel</span>
+            </h2>
+            <p className="text-gray-400 max-w-sm text-xs md:text-sm leading-relaxed border-l border-[#FFC700]/30 pl-5 opacity-80">
+              Informasi terkini mengenai inovasi dan kontribusi sosial 
+              <span className="text-white font-semibold"> AS PUTRA Group</span>.
+            </p>
+          </div>
         </div>
 
-        {/* GRID */}
-        <div
-          className="grid md:grid-cols-3 gap-6"
-          style={{
-            marginBottom: "clamp(2rem, 5vh, 3rem)",
-          }}
-        >
-          {news.map((item, idx) => {
-            const category =
-              categoryConfig[item.category] || categoryConfig.event;
-            return (
-              <Link
-                key={item.id}
-                to={`/news/${item.id}`}
-                ref={(el) => {
-                  if (el) {
-                    cardsRef.current[idx] = el;
-                  }
-                }}
-                className="group bg-white rounded-xl shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden"
-                style={{
-                  display: "block",
-                  textDecoration: "none",
-                }}
-              >
-                {/* IMAGE */}
-                <div
-                  className="relative h-52 overflow-hidden"
-                  style={{
-                    background: "var(--color-bg-alt)",
-                  }}
-                >
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
-                  />
-                  {/* Category Badge */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "1rem",
-                      left: "1rem",
-                      background: category.color,
-                      color: "white",
-                      padding: "0.25rem 0.75rem",
-                      borderRadius: "9999px",
-                      fontSize: "0.75rem",
-                      fontWeight: "600",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.25rem",
-                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                      zIndex: 1,
-                    }}
-                  >
-                    <span>{category.icon}</span>
-                    <span>{category.label}</span>
-                  </div>
-                  {/* Date */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: "1rem",
-                      right: "1rem",
-                      background: "rgba(15, 23, 42, 0.85)",
-                      backdropFilter: "blur(8px)",
-                      color: "white",
-                      padding: "0.25rem 0.75rem",
-                      borderRadius: "9999px",
-                      fontSize: "0.7rem",
-                      fontWeight: "500",
-                      zIndex: 1,
-                    }}
-                  >
-                    📅 {item.date}
-                  </div>
+        {/* GRID - Menggunakan array data */}
+        <div className="grid md:grid-cols-3 gap-5 lg:gap-8 mb-10 lg:mb-14">
+          {news.slice(0, 3).map((item, idx) => (
+            <Link
+              key={item.id}
+              to={`/news/${item.id}`}
+              ref={(el) => (cardsRef.current[idx] = el)}
+              className="group relative flex flex-col bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden transition-all duration-500 hover:bg-white/10 hover:border-white/20 shadow-2xl shadow-black/20"
+            >
+              {/* IMAGE AREA - Aspect Ratio Tetap */}
+              <div className="relative aspect-[16/10] overflow-hidden">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                />
+                {/* Overlay Gradasi agar teks terbaca */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F1A3E]/80 via-transparent to-transparent opacity-80" />
+                
+                {/* Category & Date */}
+                <div className="absolute top-3 left-3 bg-[#FFC700] text-[#0F1A3E] px-2.5 py-1 rounded-full text-[9px] font-black tracking-wider uppercase">
+                  {categoryConfig[item.category]?.label || "News"}
                 </div>
-
-                {/* CONTENT */}
-                <div className="p-5 flex flex-col justify-between h-full">
-                  <div>
-                    <h3 className="font-bold text-lg mb-2 group-hover:text-[var(--color-utama)] transition">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm text-gray-500 mb-3">{item.desc}</p>
-                  </div>
-
-                  <div className="flex items-center gap-2 group-hover:gap-3 transition-all">
-                    <span className="text-sm font-semibold text-[var(--color-utama)]">
-                      Baca Selengkapnya
-                    </span>
-                    <span className="text-sm font-semibold text-[var(--color-utama)]">
-                      →
-                    </span>
-                  </div>
+                <div className="absolute bottom-3 left-4 text-[9px] font-bold text-white/70">
+                  📅 {item.date}
                 </div>
-              </Link>
-            );
-          })}
+              </div>
+
+              {/* CONTENT AREA */}
+              <div className="p-5 lg:p-6 flex-1 flex flex-col">
+                <h3 className="text-white font-bold text-base lg:text-lg mb-2 leading-tight group-hover:text-[#FFC700] transition-colors duration-300 line-clamp-2">
+                  {item.title}
+                </h3>
+                <p className="text-gray-400 text-[11px] lg:text-xs leading-relaxed line-clamp-2 mb-4 opacity-80">
+                  {item.desc}
+                </p>
+                
+                {/* Arrow Link */}
+                <div className="mt-auto flex items-center gap-2 text-[#FFC700] text-[10px] font-black uppercase tracking-[0.15em]">
+                  <span>Read More</span>
+                  <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
 
-        {/* BUTTON */}
-        <div ref={buttonRef} style={{ textAlign: "center" }}>
+        {/* FOOTER BUTTON */}
+        <div ref={buttonRef} className="flex justify-center">
           <Link
             to="/news"
-            className="inline-block px-6 py-3 rounded-full text-white font-semibold shadow-lg hover:scale-105 transition"
-            style={{
-              background:
-                "linear-gradient(135deg, var(--color-utama), var(--color-utama-hover))",
-              boxShadow: "0 10px 15px -3px rgba(30, 58, 138, 0.3)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "scale(1.05)";
-              e.currentTarget.style.boxShadow =
-                "0 20px 25px -5px rgba(30, 58, 138, 0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.boxShadow =
-                "0 10px 15px -3px rgba(30, 58, 138, 0.3)";
-            }}
+            className="group relative px-8 py-3.5 bg-transparent border border-[#FFC700]/40 text-[#FFC700] font-bold text-[10px] uppercase tracking-[0.3em] rounded-full overflow-hidden transition-all duration-500 hover:border-[#FFC700] hover:shadow-[0_0_30px_rgba(255,199,0,0.15)]"
           >
-            Lihat Semua Berita
+            <span className="relative z-10">Explores All News</span>
+            <div className="absolute inset-0 bg-[#FFC700] translate-y-full group-hover:translate-y-0 transition-transform duration-500 -z-0" />
+            <style dangerouslySetInnerHTML={{ __html: `
+              .group:hover span { color: #0F1A3E; }
+            `}} />
           </Link>
         </div>
       </div>

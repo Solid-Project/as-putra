@@ -1,17 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import CareerPath from "./CareerPath";
 import JobDetailModal from "./JobDetailModal";
 import { 
-  BriefcaseIcon, 
   MapPinIcon, 
   AcademicCapIcon,
-  InformationCircleIcon,
-  PaperAirplaneIcon
+  ArrowUpRightIcon,
+  SparklesIcon,
+  BriefcaseIcon
 } from "@heroicons/react/24/outline";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const jobOpeningsData = [
   {
@@ -49,26 +45,17 @@ const CareerJobs = ({ isActive }) => {
   useEffect(() => {
     if (!isActive) return;
 
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        jobsRef.current,
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.5,
-          stagger: 0.1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
+    gsap.fromTo(
+      jobsRef.current,
+      { y: 30, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power3.out",
+      }
+    );
   }, [isActive]);
 
   const handleViewDetail = (job) => {
@@ -80,93 +67,105 @@ const CareerJobs = ({ isActive }) => {
 
   return (
     <div ref={sectionRef} className="py-10">
-      <CareerPath />
-
-      <div className="mt-24 max-w-5xl mx-auto">
-        {/* Header Section */}
-        <div className="text-center mb-16">
-          <h3 className="font-['Playfair_Display'] text-3xl md:text-4xl font-bold text-[var(--color-teks)] mb-4">
-            Lowongan Terbuka
-          </h3>
-          <div className="w-12 h-1 bg-[var(--color-utama)] mx-auto mb-6"></div>
-          <p className="text-[var(--color-teks-muted)] max-w-xl mx-auto text-sm md:text-base leading-relaxed">
-            Temukan peluang karir yang tepat dan jadilah bagian dari perjalanan transformasi AS PUTRA.
-          </p>
+      <div className="max-w-5xl mx-auto px-4 md:px-0">
+        
+        {/* ⚡ Header Section: Kontras Tinggi */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-3 text-[var(--color-utama)] mb-4">
+              <div className="p-2 bg-[var(--color-utama)]/10 rounded-lg">
+                <BriefcaseIcon className="w-5 h-5 animate-bounce" />
+              </div>
+              <span className="text-xs uppercase tracking-[0.4em] font-black">Peluang Karir</span>
+            </div>
+            <h3 className="font-['Playfair_Display'] text-4xl md:text-6xl text-white leading-tight">
+              Temukan <span className="italic text-[var(--color-utama)]">Potensi</span> Terbaikmu.
+            </h3>
+          </div>
+          <div className="border-l-4 border-[var(--color-utama)] pl-6">
+            <p className="text-gray-200 text-base md:text-lg leading-relaxed max-w-xs">
+              Kami mencari pemimpin masa depan untuk bertumbuh bersama keluarga besar AS PUTRA.
+            </p>
+          </div>
         </div>
 
-        {/* Jobs List */}
-        <div className="grid gap-4">
+        {/* 📋 Job Board: High Visibility */}
+        <div className="grid gap-6">
           {jobOpeningsData.map((job, index) => (
             <div
               key={job.id}
               ref={(el) => (jobsRef.current[index] = el)}
-              className="group relative bg-white border border-gray-100 rounded-2xl p-5 md:p-7 transition-all duration-300 hover:border-[var(--color-utama)]/30 hover:shadow-xl hover:shadow-blue-500/5"
+              className="group"
             >
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                
-                {/* Job Info */}
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="p-2 bg-blue-50 text-[var(--color-utama)] rounded-lg">
-                      <BriefcaseIcon className="w-5 h-5" />
-                    </span>
-                    <h4 className="text-xl font-bold text-[var(--color-teks)] group-hover:text-[var(--color-utama)] transition-colors">
+              <div 
+                onClick={() => handleViewDetail(job)}
+                className="relative bg-white/5 border border-white/10 rounded-3xl p-6 md:p-10 transition-all duration-500 cursor-pointer hover:bg-white/[0.08] hover:border-[var(--color-utama)]/50 shadow-xl"
+              >
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10">
+                  
+                  <div className="flex-1">
+                    {/* Badge Row */}
+                    <div className="flex items-center gap-4 mb-6">
+                      <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-[var(--color-utama)] text-[#0A1128] rounded-full shadow-lg shadow-[var(--color-utama)]/20">
+                        {job.type}
+                      </span>
+                      <div className="h-1 w-1 bg-white/30 rounded-full" />
+                      <span className="text-gray-300 text-xs font-bold uppercase tracking-tighter uppercase">{job.salary} Package</span>
+                    </div>
+                    
+                    <h4 className="text-3xl md:text-4xl font-['Playfair_Display'] text-white mb-6 group-hover:translate-x-2 transition-transform duration-500 font-bold">
                       {job.title}
                     </h4>
-                    <span className="hidden md:block text-[10px] font-bold uppercase tracking-widest px-2 py-1 bg-gray-100 text-gray-500 rounded">
-                      {job.type}
-                    </span>
+
+                    {/* Meta Info: Teks gray-200 untuk Readability */}
+                    <div className="flex flex-wrap gap-x-8 gap-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
+                          <MapPinIcon className="w-4 h-4 text-[var(--color-utama)]" />
+                        </div>
+                        <span className="text-gray-200 font-medium">{job.location}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
+                          <AcademicCapIcon className="w-4 h-4 text-[var(--color-utama)]" />
+                        </div>
+                        <span className="text-gray-200 font-medium">{job.requirement}</span>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-6 text-sm text-[var(--color-teks-muted)]">
-                    <div className="flex items-center gap-2">
-                      <MapPinIcon className="w-4 h-4 text-gray-400" />
-                      <span>{job.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <AcademicCapIcon className="w-4 h-4 text-gray-400" />
-                      <span>{job.requirement}</span>
-                    </div>
+                  {/* Desktop Action: Panah yang sangat jelas */}
+                  <div className="flex items-center justify-between lg:justify-end border-t border-white/5 lg:border-none pt-6 lg:pt-0 group">
+                     <span className="lg:hidden text-xs text-white/50 uppercase tracking-[0.2em] font-bold">Detail Pekerjaan</span>
+                     <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[var(--color-utama)] group-hover:scale-110 transition-all duration-500 shadow-lg">
+                        <ArrowUpRightIcon className="w-7 h-7 text-white group-hover:text-[#0A1128] transition-colors" />
+                     </div>
                   </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex items-center gap-3 border-t md:border-t-0 pt-4 md:pt-0">
-                  <button
-                    onClick={() => handleViewDetail(job)}
-                    className="p-3 text-gray-400 hover:text-[var(--color-utama)] hover:bg-blue-50 rounded-xl transition-all"
-                    title="Detail Pekerjaan"
-                  >
-                    <InformationCircleIcon className="w-6 h-6" />
-                  </button>
-                  
-                  <a
-                    href="https://ig.me/m/ptasputra"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-8 py-3 bg-[var(--color-utama)] text-white text-sm font-bold rounded-xl transition-all duration-300 hover:bg-opacity-90 hover:translate-x-1 shadow-lg shadow-blue-500/20"
-                  >
-                    <span>Lamar Sekarang</span>
-                    <PaperAirplaneIcon className="w-4 h-4 -rotate-45" />
-                  </a>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Footer Info */}
-        <div className="mt-12 text-center p-8 bg-gray-50 rounded-3xl">
-          <p className="text-[var(--color-teks-muted)] text-sm">
-            Posisi yang dicari tidak tersedia? Kami selalu terbuka untuk talenta hebat. <br className="hidden md:block" />
-            Kirimkan CV terbuka Anda ke 
-            <a
-              href="mailto:recruitment@asputra.com"
-              className="ml-1 text-[var(--color-utama)] font-bold hover:underline"
-            >
-              recruitment@asputra.com
-            </a>
+        {/* 📬 Footer: Kontras & Jelas */}
+        <div className="mt-20 p-10 rounded-[2.5rem] bg-gradient-to-br from-white/5 to-transparent border border-white/10 text-center relative overflow-hidden">
+          {/* Subtle Silhouette Background */}
+          <div className="absolute top-0 right-0 p-4 opacity-5">
+             <SparklesIcon className="w-32 h-32 text-white" />
+          </div>
+
+          <p className="text-gray-300 text-lg md:text-xl mb-6 font-medium">
+            Ingin posisi yang berbeda?
           </p>
+          <a
+            href="mailto:recruitment@asputra.com"
+            className="group inline-flex flex-col md:flex-row items-center gap-2 md:gap-4 text-white hover:text-[var(--color-utama)] transition-all duration-300"
+          >
+            <span className="text-sm md:text-2xl font-bold tracking-tight">Kirim CV Terbuka ke:</span>
+            <span className="text-xl md:text-2xl font-black text-[var(--color-utama)] underline underline-offset-[12px] decoration-white/20 group-hover:decoration-[var(--color-utama)] transition-all">
+              recruitment@asputra.com
+            </span>
+          </a>
         </div>
       </div>
 

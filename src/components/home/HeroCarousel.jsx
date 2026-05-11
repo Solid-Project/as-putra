@@ -1,18 +1,15 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 
-const HeroCarousel = ({ isActive, data }) => {
+const ASSET_URL = import.meta.env.VITE_API_URL;
+
+const HeroCarousel = ({ data, isActive, index }) => {
+  // Parsing slides dari layout_data yang dikirim dari API
   const slides = useMemo(() => {
     return (
       data?.layout_data?.map((item) => ({
-        type: item.type,
+        type: item.type || "image",
         src: item.path,
         caption: item.caption || "",
       })) || []
@@ -21,58 +18,60 @@ const HeroCarousel = ({ isActive, data }) => {
 
   const [current, setCurrent] = useState(0);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
-  const [isFirstLoaded, setIsFirstLoaded] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const [isFirstLoaded, setIsFirstLoaded] = useState(false);
 
   const videoRef = useRef(null);
   const intervalRef = useRef(null);
   const isReadyRef = useRef(false);
 
+  // Refs untuk Animasi GSAP
   const titleRef = useRef(null);
   const lineRef = useRef(null);
   const subtitleRef = useRef(null);
   const buttonsRef = useRef(null);
-  const scrollBtnRef = useRef(null);
 
   const currentSlide = slides[current] || {};
   const isVideo = currentSlide?.type?.startsWith("video");
 
-  // 🔥 PRELOAD IMAGE (sekali saja)
+  // 1. PRELOAD IMAGES untuk menghindari flickering
   useEffect(() => {
     if (!slides.length) return;
 
-    let loaded = 0;
-    const total = slides.filter(s => !s.type.startsWith("video")).length;
-
-    if (total === 0) {
+    const images = slides.filter((s) => !s.type.startsWith("video"));
+    if (images.length === 0) {
       setIsInitialLoading(false);
       return;
     }
 
-    slides.forEach((slide) => {
-      if (!slide.type.startsWith("video")) {
-        const img = new Image();
-        img.src = `http://localhost:8000/storage/${slide.src}`;
-        img.onload = () => {
-          loaded++;
-          if (loaded === total) {
-            setIsInitialLoading(false);
-          }
-        };
-      }
+    let loadedCount = 0;
+    images.forEach((slide) => {
+      const img = new Image();
+      img.src = `${ASSET_URL}/storage/${slide.src}`;
+      img.onload = () => {
+        loadedCount++;
+        if (loadedCount === images.length) setIsInitialLoading(false);
+      };
+      img.onerror = () => {
+        loadedCount++;
+        if (loadedCount === images.length) setIsInitialLoading(false);
+      };
     });
   }, [slides]);
 
-  // 🔥 delay biar skeleton fade dulu
+  // 2. Delay tampilkan konten setelah loading selesai
   useEffect(() => {
     if (!isInitialLoading) {
-      const t = setTimeout(() => setShowContent(true), 400);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => setShowContent(true), 300);
+      return () => clearTimeout(timer);
     }
   }, [isInitialLoading]);
 
+  // 3. Autoplay Logic
   const startAutoPlay = useCallback(() => {
     clearInterval(intervalRef.current);
+    if (slides.length <= 1) return;
+
     intervalRef.current = setInterval(() => {
       if (isReadyRef.current && !document.hidden) {
         setCurrent((prev) => (prev + 1) % slides.length);
@@ -84,11 +83,9 @@ const HeroCarousel = ({ isActive, data }) => {
     clearInterval(intervalRef.current);
   }, []);
 
-  // 🔥 GSAP hanya sekali
+  // 4. GSAP Entrance Animation (Hanya jalan saat section AKTIF)
   useEffect(() => {
-    if (!isActive) return;
-    if (!showContent) return;
-    if (isFirstLoaded) return;
+    if (!isActive || !showContent || isFirstLoaded) return;
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -99,122 +96,156 @@ const HeroCarousel = ({ isActive, data }) => {
         },
       });
 
-      tl.fromTo(titleRef.current, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 })
-        .fromTo(lineRef.current, { width: 0 }, { width: 80, duration: 0.6 }, "-=0.4")
-        .fromTo(subtitleRef.current, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, "-=0.3")
-        .fromTo(buttonsRef.current.children, { y: 30, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.15, duration: 0.8 }, "-=0.2");
-
-      gsap.fromTo(scrollBtnRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1, delay: 1.2 });
+      tl.fromTo(titleRef.current, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power4.out" })
+        .fromTo(lineRef.current, { width: 0 }, { width: 80, duration: 0.8, ease: "power2.inOut" }, "-=0.6")
+        .fromTo(subtitleRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, "-=0.4")
+        .fromTo(
+          buttonsRef.current.children,
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, stagger: 0.2, duration: 0.6 },
+          "-=0.3"
+        );
     });
 
     return () => ctx.revert();
-  }, [isActive, showContent]);
+  }, [isActive, showContent, isFirstLoaded, startAutoPlay]);
 
-  // 🔥 subtitle animasi saat slide ganti
+  // 5. Animasi teks saat slide berubah
   useEffect(() => {
-    if (isActive && showContent) {
-      gsap.fromTo(subtitleRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
+    if (isActive && showContent && isFirstLoaded) {
+      gsap.fromTo(
+        subtitleRef.current,
+        { opacity: 0, x: 20 },
+        { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }
+      );
     }
-  }, [current, isActive, showContent]);
+  }, [current, isActive, showContent, isFirstLoaded]);
 
-  // 🔥 video handler
+  // 6. Video Handler (Play/Pause & Auto-next)
   useEffect(() => {
-    if (!isVideo || !videoRef.current) return;
+    if (!isVideo || !videoRef.current || !isActive) return;
 
     const video = videoRef.current;
     video.currentTime = 0;
-    video.play().catch(() => {});
+    video.play().catch(() => console.log("Autoplay video tertahan browser"));
 
-    const handleEnded = () =>
+    const handleEnded = () => {
       setCurrent((prev) => (prev + 1) % slides.length);
+    };
 
     video.addEventListener("ended", handleEnded);
     return () => video.removeEventListener("ended", handleEnded);
-  }, [current, isVideo]);
+  }, [current, isVideo, slides.length, isActive]);
 
-  useEffect(() => () => clearInterval(intervalRef.current), []);
+  useEffect(() => {
+    return () => clearInterval(intervalRef.current);
+  }, []);
 
   if (!slides.length) return null;
 
   return (
-    <section className="section relative h-screen flex items-center justify-center text-center overflow-hidden bg-black">
-
-      {/* 🔥 SKELETON (ONLY ONCE) */}
+    <section 
+      className="section relative h-screen w-full flex items-center justify-center text-center overflow-hidden bg-black"
+      id={`section-${index}`}
+      data-title={data?.title || "Hero"}
+      data-theme="dark"
+    >
+      {/* Skeleton Overlay */}
       <div
-        className={`absolute inset-0 z-20 transition-all duration-700 ${
-          isInitialLoading
-            ? "opacity-100"
-            : "opacity-0 pointer-events-none blur-sm"
+        className={`absolute inset-0 z-30 bg-gray-950 transition-opacity duration-1000 ${
+          isInitialLoading ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black" />
+      />
 
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="w-[200%] h-full animate-shimmer bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        </div>
-
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-full max-w-[1200px] mx-auto px-5 sm:px-8 md:px-12 lg:px-16">
-            <div className="h-[60px] w-[60%] bg-white/10 mx-auto rounded mb-4" />
-            <div className="h-[2px] w-[80px] bg-white/20 mx-auto mb-6" />
-            <div className="h-[20px] w-[50%] bg-white/10 mx-auto rounded mb-8" />
-            <div className="flex justify-center gap-4">
-              <div className="h-[48px] w-[140px] bg-white/10 rounded-full" />
-              <div className="h-[48px] w-[140px] bg-white/10 rounded-full" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 🔥 SLIDES */}
+      {/* Media Slides */}
       <div className="absolute inset-0 z-0">
         {slides.map((slide, idx) => (
           <div
             key={idx}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              idx === current ? "opacity-100 z-10" : "opacity-0"
+            className={`absolute inset-0 transition-opacity duration-1500 ease-in-out ${
+              idx === current ? "opacity-100" : "opacity-0"
             }`}
           >
             {slide.type?.startsWith("video") ? (
               <video
                 ref={idx === current ? videoRef : null}
-                src={`http://localhost:8000/storage/${slide.src}`}
+                src={`${ASSET_URL}/storage/${slide.src}`}
                 muted
                 playsInline
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover scale-105"
               />
             ) : (
               <img
-                src={`http://localhost:8000/storage/${slide.src}`}
-                className="w-full h-full object-cover"
+                src={`${ASSET_URL}/storage/${slide.src}`}
+                className="w-full h-full object-cover scale-105"
                 alt=""
               />
             )}
-            <div className="absolute inset-0 bg-black/50" />
+            {/* Overlay Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70" />
           </div>
         ))}
       </div>
 
-      {/* 🔥 CONTENT */}
-      <div className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-8 md:px-12 lg:px-16">
-        <h1 ref={titleRef} className="text-white text-4xl md:text-6xl mb-4">
+      {/* Content Container */}
+      <div className={`relative z-20 w-full max-w-[1100px] mx-auto px-6 transition-opacity duration-700 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
+        
+        <h1
+          ref={titleRef}
+          className="text-white font-bold text-4xl sm:text-6xl md:text-7xl leading-tight mb-6 drop-shadow-lg"
+        >
           {data?.title || "Membangun Masa Depan"}
         </h1>
 
-        <div ref={lineRef} className="h-0.5 bg-[var(--color-utama)] mx-auto mb-6" style={{ width: 0 }} />
+        <div
+          ref={lineRef}
+          className="h-[3px] bg-[var(--color-utama)] mx-auto mb-8 rounded-full shadow-[0_0_15px_var(--color-utama)]"
+          style={{ width: 0 }}
+        />
 
-        <p ref={subtitleRef} className="text-white/90 mb-8">
-          {currentSlide.caption || "Deskripsi singkat perusahaan"}
-        </p>
+        <div className="min-h-[3rem] mb-12">
+          <p
+            ref={subtitleRef}
+            className="text-white/90 text-base sm:text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed"
+          >
+            {currentSlide.caption || "Deskripsi singkat perusahaan"}
+          </p>
+        </div>
 
-        <div ref={buttonsRef} className="flex justify-center gap-4">
-          <Link to="/sector" onClick={stopAutoPlay} className="bg-[var(--color-utama)] px-6 py-3 rounded-full text-white">
-            Sektor Kami
+        <div
+          ref={buttonsRef}
+          className="flex flex-col sm:flex-row justify-center items-center gap-5"
+        >
+          <Link
+            to="/sektor-bisnis"
+            onClick={stopAutoPlay}
+            className="group relative px-8 py-4 rounded-full bg-[var(--color-utama)] text-white font-bold overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl"
+          >
+            <span className="relative z-10">Sektor Kami</span>
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
           </Link>
-          <Link to="/about" onClick={stopAutoPlay} className="bg-white/20 px-6 py-3 rounded-full text-white">
+
+          <Link
+            to="/tentang-kami"
+            onClick={stopAutoPlay}
+            className="px-8 py-4 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/30 font-medium hover:bg-white/20 transition-all hover:scale-105"
+          >
             Tentang Kami
           </Link>
         </div>
+      </div>
+
+      {/* Pagination Dots (Optional Visual) */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-3">
+        {slides.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrent(idx)}
+            className={`h-1.5 transition-all duration-500 rounded-full ${
+              idx === current ? "w-8 bg-[var(--color-utama)]" : "w-2 bg-white/30"
+            }`}
+          />
+        ))}
       </div>
     </section>
   );
