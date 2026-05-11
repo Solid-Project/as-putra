@@ -1,21 +1,75 @@
 // src/pages/AboutPage.jsx
-import React from 'react';
-import HeroAbout from '@/components/about/HeroAbout';
-import VisionMission from '@/components/about/VisionMission';
-import OurValues from '@/components/about/OurValues';
-import HistoryTimeline from '@/components/about/HistoryTimeline';
-import useFullpageSnap from '@/hooks/useFullPageSnap';
+import React, { useEffect, useState } from "react";
+import HeroCarousel from "@/components/home/HeroCarousel";
+import MilestoneSection from "@/components/about/MilestoneSection";
+import OurValues from "@/components/about/OurValues";
+import VissionMission from "@/components/about/VissionMission";
+import HeroSkeleton from "@/components/skeleton/HeroSkeleton";
+import useFullpageSnap from "@/hooks/useFullPageSnap"; 
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import api from "@/lib/api"; 
+
+const COMPONENT_MAP = {
+  HeroCarousel,
+  VissionMission, // Pastikan ejaan 'ss' sesuai JSON API
+  OurValues,
+  MilestoneSection
+};
 
 const AboutPage = () => {
-  // Fullpage snap with enabled config
-  const { activeIndex } = useFullpageSnap({ enabled: true });
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get("/api/v1/page/tentang");
+        setData(response.data);
+      } catch (error) {
+        console.error("Failed to fetch page data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const { activeIndex } = useFullpageSnap({ 
+    enabled: !!data,
+    config: { sectionSelector: ".section" }
+  });
+
+  useEffect(() => {
+    if (data) {
+      const timer = setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+        window.scrollTo(0, 0);
+      }, 150); 
+      return () => clearTimeout(timer);
+    }
+  }, [data]);
 
   return (
-    <main className="overflow-x-hidden">
-      <HeroAbout activeIndex={activeIndex} />
-      <VisionMission activeIndex={activeIndex} />
-      <OurValues activeIndex={activeIndex} />
-      <HistoryTimeline activeIndex={activeIndex} />
+    <main className="relative bg-black min-h-screen">
+      <Navbar />
+      {!data ? (
+        <HeroSkeleton />
+      ) : (
+        <div className="fullpage-wrapper">
+          {data?.data?.map((section, index) => {
+            const Component = COMPONENT_MAP[section.layout_name];
+            if (!Component) return null;
+
+            return (
+              <Component
+                key={section.id}
+                data={section} // Data dikirim dari sini
+                isActive={activeIndex === index}
+                index={index}
+              />
+            );
+          })}
+          <Footer />
+        </div>
+      )}
     </main>
   );
 };

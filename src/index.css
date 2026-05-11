@@ -2,6 +2,8 @@
    FONT
 ========================= */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=KoHo:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gotham:wght@400;700&display=swap');
 @import "tailwindcss";
 
 /* =========================
@@ -150,4 +152,31 @@ button {
 button:focus-visible {
   outline: 2px solid var(--color-utama);
   outline-offset: 2px;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(50%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.8s infinite;
+}
+
+@font-face {
+  font-family: "Gotham";
+  src: url("/fonts/Gotham.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+}
+
+.font-gotham {
+  font-family: "Gotham", sans-serif;
+}
+.font-koho {
+  font-family: "KoHo", sans-serif;
 }

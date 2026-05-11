@@ -2,7 +2,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
-
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import logoIcon from "@/assets/logo.jpg"; // Mengikuti aset yang sama dengan Teaser
+gsap.registerPlugin(ScrollTrigger);
 const newsData = [
   // CSR
   {
@@ -89,286 +91,176 @@ const newsData = [
   },
 ];
 
-const categoryConfig = {
-  all: { label: "Semua", color: "bg-gray-100 text-gray-700", icon: "📰" },
-  event: { label: "Acara", color: "bg-blue-100 text-blue-700", icon: "🎉" },
-  achievement: {
-    label: "Prestasi",
-    color: "bg-green-100 text-green-700",
-    icon: "🏆",
-  },
-  csr: { label: "CSR", color: "bg-orange-100 text-orange-700", icon: "🌱" },
-};
-
-const filters = [
-  { key: "all", label: "Semua" },
-  { key: "event", label: "Acara" },
-  { key: "achievement", label: "Prestasi" },
-  { key: "csr", label: "CSR" },
-];
-
 const NewsSection = ({ activeIndex }) => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
   const sectionRef = useRef(null);
-  const filtersRef = useRef([]);
-  const searchRef = useRef(null);
   const titleRef = useRef(null);
   const cardsRef = useRef([]);
-  const SECTION_INDEX = 1; // sesuaikan urutan kamu
-  const isActive = activeIndex === SECTION_INDEX;
+  const siluetRefs = useRef([]); // Ref untuk banyak siluet
 
-  // Filter berita
   const filteredNews = newsData.filter(
     (item) =>
       (activeFilter === "all" || item.category === activeFilter) &&
       (searchQuery === "" ||
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.desc.toLowerCase().includes(searchQuery.toLowerCase())),
+        item.desc.toLowerCase().includes(searchQuery.toLowerCase()))
   );
-
-  // Reset refs saat filter/search berubah
-  useEffect(() => {
-    cardsRef.current = [];
-  }, [activeFilter, searchQuery]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const cards = cardsRef.current;
-
-      // ❗ RESET REFS biar gak numpuk
-      cardsRef.current = cards.slice(0, filteredNews.length);
-
-      // ❗ kalau TIDAK aktif → tampil normal (biar gak hilang)
-      if (!isActive) {
-        gsap.set(cards, { opacity: 1, y: 0, scale: 1 });
-        gsap.set(filtersRef.current, { opacity: 1, y: 0 });
-        gsap.set(searchRef.current, { opacity: 1, y: 0, scale: 1 });
-        gsap.set(titleRef.current, { opacity: 1, y: 0 });
-        return;
-      }
-
-      // 🔥 INITIAL STATE (pas masuk section)
-      gsap.set(titleRef.current, { opacity: 0, y: 30 });
-      gsap.set(filtersRef.current, { opacity: 0, y: 30 });
-      gsap.set(searchRef.current, { opacity: 0, y: 30, scale: 0.95 });
-
-      gsap.set(cards, {
-        opacity: 0,
-        y: 60,
-        scale: 0.95,
+      // 1. Animasi Parallax untuk Siluet
+      siluetRefs.current.forEach((el, i) => {
+        gsap.to(el, {
+          y: (i % 2 === 0 ? -100 : 100), // Arah gerak selang-seling
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
       });
 
-      // 🔥 ANIMATION
-      const tl = gsap.timeline();
-
-      tl.to(titleRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        ease: "power3.out",
-      })
-        .to(
-          filtersRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            stagger: 0.08,
-            duration: 0.4,
-            ease: "back.out(0.8)",
-          },
-          "-=0.3",
-        )
-        .to(
-          searchRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.4,
-            ease: "back.out(0.8)",
-          },
-          "-=0.3",
-        )
-        .to(
-          cards,
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            stagger: 0.08,
-            duration: 0.6,
-            ease: "back.out(0.7)",
-          },
-          "-=0.2",
+      // 2. Animasi Masuk Content (hanya jalan saat section aktif)
+      if (activeIndex === 1) {
+        gsap.fromTo(titleRef.current, 
+          { y: 50, opacity: 0 }, 
+          { y: 0, opacity: 1, duration: 1, ease: "power4.out" }
         );
+        
+        gsap.fromTo(cardsRef.current, 
+          { y: 100, opacity: 0 }, 
+          { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: "power2.out", delay: 0.2 }
+        );
+      }
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [isActive, filteredNews]);
+  }, [activeIndex, filteredNews]);
 
   return (
     <section
       ref={sectionRef}
-      className="section py-20 px-5 bg-gradient-to-b from-white to-gray-50"
-      data-title="Berita Terbaru"
+      className="section no-snap relative min-h-screen py-24 px-6 bg-white overflow-hidden"
+      data-title="News & Activity"
       data-theme="light"
     >
-      <div className="max-w-[1200px] mx-auto">
-        {/* Header */}
-        <div ref={titleRef} className="text-center mb-8">
-          <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl text-[var(--color-teks)] mb-2">
-            Berita Terkini
-          </h2>
-          <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-[var(--color-utama)] to-transparent mx-auto"></div>
-          <p className="text-[var(--color-teks-muted)] mt-2 text-sm">
-            Menampilkan {filteredNews.length} berita
-          </p>
-        </div>
-
-        {/* Control Panel */}
-        <div className="flex flex-col md:flex-row md:justify-between items-center mb-12 gap-4">
-          <div className="flex flex-wrap justify-center gap-3">
-            {filters.map((filter, idx) => (
-              <button
-                key={filter.key}
-                ref={(el) => (filtersRef.current[idx] = el)}
-                onClick={() => setActiveFilter(filter.key)}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${activeFilter === filter.key ? "bg-[var(--color-utama)] text-white shadow-md" : "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:-translate-y-0.5"}`}
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
-          <div ref={searchRef} className="max-w-md w-full">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Cari berita..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-5 py-3 pl-12 border border-gray-200 rounded-full focus:outline-none focus:border-[var(--color-utama)] focus:ring-1 focus:ring-[var(--color-utama)] transition-all duration-300"
-              />
-              <svg
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        {/* Grid Berita */}
-        {filteredNews.length === 0 ? (
-          <div className="text-center py-20">
-            <div className="text-6xl mb-4">📭</div>
-            <h3 className="text-xl font-semibold text-[var(--color-teks)] mb-2">
-              Tidak Ada Berita
-            </h3>
-            <p className="text-[var(--color-teks-muted)]">
-              Belum ada berita yang sesuai dengan filter yang dipilih.
-            </p>
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-6 px-6 py-2 bg-[var(--color-utama)] text-white rounded-full text-sm hover:bg-[var(--color-utama-hover)] transition-all"
-            >
-              Reset Filter
-            </button>
-          </div>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredNews.map((item, idx) => (
-              <Link
-                key={`${item.id}-${activeFilter}`}
-                to={`/news/${item.id}`}
-                ref={(el) => (cardsRef.current[idx] = el)}
-                className="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 cursor-pointer"
-              >
-                <div className="relative overflow-hidden h-56">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="absolute top-4 left-4 z-10">
-                    <span
-                      className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold ${categoryConfig[item.category]?.color || categoryConfig.all.color} shadow-md`}
-                    >
-                      <span>
-                        {categoryConfig[item.category]?.icon ||
-                          categoryConfig.all.icon}
-                      </span>
-                      <span>
-                        {categoryConfig[item.category]?.label || item.category}
-                      </span>
-                    </span>
-                  </div>
-                  <div className="absolute bottom-4 right-4 z-10">
-                    <div className="bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700 shadow-md flex items-center gap-1">
-                      <svg
-                        className="w-3 h-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                        />
-                      </svg>
-                      {item.date}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-[var(--color-teks)] mb-3 line-clamp-2 group-hover:text-[var(--color-utama)] transition-colors duration-300">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-[var(--color-teks-muted)] leading-relaxed line-clamp-3 mb-4">
-                    {item.desc}
-                  </p>
-                  <div className="flex items-center gap-2 text-[var(--color-utama)] font-medium text-sm group-hover:gap-3 transition-all duration-300">
-                    <span>Baca Selengkapnya</span>
-                    <svg
-                      className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                      />
-                    </svg>
-                  </div>
-                </div>
-
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[var(--color-utama)] to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-              </Link>
-            ))}
-          </div>
-        )}
+      {/* LAYER SILUET - Tersebar di latar belakang */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Siluet 1 - Kiri Atas */}
+        <img 
+          ref={el => siluetRefs.current[0] = el}
+          src={logoIcon} 
+          className="absolute -top-10 -left-20 w-[400px] opacity-[0.04] grayscale rotate-12" 
+          alt="" 
+        />
+        {/* Siluet 2 - Kanan Tengah */}
+        <img 
+          ref={el => siluetRefs.current[1] = el}
+          src={logoIcon} 
+          className="absolute top-[30%] -right-32 w-[500px] opacity-[0.03] grayscale -rotate-12" 
+          alt="" 
+        />
+        {/* Siluet 3 - Kiri Bawah */}
+        <img 
+          ref={el => siluetRefs.current[2] = el}
+          src={logoIcon} 
+          className="absolute bottom-0 -left-10 w-[450px] opacity-[0.04] grayscale rotate-[20deg]" 
+          alt="" 
+        />
+        {/* Siluet 4 - Tengah (Sangat Besar) */}
+        <img 
+          ref={el => siluetRefs.current[3] = el}
+          src={logoIcon} 
+          className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[800px] opacity-[0.02] grayscale" 
+          alt="" 
+        />
       </div>
 
-      <style>{`
-        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-      `}</style>
+      <div className="max-w-[1300px] mx-auto relative z-10">
+        {/* HEADER */}
+        <div ref={titleRef} className="mb-20 text-center md:text-left">
+          <div className="inline-block px-4 py-1 border border-[#FFC700] rounded-full mb-6">
+            <span className="text-[#B8860B] font-bold tracking-[0.3em] uppercase text-[9px]">
+              Latest News & Activity
+            </span>
+          </div>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+            <h2 className="text-5xl md:text-6xl font-['Playfair_Display'] font-bold text-[#0F1A3E]">
+              Jejak <span className="text-[#FFC700] italic">Informasi</span>
+            </h2>
+            <p className="text-gray-500 max-w-md text-sm md:text-base leading-relaxed border-l-4 border-[#FFC700] pl-6">
+              Dokumentasi langkah nyata <span className="text-[#0F1A3E] font-bold">AS PUTRA Group</span> 
+              dalam inovasi industri dan kebermanfaatan sosial bagi masyarakat.
+            </p>
+          </div>
+        </div>
+
+        {/* SEARCH & FILTER AREA */}
+        <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-6 bg-gray-50/50 backdrop-blur-sm p-4 rounded-3xl border border-gray-100">
+           <div className="flex flex-wrap gap-2">
+             {["all", "event", "achievement", "csr"].map((cat) => (
+               <button
+                 key={cat}
+                 onClick={() => setActiveFilter(cat)}
+                 className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
+                   activeFilter === cat ? "bg-[#FFC700] text-[#0F1A3E]" : "hover:bg-white text-gray-400"
+                 }`}
+               >
+                 {cat}
+               </button>
+             ))}
+           </div>
+           <input 
+              type="text" 
+              placeholder="Cari berita..." 
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-white px-6 py-3 rounded-2xl text-sm border border-gray-100 focus:outline-none focus:ring-2 focus:ring-[#FFC700]/20 w-full md:w-64"
+           />
+        </div>
+
+        {/* GRID BERITA */}
+        <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+          {filteredNews.map((item, idx) => (
+            <Link
+              key={item.id}
+              to={`/news/${item.id}`}
+              ref={(el) => (cardsRef.current[idx] = el)}
+              className="group block"
+            >
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] mb-6 shadow-xl shadow-gray-200/50">
+                <img
+                  src={item.image}
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  alt=""
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F1A3E]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                
+                {/* Float Date */}
+                <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl">
+                   <p className="text-[10px] font-black text-[#0F1A3E]">{item.date}</p>
+                </div>
+              </div>
+
+              <div className="px-2">
+                <h3 className="text-xl font-bold text-[#0F1A3E] leading-tight mb-3 group-hover:text-[#FFC700] transition-colors line-clamp-2">
+                  {item.title}
+                </h3>
+                <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-2">
+                  {item.desc}
+                </p>
+                <div className="flex items-center gap-3">
+                   <div className="h-[1px] w-8 bg-[#FFC700] group-hover:w-12 transition-all"></div>
+                   <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#0F1A3E]">Read Article</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
     </section>
   );
 };

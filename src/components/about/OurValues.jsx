@@ -1,65 +1,33 @@
+// src/components/about/OurValues.jsx
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { Handshake, Zap, Shield, Target, Trophy } from "lucide-react";
+import logoAsliUrl from "@/assets/logo.jpg"; 
 
-const OurValues = ({ activeIndex }) => {
+const OurValues = ({ data, activeIndex, index }) => {
   const sectionRef = useRef(null);
   const cardsRef = useRef([]);
-  const floatRef = useRef(null);
   const headerRef = useRef(null);
-  const descriptionRef = useRef(null);
+  const bgLogoRef = useRef(null);
   const hasAnimatedRef = useRef(false);
-  const SECTION_INDEX = 2; // sesuaikan urutan kamu
-  const isActive = activeIndex === SECTION_INDEX;
 
-  const values = [
-    {
-      number: "01",
-      title: "Berinovasi untuk Terus Bertumbuh",
-      desc: "Terbuka terhadap teknologi dan pembaruan di setiap lini usaha untuk meningkatkan kualitas dan efisiensi.",
-      icon: Handshake,
-    },
-    {
-      number: "02",
-      title: "Menjaga Amanah dengan Sepenuh Hati",
-      desc: "Menjalankan bisnis dengan jujur, bertanggung jawab, dan menjaga kualitas serta tujuan perusahaan.",
-      icon: Zap,
-    },
-    {
-      number: "03",
-      title: "Berkarya dengan Hati, Bekerja dengan Kebanggaan",
-      desc: "Bekerja dengan bangga, penuh tanggung jawab, dan memberikan kontribusi terbaik di setiap peran.",
-      icon: Shield,
-    },
-    {
-      number: "04",
-      title: "Tumbuh Bersama, Menguatkan Satu Sama Lain",
-      desc: "Membangun kolaborasi antar lini usaha dan lingkungan untuk menciptakan pertumbuhan yang berkelanjutan.",
-      icon: Target,
-    },
-    {
-      number: "05",
-      title: "Memberi Dampak Nyata bagi Sesama",
-      desc: "Menghadirkan dampak positif bagi masyarakat dan lingkungan melalui setiap aktivitas bisnis.",
-      icon: Trophy,
-    },
+  const isActive = activeIndex === index;
+  const COLOR_NAVY = "#1D2B53";
+  const COLOR_GOLD = "#FFC619";
+
+  const VALUE_IMAGES = [
+    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=400",
+    "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=400",
+    "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?auto=format&fit=crop&q=80&w=400",
+    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=400",
+    "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=400",
   ];
 
   useEffect(() => {
-    if (!sectionRef.current) return;
-
+    if (!sectionRef.current || !data) return;
     const cards = cardsRef.current.filter(Boolean);
 
     if (!isActive) {
-      // RESET
-      gsap.set([headerRef.current, descriptionRef.current, ...cards], {
-        clearProps: "all",
-      });
-
-      if (floatRef.current) {
-        gsap.set(floatRef.current, { clearProps: "all" });
-      }
-
+      gsap.set([headerRef.current, ...cards, bgLogoRef.current], { clearProps: "all" });
       hasAnimatedRef.current = false;
       return;
     }
@@ -67,332 +35,109 @@ const OurValues = ({ activeIndex }) => {
     if (hasAnimatedRef.current) return;
     hasAnimatedRef.current = true;
 
-    // ENTRY ANIMATION
     const tl = gsap.timeline();
-
-    tl.fromTo(
-      [headerRef.current, descriptionRef.current],
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, stagger: 0.1, duration: 0.7 },
-    ).fromTo(
-      cards,
-      { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        stagger: 0.08,
-        duration: 0.8,
-      },
-      "-=0.4",
+    
+    tl.fromTo(bgLogoRef.current, 
+      { opacity: 0, scale: 1.2, rotate: 0 },
+      { opacity: 0.04, scale: 1.1, rotate: -12, duration: 2, ease: "power2.out" }
     );
 
-    // FLOATING LOOP (ganti parallax scroll)
-    if (floatRef.current) {
-      gsap.to(floatRef.current.children, {
-        y: (i) => (i % 2 === 0 ? -20 : 20),
-        duration: 6,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-      });
-    }
-  }, [isActive]);
+    tl.fromTo(headerRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6 },
+      "-=1.5"
+    ).fromTo(cards,
+      { opacity: 0, y: 30, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, stagger: 0.08, duration: 0.6, ease: "power2.out" },
+      "-=0.4"
+    );
+  }, [isActive, data]);
+
+  if (!data) return null;
 
   return (
     <section
       ref={sectionRef}
-      className="section relative overflow-hidden"
-      id="our-values"
-      style={{
-        minHeight: "100vh",
-        paddingTop: "clamp(3rem, 8vh, 6rem)",
-        paddingBottom: "clamp(4rem, 10vh, 7rem)",
-        backgroundColor: "var(--color-bg-light)",
-      }}
+      className="section relative w-full h-[100vh] flex flex-col bg-white overflow-hidden"
+      id={`section-${index}`}
+      data-theme="light"
+      data-title="Our Values"
     >
-      {/* BACKGROUND IMAGE - ringan */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: "url('/react/img/mission.webp')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          opacity: 0.08,
-          zIndex: 0,
-        }}
-      />
-
-      {/* OVERLAY GRADIENT - ringan */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `
-            linear-gradient(
-              to bottom,
-              var(--color-bg-light) 0%,
-              rgba(255,255,255,0.9) 20%,
-              rgba(255,255,255,0.7) 50%,
-              rgba(255,255,255,0.9) 80%,
-              var(--color-bg-light) 100%
-            )
-          `,
-          zIndex: 1,
-        }}
-      />
-
-      {/* BACKGROUND SHAPES */}
-      <div
-        ref={floatRef}
-        className="absolute inset-0 pointer-events-none"
-        style={{ zIndex: 2 }}
-      >
-        <div
-          className="absolute rounded-full blur-3xl"
-          style={{
-            backgroundColor: "var(--color-utama)",
-            opacity: 0.06,
-            width: "min(40vw, 350px)",
-            height: "min(40vw, 350px)",
-            top: "10%",
-            left: "-5%",
-          }}
-        />
-
-        <div
-          className="absolute bottom-0 right-0 rounded-full blur-3xl"
-          style={{
-            backgroundColor: "var(--color-aksen)",
-            opacity: 0.05,
-            width: "min(35vw, 300px)",
-            height: "min(35vw, 300px)",
-            bottom: "-5%",
-            right: "-3%",
-          }}
-        />
-
-        <div
-          className="absolute rotate-12 rounded-2xl opacity-40 hidden lg:block"
-          style={{
-            border: "1px solid var(--color-utama)",
-            width: "min(12vw, 100px)",
-            height: "min(12vw, 100px)",
-            top: "20%",
-            right: "8%",
-          }}
-        />
-
-        <div
-          className="absolute opacity-15 hidden md:block"
-          style={{
-            backgroundImage:
-              "radial-gradient(var(--color-utama) 1px, transparent 1px)",
-            backgroundSize: "20px 20px",
-            width: "min(20vw, 150px)",
-            height: "min(20vw, 150px)",
-            bottom: "15%",
-            left: "3%",
-          }}
-        />
+      {/* BACKGROUND ACCENTS */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <div ref={bgLogoRef} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[800px] opacity-[0.04]">
+          <img src={logoAsliUrl} alt="" className="w-full h-auto grayscale" />
+        </div>
+        <div className="absolute top-0 right-[15%] w-[100px] h-full bg-gradient-to-b from-[#1D2B53]/5 via-transparent to-transparent -rotate-12" />
       </div>
 
-      {/* GRID LINES - tipis */}
-      <div
-        className="absolute inset-0 opacity-[0.02] pointer-events-none"
-        style={{ zIndex: 2 }}
-      >
-        <div
-          className="w-full h-full"
-          style={{
-            backgroundImage: `
-              linear-gradient(to right, var(--color-utama) 1px, transparent 1px),
-              linear-gradient(to bottom, var(--color-utama) 1px, transparent 1px)
-            `,
-            backgroundSize: "60px 60px",
-          }}
-        />
-      </div>
-
-      <div
-        className="mx-auto relative"
-        style={{
-          maxWidth: "1280px",
-          paddingLeft: "clamp(1rem, 5vw, 2rem)",
-          paddingRight: "clamp(1rem, 5vw, 2rem)",
-          zIndex: 10,
-        }}
-      >
-        {/* HEADER */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 mb-12 lg:mb-16">
-          <div
-            ref={headerRef}
-            className="max-w-xl mx-auto lg:mx-0 text-center lg:text-left"
-          >
-            <div className="flex items-center gap-3 mb-4 justify-center lg:justify-start">
-              <div
-                className="h-0.5 rounded-full"
-                style={{
-                  backgroundColor: "var(--color-utama)",
-                  width: "clamp(30px, 5vw, 48px)",
-                }}
-              />
-              <span
-                className="font-semibold tracking-[0.2em] uppercase text-xs md:text-sm"
-                style={{ color: "var(--color-utama)" }}
-              >
-                Core Values
-              </span>
-            </div>
-
-            <h2
-              className="font-['Playfair_Display'] font-bold leading-tight"
-              style={{
-                color: "var(--color-teks)",
-                fontSize: "clamp(2rem, 6vw, 3rem)",
-              }}
-            >
-              The Principles That Guide Our{" "}
-              <span style={{ color: "var(--color-utama)" }}>Growth</span>
-            </h2>
+      {/* MAIN CONTAINER: Menggunakan Flex-Col & Justify-Center agar proporsional */}
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 h-full flex flex-col justify-center py-6">
+        
+        {/* HEADER: Margin diperkecil agar tidak mendorong card ke bawah */}
+        <div ref={headerRef} className="mb-8 lg:mb-10">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-0.5" style={{ backgroundColor: COLOR_GOLD }} />
+            <span className="font-black tracking-[0.3em] uppercase text-[9px] md:text-[10px]" style={{ color: COLOR_NAVY }}>
+              {data.subtitle || "CORE VALUES"}
+            </span>
           </div>
-
-          <p
-            ref={descriptionRef}
-            className="font-light max-w-md mx-auto lg:mx-0 text-center lg:text-left lg:border-l-2 lg:pl-8 leading-relaxed"
-            style={{
-              color: "var(--color-teks-muted)",
-              borderColor: "var(--color-utama)",
-              fontSize: "clamp(0.875rem, 2vw, 1rem)",
-            }}
-          >
-            Nilai-nilai ini menjadi pondasi dalam setiap langkah AS Putra dalam
-            bekerja, berinovasi, dan membangun setiap sektor bisnis secara
-            berkelanjutan.
-          </p>
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-['Playfair_Display'] font-extrabold text-[#1D2B53] leading-tight">
+              Principles Of Our <span style={{ color: COLOR_GOLD }}>Growth</span>
+            </h2>
+            <p className="max-w-md text-gray-500 text-xs md:text-sm border-l-2 pl-4 font-medium leading-relaxed" style={{ borderColor: COLOR_GOLD }}>
+              {data.description}
+            </p>
+          </div>
         </div>
 
-        {/* CARDS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 md:gap-7 lg:gap-6">
-          {values.map((item, idx) => {
-            const IconComponent = item.icon;
+        {/* CARDS GRID: Tinggi otomatis (flex-1) agar tidak terpotong */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-5 flex-none">
+          {data.layout_data?.map((item, idx) => {
             return (
               <div
                 key={idx}
-                ref={(el) => {
-                  if (el) cardsRef.current[idx] = el;
-                }}
-                className="group relative bg-white/95 backdrop-blur-sm shadow-lg hover:shadow-2xl transition-all duration-300 rounded-2xl border border-gray-100 hover:border-gray-200 flex flex-col overflow-hidden hover:-translate-y-1"
-                style={{
-                  minHeight: "320px",
-                }}
+                ref={(el) => (cardsRef.current[idx] = el)}
+                className="group relative bg-white rounded-[1.5rem] shadow-lg border border-gray-100 flex flex-col overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-xl"
+                style={{ height: "clamp(300px, 50vh, 420px)" }} // Tinggi adaptif: min 300px, max 420px
               >
-                {/* Gradient background on hover */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                  style={{
-                    background: `linear-gradient(135deg, ${idx % 2 === 0 ? "var(--color-utama)" : "var(--color-aksen)"}08, transparent)`,
-                  }}
-                />
-
-                {/* Decorative circle background */}
-                <div
-                  className="absolute rounded-full opacity-10 group-hover:opacity-15 transition-opacity duration-300"
-                  style={{
-                    backgroundColor:
-                      idx % 2 === 0
-                        ? "var(--color-utama)"
-                        : "var(--color-aksen)",
-                    width: "min(130px, 35vw)",
-                    height: "min(130px, 35vw)",
-                    top: "-20%",
-                    right: "-20%",
-                  }}
-                />
-
-                {/* Content Container */}
-                <div className="relative z-10 flex flex-col h-full p-6 md:p-7">
-                  {/* Icon & Number Row */}
-                  <div className="flex items-start justify-between mb-5">
-                    <div
-                      className="flex items-center justify-center rounded-2xl shadow-md transition-all duration-300 group-hover:scale-105"
-                      style={{
-                        backgroundColor:
-                          idx % 2 === 0
-                            ? "var(--color-utama)"
-                            : "var(--color-aksen)",
-                        width: "clamp(48px, 10vw, 56px)",
-                        height: "clamp(48px, 10vw, 56px)",
-                      }}
-                    >
-                      <IconComponent
-                        className="text-white"
-                        size={24}
-                        strokeWidth={1.5}
-                      />
-                    </div>
-
-                    <span
-                      className="font-black select-none opacity-10 group-hover:opacity-15 transition-opacity duration-300"
-                      style={{
-                        color:
-                          idx % 2 === 0
-                            ? "var(--color-utama)"
-                            : "var(--color-aksen)",
-                        fontSize: "clamp(2rem, 7vw, 3rem)",
-                        lineHeight: 1,
-                      }}
-                    >
-                      {item.number}
-                    </span>
-                  </div>
-
-                  {/* Title */}
-                  <h4
-                    className="font-bold tracking-tight mb-3"
-                    style={{
-                      color: "var(--color-teks)",
-                      fontSize: "clamp(1rem, 3vw, 1.25rem)",
-                    }}
-                  >
-                    {item.title}
-                  </h4>
-
-                  {/* Description */}
-                  <p
-                    className="leading-relaxed flex-grow"
-                    style={{
-                      color: "var(--color-teks-muted)",
-                      fontSize: "clamp(0.75rem, 2vw, 0.875rem)",
-                      lineHeight: "1.6",
-                    }}
-                  >
-                    {item.desc}
-                  </p>
-
-                  {/* Decorative Line */}
-                  <div
-                    className="mt-5 h-0.5 rounded-full transition-all duration-300 group-hover:w-full"
-                    style={{
-                      backgroundColor:
-                        idx % 2 === 0
-                          ? "var(--color-utama)"
-                          : "var(--color-aksen)",
-                      width: "40px",
-                      opacity: 0.4,
-                    }}
+                {/* IMAGE AREA: Porsi dikurangi (40%) agar teks muat */}
+                <div className="relative h-[40%] overflow-hidden">
+                  <div className="absolute inset-0 bg-[#1D2B53]/30 group-hover:bg-transparent z-10 transition-colors duration-500" />
+                  <img 
+                    src={VALUE_IMAGES[idx]} 
+                    alt={item.title}
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-transform duration-700 group-hover:scale-110"
                   />
+                  <div className="absolute bottom-3 left-3 z-20 bg-[#1D2B53] text-[#FFC619] w-7 h-7 rounded-md flex items-center justify-center font-black text-[9px]">
+                    0{idx + 1}
+                  </div>
                 </div>
 
-                {/* Bottom accent bar */}
-                <div
-                  className="absolute bottom-0 left-0 right-0 h-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
-                  style={{
-                    backgroundColor:
-                      idx % 2 === 0
-                        ? "var(--color-utama)"
-                        : "var(--color-aksen)",
-                  }}
-                />
+                {/* TEXT AREA */}
+                <div className="p-5 flex flex-col justify-between flex-1 bg-white">
+                  <div>
+                    <h4 className="text-sm md:text-base font-black mb-2 leading-tight uppercase tracking-tight" style={{ color: COLOR_NAVY }}>
+                      {item.title}
+                    </h4>
+                    <p className="text-[11px] md:text-xs text-gray-500 leading-relaxed font-medium line-clamp-4 lg:line-clamp-5">
+                      {item.subTitle}
+                    </p>
+                  </div>
+
+                  {/* Footer Card */}
+                  <div className="pt-3 flex items-center justify-between">
+                    <div className="h-[1.5px] rounded-full bg-gray-100 flex-grow mr-3 overflow-hidden">
+                      <div 
+                        className="h-full transition-all duration-1000 w-0 group-hover:w-full" 
+                        style={{ backgroundColor: COLOR_GOLD }} 
+                      />
+                    </div>
+                    <div className="w-1 h-1 rounded-full" style={{ backgroundColor: COLOR_NAVY }} />
+                  </div>
+                </div>
               </div>
             );
           })}

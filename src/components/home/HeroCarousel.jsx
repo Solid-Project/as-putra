@@ -1,447 +1,252 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import heroVideo from "@/assets/202601251341.mp4";
-import carousel1 from "@/assets/img/Carousel/herocarousel1.webp";
-import carousel2 from "@/assets/img/Carousel/herocarousel2.webp";
-import carousel3 from "@/assets/img/Carousel/herocarousel3.webp";
-import carousel4 from "@/assets/img/Carousel/herocarousel4.jpg";
-import carousel5 from "@/assets/img/Carousel/herocarousel5.webp";
-import carousel6 from "@/assets/img/Carousel/herocarousel6.webp";
+const ASSET_URL = import.meta.env.VITE_API_URL;
 
-const slides = [
-  // { type: "video", src: heroVideo },
-  { type: "image", src: carousel1 },
-  { type: "image", src: carousel2 },
-  { type: "image", src: carousel3 },
-  { type: "image", src: carousel4 },
-  { type: "image", src: carousel5 },
-  { type: "image", src: carousel6 },
-];
+const HeroCarousel = ({ data, isActive, index }) => {
+  // Parsing slides dari layout_data yang dikirim dari API
+  const slides = useMemo(() => {
+    return (
+      data?.layout_data?.map((item) => ({
+        type: item.type || "image",
+        src: item.path,
+        caption: item.caption || "",
+      })) || []
+    );
+  }, [data]);
 
-const HeroCarousel = ({ activeIndex }) => {
   const [current, setCurrent] = useState(0);
-  const isAnimatingRef = useRef(false);
-  const [isVideoReady, setIsVideoReady] = useState(false);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [showContent, setShowContent] = useState(false);
+  const [isFirstLoaded, setIsFirstLoaded] = useState(false);
 
   const videoRef = useRef(null);
-  const contentRef = useRef(null);
   const intervalRef = useRef(null);
-  const ctxRef = useRef(null);
+  const isReadyRef = useRef(false);
 
-  // Refs teks
+  // Refs untuk Animasi GSAP
   const titleRef = useRef(null);
   const lineRef = useRef(null);
   const subtitleRef = useRef(null);
   const buttonsRef = useRef(null);
-  const scrollBtnRef = useRef(null);
-  const SECTION_INDEX = 0; // ⚠️ Hero biasanya index pertama
 
-  // Scroll ke section berikutnya
-  const scrollToNext = useCallback(() => {
-    const section = document.querySelector(".section");
-    const nextSection = section?.nextElementSibling;
+  const currentSlide = slides[current] || {};
+  const isVideo = currentSlide?.type?.startsWith("video");
 
-    if (!nextSection) return;
-
-    window.scrollTo({
-      top: nextSection.offsetTop,
-      behavior: "smooth",
-    });
-  }, []);
-
-  // Stop autoplay saat user interaksi
-  const stopAutoPlay = useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-    setIsAutoPlaying(false);
-  }, []);
-
-  const startAutoPlay = useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-
-    intervalRef.current = setInterval(() => {
-  if (!isReadyRef.current) return;
-
-  if (!isAnimatingRef.current && !document.hidden) {
-    setCurrent((prev) => (prev + 1) % slides.length);
-  }
-}, 6000);
-
-    setIsAutoPlaying(true);
-  }, []);
-
-  const isReadyRef = useRef(false);
-
+  // 1. PRELOAD IMAGES untuk menghindari flickering
   useEffect(() => {
-    if (ctxRef.current) {
-      ctxRef.current.revert();
-    }
+    if (!slides.length) return;
 
-    // ❌ kalau bukan section aktif → STOP
-    if (activeIndex !== SECTION_INDEX) {
-      isReadyRef.current = false;
-
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-
+    const images = slides.filter((s) => !s.type.startsWith("video"));
+    if (images.length === 0) {
+      setIsInitialLoading(false);
       return;
     }
+
+    let loadedCount = 0;
+    images.forEach((slide) => {
+      const img = new Image();
+      img.src = `${ASSET_URL}/storage/${slide.src}`;
+      img.onload = () => {
+        loadedCount++;
+        if (loadedCount === images.length) setIsInitialLoading(false);
+      };
+      img.onerror = () => {
+        loadedCount++;
+        if (loadedCount === images.length) setIsInitialLoading(false);
+      };
+    });
+  }, [slides]);
+
+  // 2. Delay tampilkan konten setelah loading selesai
+  useEffect(() => {
+    if (!isInitialLoading) {
+      const timer = setTimeout(() => setShowContent(true), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isInitialLoading]);
+
+  // 3. Autoplay Logic
+  const startAutoPlay = useCallback(() => {
+    clearInterval(intervalRef.current);
+    if (slides.length <= 1) return;
+
+    intervalRef.current = setInterval(() => {
+      if (isReadyRef.current && !document.hidden) {
+        setCurrent((prev) => (prev + 1) % slides.length);
+      }
+    }, 6000);
+  }, [slides.length]);
+
+  const stopAutoPlay = useCallback(() => {
+    clearInterval(intervalRef.current);
+  }, []);
+
+  // 4. GSAP Entrance Animation (Hanya jalan saat section AKTIF)
+  useEffect(() => {
+    if (!isActive || !showContent || isFirstLoaded) return;
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         onComplete: () => {
           isReadyRef.current = true;
-          startAutoPlay(); // 🔥 autoplay hanya saat aktif
+          startAutoPlay();
+          setIsFirstLoaded(true);
         },
       });
 
-      tl.fromTo(
-        titleRef.current,
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
-      )
-        .fromTo(
-          lineRef.current,
-          { width: 0 },
-          { width: 80, duration: 0.6, ease: "back.out(1.2)" },
-          "-=0.4",
-        )
-        .fromTo(
-          subtitleRef.current,
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" },
-          "-=0.3",
-        )
+      tl.fromTo(titleRef.current, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power4.out" })
+        .fromTo(lineRef.current, { width: 0 }, { width: 80, duration: 0.8, ease: "power2.inOut" }, "-=0.6")
+        .fromTo(subtitleRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, "-=0.4")
         .fromTo(
           buttonsRef.current.children,
-          { y: 30, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.15,
-            duration: 0.8,
-            ease: "power3.out",
-          },
-          "-=0.2",
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, stagger: 0.2, duration: 0.6 },
+          "-=0.3"
         );
-
-      gsap.fromTo(
-        scrollBtnRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 1, delay: 1.2 },
-      );
     });
 
-    ctxRef.current = ctx;
+    return () => ctx.revert();
+  }, [isActive, showContent, isFirstLoaded, startAutoPlay]);
 
-    return () => {
-      if (ctxRef.current) ctxRef.current.revert();
-    };
-  }, [activeIndex, startAutoPlay]);
-
-  // Video control
+  // 5. Animasi teks saat slide berubah
   useEffect(() => {
-    if (slides[current].type === "video" && videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play().catch((err) => {
-        // Handle autoplay policy
-        console.log("Video autoplay failed:", err);
-      });
-
-      // Set timeout untuk video ended
-      const handleVideoEnded = () => {
-        if (isAutoPlaying) {
-          setCurrent((prev) => (prev + 1) % slides.length);
-        }
-      };
-
-      videoRef.current.addEventListener("ended", handleVideoEnded);
-
-      return () => {
-        if (videoRef.current) {
-          videoRef.current.removeEventListener("ended", handleVideoEnded);
-        }
-      };
+    if (isActive && showContent && isFirstLoaded) {
+      gsap.fromTo(
+        subtitleRef.current,
+        { opacity: 0, x: 20 },
+        { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }
+      );
     }
-  }, [current, isAutoPlaying]);
+  }, [current, isActive, showContent, isFirstLoaded]);
 
-  // Handle visibility change (tab switch)
+  // 6. Video Handler (Play/Pause & Auto-next)
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        // Tab tidak visible, pause autoplay
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current);
-        }
-      } else {
-        // Tab visible, resume autoplay
-        if (isAutoPlaying && !intervalRef.current) {
-          startAutoPlay();
-        }
-      }
+    if (!isVideo || !videoRef.current || !isActive) return;
+
+    const video = videoRef.current;
+    video.currentTime = 0;
+    video.play().catch(() => console.log("Autoplay video tertahan browser"));
+
+    const handleEnded = () => {
+      setCurrent((prev) => (prev + 1) % slides.length);
     };
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+    video.addEventListener("ended", handleEnded);
+    return () => video.removeEventListener("ended", handleEnded);
+  }, [current, isVideo, slides.length, isActive]);
 
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, [isAutoPlaying, startAutoPlay]);
+  useEffect(() => {
+    return () => clearInterval(intervalRef.current);
+  }, []);
 
-  // Slides render dengan transition yang lebih smooth
-  const renderedSlides = useMemo(
-    () =>
-      slides.map((slide, idx) => {
-        const isActive = idx === current;
-        const isPrev = idx === (current - 1 + slides.length) % slides.length;
-        const isNext = idx === (current + 1) % slides.length;
+  if (!slides.length) return null;
 
-        return (
+  return (
+    <section 
+      className="section relative h-screen w-full flex items-center justify-center text-center overflow-hidden bg-black"
+      id={`section-${index}`}
+      data-title={data?.title || "Hero"}
+      data-theme="dark"
+    >
+      {/* Skeleton Overlay */}
+      <div
+        className={`absolute inset-0 z-30 bg-gray-950 transition-opacity duration-1000 ${
+          isInitialLoading ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      />
+
+      {/* Media Slides */}
+      <div className="absolute inset-0 z-0">
+        {slides.map((slide, idx) => (
           <div
             key={idx}
-            className={`absolute inset-0 transition-all duration-1000 ease-in-out will-change-transform ${
-              isActive
-                ? "opacity-100 z-10 transform scale-100"
-                : isPrev || isNext
-                  ? "opacity-0 z-0 transform scale-105"
-                  : "opacity-0 z-0 transform scale-95"
+            className={`absolute inset-0 transition-opacity duration-1500 ease-in-out ${
+              idx === current ? "opacity-100" : "opacity-0"
             }`}
           >
-            {slide.type === "video" ? (
+            {slide.type?.startsWith("video") ? (
               <video
                 ref={idx === current ? videoRef : null}
-                src={slide.src}
+                src={`${ASSET_URL}/storage/${slide.src}`}
                 muted
                 playsInline
-                className="w-full h-full object-cover"
-                onCanPlay={() => setIsVideoReady(true)}
+                className="w-full h-full object-cover scale-105"
               />
             ) : (
               <img
-                src={slide.src}
-                alt={`Slide ${idx + 1}`}
-                className="w-full h-full object-cover"
-                loading={idx === 0 ? "eager" : "lazy"}
+                src={`${ASSET_URL}/storage/${slide.src}`}
+                className="w-full h-full object-cover scale-105"
+                alt=""
               />
             )}
-
-            <div className="absolute inset-0 bg-black/50" />
+            {/* Overlay Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70" />
           </div>
-        );
-      }),
-    [current],
-  );
+        ))}
+      </div>
 
-  return (
-    <section
-      className="section relative h-screen flex items-center justify-center text-center overflow-hidden bg-black"
-      id="hero-section"
-      data-theme="dark"
-    >
-      {/* Background Slides */}
-      <div className="absolute inset-0 z-0">{renderedSlides}</div>
-
-      {/* Loading indicator jika video belum ready */}
-      {!isVideoReady && slides[current].type === "video" && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/70">
-          <div className="w-12 h-12 border-4 border-[var(--color-utama)] border-t-transparent rounded-full animate-spin" />
-        </div>
-      )}
-
-      {/* Content */}
-      <div
-        ref={contentRef}
-        className="relative z-10 w-full max-w-[1200px] mx-auto px-5 sm:px-8 md:px-12 lg:px-16"
-      >
-        {/* Title */}
+      {/* Content Container */}
+      <div className={`relative z-20 w-full max-w-[1100px] mx-auto px-6 transition-opacity duration-700 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
+        
         <h1
           ref={titleRef}
-          className="font-['Playfair_Display'] text-white drop-shadow-lg leading-tight"
-          style={{
-            fontSize: "clamp(2rem, 6vw, 5rem)",
-            marginBottom: "clamp(0.75rem, 2vw, 1rem)",
-          }}
+          className="text-white font-bold text-4xl sm:text-6xl md:text-7xl leading-tight mb-6 drop-shadow-lg"
         >
-          Membangun <br className="sm:hidden" /> Masa Depan
+          {data?.title || "Membangun Masa Depan"}
         </h1>
 
-        {/* Line */}
         <div
           ref={lineRef}
-          className="h-0.5 bg-[var(--color-utama)] mx-auto"
-          style={{
-            width: 0,
-            marginBottom: "clamp(1.5rem, 4vw, 2.5rem)",
-          }}
+          className="h-[3px] bg-[var(--color-utama)] mx-auto mb-8 rounded-full shadow-[0_0_15px_var(--color-utama)]"
+          style={{ width: 0 }}
         />
 
-        {/* Subtitle */}
-        <p
-          ref={subtitleRef}
-          className="text-white/95 mx-auto leading-relaxed"
-          style={{
-            fontSize: "clamp(0.9rem, 2.5vw, 1.125rem)",
-            maxWidth: "clamp(280px, 90%, 600px)",
-            marginBottom: "clamp(1.5rem, 4vw, 2.5rem)",
-          }}
+        <div className="min-h-[3rem] mb-12">
+          <p
+            ref={subtitleRef}
+            className="text-white/90 text-base sm:text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed"
+          >
+            {currentSlide.caption || "Deskripsi singkat perusahaan"}
+          </p>
+        </div>
+
+        <div
+          ref={buttonsRef}
+          className="flex flex-col sm:flex-row justify-center items-center gap-5"
         >
-          Menciptakan ekosistem bisnis yang modern dan tangguh. Sebuah sinergi tanpa batas untuk memberi dampak nyata bagi negeri.
-        </p>
+          <Link
+            to="/sektor-bisnis"
+            onClick={stopAutoPlay}
+            className="group relative px-8 py-4 rounded-full bg-[var(--color-utama)] text-white font-bold overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl"
+          >
+            <span className="relative z-10">Sektor Kami</span>
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+          </Link>
 
-        {/* Buttons */}
-        <div ref={buttonsRef}>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 justify-center">
-            <Link
-              to="/sector"
-              className="group relative px-6 sm:px-8 py-3 sm:py-3.5 bg-[var(--color-utama)] text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[var(--color-utama)]/30 hover:-translate-y-0.5"
-              style={{
-                fontSize: "clamp(0.875rem, 2.5vw, 1rem)",
-              }}
-              onClick={stopAutoPlay} // Stop autoplay saat navigasi
-            >
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                Sektor Kami
-                <svg
-                  className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
-              </span>
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-            </Link>
-
-            <Link
-              to="/about"
-              className="group relative px-6 sm:px-8 py-3 sm:py-3.5 bg-white/20 backdrop-blur-sm border border-white/40 text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:bg-white/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-white/20"
-              style={{
-                fontSize: "clamp(0.875rem, 2.5vw, 1rem)",
-              }}
-              onClick={stopAutoPlay} // Stop autoplay saat navigasi
-            >
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                Tentang Kami
-                <svg
-                  className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
-              </span>
-            </Link>
-          </div>
+          <Link
+            to="/tentang-kami"
+            onClick={stopAutoPlay}
+            className="px-8 py-4 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/30 font-medium hover:bg-white/20 transition-all hover:scale-105"
+          >
+            Tentang Kami
+          </Link>
         </div>
       </div>
 
-      {/* Scroll Indicator (Desktop) */}
-      <button
-        ref={scrollBtnRef}
-        onClick={() => {
-          stopAutoPlay();
-          scrollToNext();
-        }}
-        className="absolute z-20 hidden md:flex flex-col items-center gap-2 group cursor-pointer"
-        style={{
-          bottom: "clamp(1rem, 5vh, 3rem)",
-          right: "clamp(1rem, 5vw, 10%)",
-          transform: "translateY(20px)",
-          opacity: 0,
-        }}
-      >
-        <span className="vertical-text text-[11px] font-black uppercase tracking-[0.5em] text-white/40 group-hover:text-[var(--color-utama)] transition-colors duration-500 mb-4">
-          Scroll
-        </span>
-        <div className="flex flex-col items-center -space-y-2">
-          {[1, 2, 3].map((i) => (
-            <svg
-              key={i}
-              className="w-6 h-6 text-[var(--color-utama)]"
-              style={{
-                opacity: 1 - i * 0.2,
-                animation: `bounce 1.5s ease-in-out ${i * 0.1}s infinite`,
-              }}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          ))}
-        </div>
-      </button>
-
-      {/* Scroll Indicator (Mobile) */}
-      <button
-        onClick={() => {
-          stopAutoPlay();
-          scrollToNext();
-        }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 md:hidden flex flex-col items-center gap-1 group cursor-pointer"
-      >
-        <span className="text-[10px] font-medium uppercase tracking-widest text-white/50">
-          Scroll
-        </span>
-        <svg
-          className="w-5 h-5 text-white/60 animate-bounce"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2.5}
-            d="M19 9l-7 7-7-7"
+      {/* Pagination Dots (Optional Visual) */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-3">
+        {slides.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrent(idx)}
+            className={`h-1.5 transition-all duration-500 rounded-full ${
+              idx === current ? "w-8 bg-[var(--color-utama)]" : "w-2 bg-white/30"
+            }`}
           />
-        </svg>
-      </button>
-
-      <style jsx>{`
-        @keyframes bounce {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(10px);
-          }
-        }
-      `}</style>
+        ))}
+      </div>
     </section>
   );
 };

@@ -1,5 +1,4 @@
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 import HomePage from "@/pages/HomePage";
@@ -17,29 +16,32 @@ import LifestyleSectorPage from '@/pages/LifestyleSectorPage.jsx';
 import EkspedisiSectorPage from '@/pages/EkspedisiSectorPage.jsx'
 import EventDetailPage from "@/components/career/EventDetailPage";
 
+
 function App() {
   return (
     <div className="min-h-screen bg-[#0b132b]">
-      <Navbar />
       <SectionNavigation />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/news" element={<NewsPage />} />
-        <Route path="/news/:id" element={<NewsDetailPage />} />
-        <Route path="/career" element={<CareerPage />} />
-        <Route path="/sector" element={<SectorPage />} />
-        <Route path="/sector/peternakan" element={<PeternakanSectorPage />} />
-        <Route path="/sector/hospitality" element={<HospitalitySectorPage />} />
-        <Route path="/sector/retail" element={<RetailSectorPage />} />
-        <Route path="/sector/education" element={<EducationSectorPage />} />
-        <Route path="/sector/lifestyle" element={<LifestyleSectorPage />} />
-        <Route path="/sector/ekspedisi" element={<EkspedisiSectorPage />} />
-        <Route path="/sector/others" element={<EkspedisiSectorPage />} />
-        <Route path="/event/:id" element={<EventDetailPage />} />
-      </Routes>
 
-      <Footer />
+      <React.Suspense
+        fallback={<div className="h-screen bg-[#0b132b]" />}
+      >
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="/news/:id" element={<NewsDetailPage />} />
+          <Route path="/career" element={<CareerPage />} />
+          <Route path="/sector" element={<SectorPage />} />
+          <Route path="/sector/peternakan" element={<PeternakanSectorPage />} />
+          <Route path="/sector/hospitality" element={<HospitalitySectorPage />} />
+          <Route path="/sector/retail" element={<RetailSectorPage />} />
+          <Route path="/sector/lifestyle" element={<LifestyleSectorPage />} />
+          <Route path="/sector/ekspedisi" element={<EkspedisiSectorPage />} />
+          <Route path="/sector/education" element={<EducationSectorPage />} />
+          <Route path="/event/:id" element={<EventDetailPage />} />
+        </Routes>
+      </React.Suspense>
+      
     </div>
   );
 }

@@ -13,7 +13,9 @@ import NineLayout from '@/components/sector/SectorPeternakan/Layout9';
 import Closing from '@/components/sector/SectorPeternakan/closing';
 import { sectorData } from '@/components/data/SectorData';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
-
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
+import HeroSkeleton from "@/components/skeleton/HeroSkeleton";
 const PeternakanSectorPage = () => {
   useFullpageSnap({enabled: true});
 
@@ -22,6 +24,7 @@ const PeternakanSectorPage = () => {
 
   return (
     <main className="overflow-x-hidden">
+            <Navbar />
       <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style={{ display: 'none' }}>
         <defs>
           <filter id="goo">
@@ -42,6 +45,8 @@ const PeternakanSectorPage = () => {
       <SixLayout/>
       <SevenLayuout/>
       <Closing/>
+                <Footer />
+      
     </main>
   );
 };
