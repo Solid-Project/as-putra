@@ -12,7 +12,7 @@ import SectionNavigation from '@/hooks/SectionNavigation';
 import PeternakanSectorPage from '@/pages/PeternakanSectorPage.jsx';
 import HospitalitySectorPage from '@/pages/HospitalitySectorPage.jsx';
 import RetailSectorPage from '@/pages/RetailSectorPage.jsx';
-import ConstructionSectorPage from '@/pages/ConstructionSectorPage.jsx';
+import EducationSectorPage from '@/pages/EducationSectorPage.jsx';
 import LifestyleSectorPage from '@/pages/LifestyleSectorPage.jsx';
 import EkspedisiSectorPage from '@/pages/EkspedisiSectorPage.jsx'
 import EventDetailPage from "@/components/career/EventDetailPage";

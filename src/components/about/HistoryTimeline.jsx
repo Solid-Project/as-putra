@@ -4,27 +4,27 @@ import gsap from "gsap";
 
 const timelineData = [
   {
-    year: "1985",
+    year: "1984",
     title: "Awal Mula: Fondasi Usaha",
-    desc: "Bermula dari usaha peternakan ayam petelur skala kecil dengan 1.000 ekor di Kuningan. H. Dudung Dulajid mulai membangun kemandirian ekonomi dari pemanfaatan limbah penggilingan padi.",
+    desc: "Langkah pertama dimulai pada tahun 1985. Dengan mengelola 1.000 ekor ayam petelur, Haji Dudung sebenarnya sedang melakukan langkah cerdas: mengubah dedak hasil penggilingan gabah orang tuanya menjadi komoditas yang bernilai lebih tinggi",
     position: "left",
   },
   {
     year: "1985",
     title: "Lahirnya Nama AS Putra",
-    desc: "Dedak hasil penggilingan diolah menjadi komoditas bernilai tinggi. Dari sini nama AS Putra (Arifin Sidik Putra) lahir sebagai simbol dedikasi untuk keluarga dan masa depan usaha.",
+    desc: "Nama AS Putra (Arifin Sidik Putra) diambil dari nama putra pertamanya, sebuah simbol dedikasi bahwa bisnis ini dibangun untuk masa depan keluarga.",
     position: "right",
   },
   {
     year: "1997",
-    title: "Tahan Uji di Masa Krisis",
-    desc: "Krisis moneter menjadi ujian besar. AS Putra tetap bertahan berkat prinsip tanpa hutang, disiplin keuangan, dan kepercayaan kuat dari para mitra bisnis.",
+    title: "Bertahan dan Tangguh di Tengah Badai Krisis",
+    desc: "Ujian terbesar datang saat krisis moneter tahun 1997. Di saat banyak usaha skala besar goyah, AS Putra justru menemukan momentum untuk melompat lebih tinggi. Strategi Haji Dudung yang memiliki disiplin tinggi terhadap manajemen keuangan yang sehat terbukti menjadi penyelamat. Kepercayaan dari para mitra terjaga karena prinsip kejujurannya selalu menepati komitmen yang membuat nama AS Putra semakin disegani di industri peternakan.",
     position: "left",
   },
   {
     year: "2000",
     title: "Awal Ekspansi Usaha",
-    desc: "Mulai memasuki sektor baru di luar peternakan, termasuk dealer motor sebagai langkah awal diversifikasi bisnis.",
+    desc: "Setelah peternakan ayam, Haji Dudung mulai melebarkan sayap secara luas, massive, dan terukur. Diawali dengan dealer motor AS Putra",
     position: "right",
   },
   {

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import bgLayout from '@/assets/img/hotel4.jpeg';
+import bgLayout from '@/assets/img/hotel2.jpeg';
 
 gsap.registerPlugin(ScrollTrigger);
 

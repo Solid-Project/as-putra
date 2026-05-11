@@ -1,6 +1,6 @@
 // src/pages/SectorPage.jsx
 import React from 'react';
-import IntroSection from '@/components/sector/SectorPeternakan/IntroSection';
+import IntroSection from '@/components/sector/SectorPeternakan/HeroSector';
 import TenLayout from '@/components/sector/SectorPeternakan/Layout10';
 import FirstLayout from '@/components/sector/SectorPeternakan/Section1';
 import SecondLayout from '@/components/sector/SectorPeternakan/Section2';

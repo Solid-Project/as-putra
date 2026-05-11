@@ -90,22 +90,24 @@ const Section3 = () => {
       className="section min-h-screen flex items-center py-24 bg-white relative overflow-hidden"
       id="nine-layout"
     >
-      <div className="container mx-auto px-[6%] relative z-10">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+  
+<div className="container mx-auto px-[6%] relative z-10 pt-16 lg:pt-40">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-center">
           {/* SISI KIRI: JUDUL & VISUAL */}
           <div className="lg:col-span-7 relative">
-            <div ref={titleRef} className="text-reveal relative z-0">
-              <span className="text-[var(--color-utama)] font-black tracking-[0.4em] text-[10px] uppercase mb-6 block">
+           <div 
+              ref={titleRef} 
+              className="text-reveal relative lg:absolute lg:bottom-full lg:left-0 lg:w-full mb-6 z-0"
+            >
+        <span className="text-[var(--color-utama)] font-black tracking-[0.4em] text-[10px] uppercase mb-6 block">
                 Grand Cordella Hotel
               </span>
-              <h2 className="font-['Playfair_Display'] text-6xl md:text-8xl text-slate-900 font-bold leading-[0.9] mb-12 tracking-tighter">
+              <h2 className="font-['Playfair_Display'] text-xl md:text-6xl text-slate-900 font-bold leading-[0.9] mb-2 tracking-tighter">
                 Good Stay Best Experience
               </h2>
               
             </div>
- <p className="text-slate-500 leading-relaxed font-light text-sm border-l border-slate-100 pl-6 group-hover:border-[var(--color-utama)] transition-all">
-               Berada di titik paling strategis yang dikelilingi destinasi wisata dan pusat kuliner, Grand Cordela dirancang untuk menyempurnakan setiap momen Anda melalui kelengkapan fasilitas berstandar tinggi di bawah satu atap.
-                </p>
+
             <div
               ref={imageRef}
               className="relative w-full aspect-video rounded-sm overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.2)] z-10"
@@ -120,7 +122,7 @@ const Section3 = () => {
           </div>
 
           {/* SISI KANAN: LIST DESKRIPSI */}
-          <div ref={listRef} className="lg:col-span-5 space-y-10 lg:mt-32">
+          <div ref={listRef} className="lg:col-span-5 space-y-10">
             <div className="text-reveal flex gap-6 group">
              
               <div>
@@ -142,7 +144,7 @@ const Section3 = () => {
               </div>
             </div>
 
-            <div className="text-reveal flex gap-6 group border-t border-slate-50 pt-10">
+            <div className="text-reveal flex gap-6 group border-t border-slate-50 ">
               <span className="text-2xl font-black text-slate-200 group-hover:text-[var(--color-utama)] transition-colors duration-500 font-['Playfair_Display']">
                 02
               </span>
@@ -156,7 +158,7 @@ const Section3 = () => {
               </div>
             </div>
 
-            <div className="text-reveal flex gap-6 group border-t border-slate-50 pt-10">
+            <div className="text-reveal flex gap-6 group border-t border-slate-50 ">
               <span className="text-2xl font-black text-slate-200 group-hover:text-[var(--color-utama)] transition-colors duration-500 font-['Playfair_Display']">
                 03
               </span>

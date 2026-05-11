@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { gsap } from "gsap";
 import useNavbarTheme from "@/hooks/useNavbarTheme";
-import logoIcon from "@/assets/FA_DESIGN_LOGO_ICON_ASPUTRA_GROUP_MAIN01.png";
+import logoIcon from "@/assets/FA_DESIGN_LOGO_MAINLOGO_FORMAT01_ASPUTRA_GROUP_MAIN01.png";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -159,7 +159,7 @@ const Navbar = () => {
           <span
             className={`font-bold tracking-[0.15em] text-xs sm:text-sm transition-all duration-300 ${logoTextColor} group-hover:tracking-[0.2em]`}
           >
-            AS PUTRA
+          
           </span>
         </Link>
 

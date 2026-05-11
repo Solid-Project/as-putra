@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
-import aboutMe from "@/assets/img/aboutme.webp";
+import aboutMe from "@/assets/img/Carousel/herocarousel4.jpg";
 
 const HeroAbout = ({ activeIndex }) => {
   const sectionRef = useRef(null);
@@ -101,7 +101,9 @@ const HeroAbout = ({ activeIndex }) => {
       ref={sectionRef}
       className="section relative h-screen flex items-center justify-center text-center overflow-hidden"
       style={{
-        backgroundImage: `url(${aboutMe})`,
+        // Tambahkan linear-gradient di sini sebelum memanggil gambar
+        // rgba(0,0,0, 0.5) artinya warna hitam dengan transparansi 50%
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${aboutMe})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

@@ -106,7 +106,7 @@ const Section4 = () => {
         {/* KOLOM 1: NARASI (KIRI) */}
         <div ref={leftColRef} className="flex items-center pr-12 lg:pr-20 py-10">
           <p className="font-['Playfair_Display'] text-2xl md:text-3xl text-slate-800 leading-relaxed italic border-blue-600">
-            "Dedikasi untuk nutrisi keluarga Indonesia. Melalui sistem closed house khusus Layer, kami memproduksi Telur Premium dan Telur Omega yang dijamin kebersihan, kesegaran, serta kandungan gizinya dari peternakan hingga ke meja makan."
+            " Melalui sistem closed house khusus Layer, kami memproduksi Telur Premium dan Telur Omega yang dijamin kebersihan, kesegaran, serta kandungan gizinya dari peternakan hingga ke meja makan."
           </p>
         </div>
 

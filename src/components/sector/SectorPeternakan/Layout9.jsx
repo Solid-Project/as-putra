@@ -92,20 +92,22 @@ const Layout9 = () => {
       data-theme="light"
       data-title="Anjawani Mitra Mandiri (AMM)"
     >
-      <div className="container mx-auto px-[6%] relative z-10">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+      {/* pt-16 untuk HP (biar gak terlalu jauh jaraknya dari atas), lg:pt-40 untuk Laptop (sebagai ruang judul melayang) */}
+<div className="container mx-auto px-[6%] relative z-10 pt-16 lg:pt-40">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-center">
           {/* SISI KIRI: JUDUL & VISUAL */}
           <div className="lg:col-span-7 relative">
-            <div ref={titleRef} className="text-reveal relative z-0">
-              <span className="text-[var(--color-utama)] font-black tracking-[0.4em] text-[10px] uppercase mb-6 block">
+       <div 
+              ref={titleRef} 
+              className="text-reveal relative lg:absolute lg:bottom-full lg:left-0 lg:w-full mb-6 z-0"
+            >
+        <span className="text-[var(--color-utama)] font-black tracking-[0.4em] text-[10px] uppercase mb-6 block">
                 Kemitraan
               </span>
-              <h2 className="font-['Playfair_Display'] text-6xl md:text-8xl text-slate-900 font-bold leading-[0.9] mb-12 tracking-tighter">
-                Anjawani Mitra Mandiri (AMM)
+              <h2 className="font-['Playfair_Display'] text-xl md:text-6xl text-slate-900 font-bold leading-[0.9] mb-2 tracking-tighter">
+                Anjawani Mitra Mandiri
               </h2>
-                 <p className="text-slate-500 leading-relaxed font-light text-sm border-l border-slate-100 pl-6 group-hover:border-[var(--color-utama)] transition-all">
-                 "Katalisator pertumbuhan peternak rakyat. Berperan sebagai fasilitator strategis, kami mengedukasi dan membimbing mitra peternak untuk mengadopsi sistem manajemen modern, memastikan efisiensi dan daya saing di industri perunggasan."
-                </p>
+               
             </div>
 
             <div
@@ -124,7 +126,7 @@ const Layout9 = () => {
 
           {/* SISI KANAN: LIST DESKRIPSI */}
         
-          <div ref={listRef} className="lg:col-span-5 space-y-10 lg:mt-32">
+          <div ref={listRef} className="lg:col-span-5 space-y-10">
              
             <div className="text-reveal flex gap-6 group">
               <span className="text-2xl font-black text-slate-200 group-hover:text-[var(--color-utama)] transition-colors duration-500 font-['Playfair_Display']">
@@ -140,7 +142,7 @@ const Layout9 = () => {
               </div>
             </div>
 
-            <div className="text-reveal flex gap-6 group border-t border-slate-50 pt-10">
+            <div className="text-reveal flex gap-6 group border-t border-slate-50 ">
               <span className="text-2xl font-black text-slate-200 group-hover:text-[var(--color-utama)] transition-colors duration-500 font-['Playfair_Display']">
                 02
               </span>
@@ -154,7 +156,7 @@ const Layout9 = () => {
               </div>
             </div>
 
-            <div className="text-reveal flex gap-6 group border-t border-slate-50 pt-10">
+            <div className="text-reveal flex gap-6 group border-t border-slate-50 ">
               <span className="text-2xl font-black text-slate-200 group-hover:text-[var(--color-utama)] transition-colors duration-500 font-['Playfair_Display']">
                 03
               </span>

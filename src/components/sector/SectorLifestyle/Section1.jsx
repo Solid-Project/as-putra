@@ -90,7 +90,7 @@ const Layout10 = () => {
   return (
     <section 
       ref={sectionRef} 
-      className="section min-h-screen flex items-center bg-[#F8FAFC] py-32 md:py-40 relative overflow-hidden"
+      className="section min-h-screen flex items-center bg-[#F8FAFC] py-10 md:py-10 relative overflow-hidden"
       id="ten-layout"
     >
       
@@ -111,31 +111,31 @@ const Layout10 = () => {
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           
           {/* KOLOM KIRI: JUDUL RAKSASA (Parallax Sumbu Y) */}
-          <div ref={titleRef} className="lg:col-span-6 flex flex-col gap-2 z-20">
-            <span className="text-white lg:text-slate-500 font-bold tracking-[0.4em] text-[10px] uppercase mb-8 block opacity-90 lg:opacity-100">
+      <div ref={titleRef} className="lg:col-span-6 flex flex-col gap-2 z-20 w-fit max-w-full">
+        <span className="text-slate-200 text-lg leading-relaxed font-semibold mb-1 border-l border-slate-200 pl-8 drop-shadow-md">
               AS PUTRA
             </span>
-            <h1 className="font-['Playfair_Display'] text-7xl md:text-8xl lg:text-[9rem] text-white font-black leading-[0.85] tracking-tighter">
+       <h1 className="font-['Playfair_Display'] text-6xl md:text-7xl lg:text-[5.5vw] xl:text-[6.5rem] text-white font-black leading-[0.85] tracking-tighter drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]">
                LIFESTYLE 
             </h1>
-            <h1 className="font-['Playfair_Display'] text-7xl md:text-8xl lg:text-[9rem] text-white font-black leading-[0.85] tracking-tighter">
+       <h1 className="font-['Playfair_Display'] text-6xl md:text-7xl lg:text-[5.5vw] xl:text-[6.5rem] text-white font-black leading-[0.85] tracking-tighter drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]">
                & 
             </h1>
-            <h1 className="font-['Playfair_Display'] text-7xl md:text-8xl lg:text-[9rem] text-white font-black leading-[0.85] tracking-tighter">
+       <h1 className="font-['Playfair_Display'] text-6xl md:text-7xl lg:text-[5.5vw] xl:text-[6.5rem] text-white font-black leading-[0.85] tracking-tighter drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]">
                WELLNESS
             </h1>
           </div>
 
           {/* KOLOM KANAN: FLOATING CLEAN CARD (Parallax Lebih Cepat) */}
-          <div className="lg:col-span-5 lg:col-start-8 z-30 mt-12 lg:mt-0">
+          <div className="lg:col-span-5 lg:col-start-8 z-30 mt-1 lg:mt-0">
             <div 
               ref={cardRef}
               className="bg-white p-12 md:p-16 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] rounded-sm border-t-2 border-[var(--color-utama)]"
             >
-              <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl text-slate-900 font-bold mb-8 leading-tight tracking-tight">
+              <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl text-slate-900 font-bold mb-2 leading-tight tracking-tight">
              Membawa dedikasi pada kualitas hidup ke dimensi yang lebih personal. 
               </h2>
-              <p className="text-slate-500 text-lg leading-relaxed font-light mb-12 border-l border-slate-100 pl-8">
+              <p className="text-slate-500 text-lg leading-relaxed font-light mb-1 border-l border-slate-100 pl-8">
                Sektor Lifestyle AS Putra Group hadir untuk menjawab kebutuhan masyarakat modern akan perawatan diri, kebugaran, dan kesehatan melalui inovasi pelayanan yang profesional dan eksklusif.
               </p>
 
