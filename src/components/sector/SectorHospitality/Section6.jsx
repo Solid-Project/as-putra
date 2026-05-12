@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
-import bgImage from '@/assets/img/hotel3.jpeg'
+import bgImage from '@/assets/img/hotel1.jpeg'
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -112,7 +112,7 @@ const Section6 = () => {
           {/* KOLOM KIRI: JUDUL RAKSASA (Parallax Sumbu Y) */}
        <div ref={titleRef} className="lg:col-span-6 flex flex-col gap-2 z-20 w-fit max-w-full">
             <span className="text-slate-500 text-lg leading-relaxed font-light mb-1 border-l border-slate-100 pl-1">
-              AS Putra
+            
             </span>
               <h1 className="font-['Playfair_Display'] text-6xl md:text-7xl lg:text-[5.5vw] xl:text-[6.5rem] text-white font-black leading-[0.85] tracking-tighter drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]">
             AMANARA

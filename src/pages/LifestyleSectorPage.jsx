@@ -1,6 +1,6 @@
 // src/pages/SectorPage.jsx
 import React from 'react';
-import IntroSection from '@/components/sector/SectorLifestyle/IntroSection';
+import IntroSection from '@/components/sector/SectorLifestyle/HeroSector';
 import FirstLayout from '@/components/sector/SectorLifestyle/Section1';
 import SecondLayout from '@/components/sector/SectorLifestyle/Section2';
 import ThirdLayout from '@/components/sector/SectorLifestyle/Section3';
@@ -10,6 +10,8 @@ import SixLayout from '@/components/sector/SectorLifestyle/Section6';
 import SevenLayout from '@/components/sector/SectorLifestyle/Section7';
 import EightLayout from '@/components/sector/SectorLifestyle/Section8';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
 
 const LifestyleSectorPage = () => {
   useFullpageSnap({enabled: true});
@@ -25,6 +27,7 @@ const LifestyleSectorPage = () => {
           </filter>
         </defs>
       </svg>
+      <Navbar/>
       <IntroSection/>
       <FirstLayout/>
       <SecondLayout/>
@@ -34,6 +37,7 @@ const LifestyleSectorPage = () => {
       <SixLayout/>
       <SevenLayout/>
       <EightLayout/>
+      <Footer/>
     </main>
   );
 };

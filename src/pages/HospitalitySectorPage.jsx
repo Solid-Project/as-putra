@@ -1,6 +1,6 @@
 // src/pages/SectorPage.jsx
 import React from 'react';
-import IntroSection from '@/components/sector/SectorHospitality/IntroSection';
+import IntroSection from '@/components/sector/SectorHospitality/HeroSector';
 import FirstLayout from '@/components/sector/SectorHospitality/Section1';
 import SecondLayout from '@/components/sector/SectorHospitality/Section2';
 import ThirdLayout from '@/components/sector/SectorHospitality/Section3';
@@ -9,6 +9,8 @@ import FifthLayout from '@/components/sector/SectorHospitality/Section5';
 import SixLayout from '@/components/sector/SectorHospitality/Section6';
 import SevenLayout from '@/components/sector/SectorHospitality/Section7';
 import Closing from '@/components/sector/SectorHospitality/Closing';
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
 
 import useFullpageSnap from '@/hooks/useFullPageSnap';
 
@@ -25,6 +27,7 @@ const HospitalitySectorPage = () => {
           </filter>
         </defs>
       </svg>
+                  <Navbar />
       <IntroSection/>
       <FirstLayout />
       <SecondLayout />
@@ -34,6 +37,8 @@ const HospitalitySectorPage = () => {
       <SixLayout />
       <SevenLayout />
       <Closing />
+                      <Footer />
+      
     </main>
   );
 };

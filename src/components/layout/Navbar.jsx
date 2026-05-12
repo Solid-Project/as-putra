@@ -92,7 +92,7 @@ const Navbar = () => {
         {/* Logo - Menggunakan logo dari hook & tanpa rounded */}
         <Link to="/" className="flex items-center group" onClick={closeMenu}>
           <img
-            src={logoIcon}
+            src={logo}
             alt="AS PUTRA"
             className="w-auto h-8 sm:h-9 md:h-10 transition-all duration-500 group-hover:scale-105 object-contain"
           />

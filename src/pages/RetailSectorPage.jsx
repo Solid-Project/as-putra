@@ -1,6 +1,6 @@
 // src/pages/SectorPage.jsx
 import React from 'react';
-import IntroSection from '@/components/sector/SectorRetail/IntroSection';
+import IntroSection from '@/components/sector/SectorRetail/HeroSector';
 import FirstLayout from '@/components/sector/SectorRetail/Section1';
 import SecondLayout from '@/components/sector/SectorRetail/Section2';
 import ThirdLayout from '@/components/sector/SectorRetail/Section3';
@@ -14,6 +14,8 @@ import TenLayout from '@/components/sector/SectorRetail/Section10';
 import ElevenLayout from '@/components/sector/SectorRetail/Section11';
 import { sectorData } from '@/components/data/SectorData';
 import useFullpageSnap from '@/hooks/useFullPageSnap';
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
 
 const RetailSectorPage = () => {
   useFullpageSnap({enabled: true});
@@ -32,6 +34,7 @@ const RetailSectorPage = () => {
           </filter>
         </defs>
       </svg>
+      <Navbar />
       <IntroSection/>
       {layout1Data && <FirstLayout data={layout1Data} />}
       <SecondLayout />
@@ -44,6 +47,7 @@ const RetailSectorPage = () => {
       <NineLayout/>
       <TenLayout/>
       <ElevenLayout/>
+      <Footer />
     </main>
   );
 };
