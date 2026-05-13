@@ -88,11 +88,7 @@ const HeroSector = ({ data, index }) => {
         >
           {displayDescription}
         </p>
-
-        {/* Bagian Button Link telah dihapus */}
       </div>
-
-      {/* Bagian Button Scroll telah dihapus */}
     </section>
   );
 };
