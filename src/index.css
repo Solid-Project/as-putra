@@ -44,7 +44,23 @@ html, body {
 .section {
   position: relative;
   width: 100%;
-  will-change: transform;
+  height: 100vh; /* WAJIB: Agar navigasi dots akurat */
+  overflow: hidden; /* Mencegah body ikut memanjang */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Class pembantu untuk footer atau section yang boleh memanjang */
+.section.footer-snap, 
+.section.no-snap {
+  height: auto !important;
+  min-height: 100vh;
+}
+
+.scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 /* =========================

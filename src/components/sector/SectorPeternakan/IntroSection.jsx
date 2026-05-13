@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import livestockImg from '@/assets/img/SectorPeternakanKeempat.webp';
+import livestockImg from '@/assets/img/Carousel/herocarousel6.webp';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,6 +15,10 @@ const IntroSection = ({ title, image }) => {
 
   const displayTitle = title || "Sektor Peternakan";
   const displayImage = image || livestockImg;
+
+  // Variabel Warna Sesuai Desain Dongker & Putih
+  const COLOR_NAVY = "#1D2B53";
+  const COLOR_GOLD = "#FFC619";
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -82,7 +86,7 @@ const IntroSection = ({ title, image }) => {
         paddingRight: "clamp(1rem, 6%, 6rem)",
       }}
     >
-      {/* BACKGROUND SHAPES */}
+      {/* BACKGROUND SHAPES & DOTS (KEMBALI KE ASLI) */}
       <div ref={floatRef} className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         <div
           className="absolute rounded-full blur-3xl"
@@ -106,6 +110,8 @@ const IntroSection = ({ title, image }) => {
             left: "-5%",
           }}
         />
+        
+        {/* DOTS PATTERN ASLI (SUDAH KEMBALI) */}
         <div
           className="absolute opacity-30 hidden lg:block"
           style={{
@@ -117,6 +123,7 @@ const IntroSection = ({ title, image }) => {
             left: "10%",
           }}
         />
+        
         <div className="absolute inset-0 opacity-[0.015] pointer-events-none">
           <div
             className="w-full h-full"
@@ -129,9 +136,13 @@ const IntroSection = ({ title, image }) => {
             }}
           />
         </div>
+
+        {/* AKSEB BARU: Abstract Lines Tanpa Merusak Dot */}
+        <div className="absolute top-[10%] right-[-5%] w-[40%] h-[1px] bg-gradient-to-r from-transparent via-[#1D2B53]/10 to-transparent rotate-[-15deg]" />
+        <div className="absolute bottom-[15%] left-[5%] w-[30%] h-[1px] bg-gradient-to-r from-transparent via-[#FFC619]/20 to-transparent rotate-[10deg]" />
       </div>
 
-      {/* Label Vertikal */}
+      {/* Label Vertikal Asli */}
       <div className="absolute left-[clamp(1rem,3%,3rem)] top-1/2 -translate-y-1/2 -rotate-90 hidden lg:block z-30 pointer-events-none">
         <span 
           className="font-black tracking-[0.5em] uppercase"
@@ -148,7 +159,7 @@ const IntroSection = ({ title, image }) => {
       <div className="relative z-10 w-full h-full flex items-center">
         <div className="w-full grid lg:grid-cols-12 items-center">
           
-          {/* KOLOM KIRI: JUDUL */}
+          {/* KOLOM KIRI: JUDUL (ASLI) */}
           <div ref={titleWrapperRef} className="lg:col-span-5 flex flex-col justify-center z-20 pointer-events-none">
             {titleWords.map((word, i) => (
               <h1
@@ -165,19 +176,23 @@ const IntroSection = ({ title, image }) => {
             ))}
           </div>
 
-          {/* KOLOM KANAN: GAMBAR */}
+          {/* KOLOM KANAN: GAMBAR (DIPERBESAR + AKSEN BARU) */}
           <div 
             ref={imageWrapperRef}
             className="lg:col-span-7 relative flex items-center justify-end"
-            style={{ height: "clamp(300px, 60vh, 85%)" }}
+            style={{ height: "clamp(400px, 75vh, 85%)" }} 
           >
+            {/* AKSEN BARU: L-Shape Corners (Biru di kiri atas, Kuning di kanan bawah) */}
+            <div className="absolute -top-3 -left-3 w-16 h-16 border-t-[3px] border-l-[3px] z-20 opacity-50" style={{ borderColor: COLOR_NAVY }} />
+            <div className="absolute -bottom-3 -right-3 w-20 h-20 border-b-[3px] border-r-[3px] z-20 opacity-70" style={{ borderColor: COLOR_GOLD }} />
+
             <div className="w-full h-full overflow-hidden rounded-sm relative shadow-2xl">
               <img
                 ref={parallaxImgRef}
                 src={displayImage}
                 alt={displayTitle}
                 className="w-full h-[120%] object-cover scale-110 will-change-transform" 
-                style={{ objectPosition: 'center 20%' }}
+                style={{ objectPosition: 'center center' }}
               />
               <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-white via-white/40 to-transparent hidden lg:block z-10 pointer-events-none" />
               <div className="absolute inset-0 bg-white/20 lg:hidden block z-10 pointer-events-none" />

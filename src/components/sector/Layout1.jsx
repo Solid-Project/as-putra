@@ -4,94 +4,55 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Layout1 = ({ data }) => {
+const Layout1 = ({ data, isActive, index }) => {
   const sectionRef = useRef(null);
   const imageFrameRef = useRef(null);
   const textGroupRef = useRef(null);
   const floatRef = useRef(null);
 
+  // 1. PERBAIKAN URL GAMBAR (Sama seperti IntroSection)
+  // Pastikan VITE_API_URL Anda di .env tidak diakhiri tanda /
+  const displayImage = data?.image 
+    ? `${import.meta.env.VITE_API_URL}/storage/${data.image}` 
+    : ""; // Atau kasih placeholder image
+
   useEffect(() => {
+    if (!data) return;
+
     const ctx = gsap.context(() => {
-      // Animasi floating shapes  
+      // Animasi Floating Background
       const shapes = floatRef.current?.children;
       if (shapes) {
-        if (shapes[0]) {
-          gsap.to(shapes[0], {
-            y: 50,
-            x: 30,
-            rotate: 20,
-            duration: 15,
+        [...shapes].forEach((shape, i) => {
+          gsap.to(shape, {
+            y: i % 2 === 0 ? 30 : -30,
+            duration: 10 + i,
             repeat: -1,
             yoyo: true,
-            ease: "sine.inOut",
+            ease: "sine.inOut"
           });
-        }
-        if (shapes[1]) {
-          gsap.to(shapes[1], {
-            y: -40,
-            x: -25,
-            rotate: -15,
-            duration: 12,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-          });
-        }
-        if (shapes[2]) {
-          gsap.to(shapes[2], {
-            y: 35,
-            x: -20,
-            rotate: 10,
-            duration: 10,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-          });
-        }
-        if (shapes[3]) {
-          gsap.to(shapes[3], {
-            y: -25,
-            x: 35,
-            rotate: -8,
-            duration: 13,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-          });
-        }
+        });
       }
 
-      // TIMELINE PARALLAX
+      // Animasi Konten (ScrollTrigger)
+      // Kita pakai timeline sederhana agar sinkron dengan snap scroll
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 2,
-          invalidateOnRefresh: true
+          start: "top center",
+          toggleActions: "play none none reverse",
         }
       });
 
-      // ANIMASI GAMBAR
       tl.fromTo(imageFrameRef.current, 
-        { x: "-70%", opacity: 0 },
-        { x: "0%", opacity: 1, ease: "power2.inOut", duration: 1 }
+        { x: -100, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.2, ease: "power4.out" }
       )
-      .to(imageFrameRef.current, { duration: 0.8 }) 
-      .to(imageFrameRef.current, {
-        x: "70%", opacity: 0, ease: "power2.inOut", duration: 1 
-      });
-
-      // ANIMASI TEKS
-      tl.fromTo(textGroupRef.current, 
-        { x: "70%", opacity: 0 },
-        { x: "0%", opacity: 1, ease: "power2.inOut", duration: 1 },
-        0
-      )
-      .to(textGroupRef.current, { duration: 0.8 }, 1)
-      .to(textGroupRef.current, {
-        x: "-70%", opacity: 0, ease: "power2.inOut", duration: 1
-      }, ">");
+      .fromTo(textGroupRef.current, 
+        { x: 100, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.2, ease: "power4.out" },
+        "-=0.8" // Overlap animasi
+      );
 
     }, sectionRef);
 
@@ -101,178 +62,62 @@ const Layout1 = ({ data }) => {
   return (
     <section
       ref={sectionRef}
-      className="section relative w-full bg-white overflow-y-auto overflow-x-hidden"
-      id={data.id}
+      className="section relative w-full bg-white overflow-hidden"
+      id={`section-${index}`}
+      style={{ height: "100vh" }}
       data-theme="light"
-      style={{
-        height: "100vh",
-        minHeight: "600px",
-        maxHeight: "1080px",
-      }}
     >
-      {/* BACKGROUND SHAPES */}
-      <div ref={floatRef} className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <div
-          className="absolute rounded-full blur-3xl"
-          style={{
-            backgroundColor: "var(--color-utama)",
-            opacity: 0.06,
-            width: "min(50vw, 500px)",
-            height: "min(50vw, 500px)",
-            top: "-10%",
-            right: "-5%",
-          }}
-        />
-        <div
-          className="absolute rounded-full blur-2xl"
-          style={{
-            backgroundColor: "var(--color-aksen)",
-            opacity: 0.05,
-            width: "min(40vw, 400px)",
-            height: "min(40vw, 400px)",
-            bottom: "-10%",
-            left: "-8%",
-          }}
-        />
-        <div
-          className="absolute opacity-20 hidden lg:block"
-          style={{
-            backgroundImage: "radial-gradient(var(--color-utama) 2px, transparent 2px)",
-            backgroundSize: "clamp(20px, 4vw, 30px) clamp(20px, 4vw, 30px)",
-            width: "min(25vw, 200px)",
-            height: "min(25vw, 200px)",
-            top: "15%",
-            left: "5%",
-          }}
-        />
-        <div
-          className="absolute rotate-12 rounded-2xl opacity-30 hidden xl:block"
-          style={{
-            border: "2px solid var(--color-aksen)",
-            width: "min(12vw, 100px)",
-            height: "min(12vw, 100px)",
-            bottom: "20%",
-            right: "10%",
-          }}
-        />
-        <div className="absolute inset-0 opacity-[0.015] pointer-events-none">
-          <div
-            className="w-full h-full"
-            style={{
-              backgroundImage: `
-                linear-gradient(to right, var(--color-utama) 1px, transparent 1px),
-                linear-gradient(to bottom, var(--color-utama) 1px, transparent 1px)
-              `,
-              backgroundSize: "clamp(30px, 5vw, 50px) clamp(30px, 5vw, 50px)",
-            }}
-          />
-        </div>
+      {/* BACKGROUND DECORATIVE */}
+      <div ref={floatRef} className="absolute inset-0 pointer-events-none z-0">
+        <div className="absolute rounded-full blur-3xl opacity-[0.03] w-[40vw] h-[40vw] bottom-0 left-0 bg-[#FFC619]" />
       </div>
 
-      {/* CONTENT */}
-      <div 
-        className="relative z-10 w-full h-full flex items-center"
-        style={{
-          paddingLeft: "clamp(1rem, 6%, 6rem)",
-          paddingRight: "clamp(1rem, 6%, 6rem)",
-          paddingTop: "clamp(1rem, 3vh, 2rem)",
-          paddingBottom: "clamp(1rem, 3vh, 2rem)",
-        }}
-      >
-        <div className="w-full grid lg:grid-cols-12 gap-6 lg:gap-12 xl:gap-16 items-center">
+      <div className="relative z-10 w-full h-full flex items-center px-[8%]">
+        <div className="w-full grid lg:grid-cols-12 gap-12 items-center">
           
-          {/* KOLOM KIRI: IMAGE - TANPA BORDER DAN TANPA DECORATIVE LINE */}
+          {/* SISI KIRI: IMAGE */}
           <div className="lg:col-span-6 flex justify-center lg:justify-start order-2 lg:order-1">
             <div
               ref={imageFrameRef}
-              className="relative bg-white shadow-2xl rounded-sm overflow-hidden"
+              className="relative p-3 bg-white shadow-2xl rounded-sm border border-slate-100"
               style={{
-                padding: "clamp(0.75rem, 2vw, 1rem)",
-                maxWidth: "clamp(260px, 70vw, 480px)",
+                maxWidth: "480px",
                 width: "100%",
                 aspectRatio: "4/5",
               }}
             >
               <img
-                src={data.image}
+                src={displayImage}
                 alt={data.title}
                 className="w-full h-full object-cover rounded-sm"
-                style={{
-                  objectPosition: "center 30%",
-                }}
               />
             </div>
           </div>
 
-          {/* KOLOM KANAN: TEXT */}
-          <div 
-            ref={textGroupRef} 
-            className="lg:col-span-6 flex flex-col justify-center order-1 lg:order-2"
-          >
-            <div className="max-w-xl mx-auto lg:mx-0">
-              <div 
-                className="inline-block px-3 py-1 mb-4 text-[10px] font-black tracking-[0.3em] uppercase rounded-sm"
-                style={{
-                  backgroundColor: "var(--color-teks)",
-                  color: "white",
-                }}
-              >
-                {data.meta || "Corporate Overview"}
-              </div>
+          {/* SISI KANAN: TEXT */}
+          <div ref={textGroupRef} className="lg:col-span-6 flex flex-col order-1 lg:order-2">
+            <div className="max-w-xl">
+              <span className="text-[#FFC619] font-bold tracking-[0.3em] uppercase text-[10px] mb-4 block">
+                {data.meta || "Detail Overview"}
+              </span>
               
-              <h2 
-                className="font-['Playfair_Display'] font-bold leading-[1.1] mb-4 lg:mb-6 tracking-tighter"
-                style={{
-                  color: "var(--color-teks)",
-                  fontSize: "clamp(1.5rem, 5vw, 3.5rem)",
-                }}
-              >
+              <h2 className="font-['Playfair_Display'] font-bold leading-[1.1] mb-6 tracking-tighter text-[#1D2B53]"
+                style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)" }}>
                 {data.title}
               </h2>
 
-              <div 
-                className="mb-5 lg:mb-6"
-                style={{
-                  width: "clamp(40px, 8vw, 60px)",
-                  height: "clamp(3px, 0.6vh, 5px)",
-                  backgroundColor: "var(--color-utama)",
-                }}
-              />
+              <div className="h-[3px] w-12 bg-[#1D2B53] mb-8" />
 
-              <div className="space-y-3 md:space-y-4">
-                {Array.isArray(data.description) ? (
-                  data.description.map((p, idx) => (
-                    <p 
-                      key={idx} 
-                      className="leading-relaxed font-light"
-                      style={{
-                        color: "var(--color-teks-muted)",
-                        fontSize: "clamp(0.8rem, 2vw, 1rem)",
-                        borderLeftWidth: "2px",
-                        borderLeftColor: "var(--color-bg-alt)",
-                        paddingLeft: "clamp(0.8rem, 2.5vw, 1.2rem)",
-                      }}
-                    >
-                      {p}
-                    </p>
-                  ))
-                ) : (
-                  <p 
-                    className="leading-relaxed font-light"
-                    style={{
-                      color: "var(--color-teks-muted)",
-                      fontSize: "clamp(0.8rem, 2vw, 1rem)",
-                      borderLeftWidth: "2px",
-                      borderLeftColor: "var(--color-bg-alt)",
-                      paddingLeft: "clamp(0.8rem, 2.5vw, 1.2rem)",
-                    }}
-                  >
-                    {data.description}
-                  </p>
-                )}
+              <div className="space-y-4">
+                {/* Gunakan dangerouslySetInnerHTML jika data dari CMS mengandung tag HTML */}
+                <div 
+                  className="text-slate-500 text-base lg:text-lg leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: data.description }}
+                />
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>

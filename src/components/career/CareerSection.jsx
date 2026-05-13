@@ -3,7 +3,7 @@ import gsap from "gsap";
 import CareerNavigator from "@/components/career/CareerNavigator";
 import EmployeeEvents from "@/components/career/EmployeeEvents";
 import CareerJobs from "@/components/career/CareerJobs";
-import logoAsliUrl from "@/assets/logo.jpg";
+import logoAsliUrl from "@/assets/logo-trans.png";
 
 const CareerSection = ({ activeIndex }) => {
   const sectionRef = useRef(null);
@@ -21,16 +21,16 @@ const CareerSection = ({ activeIndex }) => {
 
       const tl = gsap.timeline();
 
-      // Siluet dibuat sangat halus (0.03) agar tidak mengalihkan fokus dari teks
+      // Animasi Siluet: Muncul perlahan dengan scale down untuk kesan elegan
       tl.fromTo(silhouetteRef.current, 
-        { x: 50, opacity: 0, scale: 1.1 },
-        { x: 0, opacity: 0.03, scale: 1, duration: 1.5, ease: "power3.out" }
+        { opacity: 0, scale: 1.2, rotate: 5 },
+        { opacity: 0.1, scale: 1, rotate: 0, duration: 2, ease: "power2.out" }
       );
 
       tl.fromTo(".reveal-text", 
         { y: 60, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.8, stagger: 0.2, ease: "power4.out" },
-        "-=1"
+        "-=1.5"
       );
 
       tl.fromTo(contentRef.current,
@@ -46,18 +46,23 @@ const CareerSection = ({ activeIndex }) => {
   return (
     <section
       ref={sectionRef}
-      className="section no-snap py-24 px-6 md:px-12 bg-[#050A1A] relative overflow-hidden" // Navy yang lebih pekat untuk kontras maksimal
+      className="section no-snap py-24 px-6 md:px-12 bg-[#050A1A] relative overflow-hidden"
       id="career-section"
     >
-      {/* 🎭 ARTISTIC SILHOUETTE - Low Opacity for Readability */}
+      {/* 🎭 FIXED ARTISTIC SILHOUETTE */}
+      {/* Menggunakan mix-blend-overlay agar menyatu dengan warna Navy. 
+          Opacity dinaikkan sedikit ke 0.1 agar bentuk logo "AS PUTRA" mulai terlihat tapi tetap subtle.
+      */}
       <div 
         ref={silhouetteRef}
-        className="absolute -right-10 -bottom-10 w-[500px] h-[500px] pointer-events-none select-none"
+        className="absolute -right-20 -bottom-20 w-[400px] md:w-[700px] h-[400px] md:h-[700px] pointer-events-none select-none z-0"
+        style={{ mixBlendMode: 'overlay' }}
       >
         <img 
           src={logoAsliUrl} 
-          alt="AS PUTRA Logo" 
-          className="w-full h-full object-contain grayscale invert brightness-200"
+          alt="Silhouette Decor" 
+          className="w-full h-full object-contain opacity-40 contrast-125 grayscale"
+          // Grayscale + Overlay akan membuat bagian gelap logo mengikuti warna background
         />
       </div>
 
@@ -67,11 +72,10 @@ const CareerSection = ({ activeIndex }) => {
           <div ref={bigTitleRef}>
             <div className="reveal-text flex items-center gap-3 mb-6">
               <div className="w-10 h-[2px] bg-[var(--color-utama)]"></div>
-              <span className="text-[var(--color-utama)] text-xs font-bold uppercase tracking-[0.4em]">
+              <span className="text-[var(--color-utama)] text-xs font-black uppercase tracking-[0.4em]">
                 Career Opportunities
               </span>
             </div>
-            {/* Teks Putih Murni (#FFFFFF) di atas Navy Peat adalah kombinasi paling nyaman */}
             <h2 className="font-['Playfair_Display'] text-white text-5xl md:text-7xl leading-[1.1] reveal-text font-bold">
               Build the <br />
               <span className="text-[var(--color-utama)] italic font-medium">Future</span> with us.
@@ -79,32 +83,34 @@ const CareerSection = ({ activeIndex }) => {
           </div>
           
           <div className="reveal-text">
-            {/* Teks deskripsi menggunakan Putih dengan opasitas 90% */}
-            <p className="text-white/90 text-lg md:text-xl max-w-md border-l-2 border-[var(--color-utama)]/50 pl-6 leading-relaxed">
-              Bukan sekadar pekerjaan. Ini adalah tempat di mana visi bertemu dengan eksekusi. Jadilah bagian dari evolusi <span className="text-[var(--color-utama)] font-bold">AS PUTRA</span>.
+            <p className="text-white/80 text-lg md:text-xl max-w-md border-l-2 border-[var(--color-utama)] pl-6 leading-relaxed">
+              Bukan sekadar pekerjaan. Ini adalah tempat di mana visi bertemu dengan eksekusi. Jadilah bagian dari evolusi <span className="text-white font-bold">AS PUTRA</span>.
             </p>
           </div>
         </div>
 
         {/* 📱 CONTENT AREA */}
         <div ref={contentRef} className="relative">
-          {/* Navigator dengan Glassmorphism yang lebih gelap agar teks navigator jelas */}
-          <div className="z-20 bg-white/5 backdrop-blur-xl p-2 rounded-2xl border border-white/10 shadow-2xl inline-block">
+          <div className="z-20 bg-white/5 backdrop-blur-xl p-2 rounded-2xl border border-white/10 shadow-2xl inline-block mb-12">
             <CareerNavigator activeTab={activeTab} setActiveTab={setActiveTab} />
           </div>
 
-          <div className="mt-12 min-h-[500px]">
+          <div className="min-h-[500px]">
             {activeTab === "events" ? (
-              <EmployeeEvents isActive={true} />
+              <div className="animate-in fade-in duration-700">
+                <EmployeeEvents isActive={true} />
+              </div>
             ) : (
-              <CareerJobs isActive={true} />
+              <div className="animate-in fade-in duration-700">
+                <CareerJobs isActive={true} />
+              </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Subtle Grid Background Decor */}
-      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none"></div>
+      {/* Decorative Gradient Glow - Menambah kedalaman visual tanpa mengganggu teks */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--color-utama)] opacity-[0.03] blur-[120px] pointer-events-none"></div>
     </section>
   );
 };

@@ -83,17 +83,17 @@ const NewsTeaser = ({ activeIndex, index }) => {
       className="section relative w-full h-[100vh] flex items-center justify-center bg-[#0F1A3E] overflow-hidden"
       id={`section-${index}`}
     >
-      {/* Background Decor - Sama dengan Culture/History */}
+      {/* Background Decor */}
       <div className="absolute inset-0 flex items-center justify-center opacity-[0.025] pointer-events-none -z-0">
         <img src={logoIcon} alt="" className="w-[85%] h-auto rotate-[-12deg] scale-110" />
       </div>
 
-      {/* Main Container - Dibatasi max-h agar muat satu layar */}
+      {/* Main Container - justify-center dikombinasikan dengan padding yang lebih ketat */}
       <div className="w-full max-w-[1300px] h-full max-h-[90vh] mx-auto px-6 md:px-12 z-10 flex flex-col justify-center">
         
-        {/* HEADER - Dibuat lebih compact */}
-        <div ref={headerRef} className="mb-10 lg:mb-14">
-          <span className="text-[#FFC700] font-black tracking-[0.4em] uppercase text-[10px] md:text-xs block mb-3">
+        {/* HEADER - Margin bottom dikurangi sedikit agar lebih rapat */}
+        <div ref={headerRef} className="mb-6 lg:mb-10">
+          <span className="text-[#FFC700] font-black tracking-[0.4em] uppercase text-[10px] md:text-xs block mb-2">
             Latest Updates
           </span>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -107,8 +107,8 @@ const NewsTeaser = ({ activeIndex, index }) => {
           </div>
         </div>
 
-        {/* GRID - Menggunakan array data */}
-        <div className="grid md:grid-cols-3 gap-5 lg:gap-8 mb-10 lg:mb-14">
+        {/* GRID - Margin bottom dikurangi secara signifikan (dari mb-10/14 menjadi mb-6/8) */}
+        <div className="grid md:grid-cols-3 gap-5 lg:gap-8 mb-6 lg:mb-8">
           {news.slice(0, 3).map((item, idx) => (
             <Link
               key={item.id}
@@ -116,17 +116,15 @@ const NewsTeaser = ({ activeIndex, index }) => {
               ref={(el) => (cardsRef.current[idx] = el)}
               className="group relative flex flex-col bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden transition-all duration-500 hover:bg-white/10 hover:border-white/20 shadow-2xl shadow-black/20"
             >
-              {/* IMAGE AREA - Aspect Ratio Tetap */}
+              {/* IMAGE AREA */}
               <div className="relative aspect-[16/10] overflow-hidden">
                 <img
                   src={item.image}
                   alt={item.title}
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
-                {/* Overlay Gradasi agar teks terbaca */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0F1A3E]/80 via-transparent to-transparent opacity-80" />
                 
-                {/* Category & Date */}
                 <div className="absolute top-3 left-3 bg-[#FFC700] text-[#0F1A3E] px-2.5 py-1 rounded-full text-[9px] font-black tracking-wider uppercase">
                   {categoryConfig[item.category]?.label || "News"}
                 </div>
@@ -144,7 +142,6 @@ const NewsTeaser = ({ activeIndex, index }) => {
                   {item.desc}
                 </p>
                 
-                {/* Arrow Link */}
                 <div className="mt-auto flex items-center gap-2 text-[#FFC700] text-[10px] font-black uppercase tracking-[0.15em]">
                   <span>Read More</span>
                   <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
@@ -154,7 +151,7 @@ const NewsTeaser = ({ activeIndex, index }) => {
           ))}
         </div>
 
-        {/* FOOTER BUTTON */}
+        {/* FOOTER BUTTON - Sekarang lebih dekat dengan Grid */}
         <div ref={buttonRef} className="flex justify-center">
           <Link
             to="/news"

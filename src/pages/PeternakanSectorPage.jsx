@@ -1,47 +1,69 @@
-// src/pages/SectorPage.jsx
-import React from 'react';
-import IntroSection from '@/components/sector/SectorPeternakan/IntroSection';
-import TenLayout from '@/components/sector/SectorPeternakan/Layout10';
-import FirstLayout from '@/components/sector/SectorPeternakan/Section1';
-import SecondLayout from '@/components/sector/SectorPeternakan/Section2';
-import ThirdLayout from '@/components/sector/SectorPeternakan/Section3';
-import ForthLayout from '@/components/sector/SectorPeternakan/Layout3';
-import FifthLayout from '@/components/sector/SectorPeternakan/Section4';
-import SixLayout from '@/components/sector/SectorPeternakan/Section5';
-import SevenLayuout from '@/components/sector/SectorPeternakan/Section6';
-import NineLayout from '@/components/sector/SectorPeternakan/Layout9';
-import Closing from '@/components/sector/SectorPeternakan/closing';
-import { sectorData } from '@/components/data/SectorData';
-import useFullpageSnap from '@/hooks/useFullPageSnap';
+// src/pages/PeternakanSectorPage.jsx
+import React, { useEffect, useState } from "react";
+import IntroSection from "@/components/sector/IntroSection";
+import useFullpageSnap from "@/hooks/useFullPageSnap"; 
+import IntroSectionSkeleton from "@/components/skeleton/IntroSectionSkeleton";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import api from "@/lib/api"; 
+
+const COMPONENT_MAP = {
+  IntroSection,
+};
 
 const PeternakanSectorPage = () => {
-  useFullpageSnap({enabled: true});
+  const [data, setData] = useState(null);
 
-  // Filter data berdasarkan layout
-  const layout1Data = sectorData.find(sector => sector.layout === 'layout1');
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get("/api/v1/page/Sector Peternakan");
+        setData(response.data);
+      } catch (error) {
+        console.error("Failed to fetch page data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const { activeIndex } = useFullpageSnap({ 
+    enabled: !!data,
+    config: { sectionSelector: ".section" }
+  });
+
+  useEffect(() => {
+    if (data) {
+      const timer = setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+        window.scrollTo(0, 0);
+      }, 150); 
+      return () => clearTimeout(timer);
+    }
+  }, [data]);
 
   return (
-    <main className="overflow-x-hidden">
-      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style={{ display: 'none' }}>
-        <defs>
-          <filter id="goo">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
-            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="goo" />
-            <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
-          </filter>
-        </defs>
-      </svg>
-      <IntroSection/>
-      <TenLayout/>
-      {layout1Data && <FirstLayout data={layout1Data} />}
-      <SecondLayout />
-      <ThirdLayout />
-      <FifthLayout />
-      <ForthLayout />
-      <NineLayout/>
-      <SixLayout/>
-      <SevenLayuout/>
-      <Closing/>
+    <main className="relative bg-black min-h-screen">
+      <Navbar />
+      {!data ? (
+        <IntroSectionSkeleton />
+      ) : (
+        <div className="fullpage-wrapper">
+          {data?.data?.map((section, index) => {
+            const Component = COMPONENT_MAP[section.layout_name];
+            if (!Component) return null;
+
+            return (
+              <Component
+                key={section.id}
+                data={section} // Data dikirim dari sini
+                isActive={activeIndex === index}
+                index={index}
+              />
+            );
+          })}
+          <Footer />
+        </div>
+      )}
     </main>
   );
 };

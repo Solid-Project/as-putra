@@ -4,8 +4,7 @@ import {
   ChartBarIcon, 
   UserGroupIcon, 
   GlobeAltIcon,
-  ArrowRightIcon,
-  EnvelopeIcon
+  SparklesIcon
 } from "@heroicons/react/24/outline";
 
 const whyJoinData = [
@@ -13,101 +12,90 @@ const whyJoinData = [
     id: 1,
     title: "Pertumbuhan",
     description:
-      "Peluang untuk pengembangan profesional dan kemajuan karir yang berkelanjutan.",
+      "Kami berinvestasi pada masa depan Anda melalui program pengembangan profesional dan jenjang karir yang terukur.",
     icon: ChartBarIcon,
   },
   {
     id: 2,
     title: "Budaya",
     description:
-      "Lingkungan kolaboratif dan inklusif di mana setiap suara dihargai dan didengar.",
+      "Lingkungan kolaboratif yang inklusif, di mana setiap ide dihargai dan setiap individu adalah keluarga.",
     icon: UserGroupIcon,
   },
   {
     id: 3,
     title: "Dampak",
     description:
-      "Bekerja pada proyek-proyek yang membuat perbedaan nyata di dunia dan komunitas sekitar.",
+      "Berkontribusi pada proyek strategis yang memberikan dampak nyata bagi industri dan komunitas sekitar.",
     icon: GlobeAltIcon,
   },
 ];
 
-const WhyJoin = ({activeIndex}) => {
+const WhyJoin = ({ activeIndex }) => {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const cardsRef = useRef([]);
-  const SECTION_INDEX = 2; // sesuaikan urutan kamu
+  const SECTION_INDEX = 2; 
   const isActive = activeIndex === SECTION_INDEX;
 
   useEffect(() => {
-  const ctx = gsap.context(() => {
-    const cards = cardsRef.current;
+    const ctx = gsap.context(() => {
+      if (!isActive) return;
 
-    // ❗ kalau tidak aktif → tampil normal
-    if (!isActive) {
-      gsap.set(titleRef.current, { y: 0, opacity: 1 });
-      gsap.set(cards, { y: 0, opacity: 1 });
-      return;
-    }
+      const tl = gsap.timeline();
 
-    // 🔥 INITIAL STATE
-    gsap.set(titleRef.current, { y: 50, opacity: 0 });
+      tl.fromTo(titleRef.current, 
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: "power4.out" }
+      )
+      .fromTo(
+        cardsRef.current,
+        { y: 60, opacity: 0, scale: 0.9 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          stagger: 0.2,
+          duration: 0.8,
+          ease: "expo.out",
+        },
+        "-=0.6"
+      );
+    }, sectionRef);
 
-    gsap.set(cards, {
-      y: 50,
-      opacity: 0,
-      scale: 0.95,
-    });
-
-    // 🔥 TIMELINE
-    const tl = gsap.timeline();
-
-    tl.to(titleRef.current, {
-      y: 0,
-      opacity: 1,
-      duration: 0.7,
-      ease: "power3.out",
-    })
-    .to(
-      cards,
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        stagger: 0.15,
-        duration: 0.6,
-        ease: "power3.out",
-      },
-      "-=0.3"
-    );
-
-  }, sectionRef);
-
-  return () => ctx.revert();
-}, [isActive]);
+    return () => ctx.revert();
+  }, [isActive]);
 
   return (
     <section
       ref={sectionRef}
-      className="section no-snap py-20 px-5 bg-white"
+      className="section no-snap py-24 px-6 bg-[#050A1A] relative overflow-hidden" // Konsisten dengan Navy Gelap
       id="why-join-section"
-      data-title="Mengapa Bergabung"
-      data-theme="light"
     >
-      <div className="max-w-[1200px] mx-auto">
-        {/* Title Section - SAMA DENGAN HISTORY TIMELINE */}
-        <div ref={titleRef} className="text-center mb-16">
-          <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl text-[var(--color-teks)] mb-4">
-            Mengapa{" "}
-            <span className="text-[var(--color-utama)]">AS PUTRA?</span>
+      {/* Dekorasi Background agar tidak kosong */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
+        <div className="absolute top-10 left-10 w-64 h-64 bg-[var(--color-utama)] rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-10 right-10 w-64 h-64 bg-blue-600 rounded-full blur-[120px]"></div>
+      </div>
+
+      <div className="max-w-[1200px] mx-auto relative z-10">
+        {/* ✨ Title Section: Bold & Editorial */}
+        <div ref={titleRef} className="text-center mb-20">
+          <div className="flex items-center justify-center gap-2 text-[var(--color-utama)] mb-4">
+            <SparklesIcon className="w-5 h-5" />
+            <span className="text-xs font-black uppercase tracking-[0.4em]">The Value</span>
+          </div>
+          <h2 className="font-['Playfair_Display'] text-4xl md:text-6xl text-white mb-6">
+            Mengapa <span className="text-[var(--color-utama)] italic font-medium">AS PUTRA?</span>
           </h2>
-          <div className="w-16 h-0.5 bg-[var(--color-utama)] mx-auto mb-4"></div>
-          <p className="text-[var(--color-teks-muted)] max-w-2xl mx-auto">
-            Temukan mengapa ribuan profesional memilih untuk tumbuh dan berkembang bersama kami
+          <div className="w-24 h-1 bg-[var(--color-utama)] mx-auto mb-8 rounded-full"></div>
+          <p className="text-gray-300 max-w-2xl mx-auto text-lg leading-relaxed">
+            Temukan alasan mengapa para profesional berbakat memilih untuk membangun mimpi dan berkembang bersama kami.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* 📋 Cards: High Contrast & Readability */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
           {whyJoinData.map((item, index) => {
             const Icon = item.icon;
             
@@ -115,26 +103,28 @@ const WhyJoin = ({activeIndex}) => {
               <div
                 key={item.id}
                 ref={(el) => (cardsRef.current[index] = el)}
-                className="group bg-[var(--color-bg-alt)] rounded-xl p-8 text-center shadow-md hover:shadow-lg transition-all duration-300"
+                className="group relative bg-white/5 border border-white/10 rounded-[2rem] p-10 text-center transition-all duration-500 hover:bg-white/[0.08] hover:border-[var(--color-utama)]/40 shadow-2xl"
               >
-                {/* Icon Container */}
-                <div className="w-20 h-20 bg-[var(--color-utama)] rounded-full flex items-center justify-center mx-auto mb-6 shadow-md group-hover:scale-110 transition-transform duration-300">
-                  <Icon className="w-10 h-10 text-white" />
+                {/* Icon Container: Navy on Yellow for visibility */}
+                <div className="w-20 h-20 bg-[var(--color-utama)] rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-[var(--color-utama)]/20 rotate-3 group-hover:rotate-0 transition-transform duration-500">
+                  <Icon className="w-10 h-10 text-[#050A1A] stroke-[1.5px]" />
                 </div>
 
-                {/* Content */}
-                <div className="relative z-10">
-                  <h3 className="text-2xl font-bold text-[var(--color-teks)] mb-4 group-hover:text-[var(--color-utama)] transition-colors duration-300">
-                    {item.title}
-                  </h3>
-                  <p className="text-[var(--color-teks-muted)] leading-relaxed text-sm">
-                    {item.description}
-                  </p>
-                </div>
+                {/* Content: Putih & Gray-200 agar nyaman dibaca */}
+                <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-[var(--color-utama)] transition-colors">
+                  {item.title}
+                </h3>
+                <p className="text-gray-300 leading-relaxed text-sm font-medium">
+                  {item.description}
+                </p>
 
-                {/* Decorative Line */}
-                <div className="mt-6">
-                  <div className="w-12 h-0.5 bg-[var(--color-utama)] group-hover:w-24 transition-all duration-300 mx-auto" />
+                {/* Decorative Accent */}
+                <div className="mt-8 flex justify-center opacity-20 group-hover:opacity-100 transition-opacity">
+                  <div className="flex gap-1">
+                    <div className="w-1 h-1 rounded-full bg-[var(--color-utama)]"></div>
+                    <div className="w-8 h-[1px] bg-[var(--color-utama)] self-center"></div>
+                    <div className="w-1 h-1 rounded-full bg-[var(--color-utama)]"></div>
+                  </div>
                 </div>
               </div>
             );
