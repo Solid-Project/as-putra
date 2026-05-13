@@ -1,287 +1,149 @@
-import React, { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import bgLayout from "@/assets/img/SectorPeternakanKedua.webp";
+import React, { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
+import bgLayout from '@/assets/img/Carousel/option.webp';
+
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Layout1 = () => {
+const Layout10 = () => {
   const sectionRef = useRef(null);
-  const imageFrameRef = useRef(null);
-  const textGroupRef = useRef(null);
-  const floatRef = useRef(null);
-
-  // =========================
-  // STATIC DATA (ARETHA FARM)
-  // =========================
-  const data = {
-    id: "aretha",
-    title: "Construction",
-    meta: "Corporate Overview",
-    image: bgLayout,
-    description: [
-      "Mendukung Pembangunan Infrastruktur dalam penyediaan material dan kebutuhan konstruksi untuk mendukung pembangunan regional.",
-    ],
-  };
+  const parallaxBgRef = useRef(null);
+  const cardRef = useRef(null);
+  const titleRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const shapes = floatRef.current?.children;
-
-      if (shapes) {
-        if (shapes[0]) {
-          gsap.to(shapes[0], {
-            y: 50,
-            x: 30,
-            rotate: 20,
-            duration: 15,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-          });
+      
+      // 1. LIVE PARALLAX BACKGROUND (Slow Motion Depth)
+      // Gambar bergerak perlahan mengikuti scroll untuk kesan megah
+      gsap.fromTo(parallaxBgRef.current, 
+        { y: "-10%" }, 
+        {
+          y: "10%",
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1,
+          }
         }
-        if (shapes[1]) {
-          gsap.to(shapes[1], {
-            y: -40,
-            x: -25,
-            rotate: -15,
-            duration: 12,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-          });
-        }
-        if (shapes[2]) {
-          gsap.to(shapes[2], {
-            y: 35,
-            x: -20,
-            rotate: 10,
-            duration: 10,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-          });
-        }
-        if (shapes[3]) {
-          gsap.to(shapes[3], {
-            y: -25,
-            x: 35,
-            rotate: -8,
-            duration: 13,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-          });
-        }
-      }
+      );
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 2,
-          invalidateOnRefresh: true,
-        },
-      });
+      // 2. LIVE PARALLAX TITLE (Floating Vision)
+      // Teks "Visi. Global. Mandiri." bergerak naik pelan
+      gsap.fromTo(titleRef.current, 
+        { y: 50 }, 
+        {
+          y: -50,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.2,
+          }
+        }
+      );
 
-      tl.fromTo(
-        imageFrameRef.current,
-        { x: "-70%", opacity: 0 },
-        { x: "0%", opacity: 1, ease: "power2.inOut", duration: 1 },
-      )
-        .to(imageFrameRef.current, { duration: 0.8 })
-        .to(imageFrameRef.current, {
-          x: "70%",
-          opacity: 0,
-          ease: "power2.inOut",
-          duration: 1,
-        });
+      // 3. LIVE PARALLAX CARD (Fast Lift)
+      // Card putih di kanan bergerak lebih cepat agar terlihat kontras di depan background
+      gsap.fromTo(cardRef.current, 
+        { y: 150 }, 
+        {
+          y: -150,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.8, // Speed paling tinggi untuk depth maksimal
+          }
+        }
+      );
 
-      tl.fromTo(
-        textGroupRef.current,
-        { x: "70%", opacity: 0 },
-        { x: "0%", opacity: 1, ease: "power2.inOut", duration: 1 },
-        0,
-      )
-        .to(textGroupRef.current, { duration: 0.8 }, 1)
-        .to(
-          textGroupRef.current,
-          {
-            x: "-70%",
-            opacity: 0,
-            ease: "power2.inOut",
-            duration: 1,
-          },
-          ">",
-        );
+      // 4. INITIAL REVEAL (Animasi Masuk Sekali)
+      // Menjaga estetika saat section pertama kali terdeteksi
+      gsap.fromTo(titleRef.current.children,
+        { x: -50, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 1.5,
+          stagger: 0.2,
+          ease: "power4.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 60%",
+          }
+        }
+      );
+
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="section relative w-full bg-white overflow-y-auto overflow-x-hidden"
-      id={data.id}
-      data-theme="light"
-      style={{
-        height: "100vh",
-        minHeight: "600px",
-        maxHeight: "1080px",
-      }}
+    <section 
+      ref={sectionRef} 
+      className="section min-h-screen flex items-center bg-[#F8FAFC] py-10 md:py-10 relative overflow-hidden"
+      id="ten-layout"
     >
-      {/* BACKGROUND SHAPES */}
-      <div
-        ref={floatRef}
-        className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
-      >
-        <div
-          className="absolute rounded-full blur-3xl"
-          style={{
-            backgroundColor: "var(--color-utama)",
-            opacity: 0.06,
-            width: "min(50vw, 500px)",
-            height: "min(50vw, 500px)",
-            top: "-10%",
-            right: "-5%",
-          }}
+      
+      {/* 1. PARALLAX BACKGROUND (Depth Layer) */}
+      <div className="absolute top-0 left-0 w-full lg:w-3/5 h-[130%] -z-0 overflow-hidden">
+        <img 
+          ref={parallaxBgRef}
+          src= {bgLayout}
+          alt="Modern Farm" 
+          className="w-full h-full object-cover origin-top scale-110" 
         />
-        <div
-          className="absolute rounded-full blur-2xl"
-          style={{
-            backgroundColor: "var(--color-aksen)",
-            opacity: 0.05,
-            width: "min(40vw, 400px)",
-            height: "min(40vw, 400px)",
-            bottom: "-10%",
-            left: "-8%",
-          }}
-        />
-        <div
-          className="absolute opacity-20 hidden lg:block"
-          style={{
-            backgroundImage:
-              "radial-gradient(var(--color-utama) 2px, transparent 2px)",
-            backgroundSize: "clamp(20px, 4vw, 30px) clamp(20px, 4vw, 30px)",
-            width: "min(25vw, 200px)",
-            height: "min(25vw, 200px)",
-            top: "15%",
-            left: "5%",
-          }}
-        />
-        <div
-          className="absolute rotate-12 rounded-2xl opacity-30 hidden xl:block"
-          style={{
-            border: "2px solid var(--color-aksen)",
-            width: "min(12vw, 100px)",
-            height: "min(12vw, 100px)",
-            bottom: "20%",
-            right: "10%",
-          }}
-        />
-        <div className="absolute inset-0 opacity-[0.015] pointer-events-none">
-          <div
-            className="w-full h-full"
-            style={{
-              backgroundImage: `
-                linear-gradient(to right, var(--color-utama) 1px, transparent 1px),
-                linear-gradient(to bottom, var(--color-utama) 1px, transparent 1px)
-              `,
-              backgroundSize: "clamp(30px, 5vw, 50px) clamp(30px, 5vw, 50px)",
-            }}
-          />
-        </div>
+        {/* Overlay Gradasi agar Sejajar dengan Grid Putih di Kanan */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-[#F8FAFC] lg:block hidden z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-[#F8FAFC] lg:hidden block z-10" />
       </div>
 
-      {/* CONTENT */}
-      <div
-        className="relative z-10 w-full h-full flex items-center"
-        style={{
-          paddingLeft: "clamp(1rem, 6%, 6rem)",
-          paddingRight: "clamp(1rem, 6%, 6rem)",
-          paddingTop: "clamp(1rem, 3vh, 2rem)",
-          paddingBottom: "clamp(1rem, 3vh, 2rem)",
-        }}
-      >
-        <div className="w-full grid lg:grid-cols-12 gap-6 lg:gap-12 xl:gap-16 items-center">
-          {/* IMAGE */}
-          <div className="lg:col-span-6 flex justify-center lg:justify-start order-2 lg:order-1">
-            <div
-              ref={imageFrameRef}
-              className="relative bg-white shadow-2xl rounded-sm overflow-hidden"
-              style={{
-                padding: "clamp(0.75rem, 2vw, 1rem)",
-                maxWidth: "clamp(260px, 70vw, 480px)",
-                width: "100%",
-                aspectRatio: "4/5",
-              }}
+      <div className="container mx-auto px-[6%] relative z-10">
+        <div className="grid lg:grid-cols-12 gap-12 items-center">
+          
+          {/* KOLOM KIRI: JUDUL RAKSASA (Parallax Sumbu Y) */}
+      <div ref={titleRef} className="lg:col-span-6 flex flex-col gap-2 z-20 w-fit max-w-full">
+            <span className="text-white lg:text-slate-500 font-bold tracking-[0.4em] text-[10px] uppercase mb-2 block opacity-90 lg:opacity-100">
+            
+            </span>
+       <h1 className="font-['Playfair_Display'] text-6xl md:text-7xl lg:text-[5.5vw] xl:text-[6.5rem] text-white font-black leading-[0.85] tracking-tighter drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]">
+              Linuwih Linuhung Niti Mangsa
+            </h1>
+      
+           
+          </div>
+
+
+          <div className="lg:col-span-5 lg:col-start-8 z-10 mt-1 lg:mt-0">
+            <div 
+              ref={cardRef}
+              className="bg-white p-12 md:p-16 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] rounded-sm border-t-2 border-[var(--color-utama)]"
             >
-              <img
-                src={data.image}
-                alt={data.title}
-                className="w-full h-full object-cover rounded-sm"
-                style={{ objectPosition: "center 30%" }}
-              />
-            </div>
-          </div>
-
-          {/* TEXT */}
-          <div
-            ref={textGroupRef}
-            className="lg:col-span-6 flex flex-col justify-center order-1 lg:order-2"
-          >
-            <div className="max-w-xl mx-auto lg:mx-0">
-              <div
-                className="inline-block px-3 py-1 mb-4 text-[10px] font-black tracking-[0.3em] uppercase rounded-sm"
-                style={{
-                  backgroundColor: "var(--color-teks)",
-                  color: "white",
-                }}
-              >
-                {data.meta}
-              </div>
-
-              <h2
-                className="font-['Playfair_Display'] font-bold leading-[1.1] mb-4 lg:mb-6 tracking-tighter"
-                style={{
-                  color: "var(--color-teks)",
-                  fontSize: "clamp(1.5rem, 5vw, 3.5rem)",
-                }}
-              >
-                {data.title}
+              <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl text-slate-900 font-bold mb-2 leading-tight tracking-tight">
+             Berinvestasi pada fondasi masa depan generasi penerus.
               </h2>
+              <p className="text-slate-500 text-lg leading-relaxed font-light mb-1 border-l border-slate-100 pl-8">
+              AS Putra Group berdedikasi menyelenggarakan ekosistem pendidikan komprehensif yang tidak sekadar berfokus pada keunggulan akademik, tetapi juga pada pembentukan karakter, nilai-nilai luhur, dan kesadaran lingkungan sedini mungkin.
+              </p>
 
-              <div
-                className="mb-5 lg:mb-6"
-                style={{
-                  width: "clamp(40px, 8vw, 60px)",
-                  height: "clamp(3px, 0.6vh, 5px)",
-                  backgroundColor: "var(--color-utama)",
-                }}
-              />
-
-              <div className="space-y-3 md:space-y-4">
-                <p
-                  className="leading-relaxed font-light text-justify"
-                  style={{
-                    color: "var(--color-teks-muted)",
-                    fontSize: "clamp(0.8rem, 2vw, 1rem)",
-                    borderLeftWidth: "2px",
-                    borderLeftColor: "var(--color-bg-alt)",
-                    paddingLeft: "clamp(0.8rem, 2.5vw, 1.2rem)",
-                  }}
-                >
-                  {data.description}
-                </p>
-              </div>
+              {/* Minimalist CTA Link */}
+           
             </div>
           </div>
+
         </div>
       </div>
     </section>
   );
 };
 
-export default Layout1;
+export default Layout10;
