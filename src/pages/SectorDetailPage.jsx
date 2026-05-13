@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import HeroSkeleton from "@/components/skeleton/HeroSkeleton";
 
 // Import Layouts
+import HeroSector from "@/components/sector/HeroSector";
 import IntroSection from "@/components/sector/IntroSection";
 import Layout1 from "@/components/sector/Layout1";
 import Layout2 from "@/components/sector/Layout2";
@@ -20,17 +21,18 @@ import Layout10 from "@/components/sector/Layout10";
 
 // Mendaftarkan semua layout yang mungkin muncul di API Sector
 const COMPONENT_MAP = {
+  "HeroSector": HeroSector,
   "IntroSection": IntroSection,
   "layout1": Layout1,
   "layout2": Layout2,
-  "Layout3": Layout3,
-  "Layout4": Layout4,
-  "Layout5": Layout5,
-  "Layout6": Layout6,
-  "Layout7": Layout7,
-  "Layout8": Layout8,
-  "Layout9": Layout9,
-  "Layout10": Layout10
+  "layout3": Layout3,
+  "layout4": Layout4,
+  "layout5": Layout5,
+  "layout6": Layout6,
+  "layout7": Layout7,
+  "layout8": Layout8,
+  "layout9": Layout9,
+  "layout10": Layout10
 };
 
 const SectorDetailPage = () => {

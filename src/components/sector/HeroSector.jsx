@@ -1,26 +1,23 @@
 import React, { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import sectorBg from '@/assets/img/sektor.webp';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HeroSector = () => {
+const HeroSector = ({ data, index }) => {
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
   const titleRef = useRef(null);
   const lineRef = useRef(null);
   const subtitleRef = useRef(null);
-  const scrollBtnRef = useRef(null);
 
-  const scrollToNext = () => {
-    // Mencari section berikutnya setelah hero untuk scroll otomatis
-    const nextSection = sectionRef.current?.nextElementSibling;
-    if (nextSection) {
-      nextSection.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  // Data Binding dari JSON
+  const displayTitle = data?.title || "Unit Bisnis Kami";
+  const displayDescription = data?.description || "";
+  const displayImage = data?.image 
+    ? `${import.meta.env.VITE_API_URL}/storage/${data.image}` 
+    : sectorBg;
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -55,17 +52,6 @@ const HeroSector = () => {
           },
         },
       );
-
-      // Animasi Tombol Scroll (Masuk pelan)
-      gsap.fromTo(
-        scrollBtnRef.current,
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 1,
-          delay: 1,
-        },
-      );
     }, sectionRef);
 
     return () => ctx.revert();
@@ -74,14 +60,15 @@ const HeroSector = () => {
   return (
     <section
       ref={sectionRef}
+      id={`section-${index}`}
       className="section relative h-screen flex items-center justify-center text-center overflow-hidden"
       style={{
-        backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url(${sectorBg})`,
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url(${displayImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
       data-theme="dark"
-      data-title="Unit Bisnis Kami"
+      data-title={displayTitle}
     >
       {/* Konten Utama Tengah */}
       <div ref={contentRef} className="relative z-10 px-5">
@@ -89,7 +76,7 @@ const HeroSector = () => {
           ref={titleRef}
           className="font-['Playfair_Display'] text-4xl md:text-5xl lg:text-7xl text-white mb-4 drop-shadow-lg"
         >
-          Unit Bisnis Kami
+          {displayTitle}
         </h1>
         <div
           ref={lineRef}
@@ -99,82 +86,13 @@ const HeroSector = () => {
           ref={subtitleRef}
           className="text-white/95 max-w-[600px] mx-auto mb-10 text-lg md:text-xl font-light"
         >
-          AS Putra Group mengembangkan berbagai sektor usaha yang saling terhubung, membentuk ekosistem bisnis yang kuat, efisien, dan berkelanjutan. Setiap sektor tidak berdiri sendiri melainkan saling mendukung untuk menciptakan nilai yang lebih besar, dari produksi hingga distribusi, dari layanan hingga pengalaman.
+          {displayDescription}
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-5 justify-center">
-          <Link
-            to="/sector"
-            className="group relative px-8 py-3.5 bg-[var(--color-utama)] text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-[var(--color-utama)]/30 hover:-translate-y-0.5"
-          >
-            <span className="relative z-10 flex items-center gap-2">
-              Lihat Semua Sektor
-            </span>
-          </Link>
-          <Link
-            to="/about"
-            className="group relative px-8 py-3.5 bg-white/20 backdrop-blur-sm border border-white/40 text-white font-medium tracking-wide rounded-full overflow-hidden transition-all duration-300 hover:bg-white/30 hover:-translate-y-0.5"
-          >
-            <span className="relative z-10 flex items-center gap-2">
-              Tentang Kami
-            </span>
-          </Link>
-        </div>
+        {/* Bagian Button Link telah dihapus */}
       </div>
 
-      <button
-        ref={scrollBtnRef}
-        onClick={scrollToNext}
-        className="absolute bottom-12 right-[10%] z-20 hidden lg:flex flex-col items-center gap-2 group cursor-pointer"
-      >
-        {/* Teks Scroll yang lebih besar & berjarak */}
-        <span className="vertical-text text-[11px] font-black uppercase tracking-[0.5em] text-white/40 group-hover:text-[var(--color-utama)] transition-colors duration-500 mb-4">
-          Scroll
-        </span>
-
-        {/* Stack Panah (Tanpa Line) */}
-        <div className="flex flex-col items-center -space-y-2">
-          <svg
-            className="w-8 h-8 text-[var(--color-utama)] animate-arrow-1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2.5}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-          <svg
-            className="w-8 h-8 text-[var(--color-utama)] animate-arrow-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2.5}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-          <svg
-            className="w-8 h-8 text-[var(--color-utama)] animate-arrow-3"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2.5}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </div>
-      </button>
+      {/* Bagian Button Scroll telah dihapus */}
     </section>
   );
 };

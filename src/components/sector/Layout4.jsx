@@ -1,124 +1,138 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import peternakanImg from "@/assets/img/sector-peternakan-2.webp";
+import logoAsliUrl from "@/assets/logo.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Layout4 = () => {
+const Layout4 = ({ data, index, isActive }) => {
   const sectionRef = useRef(null);
   const imageFrameRef = useRef(null);
   const textGroupRef = useRef(null);
+  
+  const [displayText, setDisplayText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const typingIntervalRef = useRef(null);
+
+  const displayTitle = data?.title || "Teknologi Modern";
+  const displaySubtitle = data?.subtitle || "Aretha Farm";
+  const displayDescription = data?.description || "";
+  const displayImage = data?.image 
+    ? `${import.meta.env.VITE_API_URL}/storage/${data.image}` 
+    : "";
+
+  const isLongText = displayDescription.length > 800;
+  const sectionClass = isLongText ? "section no-snap" : "section";
+
+  useEffect(() => {
+    if (!isActive || !displaySubtitle) {
+      setDisplayText("");
+      return;
+    }
+    let currentIdx = 0;
+    setIsTyping(true);
+    typingIntervalRef.current = setInterval(() => {
+      currentIdx++;
+      setDisplayText(displaySubtitle.slice(0, currentIdx));
+      if (currentIdx >= displaySubtitle.length) {
+        clearInterval(typingIntervalRef.current);
+        setIsTyping(false);
+      }
+    }, 70);
+    return () => clearInterval(typingIntervalRef.current);
+  }, [isActive, displaySubtitle]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 2,
-          invalidateOnRefresh: true,
+          start: "top center",
+          toggleActions: "play none none reverse",
         }
       });
 
-      // ✅ IMAGE (KANAN → MASUK DARI KANAN)
-      tl.fromTo(
-        imageFrameRef.current,
-        { x: "70%", opacity: 0 },
-        {
-          x: "0%",
-          opacity: 1,
-          ease: "power2.inOut",
-          duration: 1,
-        }
-      )
-      .to(imageFrameRef.current, { duration: 0.8 })
-      .to(imageFrameRef.current, {
-        x: "-70%",
-        opacity: 0,
-        ease: "power2.inOut",
-        duration: 1,
-      });
-
-      // ✅ TEXT (KIRI → MASUK DARI KIRI)
-      tl.fromTo(
-        textGroupRef.current,
-        { x: "-70%", opacity: 0 },
-        {
-          x: "0%",
-          opacity: 1,
-          ease: "power2.inOut",
-          duration: 1,
-        },
-        0
-      )
-      .to(textGroupRef.current, { duration: 0.8 }, 1)
-      .to(textGroupRef.current, {
-        x: "70%",
-        opacity: 0,
-        ease: "power2.inOut",
-        duration: 1,
-      }, ">");
-
+      tl.fromTo([textGroupRef.current, imageFrameRef.current],
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power3.out" }
+      );
     }, sectionRef);
-
     return () => ctx.revert();
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="section min-h-screen w-full flex items-center bg-white relative overflow-hidden px-[6%]"
-      id="fourth-layout"
-      data-theme="light"
+      id={`section-${index}`}
+      className={`${sectionClass} relative w-full flex flex-col bg-[#0F1A3E] overflow-hidden`}
+      style={{ 
+        minHeight: "100vh", 
+        height: isLongText ? "auto" : "100vh",
+      }}
+      data-theme="dark"
     >
-      <div className="w-full relative z-10">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+      {/* Background Decor Logo */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none -z-0">
+        <img src={logoAsliUrl} alt="" className="w-[80%] h-auto rotate-12 scale-110" />
+      </div>
 
-          {/* ✅ TEXT (KIRI) - KONTEN DIUBAH TENTANG PETERNAKAN */}
-          <div
-            ref={textGroupRef}
-            className="lg:col-span-6 flex flex-col justify-center order-1"
-            style={{ willChange: "transform, opacity" }}
-          >
-            <div className="max-w-xl">
-              <div className="inline-block px-4 py-1.5 mb-6 text-[10px] font-black tracking-[0.3em] uppercase bg-slate-900 text-white rounded-sm">
-                Peternakan Modern
-              </div>
+      <div className={`w-full flex-grow flex items-center px-[8%] z-10 ${isLongText ? "py-32" : "py-10"}`}>
+        <div className="w-full grid lg:grid-cols-12 gap-12 lg:gap-24 items-center">
+          
+          {/* TEXT GROUP */}
+          <div ref={textGroupRef} className="lg:col-span-7 flex flex-col order-2 lg:order-1">
+            <div className="flex items-center mb-4 h-5">
+              <span className="text-[#FFC700] font-black tracking-[0.4em] uppercase text-[10px] md:text-xs">
+                {displayText || "\u00A0"}
+              </span>
+              {isTyping && <div className="w-[1.5px] h-3 bg-[#FFC700] ml-2 animate-blink" />}
+            </div>
 
-              <h2 className="font-['Playfair_Display'] text-4xl md:text-6xl lg:text-7xl text-slate-900 font-bold leading-[1.1] mb-8 tracking-tighter">
-                Peternakan <br />
-                <span className="text-[var(--color-utama)]">AS PUTRA</span>
-              </h2>
+            <h2 className="font-['Playfair_Display'] text-4xl md:text-5xl lg:text-6xl text-white font-bold leading-[1.1] mb-6 tracking-tighter">
+              {displayTitle}
+            </h2>
 
-              <div className="w-16 h-1.5 bg-[var(--color-utama)] mb-8"></div>
+            {/* Garis Aksen Gold Tetap Ada sebagai Pemisah Horizontal */}
+            <div className="w-20 h-1 bg-[#FFC700] mb-8"></div>
 
-              <p className="text-slate-600 text-base md:text-lg leading-relaxed font-light border-l-2 border-slate-50 pl-6">
-                AS Putra Group berkomitmen mengembangkan ekosistem peternakan modern terintegrasi 
-                melalui breeding, closed house system, dan kemitraan dengan 1.500+ peternak lokal.
-              </p>
+            {/* Deskripsi: Line Dihilangkan & Sejajar Judul */}
+            <div className="max-w-2xl">
+              <div 
+                className="text-gray-400 text-base md:text-lg leading-[1.8] font-light text-justify"
+                dangerouslySetInnerHTML={{ __html: displayDescription }}
+              />
             </div>
           </div>
 
-          {/* ✅ IMAGE (KANAN) - GAMBAR PETERNAKAN */}
-          <div className="lg:col-span-6 flex justify-center lg:justify-end order-2">
-            <div
-              ref={imageFrameRef}
-              className="relative p-3 bg-white border border-slate-100 shadow-2xl rounded-sm max-w-[480px] lg:max-w-[520px] w-full aspect-[4/5] overflow-hidden"
-              style={{ willChange: "transform, opacity" }}
-            >
-              <img
-                src={peternakanImg}
-                alt="Peternakan Modern AS PUTRA"
-                className="w-full h-full object-cover rounded-sm"
-              />
+          {/* IMAGE GROUP */}
+          <div className={`lg:col-span-5 flex justify-center lg:justify-end order-1 lg:order-2 ${isLongText ? "lg:self-start lg:sticky lg:top-32" : ""}`}>
+            <div ref={imageFrameRef} className="relative w-full max-w-[420px]">
+              <div className="absolute -inset-3 border border-[#FFC700]/20 rounded-2xl -z-10 translate-x-3 translate-y-3" />
+              
+              <div className="relative z-10 p-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl shadow-2xl">
+                <div 
+                  className="overflow-hidden rounded-xl"
+                  style={{ clipPath: "polygon(0 0, 100% 0, 100% 94%, 94% 100%, 0 100%)" }}
+                >
+                  {displayImage && (
+                    <img
+                      src={displayImage}
+                      alt={displayTitle}
+                      className="w-full aspect-[4/5] object-cover transition-transform duration-1000 hover:scale-105"
+                    />
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
         </div>
       </div>
+
+      <style>{`
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .animate-blink { animation: blink 0.8s step-end infinite; }
+      `}</style>
     </section>
   );
 };

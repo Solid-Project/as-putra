@@ -5,84 +5,63 @@ import {
   CurrencyDollarIcon, 
   GlobeAsiaAustraliaIcon 
 } from "@heroicons/react/24/outline";
+import logoAsliUrl from "@/assets/logo.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Layout6 = () => {
+const Layout6 = ({ data, index }) => {
   const sectionRef = useRef(null);
   const leftColRef = useRef(null);
   const midColRef = useRef(null);
   const rightColRef = useRef(null);
   const statsRefs = useRef([]);
 
+  const displayDescription = data?.description || "";
+  const layoutData = data?.layout_data || {};
+  const logos = layoutData?.logos || [];
+
+  // 1. LOGIKA SNAP DINAMIS
+  // Jika teks deskripsi sangat panjang (> 600 karakter), matikan snap agar user bisa scroll bebas.
+  const isLongContent = displayDescription.length > 600; 
+  const sectionClass = isLongContent ? "section no-snap" : "section";
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       
-      // --- LIVE PARALLAX KONTRAS (BI-DIRECTIONAL) ---
-      // Kita buat range pergerakan yang besar agar efeknya "terlihat" nyata
+      // 2. PARALLAX BI-DIRECTIONAL (Menciptakan kedalaman visual)
+      // Kolom Kiri: Naik pelan
+      gsap.fromTo(leftColRef.current, { y: 40 }, { 
+        y: -40, scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "bottom top", scrub: 1 } 
+      });
 
-      // Kolom 1: Bergerak dari Bawah ke Atas (Sangat Lambat)
-      gsap.fromTo(leftColRef.current, 
-        { y: 50 }, 
-        { 
-          y: -50, 
-          ease: "none", 
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom", // Mulai saat muncul di bawah
-            end: "bottom top",   // Selesai saat hilang di atas
-            scrub: 1
-          } 
-        }
-      );
+      // Kolom Tengah: Turun pelan
+      gsap.fromTo(midColRef.current, { y: -60 }, { 
+        y: 60, scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "bottom top", scrub: 1.2 } 
+      });
 
-      // Kolom 2: Bergerak dari Atas ke Bawah (Berlawanan Arah)
-      gsap.fromTo(midColRef.current, 
-        { y: -80 }, 
-        { 
-          y: 80, 
-          ease: "none", 
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.2
-          } 
-        }
-      );
+      // Kolom Kanan: Naik lebih cepat
+      gsap.fromTo(rightColRef.current, { y: 100 }, { 
+        y: -100, scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "bottom top", scrub: 1.5 } 
+      });
 
-      // Kolom 3: Bergerak dari Bawah ke Atas (Paling Cepat)
-      gsap.fromTo(rightColRef.current, 
-        { y: 150 }, 
-        { 
-          y: -150, 
-          ease: "none", 
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.5
-          } 
-        }
-      );
+      // 3. ANIMASI COUNTER
+      const statsToAnimate = [
+        parseFloat(layoutData.stat1_val) || 0,
+        parseFloat(layoutData.stat2_val) || 0
+      ];
 
-      // --- ANIMASI COUNTER (Tetap Jalan) ---
-      const statsData = [124.5, 5.345];
-      statsData.forEach((target, idx) => {
+      statsToAnimate.forEach((target, idx) => {
         const obj = { val: 0 };
         gsap.to(obj, {
           val: target,
-          duration: 2,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 75%",
-          },
+          duration: 2.5,
+          ease: "expo.out",
+          scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
           onUpdate: () => {
             if (statsRefs.current[idx]) {
               statsRefs.current[idx].innerText = obj.val.toLocaleString("id-ID", {
                 minimumFractionDigits: 1,
-                maximumFractionDigits: 3,
+                maximumFractionDigits: 1,
               });
             }
           }
@@ -90,62 +69,75 @@ const Layout6 = () => {
       });
 
     }, sectionRef);
-
     return () => ctx.revert();
-  }, []);
+  }, [layoutData]);
 
   return (
     <section
       ref={sectionRef}
-      className="section min-h-screen flex items-center bg-[#F8FAFC] py-32 px-[5%] relative overflow-hidden"
-      id="six-layout"
-      data-theme="light"
+      id={`section-${index}`}
+      className={`${sectionClass} relative w-full flex flex-col bg-[#0F1A3E] overflow-hidden`}
+      style={{ 
+        height: isLongContent ? "auto" : "100vh",
+        minHeight: "100vh" 
+      }}
     >
-      <div className="w-full grid lg:grid-cols-3 items-stretch relative z-10">
-        
-        {/* KOLOM 1: NARASI (KIRI) */}
-        <div ref={leftColRef} className="flex items-center pr-12 lg:pr-20 py-10">
-          <p className="font-['Playfair_Display'] text-2xl md:text-3xl text-slate-800 leading-relaxed italic border-blue-600">
-            "Sebagai salah satu grup usaha terbesar di Indonesia, AS Putra terus berkomitmen menghadirkan fasilitas modern, laboratorium teknologi terkini, serta investasi berkelanjutan demi masa depan industri nasional."
-          </p>
-        </div>
+      {/* Background Decor Logo */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none -z-0">
+        <img src={logoAsliUrl} alt="" className="w-[80%] h-auto -rotate-12 scale-125" />
+      </div>
 
-        {/* KOLOM 2: STATISTIK (TENGAH) */}
-        <div ref={midColRef} className="flex flex-col justify-center gap-20 px-12 lg:px-20 py-10 border-y lg:border-y-0 lg:border-x border-slate-200 relative bg-white/30">
-          <div className="flex flex-col gap-4">
-            <CurrencyDollarIcon className="w-10 h-10 text-blue-600/60" />
-            <div className="flex items-baseline gap-2">
-              <span ref={(el) => (statsRefs.current[0] = el)} className="text-6xl md:text-7xl font-['Playfair_Display'] font-bold text-slate-900">0</span>
-              <span className="text-xl font-bold text-slate-900">Miliar</span>
-            </div>
-            <p className="text-sm uppercase tracking-[0.2em] text-slate-400 font-bold">Omset Tahunan Grup</p>
-          </div>
-
-          <div className="flex flex-col gap-4">
-            <GlobeAsiaAustraliaIcon className="w-10 h-10 text-blue-600/60" />
-            <div className="flex items-baseline gap-2">
-              <span ref={(el) => (statsRefs.current[1] = el)} className="text-6xl md:text-7xl font-['Playfair_Display'] font-bold text-slate-900">0</span>
-              <span className="text-xl font-bold text-slate-900">Juta</span>
-            </div>
-            <p className="text-sm uppercase tracking-[0.2em] text-slate-400 font-bold">Volume Ekspor Global</p>
-          </div>
-        </div>
-
-        {/* KOLOM 3: LOGO (KANAN) */}
-        <div ref={rightColRef} className="flex flex-col justify-center items-center gap-16 pl-12 lg:pl-20 py-10">
-          <div className="w-32 h-32 grayscale hover:grayscale-0 transition-all duration-500 flex items-center justify-center border border-slate-100 rounded-full bg-white shadow-sm hover:shadow-xl p-4">
-            <img src="https://cdn.simpleicons.org/blueprint/1e293b" alt="Unit 1" className="w-full object-contain" />
-          </div>
+      <div className={`w-full flex-grow flex items-center px-[8%] z-10 ${isLongContent ? "py-32" : "py-10"}`}>
+        <div className="w-full grid lg:grid-cols-3 items-center gap-12 lg:gap-0">
           
-          <div className="w-28 h-28 grayscale hover:grayscale-0 transition-all duration-500 flex items-center justify-center border border-slate-100 rounded-full bg-white shadow-sm hover:shadow-xl p-6">
-            <img src="https://cdn.simpleicons.org/probot/1e293b" alt="Unit 2" className="w-full object-contain" />
+          {/* KOLOM 1: NARASI (KIRI) */}
+          <div ref={leftColRef} className="flex items-center lg:pr-16 order-2 lg:order-1">
+            <p className="font-['Playfair_Display'] text-2xl md:text-3xl text-gray-300 leading-relaxed italic border-l-4 border-[#FFC700] pl-8">
+              {displayDescription}
+            </p>
           </div>
 
-          <div className="w-40 h-16 grayscale hover:grayscale-0 transition-all duration-500 flex items-center justify-center">
-             <span className="font-black text-2xl tracking-tighter text-slate-300 group-hover:text-blue-900 transition-colors uppercase">AS PUTRA</span>
+          {/* KOLOM 2: STATISTIK (TENGAH) */}
+          <div ref={midColRef} className="flex flex-col justify-center gap-16 px-10 lg:px-20 py-10 border-y lg:border-y-0 lg:border-x border-white/10 relative bg-white/[0.02] backdrop-blur-sm order-1 lg:order-2">
+            <div className="flex flex-col gap-3">
+              <CurrencyDollarIcon className="w-8 h-8 text-[#FFC700]/50" />
+              <div className="flex items-baseline gap-2">
+                <span ref={(el) => (statsRefs.current[0] = el)} className="text-6xl md:text-7xl font-['Playfair_Display'] font-bold text-[#FFC700] leading-none">0</span>
+                <span className="text-xl font-bold text-white/80">{layoutData.stat1_unit}</span>
+              </div>
+              <p className="text-[10px] uppercase tracking-[0.3em] text-gray-500 font-black">{layoutData.stat1_label}</p>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <GlobeAsiaAustraliaIcon className="w-8 h-8 text-[#FFC700]/50" />
+              <div className="flex items-baseline gap-2">
+                <span ref={(el) => (statsRefs.current[1] = el)} className="text-6xl md:text-7xl font-['Playfair_Display'] font-bold text-[#FFC700] leading-none">0</span>
+                <span className="text-xl font-bold text-white/80">{layoutData.stat2_unit}</span>
+              </div>
+              <p className="text-[10px] uppercase tracking-[0.3em] text-gray-500 font-black">{layoutData.stat2_label}</p>
+            </div>
           </div>
+
+          {/* KOLOM 3: LOGO PARTNER (KANAN) */}
+          <div ref={rightColRef} className="flex flex-col justify-center items-center lg:pl-16 py-10 order-3">
+            <div className="grid grid-cols-2 gap-4 lg:gap-6 mb-10">
+              {logos.map((logo, idx) => (
+                <div 
+                  key={logo.id} 
+                  className={`w-24 h-24 lg:w-28 lg:h-28 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-700 flex items-center justify-center p-5 bg-white/[0.03] rounded-full border border-white/10 hover:border-[#FFC700]/30 shadow-2xl
+                    ${logos.length === 3 && idx === 2 ? "col-span-2 justify-self-center" : ""}`}
+                >
+                  <img 
+                    src={`${import.meta.env.VITE_API_URL}/storage/${logo.file}`} 
+                    alt={`Partner ${idx}`} 
+                    className="w-full h-full object-contain" 
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
-
       </div>
     </section>
   );

@@ -1,28 +1,31 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import bgLayout from '@/assets/img/Carousel/herocarousel5.webp';
+import logoAsliUrl from "@/assets/logo.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Layout8 = () => {
+const Layout8 = ({ data, index }) => {
   const sectionRef = useRef(null);
   const imageRef = useRef(null);
   const cardRef = useRef(null);
   const statsRef = useRef(null);
 
+  const displayTitle = data?.title || "";
+  const displayDescription = data?.description || "";
+  const displayImage = data?.image 
+    ? `${import.meta.env.VITE_API_URL}/storage/${data.image}` 
+    : "";
+  
+  const layoutData = data?.layout_data || {};
+  const stats = layoutData?.stats || [];
+
   useEffect(() => {
     const ctx = gsap.context(() => {
-      
-      // --- LIVE PARALLAX (HANYA BERGERAK SAAT SCROLL) ---
-      // Kita gunakan 'y' sebagai offset, tapi target akhirnya WAJIB 0
-      // agar posisi section aktif tetap presisi sesuai desain awal.
-
-      // 1. Image Utama: Datang dari bawah (50px) ke posisi asli (0)
       gsap.fromTo(imageRef.current, 
-        { y: 60 }, 
+        { y: 30 }, 
         { 
-          y: -60, // Bergerak melintasi posisi aslinya
+          y: -30, 
           ease: "none",
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -32,110 +35,101 @@ const Layout8 = () => {
           }
         }
       );
-
-      // 2. Floating Card: Bergerak berlawanan arah agar kontras
-      gsap.fromTo(cardRef.current, 
-        { y: -100 }, 
-        { 
-          y: 100, 
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.5,
-          }
-        }
-      );
-
-      // --- ANIMASI MASUK (ONCE) ---
-      // Tetap jalankan animasi stagger stats saat pertama kali muncul
-      gsap.fromTo(statsRef.current.children, 
-        { opacity: 0, y: 20 }, 
-        { 
-          opacity: 1, 
-          y: 0, 
-          stagger: 0.1, 
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: statsRef.current,
-            start: "top 85%",
-          }
-        }
-      );
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [stats]);
 
   return (
     <section 
       ref={sectionRef} 
-      className="section min-h-screen bg-[#f4f4f4] flex items-center py-24 relative overflow-hidden"
-      id="eight-layout"
+      id={`section-${index}`}
+      className="section no-snap relative w-full flex flex-col bg-[#0F1A3E]"
+      style={{ 
+        scrollSnapAlign: "none", 
+        scrollSnapStop: "normal",
+        minHeight: "100vh",
+        height: "auto", 
+        display: "block", 
+      }}
     >
-      {/* Background Decoration - Sesuai Desain Asli */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div className="absolute left-[6%] h-full w-[1px] bg-slate-900"></div>
-        <div className="absolute right-[6%] h-full w-[1px] bg-slate-900"></div>
+      {/* Background Decor */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none -z-0">
+        <img src={logoAsliUrl} alt="" className="w-[70%] h-auto rotate-12" />
       </div>
 
-      <div className="container mx-auto px-[6%] relative z-10">
-        <div className="grid lg:grid-cols-12 gap-0 items-start">
+      {/* PERBAIKAN JARAK: 
+          - pt-24 lg:pt-28: Mengurangi jarak atas agar tidak terlalu jauh melorot (Navbar Safe Zone).
+          - pb-24 lg:pb-32: Mengurangi jarak bawah agar lebih seimbang.
+      */}
+      <div className="w-full flex items-center px-[6%] relative z-10 pt-24 pb-24 lg:pt-28 lg:pb-32">
+        <div className="w-full grid lg:grid-cols-12 gap-10 lg:gap-0 items-center lg:items-start">
           
-          {/* KOLOM KIRI: IMAGE BESAR (Posisi asli tidak berubah) */}
-          <div className="lg:col-span-7 relative group">
-            <div className="overflow-hidden rounded-sm shadow-2xl aspect-[4/5] lg:aspect-[16/10]">
-              <img 
-                ref={imageRef}
-                src={bgLayout} 
-                alt="Corporate" 
-                className="w-full h-full object-cover scale-110" // Scale sedikit agar tidak bocor saat parallax
-              />
+          {/* KOLOM KIRI: IMAGE */}
+          <div className="lg:col-span-7 relative group order-2 lg:order-1">
+            <div className="overflow-hidden rounded-sm shadow-2xl aspect-[4/5] lg:aspect-[16/10] border border-white/10 bg-[#162454]">
+              {displayImage && (
+                <img 
+                  ref={imageRef}
+                  src={displayImage} 
+                  alt={displayTitle} 
+                  className="w-full h-full object-cover scale-110" 
+                />
+              )}
             </div>
-            <div className="absolute -bottom-6 -left-6 bg-[var(--color-utama)] text-white p-8 hidden md:block shadow-xl">
-               <p className="text-xs font-bold tracking-[0.3em] uppercase mb-2 opacity-80">Established Since</p>
-               <h4 className="text-4xl font-black font-['Playfair_Display']">1985</h4>
+            
+            <div className="absolute -bottom-6 -left-4 lg:-left-6 bg-[#FFC700] text-[#0F1A3E] p-6 lg:p-8 shadow-xl z-30">
+               <p className="text-[10px] font-black tracking-[0.3em] uppercase mb-1 opacity-70">
+                 {layoutData.year_label || "Established"}
+               </p>
+               <h4 className="text-3xl lg:text-4xl font-black font-['Playfair_Display']">
+                 {layoutData.year_num || "1988"}
+               </h4>
             </div>
           </div>
 
-          {/* KOLOM KANAN: CONTENT CARD (Posisi asli tidak berubah) */}
-          <div className="lg:col-span-5 lg:-ml-20 mt-12 lg:mt-32 z-20">
+          {/* KOLOM KANAN: CARD */}
+          <div className="lg:col-span-5 lg:-ml-20 mt-8 lg:mt-24 z-20 order-1 lg:order-2">
             <div 
               ref={cardRef}
-              className="bg-white p-10 md:p-16 shadow-2xl border-t-4 border-[var(--color-utama)]"
+              className="bg-[#162454] p-8 md:p-14 shadow-2xl border-t-4 border-[#FFC700]"
             >
-              <h2 className="font-['Playfair_Display'] text-4xl md:text-5xl text-slate-900 font-bold mb-8 leading-tight">
-                Visi Strategis & <br/> Eksekusi Presisi
+              <h2 className="font-['Playfair_Display'] text-3xl md:text-5xl text-white font-bold mb-6 lg:mb-8 leading-tight tracking-tighter whitespace-pre-line">
+                {displayTitle}
               </h2>
-              <p className="text-slate-600 leading-relaxed mb-12 text-lg font-light">
-                Kami tidak hanya membangun bisnis, kami membangun kepercayaan melalui integrasi teknologi dan sumber daya manusia yang berintegritas tinggi.
-              </p>
+              
+              <div 
+                className="text-gray-400 leading-relaxed mb-10 text-base md:text-lg font-light text-justify"
+                dangerouslySetInnerHTML={{ __html: displayDescription }}
+              />
 
-              {/* Mini Stats Grid */}
-              <div ref={statsRef} className="grid grid-cols-2 gap-8 border-t border-slate-100 pt-10">
-                <div>
-                  <h5 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Projects</h5>
-                  <p className="text-3xl font-bold text-slate-900 italic font-['Playfair_Display']">250+</p>
-                </div>
-                <div>
-                  <h5 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Awards</h5>
-                  <p className="text-3xl font-bold text-slate-900 italic font-['Playfair_Display']">12</p>
-                </div>
-                <div>
-                  <h5 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Reliability</h5>
-                  <p className="text-3xl font-bold text-slate-900 italic font-['Playfair_Display']">99%</p>
-                </div>
-                <div>
-                  <h5 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Partners</h5>
-                  <p className="text-3xl font-bold text-slate-900 italic font-['Playfair_Display']">45</p>
-                </div>
+              <div ref={statsRef} className="grid grid-cols-2 gap-6 lg:gap-8 border-t border-white/10 pt-8 lg:pt-10">
+                {stats.map((stat, i) => (
+                  <div key={i}>
+                    <h5 className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-1">
+                      {stat.label}
+                    </h5>
+                    <p className="text-2xl lg:text-3xl font-bold text-[#FFC700] italic font-['Playfair_Display'] leading-none">
+                      {stat.val}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
         </div>
       </div>
+
+      <style>{`
+        #section-${index}.no-snap {
+          scroll-snap-align: none !important;
+          scroll-snap-stop: normal !important;
+          height: auto !important;
+          min-height: 100vh !important;
+          overflow: visible !important;
+        }
+      `}</style>
     </section>
   );
 };

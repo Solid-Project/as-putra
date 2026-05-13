@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { 
@@ -7,10 +7,11 @@ import {
   CircleStackIcon, 
   GlobeAltIcon 
 } from "@heroicons/react/24/outline";
+import logoAsliUrl from "@/assets/logo.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Layout5 = () => {
+const Layout5 = ({ data, index }) => {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const leftColRef = useRef(null);
@@ -18,42 +19,33 @@ const Layout5 = () => {
   const statsRefs = useRef([]);
   const hasAnimatedCounter = useRef(false);
 
+  // Ambil data dari JSON props
+  const displayTitle = data?.title || "Aretha Farm";
+  const displayDescription = data?.description || "";
+  const statsData = data?.layout_data?.items || [];
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       
-      // --- 1. EFEK LIVE PARALLAX: SHATTER TO REASSEMBLE ---
-      const tlShatter = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "top top",
-          scrub: 1.5,
-        }
-      });
-
-      tlShatter.fromTo(titleRef.current, 
+      // 1. EFEK REVEAL JUDUL
+      gsap.fromTo(titleRef.current, 
+        { y: 50, opacity: 0 },
         { 
-          x: -150, 
-          y: 100, 
-          rotation: -10, 
-          filter: "blur(15px)", 
-          opacity: 0 
-        },
-        { 
-          x: 0, 
           y: 0, 
-          rotation: 0, 
-          filter: "blur(0px)", 
           opacity: 1, 
-          ease: "power2.out" 
+          duration: 1,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+          }
         }
       );
 
-      // --- 2. LIVE PARALLAX: DUA ARAH (KIRI & KANAN) ---
+      // 2. PARALLAX EFFECT UNTUK KOLOM
       gsap.fromTo(leftColRef.current, 
-        { y: 80 }, 
+        { y: 50 }, 
         { 
-          y: -80, 
+          y: -50, 
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top bottom",
@@ -63,150 +55,102 @@ const Layout5 = () => {
         }
       );
 
-      gsap.fromTo(rightGridRef.current, 
-        { y: 150 }, 
-        { 
-          y: -150, 
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 2
-          }
-        }
-      );
-
-      // --- 3. ANIMASI COUNTER (Berjalan Setiap Section Aktif) ---
-      const statsData = [
-        { target: 70, suffix: "" },
-        { target: 5000, suffix: "+" },
-        { target: 1.3, suffix: "T", isDecimal: true },
-        { target: 6, suffix: "B" },
-      ];
-
-      // Reset counter ke 0 saat section masuk
-      const resetCounters = () => {
-        statsData.forEach((stat, idx) => {
-          if (statsRefs.current[idx]) {
-            statsRefs.current[idx].innerText = "0" + stat.suffix;
-          }
-        });
-      };
-
-      // Animasi counter
+      // 3. ANIMASI COUNTER
       const animateCounters = () => {
         statsData.forEach((stat, idx) => {
+          const targetNum = parseFloat(stat.target) || 0;
           const obj = { val: 0 };
-          gsap.killTweensOf(obj); // Hentikan animasi sebelumnya jika ada
           gsap.to(obj, {
-            val: stat.target,
-            duration: 2,
-            ease: "expo.out",
+            val: targetNum,
+            duration: 2.5,
+            ease: "power4.out",
             onUpdate: () => {
               if (statsRefs.current[idx]) {
-                let value = stat.isDecimal ? obj.val.toFixed(1) : Math.floor(obj.val);
-                statsRefs.current[idx].innerText = value + stat.suffix;
+                const isDecimal = stat.target.includes(".");
+                let value = isDecimal ? obj.val.toFixed(1) : Math.floor(obj.val);
+                statsRefs.current[idx].innerText = value + (stat.suffix || "");
               }
             },
           });
         });
       };
 
-      // ScrollTrigger untuk counter - berulang setiap section aktif
       ScrollTrigger.create({
         trigger: sectionRef.current,
-        start: "top 75%",
+        start: "top 70%",
         onEnter: () => {
           if (!hasAnimatedCounter.current) {
-            resetCounters();
             animateCounters();
             hasAnimatedCounter.current = true;
           }
         },
         onLeaveBack: () => {
-          // Reset flag saat scroll ke atas
           hasAnimatedCounter.current = false;
-          resetCounters();
-        },
-        onEnterBack: () => {
-          // Animasi lagi saat scroll ke bawah kembali
-          if (!hasAnimatedCounter.current) {
-            resetCounters();
-            animateCounters();
-            hasAnimatedCounter.current = true;
-          }
-        },
+        }
       });
 
     }, sectionRef);
 
-    return () => {
-      ctx.revert();
-      ScrollTrigger.getAll().forEach((trigger) => {
-        if (trigger.vars.trigger === sectionRef.current) {
-          trigger.kill();
-        }
-      });
-    };
-  }, []);
+    return () => ctx.revert();
+  }, [statsData]);
+
+  // Map icon berdasarkan index agar variatif
+  const icons = [
+    <BuildingOffice2Icon className="w-10 h-10 text-[#FFC700]/40" />,
+    <UsersIcon className="w-10 h-10 text-[#FFC700]/40" />,
+    <CircleStackIcon className="w-10 h-10 text-[#FFC700]/40" />,
+    <GlobeAltIcon className="w-10 h-10 text-[#FFC700]/40" />
+  ];
 
   return (
     <section
       ref={sectionRef}
-      className="section min-h-screen flex items-center py-32 px-[8%] bg-white relative overflow-hidden"
-      id="fifth-layout"
+      className="section min-h-screen flex items-center py-32 px-[8%] bg-[#0F1A3E] relative overflow-hidden"
+      id={`section-${index}`}
+      data-theme="dark"
     >
-      {/* Dekorasi Background - TIDAK DIUBAH */}
-      <div className="absolute top-0 right-0 w-1/4 h-full bg-slate-50/50 -z-0" />
+      {/* Background Decor Logo (Sama dengan Layout Lain) */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none -z-0">
+        <img src={logoAsliUrl} alt="" className="w-[80%] h-auto rotate-12 scale-110" />
+      </div>
 
       <div className="w-full grid lg:grid-cols-2 gap-24 items-center relative z-10">
         
-        {/* KOLOM KIRI: NARASI - TIDAK DIUBAH */}
+        {/* KOLOM KIRI: NARASI */}
         <div ref={leftColRef} className="max-w-[600px]">
           <h2 
             ref={titleRef} 
-            className="font-['Playfair_Display'] text-4xl md:text-5xl lg:text-6xl text-slate-900 leading-[1.1] mb-12 font-bold tracking-tighter"
+            className="font-['Playfair_Display'] text-4xl md:text-5xl lg:text-6xl text-white leading-[1.1] mb-12 font-bold tracking-tighter"
           >
-            Pertumbuhan Strategis & Komitmen Keberlanjutan
+            {displayTitle}
           </h2>
-          <p className="text-slate-600 text-lg md:text-xl leading-relaxed font-light border-l-2 border-blue-600 pl-8">
-            Hingga tahun 2026, AS Putra Group terus memperluas jejak ekosistem bisnisnya di seluruh penjuru negeri, 
-            menghasilkan nilai tambah bagi ekonomi nasional.
+          <div className="w-20 h-1.5 bg-[#FFC700] mb-10" />
+          <p className="text-gray-400 text-lg md:text-xl leading-relaxed font-light text-justify">
+            {displayDescription}
           </p>
         </div>
 
-        {/* KOLOM KANAN: GRID STATISTIK - TIDAK DIUBAH */}
-        <div ref={rightGridRef} className="grid grid-cols-2 gap-x-12 gap-y-24 relative">
-          {/* Garis Vertikal - TIDAK DIUBAH */}
-          <div className="absolute left-1/2 top-0 w-[1px] h-full bg-blue-50 hidden md:block" />
+        {/* KOLOM KANAN: GRID STATISTIK */}
+        <div ref={rightGridRef} className="grid grid-cols-2 gap-x-12 gap-y-20 relative">
+          {/* Garis Vertikal Dekoratif */}
+          <div className="absolute left-1/2 top-0 w-[1px] h-full bg-[#FFC700]/10 hidden md:block" />
 
-          {/* Item 1 - TIDAK DIUBAH */}
-          <div className="flex flex-col gap-6">
-            <BuildingOffice2Icon className="w-10 h-10 text-blue-600/40" />
-            <span ref={(el) => (statsRefs.current[0] = el)} className="text-6xl md:text-8xl font-['Playfair_Display'] font-bold text-slate-900 tracking-tighter">0</span>
-            <span className="text-[10px] uppercase tracking-[0.4em] text-slate-400 font-black">Unit Bisnis</span>
-          </div>
-
-          {/* Item 2 - TIDAK DIUBAH */}
-          <div className="flex flex-col gap-6 md:pl-12">
-            <UsersIcon className="w-10 h-10 text-blue-600/40" />
-            <span ref={(el) => (statsRefs.current[1] = el)} className="text-6xl md:text-8xl font-['Playfair_Display'] font-bold text-slate-900 tracking-tighter">0+</span>
-            <span className="text-[10px] uppercase tracking-[0.4em] text-slate-400 font-black">Tenaga Kerja</span>
-          </div>
-
-          {/* Item 3 - TIDAK DIUBAH */}
-          <div className="flex flex-col gap-6">
-            <CircleStackIcon className="w-10 h-10 text-blue-600/40" />
-            <span ref={(el) => (statsRefs.current[2] = el)} className="text-6xl md:text-8xl font-['Playfair_Display'] font-bold text-slate-900 tracking-tighter">0</span>
-            <span className="text-[10px] uppercase tracking-[0.4em] text-slate-400 font-black">Triliun Omset</span>
-          </div>
-
-          {/* Item 4 - TIDAK DIUBAH */}
-          <div className="flex flex-col gap-6 md:pl-12">
-            <GlobeAltIcon className="w-10 h-10 text-blue-600/40" />
-            <span ref={(el) => (statsRefs.current[3] = el)} className="text-6xl md:text-8xl font-['Playfair_Display'] font-bold text-slate-900 tracking-tighter">0</span>
-            <span className="text-[10px] uppercase tracking-[0.4em] text-slate-400 font-black">Volume Ekspor</span>
-          </div>
+          {statsData.map((item, idx) => (
+            <div key={item.id} className={`flex flex-col gap-6 ${idx % 2 !== 0 ? "md:pl-12" : ""}`}>
+              {icons[idx % icons.length]}
+              <div className="flex flex-col">
+                <span 
+                  ref={(el) => (statsRefs.current[idx] = el)} 
+                  className="text-5xl md:text-7xl font-['Playfair_Display'] font-bold text-[#FFC700] tracking-tighter"
+                >
+                  0
+                </span>
+                <span className="text-[10px] uppercase tracking-[0.4em] text-gray-500 font-black mt-2">
+                  {item.label}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
 
       </div>

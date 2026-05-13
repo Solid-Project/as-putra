@@ -64,6 +64,7 @@ const Layout2 = ({ data, isActive, index }) => {
       ref={sectionRef}
       className="section relative min-h-screen flex items-center py-24 px-[10%] bg-[#FDFDFD] overflow-hidden"
       id={`section-${orderId}`} 
+      data-theme="light"
     >
       {/* BACKGROUND SILUET LOGO - Warna Asli, Tetap Berani */}
       <div className="absolute inset-0 pointer-events-none z-0">

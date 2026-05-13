@@ -2,127 +2,114 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRightIcon, ArrowLeftIcon, BuildingOffice2Icon } from "@heroicons/react/24/outline";
+import logoAsliUrl from "@/assets/logo.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Layout7 = () => {
+const Layout7 = ({ data, index }) => {
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
   const mainCardRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const cardsRef = useRef([]);
 
-  const unitBisnis = [
-    { id: 1, name: "PT AS PUTRA AYAM", desc: "Peternakan ayam modern.", img: "https://images.unsplash.com/photo-1516467508483-a7212febe31a?q=80&w=600" },
-    { id: 2, name: "PT AS PUTRA SAPI", desc: "Penggemukan sapi potong unggul.", img: "https://images.unsplash.com/photo-1547496502-affa22d38842?q=80&w=600" },
-    { id: 3, name: "PT AS PUTRA PAKAN", desc: "Produksi pakan ternak bernutrisi.", img: "https://images.unsplash.com/photo-1594913366159-1832ffef867d?q=80&w=600" },
-    { id: 4, name: "PT AS PUTRA LOGISTIK", desc: "Distribusi hasil ternak nasional.", img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=600" },
-    { id: 5, name: "PT AS PUTRA RETAIL", desc: "Jaringan toko daging segar.", img: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=600" },
-  ];
+  const displayTitle = data?.title || "Sektor Kami";
+  const displaySubtitle = data?.subtitle || "";
+  const displayLabel = data?.more_text || "Unit Bisnis";
+  const unitBisnis = data?.layout_data?.items || [];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      
-      // 1. LIVE PARALLAX HEADER: Bergerak turun pelan saat scroll ke bawah
       gsap.fromTo(headerRef.current, 
-        { y: -60, opacity: 0.7 }, 
+        { y: 20, opacity: 0 }, 
         {
-          y: 60,
+          y: 0,
           opacity: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1,
-          }
+          duration: 0.8,
+          scrollTrigger: { trigger: sectionRef.current, start: "top 85%" }
         }
       );
 
-      // 2. LIVE PARALLAX MAIN CARD: Bergerak NAIK berlawanan arah dengan header
-      // Ini yang bikin efek "berpapasan" yang indah
       gsap.fromTo(mainCardRef.current, 
-        { y: 100 }, 
+        { y: 30, opacity: 0 }, 
         {
-          y: -100,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.5, // Sedikit lebih lambat agar terasa "berat"
-          }
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: { trigger: sectionRef.current, start: "top 80%" }
         }
       );
-
-      // 3. INTERNAL DRIFT: Kartu kecil di dalam meluncur halus secara horizontal
-      cardsRef.current.forEach((card, idx) => {
-        gsap.fromTo(card, 
-          { x: 30 * (idx + 1) }, 
-          {
-            x: -30 * (idx + 1),
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 2,
-            }
-          }
-        );
-      });
-
     }, sectionRef);
-
     return () => ctx.revert();
-  }, []);
+  }, [unitBisnis]);
 
   const scroll = (direction) => {
     const { current } = scrollContainerRef;
     if (current) {
-      const scrollAmount = 300; 
-      current.scrollBy({ left: direction === "left" ? -scrollAmount : scrollAmount, behavior: "smooth" });
+      const scrollAmount = 330; 
+      current.scrollBy({ 
+        left: direction === "left" ? -scrollAmount : scrollAmount, 
+        behavior: "smooth" 
+      });
     }
   };
 
   return (
     <section 
       ref={sectionRef} 
-      className="section min-h-screen flex flex-col justify-center py-12 bg-[#F8FAFC] overflow-hidden" 
-      id="seven-layout"
+      id={`section-${index}`}
+      className="section relative w-full h-screen flex flex-col bg-white overflow-hidden" 
     >
-      
-      {/* HEADER: PADAT & RAPAT */}
-      <div ref={headerRef} className="w-full px-[6%] mx-auto mb-6 flex justify-between items-end relative z-10">
-        <div className="max-w-2xl">
-          <div className="flex items-center gap-3 mb-2">
-             <div className="w-8 h-[2px] bg-[var(--color-utama)]"></div>
-             <span className="text-[var(--color-utama)] font-bold tracking-[0.3em] text-[9px] uppercase">Subsidiaries</span>
-          </div>
-          <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl lg:text-5xl text-slate-950 font-bold leading-[1.1] tracking-tighter">
-            Sektor Pertanian & <br className="hidden md:block"/> Peternakan AS Putra
-          </h2>
-        </div>
-
-        <div className="hidden lg:flex gap-2 mb-1">
-          <button onClick={() => scroll("left")} className="p-3 border border-slate-200 bg-white rounded-full hover:bg-slate-950 hover:text-white transition-all shadow-sm active:scale-95">
-            <ArrowLeftIcon className="w-4 h-4" />
-          </button>
-          <button onClick={() => scroll("right")} className="p-3 border border-slate-200 bg-white rounded-full hover:bg-slate-950 hover:text-white transition-all shadow-sm active:scale-95">
-            <ArrowRightIcon className="w-4 h-4" />
-          </button>
-        </div>
+      {/* BACKGROUND DECOR */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none -z-0">
+        <img src={logoAsliUrl} alt="" className="w-[50%] h-auto rotate-6" />
       </div>
+      
+      {/* CONTAINER UTAMA: pt-20 & pb-10 agar tetap di dalam 100vh */}
+      <div className="relative z-10 w-full h-full flex flex-col justify-center pt-20 pb-10 px-[8%]">
+        
+        {/* HEADER SECTION - Dibuat lebih ringkas */}
+        <div ref={headerRef} className="w-full mb-6 flex flex-col md:flex-row justify-between items-end gap-4">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3 mb-2">
+               <div className="w-8 h-[2px] bg-slate-900"></div>
+               <span className="text-slate-900 font-black tracking-[0.3em] text-[9px] uppercase">
+                  {displaySubtitle}
+               </span>
+            </div>
+            <h2 className="font-['Playfair_Display'] text-3xl md:text-4xl lg:text-5xl text-slate-950 font-bold leading-tight tracking-tighter">
+              {displayTitle}
+            </h2>
+          </div>
 
-      {/* MAIN CARD: COMPACT & SOLID */}
-      <div className="w-full px-[6%] mx-auto relative z-10">
+          {/* NAVIGATION */}
+          <div className="flex gap-2 mb-1">
+            <button 
+              onClick={() => scroll("left")} 
+              className="p-3 border border-slate-200 bg-white rounded-full hover:bg-slate-950 hover:text-white transition-all shadow-sm active:scale-90 group"
+            >
+              <ArrowLeftIcon className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={() => scroll("right")} 
+              className="p-3 border border-slate-200 bg-white rounded-full hover:bg-slate-950 hover:text-white transition-all shadow-sm active:scale-90 group"
+            >
+              <ArrowRightIcon className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* MAIN CARD SECTION - Padding dikurangi agar hemat ruang vertikal */}
         <div 
           ref={mainCardRef}
-          className="bg-white p-6 md:p-8 rounded-sm shadow-[0_40px_80px_-20px_rgba(0,0,0,0.06)] border border-slate-100"
+          className="bg-white/95 backdrop-blur-md p-5 md:p-8 rounded-xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.08)] border border-slate-100"
         >
-          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-50">
-             <BuildingOffice2Icon className="w-6 h-6 text-blue-600/50" />
-             <h3 className="text-base font-bold text-slate-900 tracking-tight italic font-['Playfair_Display']">Unit Bisnis Terintegrasi</h3>
+          <div className="flex items-center gap-2 mb-6 pb-4 border-b border-slate-100">
+             <BuildingOffice2Icon className="w-4 h-4 text-slate-400" />
+             <h3 className="text-[9px] font-black text-slate-900 tracking-[0.2em] uppercase">
+                {displayLabel}
+             </h3>
           </div>
 
           <div 
@@ -131,33 +118,41 @@ const Layout7 = () => {
           >
             {unitBisnis.map((item, idx) => (
               <div 
-                key={item.id}
+                key={item.id || idx}
                 ref={(el) => (cardsRef.current[idx] = el)}
-                className="unit-card flex-none w-[240px] md:w-[280px] snap-start group cursor-pointer"
+                className="unit-card flex-none w-[260px] md:w-[300px] snap-start group"
               >
-                <div className="relative h-[160px] md:h-[180px] overflow-hidden rounded-sm bg-slate-50 mb-4 border border-slate-100">
-                  <img 
-                    src={item.img} 
-                    alt={item.name} 
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
-                  />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-all duration-500" />
+                {/* TINGGI GAMBAR DIPERKECIL (h-[140px] md:h-[180px]) */}
+                <div className="relative h-[140px] md:h-[180px] overflow-hidden rounded-lg bg-slate-100 mb-4 border border-slate-200/50 shadow-sm">
+                  {item.image ? (
+                    <img 
+                      src={`${import.meta.env.VITE_API_URL}/storage/${item.image}`} 
+                      alt={item.title} 
+                      className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-slate-300 italic text-xs">No Image</div>
+                  )}
                 </div>
 
-                <h4 className="text-base font-bold text-slate-950 mb-1 tracking-tight group-hover:text-blue-700 transition-colors">
-                  {item.name}
+                <h4 className="text-lg font-bold text-slate-950 mb-1 tracking-tight group-hover:text-blue-600 transition-colors">
+                  {item.title}
                 </h4>
-                <p className="text-slate-500 text-[11px] leading-relaxed font-light line-clamp-2">
+                <p className="text-slate-500 text-[13px] leading-relaxed font-light line-clamp-2 italic">
                   {item.desc}
                 </p>
-                <div className="mt-3 w-6 group-hover:w-10 h-[1.5px] bg-[var(--color-utama)] transition-all duration-500"></div>
+                <div className="mt-4 w-6 group-hover:w-12 h-[2px] bg-slate-900 transition-all duration-500"></div>
               </div>
             ))}
-            <div className="flex-none w-[20px]" />
+            <div className="flex-none w-10" />
           </div>
         </div>
       </div>
 
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
     </section>
   );
 };
