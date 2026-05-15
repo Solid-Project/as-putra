@@ -13,13 +13,36 @@ const SectionNavigation = () => {
   const timerRef = useRef(null);
 
   const refreshSections = useCallback(() => {
-    const secs = Array.from(document.querySelectorAll(".section"));
-    setSections(secs);
+    // FIX UTAMA: Gunakan :scope agar hanya menghitung section utama
+    // bukan elemen di dalam carousel/slider yang mungkin pakai class yang sama
+    const wrapper = document.querySelector(".fullpage-wrapper");
+    if (!wrapper) return;
+
+    const secs = Array.from(wrapper.querySelectorAll(":scope > .section"));
+    
+    // Hanya update state jika jumlahnya berubah untuk cegah flicker
+    setSections((prev) => {
+      if (prev.length === secs.length) return prev;
+      return secs;
+    });
   }, []);
 
   useEffect(() => {
-    const timeout = setTimeout(refreshSections, 600);
-    return () => clearTimeout(timeout);
+    // Jalankan refresh saat navigasi berubah
+    refreshSections();
+
+    // Dengerin event resize dari HomePage setelah data masuk
+    window.addEventListener("resize", refreshSections);
+
+    // MutationObserver untuk jaga-jaga jika DOM berubah dinamis
+    const observer = new MutationObserver(refreshSections);
+    const wrapper = document.querySelector(".fullpage-wrapper");
+    if (wrapper) observer.observe(wrapper, { childList: true });
+
+    return () => {
+      window.removeEventListener("resize", refreshSections);
+      observer.disconnect();
+    };
   }, [location.pathname, refreshSections]);
 
   useEffect(() => {
@@ -30,37 +53,30 @@ const SectionNavigation = () => {
 
       sections.forEach((section, i) => {
         const rect = section.getBoundingClientRect();
-        if (rect.top < vh / 2 && rect.bottom > vh / 2) {
+        // Deteksi yang paling dominan di tengah layar
+        if (rect.top <= vh / 2 && rect.bottom >= vh / 2) {
           current = i;
         }
       });
 
       if (current !== activeIndex) {
         setActiveIndex(current);
-        
-        // EFEK MUNCUL SEBENTAR (KHUSUS AKTIF)
         setShowLabel(true);
         if (timerRef.current) clearTimeout(timerRef.current);
-        timerRef.current = setTimeout(() => {
-          setShowLabel(false);
-        }, 1500); 
+        timerRef.current = setTimeout(() => setShowLabel(false), 1500); 
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [sections, activeIndex]);
 
   const scrollToSection = (index) => {
     const target = sections[index];
     if (!target) return;
-    const targetPos = target.getBoundingClientRect().top + window.pageYOffset;
 
     gsap.to(window, {
-      scrollTo: { y: targetPos, autoKill: false },
+      scrollTo: { y: target, autoKill: false },
       duration: 1.2,
       ease: "expo.inOut",
       overwrite: true,
@@ -72,16 +88,17 @@ const SectionNavigation = () => {
   return (
     <div className="fixed right-5 xl:right-8 top-1/2 -translate-y-1/2 z-[999] hidden md:flex flex-col gap-3">
       {sections.map((section, i) => {
-        const title = section.dataset.title || `Section ${i + 1}`;
+        // Ambil label dari data-title (section_name dari API)
+        const title = section.getAttribute('data-title') || `Section ${i + 1}`;
         const isActive = activeIndex === i;
 
         return (
           <div
-            key={i}
+            key={`${location.pathname}-${i}`} // Key lebih unik
             onClick={() => scrollToSection(i)}
             className="group flex items-center gap-2 flex-row-reverse cursor-pointer"
           >
-            {/* BAR INDIKATOR - Dibuat Lebih Pendek & Tipis */}
+            {/* DESAIN TETAP SAMA SEPERTI REQUEST ANDA */}
             <div
               className={`h-5 w-[3px] border transition-all duration-500 ${
                 isActive
@@ -90,7 +107,6 @@ const SectionNavigation = () => {
               }`}
             />
 
-            {/* LABEL TEKS - Super Kecil & Tipis */}
             <div className="overflow-hidden">
               <span
                 className={`text-[8px] font-bold tracking-[0.2em] uppercase transition-all duration-1000 whitespace-nowrap block pointer-events-none

@@ -85,7 +85,7 @@ const HeroSkeleton = () => {
       </div>
 
       {/* Animation */}
-      <style jsx>{`
+      <style jsx="true">{`
         @keyframes shimmer {
           0% {
             background-position: 200% 0;

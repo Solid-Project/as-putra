@@ -4,131 +4,103 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 gsap.registerPlugin(ScrollToPlugin);
 
-const useFullPageSnap = () => {
-  const allSectionsRef = useRef([]); // Semua (Section + Footer)
-  const navSectionsRef = useRef([]); // Hanya Section (untuk navigasi)
-  const indexRef = useRef(0);
+const useFullPageSnap = ({ enabled = true } = {}) => {
+  const [activeIndex, setActiveIndex] = useState(0);
   const lockRef = useRef(false);
 
-  const [activeIndex, setActiveIndex] = useState(0);
+  const getElements = useCallback(() => 
+    Array.from(document.querySelectorAll(".fullpage-wrapper > .section, .fullpage-wrapper > .footer-snap")), 
+  []);
 
-  // Selector baru: Navigasi hanya untuk .section yang BUKAN .footer
-  const getNavSections = () => Array.from(document.querySelectorAll(".section:not(.footer-snap)"));
-  const getAllElements = () => Array.from(document.querySelectorAll(".section, .footer-snap"));
-
-  const isNoSnap = (el) => el?.classList?.contains("no-snap") || false;
-  const isFooter = (el) => el?.classList?.contains("footer-snap") || false;
-
-  const scrollToElement = useCallback((targetEl, realIdx, isNavigational = true) => {
+  const scrollToElement = useCallback((targetEl, navIndex) => {
     if (!targetEl || lockRef.current) return;
 
     lockRef.current = true;
-    
-    // Jika itu section navigasi, update activeIndex. Jika footer, tetap di index terakhir.
-    if (isNavigational) {
-      setActiveIndex(realIdx);
-    }
-    indexRef.current = realIdx;
+    if (navIndex !== -1) setActiveIndex(navIndex);
 
     gsap.to(window, {
       duration: 0.8,
       ease: "power2.inOut",
       scrollTo: { y: targetEl, autoKill: false },
       onComplete: () => {
-        if (window.ScrollTrigger) window.ScrollTrigger.refresh();
-        setTimeout(() => { lockRef.current = false; }, 300);
+        setTimeout(() => { lockRef.current = false; }, 200);
       },
     });
   }, []);
 
   const handleWheel = useCallback((e) => {
-    if (lockRef.current) {
-      e.preventDefault();
-      return;
+  if (!enabled || lockRef.current) return;
+
+  const all = Array.from(document.querySelectorAll(".fullpage-wrapper > .section"));
+  const scrollY = window.scrollY;
+  const vh = window.innerHeight;
+  
+  let currentIdx = 0;
+  all.forEach((el, i) => {
+    if (scrollY >= el.offsetTop - 100) currentIdx = i;
+  });
+
+  const currentEl = all[currentIdx];
+  const isDown = e.deltaY > 0;
+  const rect = currentEl.getBoundingClientRect();
+
+  if (currentEl.classList.contains("no-snap")) {
+    if (isDown) {
+      if (rect.bottom > vh + 5) return; 
+    } else {
+      if (rect.top < -5) return;
     }
+  }
 
-    const delta = e.deltaY;
-    if (Math.abs(delta) < 40) return;
+  // Cari target berikutnya
+  const nextIdx = isDown ? currentIdx + 1 : currentIdx - 1;
+  const nextEl = all[nextIdx];
 
-    const direction = delta > 0 ? "down" : "up";
-    const all = getAllElements();
+  if (nextEl) {
+    if (!nextEl.classList.contains("no-snap") || isDown) {
+       e.preventDefault();
+       scrollToElement(nextEl, nextIdx);
+    }
+  }
+}, [enabled, scrollToElement]);
+
+  // Sinkronisasi index saat resize atau refresh manual
+  const refreshIndex = useCallback(() => {
+    const all = getElements();
+    const navElements = Array.from(document.querySelectorAll(".fullpage-wrapper > .section"));
     const scrollY = window.scrollY;
-    const windowHeight = window.innerHeight;
-
-    // Cari elemen saat ini
-    let currentIndex = 0;
+    let current = 0;
+    
     all.forEach((el, i) => {
-      if (scrollY >= el.offsetTop - 100) currentIndex = i;
+      if (scrollY >= el.offsetTop - 100) current = i;
     });
 
-    const currentEl = all[currentIndex];
-
-    // =========================================================
-    // 🔥 LOGIKA FOOTER ATAU NO-SNAP
-    // =========================================================
-    if (isNoSnap(currentEl) || isFooter(currentEl)) {
-      const rect = currentEl.getBoundingClientRect();
-
-      if (direction === "up" && rect.top >= -10) {
-        e.preventDefault();
-        const prevEl = all[currentIndex - 1];
-        if (prevEl) {
-          // Balik ke section sebelumnya (bisa snap atau no-snap)
-          const isNav = !isFooter(prevEl);
-          // Cari index navigasi yang sesuai
-          const navIdx = getNavSections().indexOf(prevEl);
-          scrollToElement(prevEl, navIdx !== -1 ? navIdx : activeIndex, isNav);
-        }
-        return;
-      }
-      
-      if (direction === "down" && rect.bottom <= windowHeight + 10) {
-        const nextEl = all[currentIndex + 1];
-        if (nextEl) {
-          e.preventDefault();
-          const navIdx = getNavSections().indexOf(nextEl);
-          scrollToElement(nextEl, navIdx !== -1 ? navIdx : activeIndex, !isFooter(nextEl));
-        }
-        return;
-      }
-      return; // Biarkan native scroll
-    }
-
-    // =========================================================
-    // 🔥 LOGIKA SNAP BIASA
-    // =========================================================
-    if (direction === "down") {
-      const nextEl = all[currentIndex + 1];
-      if (nextEl) {
-        e.preventDefault();
-        const navIdx = getNavSections().indexOf(nextEl);
-        scrollToElement(nextEl, navIdx !== -1 ? navIdx : activeIndex, !isFooter(nextEl));
-      }
-    } else {
-      const prevEl = all[currentIndex - 1];
-      if (prevEl) {
-        e.preventDefault();
-        const navIdx = getNavSections().indexOf(prevEl);
-        scrollToElement(prevEl, navIdx !== -1 ? navIdx : 0, !isFooter(prevEl));
-      }
-    }
-  }, [scrollToElement, activeIndex]);
+    const currentEl = all[current];
+    const navIdx = navElements.indexOf(currentEl);
+    if (navIdx !== -1) setActiveIndex(navIdx);
+  }, [getElements]);
 
   useEffect(() => {
-    const init = () => {
-      allSectionsRef.current = getAllElements();
-      navSectionsRef.current = getNavSections();
-    };
-    setTimeout(init, 500);
+    if (!enabled) return;
+
+    const timer = setTimeout(refreshIndex, 500);
     window.addEventListener("wheel", handleWheel, { passive: false });
-    window.addEventListener("resize", init);
+    window.addEventListener("resize", refreshIndex);
+
     return () => {
       window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("resize", init);
+      window.removeEventListener("resize", refreshIndex);
+      clearTimeout(timer);
     };
-  }, [handleWheel]);
+  }, [enabled, handleWheel, refreshIndex]);
 
-  return { activeIndex, scrollToSection: (idx) => scrollToElement(getNavSections()[idx], idx, true) };
+  return { 
+    activeIndex, 
+    scrollToSection: (idx) => {
+      const navElements = Array.from(document.querySelectorAll(".fullpage-wrapper > .section"));
+      scrollToElement(navElements[idx], idx);
+    } 
+  };
 };
 
 export default useFullPageSnap;

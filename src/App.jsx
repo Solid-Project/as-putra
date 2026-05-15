@@ -1,36 +1,32 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
-
-import HomePage from "@/pages/HomePage";
-import AboutPage from "@/pages/AboutPage";
-import NewsPage from "@/pages/news/NewsPage";
-import NewsDetailPage from "@/pages/news/NewsDetailPage";
-import CareerPage from "@/pages/CareerPage";
-import SectorPage from "@/pages/SectorPage"; // Ini halaman list semua sektor
-import SectorDetailPage from "@/pages/SectorDetailPage"; // Komponen baru kita
-import EventDetailPage from "@/components/career/EventDetailPage";
-
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import FullPage from "@/pages/FullPage";
+import SectorDetailPage from "@/pages/SectorDetailPage"; 
+import NewsDetailPage from "@/pages/NewsDetailPage";
+import EventDetailPage from "@/components/section/EventDetailPage";
 import SectionNavigation from "@/hooks/SectionNavigation";
+import TitleManager from "@/components/TitleManager";
 
 function App() {
-  return (
-    <div className="min-h-screen bg-[#0b132b]">
-      <SectionNavigation />
+  const location = useLocation();
 
-      <React.Suspense fallback={<div className="h-screen bg-[#0b132b]" />}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/news" element={<NewsPage />} />
-          <Route path="/news/:id" element={<NewsDetailPage />} />
-          <Route path="/career" element={<CareerPage />} />
-          
-          {/* Halaman utama list sektor */}
-        {/*}  <Route path="/sector" element={<SectorPage />} /> */}
-          
-          {/* MAGIC HAPPENS HERE: Satu baris untuk semua sektor (peternakan, retail, dll) */}
+  return (
+    <div className="min-h-screen bg-black">
+      <TitleManager/>
+      <SectionNavigation key={location.pathname} />
+
+      <React.Suspense 
+        fallback={
+          <div className="h-screen bg-black flex items-center justify-center text-white font-bold uppercase tracking-widest animate-pulse">
+            Loading...
+          </div>
+        }
+      >
+        <Routes location={location} key={location.pathname}>
+          <Route path="/:slug" element={<FullPage />} />
+          <Route path="/" element={<Navigate to="/beranda" replace />} />
           <Route path="/sector/:slug" element={<SectorDetailPage />} />
-          
+          <Route path="/news/:id" element={<NewsDetailPage />} />
           <Route path="/event/:id" element={<EventDetailPage />} />
         </Routes>
       </React.Suspense>

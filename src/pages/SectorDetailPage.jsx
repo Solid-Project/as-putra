@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+//import Hooks & Layout Utama
 import useFullpageSnap from "@/hooks/useFullPageSnap"; 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import HeroSkeleton from "@/components/skeleton/HeroSkeleton";
+//Import Layout
+import HeroSector from "@/components/section/HeroSector";
+import IntroSection from "@/components/section/IntroSection";
+import Layout1 from "@/components/section/Layout1";
+import Layout2 from "@/components/section/Layout2";
+import Layout3 from "@/components/section/Layout3";
+import Layout4 from "@/components/section/Layout4";
+import Layout5 from "@/components/section/Layout5";
+import Layout6 from "@/components/section/Layout6";
+import Layout7 from "@/components/section/Layout7";
+import Layout8 from "@/components/section/Layout8";
+import Layout9 from "@/components/section/Layout9";
+import Layout10 from "@/components/section/Layout10";
 
-// Import Layouts
-import HeroSector from "@/components/sector/HeroSector";
-import IntroSection from "@/components/sector/IntroSection";
-import Layout1 from "@/components/sector/Layout1";
-import Layout2 from "@/components/sector/Layout2";
-import Layout3 from "@/components/sector/Layout3";
-import Layout4 from "@/components/sector/Layout4";
-import Layout5 from "@/components/sector/Layout5";
-import Layout6 from "@/components/sector/Layout6";
-import Layout7 from "@/components/sector/Layout7";
-import Layout8 from "@/components/sector/Layout8";
-import Layout9 from "@/components/sector/Layout9";
-import Layout10 from "@/components/sector/Layout10";
-
-// Mendaftarkan semua layout yang mungkin muncul di API Sector
 const COMPONENT_MAP = {
   "HeroSector": HeroSector,
   "IntroSection": IntroSection,
@@ -41,35 +40,34 @@ const SectorDetailPage = () => {
 
   useEffect(() => {
     const fetchSectorData = async () => {
+      setSections(null); 
       try {
-        const formattedName = `sector ${slug.toLowerCase()}`;
         const baseUrl = import.meta.env.VITE_API_URL.replace(/\/$/, "");
+        const capitalizedSlug = slug.charAt(0).toUpperCase() + slug.slice(1).toLowerCase();
+        const pageName = `Sector ${capitalizedSlug}`;
+        const response = await fetch(`${baseUrl}/api/v1/page/${encodeURIComponent(pageName)}`);
         
-        const response = await fetch(`${baseUrl}/api/v1/page/${encodeURIComponent(formattedName)}`);
-        if (!response.ok) throw new Error("Sector not found");
+        if (!response.ok) throw new Error("Halaman sektor tidak ditemukan");
         
         const result = await response.json();
         
-        // Sesuaikan dengan struktur API (result.data biasanya array sections)
-        const dataArray = result.data || result;
-        setSections(dataArray);
+        if (result.status && result.data) {
+          setSections(result.data);
+        } else {
+          setSections([]);
+        }
       } catch (error) {
-        console.error("Failed to fetch sector data:", error);
-        setSections([]); // Set array kosong jika error agar tidak loading selamanya
+        console.error("Gagal memuat data sektor:", error);
+        setSections([]); 
       }
     };
 
-    setSections(null); // Reset ke loading setiap kali slug berubah (pindah sektor)
     fetchSectorData();
   }, [slug]);
-
-  // Aktifkan Efek Snap Scroll (sama seperti AboutPage)
   const { activeIndex } = useFullpageSnap({ 
     enabled: !!sections && sections.length > 0,
-    config: { sectionSelector: ".section" } // Pastikan setiap Layout punya class "section"
+    config: { sectionSelector: ".section" }
   });
-
-  // Handle Resize & Reset Scroll posisi (sama seperti AboutPage)
   useEffect(() => {
     if (sections) {
       const timer = setTimeout(() => {
@@ -98,7 +96,7 @@ const SectorDetailPage = () => {
                 data={section}
                 isActive={activeIndex === index}
                 index={index}
-                className="section" // Tambahkan ini agar Snap Scroll bekerja
+                className="section"
               />
             );
           })}

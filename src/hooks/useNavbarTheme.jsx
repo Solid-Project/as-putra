@@ -1,48 +1,56 @@
 import { useState, useEffect } from "react";
-// Import semua variasi logo di sini
+// Import logo assets
 import logoLight from "@/assets/logo-teks-putih.png"; 
 import logoDark from "@/assets/logo-teks-asli.png";
 
 const useNavbarTheme = () => {
   const [theme, setTheme] = useState("dark");
-  const [logo, setLogo] = useState(logoLight); // Default logo
+  const [logo, setLogo] = useState(logoLight);
 
   useEffect(() => {
-    const handleScroll = () => {
+    const handleThemeChange = () => {
       const sections = document.querySelectorAll(".section");
-      const scrollPosition = window.scrollY + 80; // Offset sedikit lebih besar dari tinggi navbar
-
+      
+      // Kita cek section yang berada di area atas layar (posisi navbar)
+      const navbarHeight = 80; 
+      
       sections.forEach((section) => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
-
-        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-          const sectionTheme = section.getAttribute("data-theme"); // Pastikan section punya data-theme="light" atau "dark"
+        const rect = section.getBoundingClientRect();
+        
+        /**
+         * Logika: Jika bagian atas section sudah melewati batas navbar 
+         * DAN bagian bawah section masih di bawah batas navbar, 
+         * berarti section inilah yang sedang bersentuhan dengan navbar.
+         */
+        if (rect.top <= navbarHeight && rect.bottom >= navbarHeight) {
+          const sectionTheme = section.getAttribute("data-theme");
           
-          if (sectionTheme) {
+          if (sectionTheme && sectionTheme !== theme) {
             setTheme(sectionTheme);
-            // Logika ganti logo berdasarkan theme section
+            
             if (sectionTheme === "light") {
-              setLogo(logoDark); // Jika bg section terang, pakai logo gelap
+              setLogo(logoDark); // Section terang -> Logo gelap
             } else {
-              setLogo(logoLight); // Jika bg section gelap, pakai logo terang
+              setLogo(logoLight); // Section gelap -> Logo terang
             }
           }
         }
       });
     };
 
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleScroll);
-    handleScroll();
+    // Jalankan saat scroll dan resize
+    window.addEventListener("scroll", handleThemeChange, { passive: true });
+    window.addEventListener("resize", handleThemeChange);
+    
+    // Inisialisasi pertama kali
+    handleThemeChange();
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
+      window.removeEventListener("scroll", handleThemeChange);
+      window.removeEventListener("resize", handleThemeChange);
     };
-  }, []);
+  }, [theme]); // Dependency theme agar pengecekan lebih akurat
 
-  // Sekarang hook mengembalikan theme dan logo
   return { theme, logo };
 };
 
