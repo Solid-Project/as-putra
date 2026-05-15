@@ -60,7 +60,7 @@ const FullPage = ({ defaultSlug = "beranda" }) => {
         )}
 
         {/* Footer juga wajib menggunakan kelas 'section no-snap' agar masuk hitungan GSAP akhir */}
-        <section className="section no-snap w-full h-auto" data-title="Footer">
+        <section className="footer no-snap w-full h-auto" data-title="Footer">
           <Footer />
         </section>
       </div>
