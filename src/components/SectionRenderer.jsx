@@ -1,5 +1,4 @@
-// src/components/SectionRenderer.jsx
-import React from "react";
+import React, { memo } from "react";
 import HeroCarousel from "@/components/section/HeroCarousel";
 import HistorySection from "@/components/section/HistorySection";
 import CareerSection from "@/components/section/CareerSection";
@@ -24,97 +23,61 @@ import Layout9 from "@/components/section/Layout9";
 import Layout10 from "@/components/section/Layout10";
 import NewsSection from "@/components/section/NewsSection";
 
-// Mapping Komponen (Case Sensitive sesuai API)
 export const COMPONENT_MAP = {
-  HeroCarousel,
-  HistorySection,
-  CareerSection,
-  CardSection,
-  StatsSection,
-  SectorStrip,
-  NewsTeaser,
-  MilestoneSection,
-  OurValues,
-  VissionMission,
-  IntroSection,
-  HeroSector,
-  layout1: Layout1,
-  layout2: Layout2,
-  layout3: Layout3,
-  layout4: Layout4,
-  layout5: Layout5,
-  layout6: Layout6,
-  layout7: Layout7,
-  layout8: Layout8,
-  layout9: Layout9,
-  layout10: Layout10,
+  HeroCarousel, HistorySection, CareerSection, CardSection, StatsSection,
+  SectorStrip, NewsTeaser, MilestoneSection, OurValues, VissionMission,
+  IntroSection, HeroSector,
+  layout1: Layout1, layout2: Layout2, layout3: Layout3, layout4: Layout4, layout5: Layout5,
+  layout6: Layout6, layout7: Layout7, layout8: Layout8, layout9: Layout9, layout10: Layout10,
 };
 
-// Mapping Tema Manual sesuai visual komponen
 const THEME_MAPPING = {
-  HeroCarousel: "dark",
-  HeroSector: "dark",
-  IntroSection: "light",
-  HistorySection: "dark",
-  CareerSection: "light",
-  CardSection: "dark",
-  StatsSection: "dark",
-  SectorStrip: "dark",
-  NewsTeaser: "dark",
-  NewsSection: "light",
-  MilestoneSection: "light",
-  OurValues: "light",
-  VissionMission: "light",
-  layout1: "light",
-  layout2: "dark",
-  layout3: "light",
-  layout4: "dark",
-  layout5: "light",
-  layout6: "dark",
-  layout7: "light",
-  layout8: "dark",
-  layout9: "light",
-  layout10: "dark",
+  HeroCarousel: "dark", HeroSector: "dark", IntroSection: "light", HistorySection: "dark",
+  CareerSection: "light", CardSection: "dark", StatsSection: "dark", SectorStrip: "dark",
+  NewsTeaser: "dark", NewsSection: "light", MilestoneSection: "light", OurValues: "light",
+  VissionMission: "light", layout1: "light", layout2: "dark", layout3: "light", layout4: "dark",
+  layout5: "light", layout6: "dark", layout7: "light", layout8: "dark", layout9: "light", layout10: "dark",
 };
+
+const SafeComponentWrapper = memo(({ Component, contentData, isActive, index }) => {
+  return <Component data={contentData} isActive={isActive} index={index} />;
+});
+SafeComponentWrapper.displayName = "SafeComponentWrapper";
 
 export const SectionRenderer = ({ sections, activeIndex }) => {
-  if (!sections) return null;
+  if (!sections || sections.length === 0) return null;
 
   return (
     <>
       {sections.map((section, index) => {
         const layoutName = section.layout_name;
         const Component = COMPONENT_MAP[layoutName];
-        
         if (!Component) return null;
 
-        // Tentukan apakah section ini no-snap
+        // Cek mana komponen bebas (no-snap)
         const isNoSnap = [
-            "CardSection", 
-            "StatsSection", 
-            "NewsTeaser",
-            "MilestoneSection",
-            "CareerSection"
+          "CardSection", "StatsSection", "NewsTeaser",
+          "MilestoneSection", "CareerSection", "SectorStrip"
         ].includes(layoutName);
 
-        /**
-         * LOGIKA TEMA:
-         * Prioritas 1: Ambil dari database jika ada (section.theme).
-         * Prioritas 2: Ambil dari THEME_MAPPING manual di atas.
-         * Fallback: "dark".
-         */
         const currentTheme = section.theme || THEME_MAPPING[layoutName] || "dark";
 
         return (
           <section
-            key={section.id || index}
-            // data-theme dipasang di sini agar Navbar bisa mendeteksi lewat Intersection Observer
+            key={section.id || `section-${index}`}
             data-theme={currentTheme}
             data-title={section.section_name}
-            className={`section w-full ${isNoSnap ? "no-snap" : ""}`}
+            // KELAS WAJIB: Gunakan kombinasi 'section' dan 'no-snap' agar dibaca oleh hitungan GSAP
+            className={`section w-full relative ${isNoSnap ? "no-snap h-auto" : "h-screen"}`}
+            style={{
+              backgroundColor: currentTheme === "dark" ? "#111111" : "#ffffff",
+              contentVisibility: "auto",
+              containIntrinsicSize: "0 500px"
+            }}
           >
-            <Component 
-              data={section} 
+            <SafeComponentWrapper 
+              Component={Component} 
+              contentData={section.content_data || section} 
               isActive={activeIndex === index} 
               index={index} 
             />
@@ -125,4 +88,4 @@ export const SectionRenderer = ({ sections, activeIndex }) => {
   );
 };
 
-export default SectionRenderer;
+export default memo(SectionRenderer);

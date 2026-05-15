@@ -17,11 +17,9 @@ const FullPage = ({ defaultSlug = "beranda" }) => {
   const { data, loading } = usePageData(currentSlug);
   const sections = data?.data || [];
 
+  // Panggil hook GSAP tanpa mengunci config selector manual (biarkan pakai bawaan hook yang baru)
   const { activeIndex } = useFullpageSnap({ 
-    enabled: !loading && sections.length > 0,
-    config: { 
-      sectionSelector: ".fullpage-wrapper > .section" 
-    }
+    enabled: !loading && sections.length >= 0
   });
 
   useEffect(() => {
@@ -39,24 +37,30 @@ const FullPage = ({ defaultSlug = "beranda" }) => {
       <Navbar />
 
       <div className="fullpage-wrapper">
+        {/* Render komponen database */}
         <SectionRenderer sections={sections} activeIndex={activeIndex} />
+        
+        {/* Render komponen manual bersyarat (Semuanya wajib punya kelas 'section no-snap') */}
         {currentSlug === "beranda" && (
-          <section className="section no-snap" data-title="News Updates">
+          <section className="section no-snap w-full h-auto" data-title="News Updates">
             <NewsTeaser isActive={activeIndex === sections.length} />
           </section>
         )}
 
         {currentSlug === "news" && (
-          <section className="section no-snap" data-title="Latest News">
+          <section className="section no-snap w-full h-auto" data-title="Latest News">
             <NewsSection isActive={activeIndex === sections.length} />
           </section>
         )}
+
         {currentSlug === "karir" && (
-          <section className="section no-snap" data-theme="light" data-title="Join Our Team">
+          <section className="section no-snap w-full h-auto" data-theme="light" data-title="Join Our Team">
             <CareerSection isActive={activeIndex === sections.length} />
           </section>
         )}
-        <section className="footer no-snap" data-title="Footer">
+
+        {/* Footer juga wajib menggunakan kelas 'section no-snap' agar masuk hitungan GSAP akhir */}
+        <section className="section no-snap w-full h-auto" data-title="Footer">
           <Footer />
         </section>
       </div>

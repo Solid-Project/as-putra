@@ -8,8 +8,9 @@ const useFullPageSnap = ({ enabled = true } = {}) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const lockRef = useRef(false);
 
+  // Ambil semua elemen yang punya kelas .section di dalam wrapper
   const getElements = useCallback(() => 
-    Array.from(document.querySelectorAll(".fullpage-wrapper > .section, .fullpage-wrapper > .footer-snap")), 
+    Array.from(document.querySelectorAll(".fullpage-wrapper > .section")), 
   []);
 
   const scrollToElement = useCallback((targetEl, navIndex) => {
@@ -29,55 +30,56 @@ const useFullPageSnap = ({ enabled = true } = {}) => {
   }, []);
 
   const handleWheel = useCallback((e) => {
-  if (!enabled || lockRef.current) return;
+    if (!enabled || lockRef.current) return;
 
-  const all = Array.from(document.querySelectorAll(".fullpage-wrapper > .section"));
-  const scrollY = window.scrollY;
-  const vh = window.innerHeight;
-  
-  let currentIdx = 0;
-  all.forEach((el, i) => {
-    if (scrollY >= el.offsetTop - 100) currentIdx = i;
-  });
+    const all = getElements();
+    if (all.length === 0) return;
 
-  const currentEl = all[currentIdx];
-  const isDown = e.deltaY > 0;
-  const rect = currentEl.getBoundingClientRect();
+    const scrollY = window.scrollY;
+    const vh = window.innerHeight;
+    
+    let currentIdx = 0;
+    all.forEach((el, i) => {
+      if (scrollY >= el.offsetTop - 120) currentIdx = i;
+    });
 
-  if (currentEl.classList.contains("no-snap")) {
-    if (isDown) {
-      if (rect.bottom > vh + 5) return; 
-    } else {
-      if (rect.top < -5) return;
+    const currentEl = all[currentIdx];
+    const isDown = e.deltaY > 0;
+    const rect = currentEl.getBoundingClientRect();
+
+    // Logika pengaman untuk section yang tingginya bebas (no-snap)
+    if (currentEl.classList.contains("no-snap")) {
+      if (isDown) {
+        // Kalau bagian bawah section bebas belum mentok atas layar, biarkan scroll normal dulu
+        if (rect.bottom > vh + 10) return; 
+      } else {
+        // Kalau bagian atas section bebas belum nempel atas layar, biarkan scroll naik normal dulu
+        if (rect.top < -10) return;
+      }
     }
-  }
 
-  // Cari target berikutnya
-  const nextIdx = isDown ? currentIdx + 1 : currentIdx - 1;
-  const nextEl = all[nextIdx];
+    // Cari target berikutnya
+    const nextIdx = isDown ? currentIdx + 1 : currentIdx - 1;
+    const nextEl = all[nextIdx];
 
-  if (nextEl) {
-    if (!nextEl.classList.contains("no-snap") || isDown) {
-       e.preventDefault();
-       scrollToElement(nextEl, nextIdx);
+    if (nextEl) {
+      e.preventDefault();
+      scrollToElement(nextEl, nextIdx);
     }
-  }
-}, [enabled, scrollToElement]);
+  }, [enabled, getElements, scrollToElement]);
 
-  // Sinkronisasi index saat resize atau refresh manual
   const refreshIndex = useCallback(() => {
     const all = getElements();
-    const navElements = Array.from(document.querySelectorAll(".fullpage-wrapper > .section"));
     const scrollY = window.scrollY;
     let current = 0;
     
     all.forEach((el, i) => {
-      if (scrollY >= el.offsetTop - 100) current = i;
+      if (scrollY >= el.offsetTop - 120) current = i;
     });
 
-    const currentEl = all[current];
-    const navIdx = navElements.indexOf(currentEl);
-    if (navIdx !== -1) setActiveIndex(navIdx);
+    if (all[current]) {
+      setActiveIndex(current);
+    }
   }, [getElements]);
 
   useEffect(() => {
@@ -97,8 +99,8 @@ const useFullPageSnap = ({ enabled = true } = {}) => {
   return { 
     activeIndex, 
     scrollToSection: (idx) => {
-      const navElements = Array.from(document.querySelectorAll(".fullpage-wrapper > .section"));
-      scrollToElement(navElements[idx], idx);
+      const all = getElements();
+      scrollToElement(all[idx], idx);
     } 
   };
 };
