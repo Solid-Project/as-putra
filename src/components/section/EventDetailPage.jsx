@@ -78,7 +78,7 @@ const EventDetailPage = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0F1A3E] via-[#0F1A3E]/40 to-transparent"></div>
         </div>
 
-        {/* 1. KHUSUS MOBILE: Floating di atas (Hanya muncul di < 768px) */}
+        {/* 1. KHUSUS MOBILE: Floating di atas (DESAIN ASLI ANDA) */}
         <div className="md:hidden absolute top-6 left-0 w-full z-20 px-5">
           <div className="flex items-center justify-between">
             <button
@@ -99,7 +99,7 @@ const EventDetailPage = () => {
           <div className="w-full px-5 sm:px-8 lg:px-[5%]">
             <div className="max-w-[1400px] mx-auto">
 
-              {/* 2. KHUSUS DESKTOP: Sejajar di atas judul (Hanya muncul di >= 768px) */}
+              {/* 2. KHUSUS DESKTOP: Sejajar di atas judul */}
               <div className="hidden md:flex animate-content flex-row items-center gap-6 mb-8">
                 <button
                   onClick={() => navigate(-1)}
@@ -113,9 +113,9 @@ const EventDetailPage = () => {
                 </span>
               </div>
 
-              {/* TITLE */}
+              {/* TITLE - PERBAIKAN UTAMA: text-2xl di mobile agar proper, md:text-6xl & lg:text-8xl tetap mewah di desktop */}
               <div className="animate-content">
-                <h1 className="text-3xl md:text-6xl lg:text-8xl tracking-tight font-['Playfair_Display'] font-bold leading-tight md:leading-[1.1] text-white mb-6 md:mb-10 max-w-5xl">
+                <h1 className="text-2xl sm:text-3xl md:text-6xl lg:text-8xl tracking-tight font-['Playfair_Display'] font-bold leading-tight md:leading-[1.1] text-white mb-6 md:mb-10 max-w-5xl">
                   {event.title}
                 </h1>
 
@@ -125,11 +125,6 @@ const EventDetailPage = () => {
                     <CalendarIcon className="w-4 h-4 text-[#FFC700]" />
                     {event.created?.split(' ')[0]}
                   </span>
-                  <span className="flex items-center gap-2">
-                    <MapPinIcon className="w-4 h-4 text-[#FFC700]" />
-                    {event.excerpt?.split(',')[0]}
-                  </span>
-                  {/* UserIcon disembunyikan di mobile agar tidak terlalu penuh, muncul di desktop */}
                   <span className="hidden md:flex items-center gap-3">
                     <UserIcon className="w-5 h-5 text-[#FFC700]" />
                     {event.author || "Admin"}
@@ -162,14 +157,13 @@ const EventDetailPage = () => {
             </article>
           </div>
 
-          {/* SIDEBAR - Moved below content on mobile */}
+          {/* SIDEBAR */}
           <aside ref={sidebarRef} className="animate-content space-y-8 order-2 lg:order-2">
             <div className="bg-[#0F1A3E] rounded-[2rem] p-6 md:p-8 text-white shadow-xl relative overflow-hidden group">
               <h4 className="text-lg md:text-xl font-bold mb-6 md:mb-10 font-['Playfair_Display']">Informasi Event</h4>
               <div className="space-y-6 md:space-y-8 relative z-10">
                 {[
                   { icon: CalendarIcon, label: "Tanggal", value: event.created?.split(' ')[0] },
-                  { icon: MapPinIcon, label: "Lokasi", value: event.excerpt?.split(',')[0] },
                   { icon: UserIcon, label: "Penulis", value: event.author }
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-4">
@@ -187,7 +181,7 @@ const EventDetailPage = () => {
 
             {/* EVENT LAINNYA */}
             <div className="bg-white border border-gray-100 rounded-[2rem] p-6 md:p-8 shadow-sm">
-              <h4 className="text-lg md:text-xl font-bold text-[#0F1A3E] mb-6 font-['Playfair_Display']">Langkah Lainnya</h4>
+              <h4 className="text-lg md:text-xl font-bold text-[#0F1A3E] mb-6 font-['Playfair_Display']">Event Lainnya</h4>
               <div className="space-y-5">
                 {otherEvents.map((item) => (
                   <Link
@@ -207,9 +201,9 @@ const EventDetailPage = () => {
 
       <style dangerouslySetInnerHTML={{
         __html: `
-        .event-content p { margin-bottom: 1.5rem; text-align: left; }
+        .event-content p { margin-bottom: 1.5rem; text-align: justify; text-justify: inter-word; }
         @media (min-width: 768px) {
-          .event-content p { margin-bottom: 2.2rem; text-align: justify; }
+          .event-content p { margin-bottom: 2.2rem; }
         }
         .event-content strong { color: #0F1A3E; font-weight: 800; }
         .event-content p:first-of-type::first-letter {
@@ -224,7 +218,6 @@ const EventDetailPage = () => {
         @media (min-width: 768px) {
           .event-content p:first-of-type::first-letter { font-size: 4.5rem; margin-right: 0.8rem; }
         }
-        /* Fix for images inside content on mobile */
         .event-content img {
           max-width: 100%;
           height: auto;

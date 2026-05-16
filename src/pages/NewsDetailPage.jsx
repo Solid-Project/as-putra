@@ -5,7 +5,6 @@ import {
   CalendarIcon, 
   UserIcon, 
   ArrowLeftIcon,
-  MapPinIcon
 } from "@heroicons/react/24/outline";
 import ShareButtons from "@/components/ui/ShareButtons";
 import NewsSidebar from "@/pages/NewsSidebar"; 
@@ -17,7 +16,6 @@ const NewsDetailPage = () => {
   const [loading, setLoading] = useState(true);
 
   const heroRef = useRef(null);
-  const titleRef = useRef(null);
   const contentRef = useRef(null);
   const sidebarRef = useRef(null);
 
@@ -59,16 +57,37 @@ const NewsDetailPage = () => {
   if (!news) return <div className="h-screen flex items-center justify-center font-['Playfair_Display']">Berita tidak ditemukan</div>;
 
   return (
-    <main className="min-h-screen bg-[#FAFAFA]">
-      <div className="relative h-[80vh] min-h-[650px] overflow-hidden">
+    <main className="min-h-screen bg-[#FAFAFA] overflow-x-hidden">
+      {/* HERO SECTION */}
+      <div className="relative h-[65vh] md:h-[80vh] min-h-[480px] md:min-h-[650px] overflow-hidden">
         <div ref={heroRef} className="absolute inset-0">
           <img src={news.thumbnail} alt={news.title} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0F1A3E] via-[#0F1A3E]/50 to-transparent"></div>
         </div>
-        <div className="absolute inset-0 flex items-end pb-20">
+
+        {/* 1. KHUSUS MOBILE: Floating di atas (Tetap Sesuai Desain Asli Anda) */}
+        <div className="md:hidden absolute top-6 left-0 w-full z-20 px-5">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => navigate(-1)}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black/30 backdrop-blur-md text-white border border-white/10 shadow-2xl"
+            >
+              <ArrowLeftIcon className="w-4 h-4" />
+              <span className="text-[10px] font-black uppercase tracking-widest">Back</span>
+            </button>
+            <span className="px-4 py-2 rounded-xl bg-[#FFC700] text-[#0F1A3E] text-[9px] font-black uppercase tracking-widest">
+              {news.categories?.[0]?.name || "Official"}
+            </span>
+          </div>
+        </div>
+
+        {/* HERO CONTENT */}
+        <div className="absolute inset-0 flex items-end pb-10 md:pb-20">
           <div className="w-full px-4 sm:px-6 md:px-8 lg:px-[5%]">
             <div className="max-w-[1400px] mx-auto">
-              <div className="animate-content flex flex-col md:flex-row md:items-center gap-6 mb-8">
+              
+              {/* 2. KHUSUS DESKTOP: Sejajar di atas judul */}
+              <div className="hidden md:flex animate-content flex-row items-center gap-6 mb-8">
                 <button
                   onClick={() => navigate(-1)}
                   className="group flex items-center gap-3 w-fit px-6 py-3 rounded-2xl bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-[#FFC700] hover:text-[#0F1A3E] hover:border-[#FFC700] transition-all duration-500 shadow-xl"
@@ -81,18 +100,18 @@ const NewsDetailPage = () => {
                   {news.categories?.[0]?.name || "Official"}
                 </span>
               </div>
+
+              {/* TITLE - Dioptimalkan: text-2xl di mobile agar proper, md:text-6xl & lg:text-8xl tetap mewah di desktop */}
               <div className="animate-content">
-                <h1 className="text-4xl md:text-6xl lg:text-8xl tracking-tight font-['Playfair_Display'] font-bold leading-[1.1] text-white mb-10 max-w-5xl">
+                <h1 className="text-2xl sm:text-3xl md:text-6xl lg:text-8xl tracking-tight font-['Playfair_Display'] font-bold leading-tight md:leading-[1.1] text-white mb-6 md:mb-10 max-w-5xl">
                   {news.title}
                 </h1>
+                
+                {/* META INFO */}
                 <div className="flex flex-wrap gap-x-10 gap-y-4 text-sm md:text-base text-white/70 font-bold uppercase tracking-widest text-[11px]">
                   <span className="flex items-center gap-3">
                     <CalendarIcon className="w-5 h-5 text-[#FFC700]" />
                     {news.created?.split(' ')[0]}
-                  </span>
-                  <span className="flex items-center gap-3">
-                    <MapPinIcon className="w-5 h-5 text-[#FFC700]" />
-                    {news.excerpt?.split(',')[0]}
                   </span>
                   <span className="flex items-center gap-3">
                     <UserIcon className="w-5 h-5 text-[#FFC700]" />
@@ -104,13 +123,15 @@ const NewsDetailPage = () => {
           </div>
         </div>
       </div>
+
+      {/* CONTENT SECTION */}
       <div className="w-full px-4 sm:px-6 md:px-8 lg:px-[5%] py-24">
         <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[1.8fr_0.7fr] gap-16 xl:gap-24">
           
           <div ref={contentRef} className="animate-content">
-            <article className="bg-white border border-gray-100 rounded-[3rem] p-8 md:p-16 shadow-[0_20px_50px_rgba(0,0,0,0.03)]">
+            <article className="bg-white border border-gray-100 rounded-[2rem] md:rounded-[3rem] p-6 md:p-16 shadow-[0_20px_50px_rgba(0,0,0,0.03)]">
               <div
-                className="news-article max-w-none text-lg md:text-xl leading-[2.1] text-gray-600 font-medium"
+                className="news-article max-w-none text-base md:text-xl leading-relaxed md:leading-[2.1] text-gray-600 font-medium"
                 dangerouslySetInnerHTML={{ __html: news.content }}
               />
               <div className="mt-20 pt-10 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-8">
@@ -130,17 +151,36 @@ const NewsDetailPage = () => {
         </div>
       </div>
 
+      {/* PERBAIKAN CSS UTAMA */}
       <style dangerouslySetInnerHTML={{ __html: `
-        .news-article p { margin-bottom: 2.2rem; text-align: justify; text-justify: inter-word; }
+        /* PERBAIKAN: Setel justify rata kiri-kanan langsung sebagai default (Sasar layar mobile & desktop) */
+        .news-article p { 
+          margin-bottom: 1.5rem; 
+          text-align: justify; 
+          text-justify: inter-word; 
+        }
+        @media (min-width: 768px) {
+          .news-article p { margin-bottom: 2.2rem; }
+        }
         .news-article strong { color: #0F1A3E; font-weight: 800; }
         .news-article p:first-of-type::first-letter {
           float: left;
-          font-size: 4.5rem;
+          font-size: 3.5rem;
           line-height: 1;
           font-weight: 900;
-          margin-right: 0.8rem;
+          margin-right: 0.6rem;
           color: #FFC700;
           font-family: 'Playfair Display', serif;
+        }
+        @media (min-width: 768px) {
+          .news-article p:first-of-type::first-letter { font-size: 4.5rem; margin-right: 0.8rem; }
+        }
+        /* Fix for images inside content on mobile */
+        .news-article img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 1rem;
+          margin: 2rem 0;
         }
       `}} />
     </main>
