@@ -88,10 +88,6 @@ const IntroSection = ({ data, isActive, index }) => {
         {/* Mengubah `justify-center` menjadi `justify-start` di mobile dan memadatkan padding bawah (`pb-4`) */}
         <div className="w-full lg:w-[45%] flex flex-col justify-start lg:justify-center pt-16 pb-4 lg:py-0 px-6 sm:px-12 lg:px-[8%] lg:pr-4">
           <div ref={titleWrapperRef} className="flex flex-col">
-            <span className="text-[#FFC619] font-bold tracking-[0.25em] lg:tracking-[0.3em] uppercase text-[10px] md:text-xs mb-2 lg:mb-4 block">
-              Overview Sector
-            </span>
-            
             {titleWords.map((word, i) => (
               <h1
                 key={i}

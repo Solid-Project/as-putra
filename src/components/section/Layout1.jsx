@@ -93,10 +93,6 @@ const Layout1 = ({ data, isActive, index }) => {
           {/* SISI KANAN: TEXT */}
           <div ref={textGroupRef} className="lg:col-span-6 flex flex-col order-1 lg:order-2">
             <div className="max-w-xl">
-              <span className="text-[#FFC619] font-bold tracking-[0.3em] uppercase text-[10px] mb-4 block">
-                {data.meta || "Detail Overview"}
-              </span>
-              
               <h2 className="font-['Playfair_Display'] font-bold leading-[1.1] mb-6 tracking-tighter text-[#1D2B53]"
                 style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)" }}>
                 {data.title}

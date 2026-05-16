@@ -166,11 +166,6 @@ const NewsSection = ({ activeIndex }) => {
             <h2 className="text-4xl lg:text-6xl font-['Playfair_Display'] font-bold text-[#0F1A3E] tracking-tight">
               Jejak <span className="text-[#FFC700] italic font-normal">Informasi</span>
             </h2>
-            <div className="max-w-xl border-l-4 border-[#FFC700] pl-4 lg:pl-6">
-              <p className="text-gray-500 text-xs lg:text-base leading-relaxed font-medium">
-                Dokumentasi langkah nyata <span className="font-bold" style={{ color: COLOR_NAVY }}>AS PUTRA Group</span> dalam inovasi industri dan kebermanfaatan sosial.
-              </p>
-            </div>
           </div>
         </div>
 

@@ -14,14 +14,14 @@ const NewsTeaser = ({ activeIndex, index }) => {
   
   const isActive = activeIndex === index;
 
-  // Fetch Data Preview (Cukup ambil 3 berita teratas demi kenyamanan layout 100vh)
+  // Fetch Data Preview
   useEffect(() => {
     const fetchNews = async () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/news/all-news`);
         const json = await response.json();
         if (json.status && json.data.details) {
-          setNewsData(json.data.details.slice(0, 3)); // 1 Utama, 2 List Samping
+          setNewsData(json.data.details.slice(0, 3)); 
         }
       } catch (error) { 
         console.error("Gagal memuat etalase berita:", error); 
@@ -49,7 +49,7 @@ const NewsTeaser = ({ activeIndex, index }) => {
   }, [isActive, loading, newsData]);
 
   const featuredNews = newsData[0]; 
-  const sideNewsList = newsData.slice(1, 3); // Dipangkas menjadi hanya 2 item
+  const sideNewsList = newsData.slice(1, 3);
 
   return (
     <section
@@ -64,8 +64,8 @@ const NewsTeaser = ({ activeIndex, index }) => {
 
       <div className="w-full relative z-10 flex flex-col max-w-[1440px] mx-auto h-full justify-between items-stretch">
         
-        {/* HEADER AREA (Tetap Kokoh di Atas) */}
-        <div ref={headerRef} className="text-left flex-shrink-0 mb-4">
+        {/* HEADER AREA */}
+        <div ref={headerRef} className="text-left flex-shrink-0 mb-2 md:mb-4">
           <div className="inline-block px-3 py-0.5 border border-[#FFC700] rounded-full mb-2">
             <span className="text-[#FFC700] font-black tracking-[0.3em] uppercase text-[8px] lg:text-[9px]">
               Latest News & Activity
@@ -75,11 +75,6 @@ const NewsTeaser = ({ activeIndex, index }) => {
             <h2 className="text-2xl lg:text-4xl font-['Playfair_Display'] font-bold text-white tracking-tight">
               Jejak <span className="text-[#FFC700] italic font-normal">Informasi</span>
             </h2>
-            <div className="max-w-xl border-l-2 border-[#FFC700] pl-4 opacity-60 hidden sm:block">
-              <p className="text-gray-400 text-[11px] lg:text-xs leading-relaxed font-medium">
-                Dokumentasi langkah nyata <span className="font-bold text-white">AS PUTRA Group</span> dalam inovasi industri dan kebermanfaatan sosial.
-              </p>
-            </div>
           </div>
         </div>
 
@@ -90,18 +85,20 @@ const NewsTeaser = ({ activeIndex, index }) => {
           </div>
         ) : newsData.length > 0 ? (
           
-          /* GRID UTAMA - DIKUNCI HANYA 42% HINGGA 45% DARI TINGGI LAYAR */
-          <div ref={contentGridRef} className="grid grid-cols-12 gap-6 lg:gap-8 items-stretch my-auto max-h-[45vh] w-full">
+          /* PERBAIKAN UTAMA: Mengganti 'my-auto' menjadi 'mt-1 mb-auto md:my-auto' */
+          <div 
+            ref={contentGridRef} 
+            className="grid grid-cols-12 gap-4 md:gap-6 lg:gap-8 items-stretch mt-1 mb-auto md:my-auto max-h-[58vh] md:max-h-[45vh] w-full"
+          >
             
-            {/* COLUMN 1: BERITA UTAMA / HERO (DI-SHRINK TOTAL) */}
+            {/* COLUMN 1: BERITA UTAMA / HERO */}
             <div className="col-span-12 md:col-span-7 flex flex-col h-full">
               {featuredNews && (
                 <Link
                   to={`/news/${featuredNews.slug?.split('/').pop()}`}
-                  className="teaser-hero-card group relative flex flex-row md:flex-col gap-4 w-full h-full bg-white/[0.01] border border-white/10 rounded-xl p-3.5 shadow-[0_12px_30px_rgba(0,0,0,0.3)] hover:border-white/20 hover:bg-white/[0.02] transition-all duration-500 overflow-hidden"
+                  className="teaser-hero-card group relative flex flex-col gap-3 w-full h-full bg-white/[0.01] border border-white/10 rounded-xl p-3.5 shadow-[0_12px_30px_rgba(0,0,0,0.3)] hover:border-white/20 hover:bg-white/[0.02] transition-all duration-500 overflow-hidden"
                 >
-                  {/* Tinggi frame disunat ekstrem */}
-                  <div className="relative flex-1 overflow-hidden rounded-lg bg-white/5 max-h-[150px] lg:max-h-[200px] w-1/3 md:w-full flex-shrink-0 aspect-[16/10] md:aspect-auto">
+                  <div className="relative overflow-hidden rounded-lg bg-white/5 max-h-[160px] md:max-h-[150px] lg:max-h-[200px] w-full flex-shrink-0 aspect-[16/9] md:aspect-auto">
                     <img
                       src={featuredNews.thumbnail}
                       className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-103"
@@ -113,13 +110,13 @@ const NewsTeaser = ({ activeIndex, index }) => {
                     </span>
                   </div>
 
-                  {/* Teks Deskripsi Super Ringkas */}
-                  <div className="flex flex-col justify-between flex-1 pt-0 md:pt-2">
+                  {/* Teks Deskripsi */}
+                  <div className="flex flex-col justify-between flex-1 pt-1 md:pt-2">
                     <div>
                       <span className="text-white/30 text-[8px] block mb-0.5 font-medium">
                         {featuredNews.created?.split(" ")[0]}
                       </span>
-                      <h3 className="text-xs lg:text-base font-bold text-white leading-snug mb-1 group-hover:text-[#FFC700] transition-colors duration-300 font-['Playfair_Display'] line-clamp-2">
+                      <h3 className="text-sm md:text-xs lg:text-base font-bold text-white leading-snug mb-1 group-hover:text-[#FFC700] transition-colors duration-300 font-['Playfair_Display'] line-clamp-2">
                         {featuredNews.title}
                       </h3>
                       <p className="text-gray-400 text-[11px] leading-relaxed line-clamp-2 opacity-45 font-light hidden md:block">
@@ -127,7 +124,7 @@ const NewsTeaser = ({ activeIndex, index }) => {
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-1 text-[#FFC700] text-[8px] font-black uppercase tracking-widest mt-2">
+                    <div className="flex items-center gap-1 text-[#FFC700] text-[8px] font-black uppercase tracking-widest mt-1">
                       <span>Baca Selengkapnya</span>
                       <span className="transform translate-x-0 group-hover:translate-x-1 transition-transform duration-300">→</span>
                     </div>
@@ -136,14 +133,14 @@ const NewsTeaser = ({ activeIndex, index }) => {
               )}
             </div>
 
-            {/* COLUMN 2: SIDE LIST (HANYA 2 ITEM - SEJAJAR DAN PAS DENGAN HERO KIRI) */}
-            <div className="col-span-12 md:col-span-5 flex flex-col justify-between gap-3 h-full">
+            {/* COLUMN 2: SIDE LIST */}
+            <div className="col-span-12 md:col-span-5 flex flex-col justify-between gap-2.5 md:gap-3 h-full">
               {sideNewsList.length > 0 ? (
                 sideNewsList.map((item, idx) => (
                   <Link
                     key={`side-${item.slug || idx}`}
                     to={`/news/${item.slug?.split('/').pop()}`}
-                    className="teaser-list-item group flex flex-row items-center gap-3.5 bg-white/[0.01] border border-white/5 p-3 rounded-xl hover:border-white/15 hover:bg-white/[0.02] transition-all duration-300 w-full flex-1 min-h-[70px]"
+                    className="teaser-list-item group flex flex-row items-center gap-3.5 bg-white/[0.01] border border-white/5 p-3 rounded-xl hover:border-white/15 hover:bg-white/[0.02] transition-all duration-300 w-full flex-1 min-h-[65px] md:min-h-[70px]"
                   >
                     <div className="flex-1 min-w-0">
                       <span className="text-[#FFC700] text-[8px] font-bold uppercase tracking-wider block mb-0.5 opacity-80">
@@ -157,7 +154,7 @@ const NewsTeaser = ({ activeIndex, index }) => {
                       </span>
                     </div>
 
-                    <div className="flex-none w-14 h-14 lg:w-16 lg:h-16 rounded-lg overflow-hidden bg-white/5 border border-white/10 relative">
+                    <div className="flex-none w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-lg overflow-hidden bg-white/5 border border-white/10 relative">
                       <img 
                         src={item.thumbnail} 
                         className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-103" 
@@ -182,7 +179,7 @@ const NewsTeaser = ({ activeIndex, index }) => {
           </div>
         )}
 
-        {/* BUTTON REDIREKSI (Terbanting Sempurna ke Dasar Layar, Berjarak Aman) */}
+        {/* BUTTON REDIREKSI */}
         <div ref={buttonRef} className="flex justify-center flex-shrink-0 pt-4 pb-2">
           <Link
             to="/news"

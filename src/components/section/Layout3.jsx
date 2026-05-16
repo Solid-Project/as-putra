@@ -57,7 +57,7 @@ const Layout3 = ({ data, isActive, index }) => {
             <div className="flex-none mb-6">
               <div className="flex items-center gap-2 mb-2">
                  <div className="h-[2px] w-6 bg-[#FFC619]" />
-                 <span className="text-[9px] font-bold tracking-[0.3em] uppercase text-slate-400">Overview</span>
+               
               </div>
               <h2 className="font-['Playfair_Display'] font-bold text-3xl lg:text-4xl text-[#1D2B53] leading-tight">{displayTitle}</h2>
               <div className="h-[1px] w-full bg-slate-50 mt-6" />

@@ -96,13 +96,6 @@ const Layout5 = ({ data, index }) => {
     return () => ctx.revert();
   }, [statsData]);
 
-  const icons = [
-    <BuildingOffice2Icon className="w-8 h-8 md:w-10 md:h-10 text-[#FFC700]/40" />,
-    <UsersIcon className="w-8 h-8 md:w-10 md:h-10 text-[#FFC700]/40" />,
-    <CircleStackIcon className="w-8 h-8 md:w-10 md:h-10 text-[#FFC700]/40" />,
-    <GlobeAltIcon className="w-8 h-8 md:w-10 md:h-10 text-[#FFC700]/40" />
-  ];
-
   return (
     <section
       ref={sectionRef}
@@ -143,7 +136,6 @@ const Layout5 = ({ data, index }) => {
           {statsData.map((item, idx) => (
             // Tetap mempertahankan flex-col vertikal asli bawaan Anda
             <div key={item.id || idx} className={`flex flex-col gap-4 md:gap-6 ${idx % 2 !== 0 ? "sm:pl-12" : ""}`}>
-              {icons[idx % icons.length]}
               <div className="flex flex-col">
                 <span 
                   ref={(el) => (statsRefs.current[idx] = el)} 
