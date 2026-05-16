@@ -8,7 +8,7 @@ const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [language, setLanguage] = useState("id");
   const [isVisible, setIsVisible] = useState(true);
-  
+
   const [sectors, setSectors] = useState([]);
   const [isSectorLoading, setIsSectorLoading] = useState(true);
 
@@ -19,7 +19,7 @@ const Navbar = () => {
   const COLOR_GOLD = "#FFC619";
   const COLOR_NAVY = "#1D2B53";
   const isDark = theme === "dark";
-  
+
   const COLOR_ACCENT = isDark ? COLOR_GOLD : COLOR_NAVY;
   const textColorClass = isDark ? "text-white" : "text-slate-900";
   const hamburgerColor = isDark ? "bg-white" : "bg-slate-900";
@@ -27,26 +27,52 @@ const Navbar = () => {
   const isSectorActive = location.pathname.includes("/sector/");
 
   // 1. FETCH SEKTOR DARI DATABASE
+  // 1. FETCH SEKTOR DARI DATABASE
+  // 1. FETCH SEKTOR DARI DATABASE (NAVBAR)
+  // 1. FETCH SEKTOR DARI DATABASE (NAVBAR)
   useEffect(() => {
     const fetchSectors = async () => {
       try {
         const baseUrl = import.meta.env.VITE_API_URL.replace(/\/$/, "");
         const response = await fetch(`${baseUrl}/api/v1/page/list`);
         const json = await response.json();
-        if (json.status) {
+
+        if (json.status && json.data) {
           const sectorPages = json.data
-            .filter(p => p.name.toLowerCase().includes("sector"))
-            .map(p => ({
-              label: p.name.replace(/Sector\s+/i, ""),
-              slug: p.name.replace(/Sector\s+/i, "").toLowerCase().replace(/\s+/g, '-'),
-            }));
+            // AMAN & SEDERHANA: Cek apakah nama mengandung "sector" ATAU "sektor"
+            .filter(p => {
+              if (!p || !p.name) return false;
+              const nameLower = p.name.toLowerCase();
+              return nameLower.includes("sector") || nameLower.includes("sektor");
+            })
+            .map(p => {
+              // Potong kata depan "Sector " atau "Sektor " secara manual agar aman
+              const cleanLabel = p.name
+                .replace(/Sector\s+/i, "")
+                .replace(/Sektor\s+/i, "")
+                .trim();
+
+              return {
+                label: cleanLabel,
+                // Mengubah spasi dan karakter khusus seperti & menjadi dash (-) untuk URL slug
+                slug: cleanLabel
+                  .toLowerCase()
+                  .replace(/[^a-z0-9\s-]/g, "") // Buang karakter aneh seperti &
+                  .replace(/\s+/g, "-")         // Ganti spasi dengan (-)
+                  .replace(/-+/g, "-"),         // Bersihkan jika ada double dash (--)
+              };
+            });
+
           setSectors(sectorPages);
         }
-      } catch (error) { console.error(error); } finally { setIsSectorLoading(false); }
+      } catch (error) {
+        console.error("Gagal memuat list dropdown sektor:", error);
+      } finally {
+        setIsSectorLoading(false);
+      }
     };
     fetchSectors();
   }, []);
-
   // 2. AUTO-HIDE NAVBAR SAAT SCROLL
   useEffect(() => {
     const handleScroll = () => {
@@ -72,7 +98,7 @@ const Navbar = () => {
     <>
       {/* NAVBAR MAIN */}
       <nav className={`fixed top-0 w-full z-50 px-4 md:px-8 lg:px-[5%] flex justify-between items-center py-2 transition-all duration-500 ${isVisible ? "translate-y-0" : "-translate-y-full"} bg-transparent`}>
-        
+
         {/* LOGO */}
         <Link to="/beranda" className="flex items-center" onClick={closeMenu}>
           <img src={logo} alt="AS PUTRA" className="h-7 md:h-8 object-contain transition-transform hover:scale-105" />
@@ -82,8 +108,8 @@ const Navbar = () => {
         <ul className="hidden md:flex items-center gap-6 lg:gap-8">
           {menuItems.slice(0, 2).map((item) => (
             <li key={item.to} className="relative group">
-              <NavLink 
-                to={item.to} 
+              <NavLink
+                to={item.to}
                 className={({ isActive }) => `text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`}
                 style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}
               >
@@ -99,7 +125,7 @@ const Navbar = () => {
 
           {/* DROPDOWN SEKTOR */}
           <li className="relative group">
-            <div 
+            <div
               className={`flex items-center gap-1 cursor-pointer text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-colors ${isSectorActive ? "" : textColorClass}`}
               style={{ color: isSectorActive ? COLOR_ACCENT : '' }}
             >
@@ -120,8 +146,8 @@ const Navbar = () => {
 
           {menuItems.slice(2).map((item) => (
             <li key={item.to} className="relative group">
-              <NavLink 
-                to={item.to} 
+              <NavLink
+                to={item.to}
                 className={({ isActive }) => `text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`}
                 style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}
               >
@@ -170,7 +196,7 @@ const Navbar = () => {
               {item.label}
             </NavLink>
           ))}
-          
+
           <div className="pt-5 border-t border-slate-50">
             <p className="text-[9px] uppercase tracking-widest text-slate-300 font-bold mb-4">Unit Bisnis</p>
             <div className="grid grid-cols-1 gap-4">

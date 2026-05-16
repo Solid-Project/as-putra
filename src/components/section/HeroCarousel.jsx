@@ -24,7 +24,7 @@ const HeroCarousel = ({ data, isActive, index }) => {
       case "/":
       case "/beranda":
         return [
-          { label: "Sektor Bisnis", to: "/sector/peternakan", primary: true },
+          { label: "Sektor Bisnis", to: "/sector", primary: true },
           { label: "Tentang Kami", to: "/tentang", primary: false },
         ];
       

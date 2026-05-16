@@ -6,6 +6,7 @@ import NewsDetailPage from "@/pages/NewsDetailPage";
 import EventDetailPage from "@/components/section/EventDetailPage";
 import SectionNavigation from "@/hooks/SectionNavigation";
 import TitleManager from "@/components/TitleManager";
+import SectorPage from "@/pages/SectorPage";
 
 function App() {
   const location = useLocation();
@@ -25,6 +26,7 @@ function App() {
         <Routes location={location} key={location.pathname}>
           <Route path="/:slug" element={<FullPage />} />
           <Route path="/" element={<Navigate to="/beranda" replace />} />
+          <Route path="/sector" element={<SectorPage />} />
           <Route path="/sector/:slug" element={<SectorDetailPage />} />
           <Route path="/news/:id" element={<NewsDetailPage />} />
           <Route path="/event/:id" element={<EventDetailPage />} />
