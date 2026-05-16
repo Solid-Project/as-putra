@@ -62,91 +62,90 @@ const Layout2 = ({ data, isActive, index }) => {
   return (
     <section
       ref={sectionRef}
-      className="section relative min-h-screen flex items-center py-24 px-[10%] bg-[#FDFDFD] overflow-hidden"
+      // OPTIMASI: Menggunakan px-4 di mobile, px-[10%] baru aktif di desktop. py disesuaikan.
+      className="section relative min-h-screen flex items-start md:items-center py-12 md:py-24 px-4 sm:px-6 md:px-[10%] bg-[#FDFDFD] overflow-hidden"
       id={`section-${orderId}`} 
       data-theme="light"
     >
-      {/* BACKGROUND SILUET LOGO - Warna Asli, Tetap Berani */}
+      {/* BACKGROUND SILUET LOGO */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <img 
           ref={silhouetteLeftRef}
           src={logoAsPutra} 
-          className="absolute -top-20 -left-20 w-[55vw] opacity-[0.06] object-contain grayscale-0"
+          className="absolute -top-10 -left-10 w-[65vw] md:w-[55vw] opacity-[0.04] md:opacity-[0.06] object-contain"
         />
         <img 
           ref={silhouetteRightRef}
           src={logoAsPutra} 
-          className="absolute -bottom-20 -right-20 w-[45vw] opacity-[0.04] grayscale-0 object-contain"
+          className="absolute -bottom-10 -right-10 w-[55vw] md:w-[45vw] opacity-[0.03] md:opacity-[0.04] object-contain"
         />
       </div>
 
-      {/* DEKORASI GARIS FRAME (PENGGANTI WATERMARK) */}
-      <div className="absolute inset-0 pointer-events-none z-0 border-[40px] border-transparent">
-        <div className="w-full h-full border border-slate-100/50 rounded-[4rem] relative">
-            {/* Aksen Sudut Emas */}
-            <div className="absolute -top-[1px] -left-[1px] w-20 h-[2px]" style={{ backgroundColor: COLOR_GOLD }} />
-            <div className="absolute -top-[1px] -left-[1px] w-[2px] h-20" style={{ backgroundColor: COLOR_GOLD }} />
+      {/* DEKORASI GARIS FRAME (Disesuaikan ketebalannya di mobile agar tidak makan tempat) */}
+      <div className="absolute inset-0 pointer-events-none z-0 border-[16px] md:border-[40px] border-transparent">
+        <div className="w-full h-full border border-slate-100/70 rounded-[2rem] md:rounded-[4rem] relative">
+            <div className="absolute -top-[1px] -left-[1px] w-10 md:w-20 h-[2px]" style={{ backgroundColor: COLOR_GOLD }} />
+            <div className="absolute -top-[1px] -left-[1px] w-[2px] h-10 md:h-20" style={{ backgroundColor: COLOR_GOLD }} />
         </div>
       </div>
 
-      <div className="w-full relative z-10">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+      <div className="w-full relative z-10 pt-4 md:pt-0">
+        {/* Kontainer Utama Grid */}
+        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 md:gap-12 lg:gap-20 items-start">
           
           {/* KOLOM 1: STORY */}
-          <div className="lg:col-span-4 pt-12">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="h-[4px] w-12" style={{ backgroundColor: COLOR_GOLD }} />
-              <span className="text-[11px] font-black tracking-[0.4em] uppercase text-slate-400">
-                The Heritage
-              </span>
+          <div className="w-full lg:col-span-4 pt-4 md:pt-12">
+            <div className="flex items-center gap-3 mb-4 md:mb-8">
+              <div className="h-[3px] md:h-[4px] w-8 md:w-12" style={{ backgroundColor: COLOR_GOLD }} />
+              
             </div>
-            <h2 className="font-['Playfair_Display'] text-4xl lg:text-5xl mb-10 font-black leading-[1.1] text-[#1D2B53]">
+            <h2 className="font-['Playfair_Display'] text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-4 md:mb-10 font-black leading-[1.2] md:leading-[1.1] text-[#1D2B53]">
               {data?.title}
             </h2>
             <div 
-              className="text-slate-500 text-lg leading-relaxed font-light mb-8"
+              className="text-slate-500 text-sm md:text-lg leading-relaxed font-light mb-2 prose-sm max-w-none"
               dangerouslySetInnerHTML={{ __html: data?.description }}
             />
-            {/* Small Detail Sejajar Teks */}
           </div>
 
-          {/* KOLOM 2: CENTER CARD */}
-          <div className="lg:col-span-4 flex justify-center pt-6">
-            <div className="relative w-full max-w-[360px] aspect-[4/5] bg-white rounded-[3.5rem] shadow-[0_60px_120px_-20px_rgba(29,43,83,0.12)] border border-slate-50 flex flex-col items-center justify-center overflow-hidden">
-              <div className="absolute top-0 w-full h-2.5" style={{ backgroundColor: COLOR_GOLD }} />
+          {/* KOLOM 2: CENTER CARD (COUNTER) */}
+          <div className="w-full lg:col-span-4 flex justify-center pt-2 md:pt-6">
+            {/* OPTIMASI: Menggunakan md:max-w-[360px] dan penyesuaian border radius di mobile */}
+            <div className="relative w-full max-w-[280px] sm:max-w-[320px] md:max-w-[360px] aspect-[4/4.5] md:aspect-[4/5] bg-white rounded-[2.5rem] md:rounded-[3.5rem] shadow-[0_30px_60px_-15px_rgba(29,43,83,0.08)] md:shadow-[0_60px_120px_-20px_rgba(29,43,83,0.12)] border border-slate-50 flex flex-col items-center justify-center overflow-hidden p-6">
+              <div className="absolute top-0 w-full h-1.5 md:h-2.5" style={{ backgroundColor: COLOR_GOLD }} />
               
-              <div className="mb-6 w-24 h-20 flex items-center justify-center">
+              <div className="mb-3 md:mb-6 w-16 h-12 md:w-24 md:h-20 flex items-center justify-center">
                 <img src={logoCounter} alt="Icon" className="w-full h-full object-contain" />
               </div>
               
               <div className="flex items-start">
-                <div ref={statsRef} className="text-[9rem] lg:text-[11rem] font-bold tracking-tighter leading-none font-['Playfair_Display'] text-[#1D2B53]">
+                {/* Font diturunkan dari 9rem ke 6rem di mobile agar tidak memotong box */}
+                <div ref={statsRef} className="text-[6rem] sm:text-[7.5rem] md:text-[9rem] lg:text-[11rem] font-bold tracking-tighter leading-none font-['Playfair_Display'] text-[#1D2B53]">
                   0
                 </div>
-                <span className="text-5xl font-black mt-6" style={{ color: COLOR_GOLD }}>+</span>
+                <span className="text-3xl md:text-5xl font-black mt-2 md:mt-6" style={{ color: COLOR_GOLD }}>+</span>
               </div>
               
-              <div className="px-10 text-slate-400 font-bold text-[10px] uppercase tracking-[0.6em] mt-4 text-center leading-loose">
+              <div className="px-4 md:px-10 text-slate-400 font-bold text-[8px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.6em] mt-2 md:mt-4 text-center leading-normal md:leading-loose">
                 {data?.subtitle}
               </div>
             </div>
           </div>
 
           {/* KOLOM 3: PARTNERS */}
-          <div className="lg:col-span-4 pt-12">
-            <div className="flex items-center gap-4 mb-10">
-              <span className="text-[11px] font-black tracking-[0.5em] uppercase text-slate-400">
-                Strategic Partners
-              </span>
-              <div className="h-[4px] w-12" style={{ backgroundColor: COLOR_GOLD }} />
+          <div className="w-full lg:col-span-4 pt-4 md:pt-12">
+            <div className="flex items-center gap-3 mb-6 md:mb-10">
+             
+              <div className="h-[3px] md:h-[4px] w-8 md:w-12" style={{ backgroundColor: COLOR_GOLD }} />
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            {/* Grid Partner: Menggunakan p-4 dan h-20 di mobile agar lebih proporsional */}
+            <div className="grid grid-cols-2 gap-3 md:gap-4">
               {partners.map((item, idx) => (
-                <div key={idx} className="group h-28 flex items-center justify-center p-6 bg-white rounded-3xl border border-slate-100 shadow-sm transition-all duration-500">
+                <div key={idx} className="group h-20 md:h-28 flex items-center justify-center p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-100 shadow-sm transition-all duration-500">
                   <img 
                     src={`${storageUrl}/${item.image}`} 
-                    className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 opacity-40 group-hover:opacity-100"
+                    className="max-w-full max-h-full object-contain filter grayscale-0 md:grayscale md:group-hover:grayscale-0 opacity-80 md:opacity-40 md:group-hover:opacity-100"
                   />
                 </div>
               ))}

@@ -49,59 +49,63 @@ const SectorStrip = ({ data, isActive, index }) => {
   return (
     <section
       ref={sectionRef}
-      style={{
-        height: "100vh",
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        overflow: "hidden",
-        backgroundColor: "#0F1A3E",
-        position: "relative",
-      }}
+      /* 
+        FIXED UTAMA: 
+        Di mobile diubah menjadi h-auto agar semua strip bisa memanjang ke bawah murni secara alami.
+        Di desktop baru dikunci md:h-screen (100% layar) agar presisi di tengah.
+      */
+      className="h-auto md:h-screen w-full flex items-stretch overflow-hidden bg-[#0F1A3E] relative snap-start"
       id={`section-${index}`}
     >
       <div 
-        className="grid w-full h-full" 
-        style={{ 
-          gridTemplateColumns: `repeat(${sectors.length}, 1fr)`,
-          position: "relative"
-        }}
+        /* 
+          FIXED GRID:
+          Mobile menggunakan h-auto mengikuti konten, Desktop menggunakan md:h-full 
+          agar flexbox vertikal di bawahnya bisa mendeteksi titik tengah ekuator layar komputer.
+        */
+        className="grid w-full h-auto md:h-full grid-cols-1 md:grid-flow-col md:auto-cols-fr"
       >
         {sectors.map((item, idx) => (
           <div
             key={item.id || idx}
-            className="relative flex flex-col justify-center text-white border-r border-white/10 last:border-none"
-            style={{ 
-              padding: "2.5rem 2rem", // Padding disesuaikan agar teks panjang tidak mepet
-              height: "100%", 
-              overflow: "hidden",
-              backgroundColor: "#1a1a1a" 
-            }}
+            /* 
+              FIXED KOLOM:
+              - min-h-[50vh] di mobile memastikan tiap sektor mengambil porsi setengah layar HP yang rapi.
+              - md:h-full mengembalikan tinggi kolom penuh di monitor desktop.
+              - justify-center mendudukkan boks konten [350px] murni simetris di tengah-tengah.
+            */
+            className="relative flex flex-col justify-center items-start text-white border-b md:border-b-0 md:border-r border-white/10 last:border-none px-6 py-20 min-h-[50vh] md:min-h-0 md:h-full overflow-hidden bg-[#1a1a1a]"
           >
             {/* BACKGROUND LAYER PARALAKS */}
             <div className="absolute inset-0 z-0">
               <div 
                 ref={(el) => (bgRefs.current[idx] = el)}
-                className="absolute inset-x-0 h-[120%] top-[-10%]" 
+                className="absolute inset-x-0 h-[130%] top-[-15%]" 
                 style={{
-                  backgroundImage: `linear-gradient(rgba(15, 26, 62, 0.5), rgba(15, 26, 62, 0.85)), url(${getFullImageUrl(item.image)})`,
+                  backgroundImage: `linear-gradient(rgba(15, 26, 62, 0.65), rgba(15, 26, 62, 0.95)), url(${getFullImageUrl(item.image)})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
               />
             </div>
 
-            {/* CONTENT - Teks tampil utuh */}
-            <div className="relative z-10 pointer-events-none">
-              <h3 className="font-bold text-xl md:text-2xl mb-4 uppercase tracking-tight leading-tight">
+            {/* CONTENT CONTAINER */}
+            <div className="relative z-10 w-full text-left flex flex-col justify-start items-start max-w-md mx-auto md:mx-0 md:h-[350px]">
+              
+              {/* JUDUL */}
+              <h3 className="font-bold text-xl md:text-[1.3vw] lg:text-[1.5vw] mb-4 uppercase tracking-wider leading-none w-full md:whitespace-nowrap">
                 {item.title}
               </h3>
-              {/* Teks Deskripsi Panjang */}
-              <p className="text-sm opacity-90 mb-6 leading-relaxed whitespace-normal break-words">
+              
+              {/* DESKRIPSI */}
+              <p className="text-sm md:text-xs lg:text-sm opacity-80 mb-6 leading-relaxed w-full break-words whitespace-normal font-light">
                 {item.description}
               </p>
-              <div className="h-[3px] w-12 bg-yellow-500 shadow-lg shadow-yellow-500/20" />
+              
+              {/* Garis Kuning */}
+              <div className="h-[3px] w-12 bg-yellow-500 shadow-lg shadow-yellow-500/30" />
             </div>
+
           </div>
         ))}
       </div>

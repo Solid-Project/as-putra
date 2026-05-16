@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import gsap from "gsap";
 
 const ASSET_URL = import.meta.env.VITE_API_URL;
 
 const HeroCarousel = ({ data, isActive, index }) => {
-  // Parsing slides dari layout_data yang dikirim dari API
+  const location = useLocation();
+
   const slides = useMemo(() => {
     return (
       data?.layout_data?.map((item) => ({
@@ -16,6 +17,39 @@ const HeroCarousel = ({ data, isActive, index }) => {
     );
   }, [data]);
 
+  // LOGIKA TOMBOL STATIS DAN PREMIUM SESUAI PAGE YANG AKTIF
+  const activeButtons = useMemo(() => {
+    switch (location.pathname) {
+      // 1. Halaman Home
+      case "/":
+      case "/beranda":
+        return [
+          { label: "Sektor Bisnis", to: "/sector/peternakan", primary: true },
+          { label: "Tentang Kami", to: "/tentang", primary: false },
+        ];
+      
+      // 2. Halaman Tentang Kami
+      case "/tentang":
+        return [
+          { label: "Career AS Putra", to: "/karir", primary: true },
+          { label: "Berita & Event", to: "/news", primary: false },
+        ];
+      
+      // 3. Halaman Karir (Tanpa Button)
+      case "/karir":
+        return [];
+      
+      // 4. Halaman Berita (Tanpa Button)
+      case "/news":
+      case "/berita":
+        return [];
+      
+      // Halaman Lain / Fallback
+      default:
+        return [];
+    }
+  }, [location.pathname]);
+
   const [current, setCurrent] = useState(0);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
@@ -25,7 +59,6 @@ const HeroCarousel = ({ data, isActive, index }) => {
   const intervalRef = useRef(null);
   const isReadyRef = useRef(false);
 
-  // Refs untuk Animasi GSAP
   const titleRef = useRef(null);
   const lineRef = useRef(null);
   const subtitleRef = useRef(null);
@@ -34,7 +67,7 @@ const HeroCarousel = ({ data, isActive, index }) => {
   const currentSlide = slides[current] || {};
   const isVideo = currentSlide?.type?.startsWith("video");
 
-  // 1. PRELOAD IMAGES untuk menghindari flickering
+  // Preload Images
   useEffect(() => {
     if (!slides.length) return;
 
@@ -59,7 +92,7 @@ const HeroCarousel = ({ data, isActive, index }) => {
     });
   }, [slides]);
 
-  // 2. Delay tampilkan konten setelah loading selesai
+  // Delay Content
   useEffect(() => {
     if (!isInitialLoading) {
       const timer = setTimeout(() => setShowContent(true), 300);
@@ -67,7 +100,7 @@ const HeroCarousel = ({ data, isActive, index }) => {
     }
   }, [isInitialLoading]);
 
-  // 3. Autoplay Logic
+  // Autoplay
   const startAutoPlay = useCallback(() => {
     clearInterval(intervalRef.current);
     if (slides.length <= 1) return;
@@ -83,7 +116,7 @@ const HeroCarousel = ({ data, isActive, index }) => {
     clearInterval(intervalRef.current);
   }, []);
 
-  // 4. GSAP Entrance Animation (Hanya jalan saat section AKTIF)
+  // GSAP Entrance Animation
   useEffect(() => {
     if (!isActive || !showContent || isFirstLoaded) return;
 
@@ -96,32 +129,28 @@ const HeroCarousel = ({ data, isActive, index }) => {
         },
       });
 
-      tl.fromTo(titleRef.current, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power4.out" })
-        .fromTo(lineRef.current, { width: 0 }, { width: 80, duration: 0.8, ease: "power2.inOut" }, "-=0.6")
-        .fromTo(subtitleRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, "-=0.4")
-        .fromTo(
+      tl.fromTo(titleRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power4.out" });
+      
+      if (lineRef.current) {
+        tl.fromTo(lineRef.current, { width: 0 }, { width: 80, duration: 0.6, ease: "power2.inOut" }, "-=0.5");
+      }
+
+      tl.fromTo(subtitleRef.current, { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, "-=0.4");
+      
+      if (activeButtons.length > 0 && buttonsRef.current?.children?.length) {
+        tl.fromTo(
           buttonsRef.current.children,
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, stagger: 0.2, duration: 0.6 },
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, stagger: 0.1, duration: 0.5, ease: "power2.out" },
           "-=0.3"
         );
+      }
     });
 
     return () => ctx.revert();
-  }, [isActive, showContent, isFirstLoaded, startAutoPlay]);
+  }, [isActive, showContent, isFirstLoaded, startAutoPlay, activeButtons]);
 
-  // 5. Animasi teks saat slide berubah
-  useEffect(() => {
-    if (isActive && showContent && isFirstLoaded) {
-      gsap.fromTo(
-        subtitleRef.current,
-        { opacity: 0, x: 20 },
-        { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }
-      );
-    }
-  }, [current, isActive, showContent, isFirstLoaded]);
-
-  // 6. Video Handler (Play/Pause & Auto-next)
+  // Video Handler
   useEffect(() => {
     if (!isVideo || !videoRef.current || !isActive) return;
 
@@ -145,25 +174,18 @@ const HeroCarousel = ({ data, isActive, index }) => {
 
   return (
     <section 
-      className="relative h-screen w-full flex items-center justify-center text-center overflow-hidden bg-black"
+      className="relative block h-dvh w-full text-center overflow-hidden bg-black snap-start"
       id={`section-${index}`}
       data-title={data?.title || "Hero"}
       data-theme="dark"
     >
-      {/* Skeleton Overlay */}
-      <div
-        className={`absolute inset-0 z-30 bg-gray-950 transition-opacity duration-1000 ${
-          isInitialLoading ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-      />
-
-      {/* Media Slides */}
-      <div className="absolute inset-0 z-0">
+      {/* Media Wrapper */}
+      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
         {slides.map((slide, idx) => (
           <div
             key={idx}
-            className={`absolute inset-0 transition-opacity duration-1500 ease-in-out ${
-              idx === current ? "opacity-100" : "opacity-0"
+            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
+              idx === current ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
             }`}
           >
             {slide.type?.startsWith("video") ? (
@@ -172,80 +194,93 @@ const HeroCarousel = ({ data, isActive, index }) => {
                 src={`${ASSET_URL}/storage/${slide.src}`}
                 muted
                 playsInline
-                className="w-full h-full object-cover scale-105"
+                className="w-full h-full object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
               />
             ) : (
               <img
                 src={`${ASSET_URL}/storage/${slide.src}`}
-                className="w-full h-full object-cover scale-105"
+                className="w-full h-full object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
                 alt=""
               />
             )}
-            {/* Overlay Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70" />
+            <div className="absolute inset-0 bg-black/50 md:bg-gradient-to-b md:from-black/60 md:via-black/30 md:to-black/70" />
           </div>
         ))}
       </div>
 
-      {/* Content Container */}
-      <div className={`relative z-20 w-full max-w-[1100px] mx-auto px-6 transition-opacity duration-700 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
+      {/* Main Content */}
+      <div className={`absolute inset-0 z-20 flex flex-col items-center justify-center w-full max-w-[1100px] mx-auto px-6 transition-opacity duration-700 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
         
         <h1
           ref={titleRef}
-          className="text-white font-bold text-4xl sm:text-6xl md:text-7xl leading-tight mb-6 drop-shadow-lg"
+          className="text-white font-bold text-3xl md:text-7xl leading-tight mb-3 md:mb-6 drop-shadow-lg"
         >
           {data?.title || "Membangun Masa Depan"}
         </h1>
 
         <div
           ref={lineRef}
-          className="h-[3px] bg-[var(--color-utama)] mx-auto mb-8 rounded-full shadow-[0_0_15px_var(--color-utama)]"
+          className="hidden md:block h-[3px] bg-[var(--color-utama)] mx-auto mb-8 rounded-full shadow-[0_0_10px_var(--color-utama)]"
           style={{ width: 0 }}
         />
 
-        <div className="min-h-[3rem] mb-12">
-          <p
-            ref={subtitleRef}
-            className="text-white/90 text-base sm:text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed"
-          >
-            {currentSlide.caption || "Deskripsi singkat perusahaan"}
-          </p>
-        </div>
-
-        <div
-          ref={buttonsRef}
-          className="flex flex-col sm:flex-row justify-center items-center gap-5"
+        <p
+          ref={subtitleRef}
+          className="text-white/90 text-sm md:text-xl max-w-[300px] md:max-w-2xl mx-auto font-light leading-relaxed mb-6 md:mb-12 line-clamp-3 md:line-clamp-none"
         >
-          <Link
-            to="/sektor"
-            onClick={stopAutoPlay}
-            className="group relative px-8 py-4 rounded-full bg-[var(--color-utama)] text-white font-bold overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl"
-          >
-            <span className="relative z-10">Sektor Kami</span>
-            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-          </Link>
+          {currentSlide.caption || "Deskripsi singkat perusahaan"}
+        </p>
 
-          <Link
-            to="/tentang"
-            onClick={stopAutoPlay}
-            className="px-8 py-4 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/30 font-medium hover:bg-white/20 transition-all hover:scale-105"
+        {/* Dynamic Premium Buttons Render */}
+        {activeButtons.length > 0 && (
+          <div
+            ref={buttonsRef}
+            className="flex flex-row justify-center items-center gap-4 md:gap-5"
           >
-            Tentang Kami
-          </Link>
-        </div>
+            {activeButtons.map((btn, bIdx) => (
+              <Link
+                key={bIdx}
+                to={btn.to}
+                onClick={stopAutoPlay}
+                className={
+                  btn.primary
+                    ? "relative px-7 md:px-9 py-3 md:py-4 rounded-full bg-[var(--color-utama)] text-white text-sm md:text-base font-bold tracking-wide transition-all duration-300 shadow-[0_4px_15px_rgba(0,0,0,0.15)] hover:shadow-[0_0_25px_var(--color-utama)] hover:scale-105 active:scale-95 overflow-hidden group"
+                    : "relative px-7 md:px-9 py-3 md:py-4 rounded-full bg-white/5 backdrop-blur-md text-white border border-white/20 text-sm md:text-base font-semibold tracking-wide transition-all duration-300 hover:border-white/60 hover:text-black hover:scale-105 active:scale-95 overflow-hidden group"
+                }
+              >
+                {/* Background Animation Sliding Layer */}
+                <span className={`absolute inset-0 w-full h-full transition-transform duration-300 ease-out -translate-x-full group-hover:translate-x-0 -z-10 ${
+                  btn.primary ? 'bg-white/10' : 'bg-white'
+                }`} />
+                
+                {/* Text Node */}
+                <span className="relative z-10">{btn.label}</span>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Pagination Dots (Optional Visual) */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-3">
+      {/* Pagination Dots */}
+      <div className="absolute bottom-12 md:bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-1.5 md:gap-2">
         {slides.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrent(idx)}
-            className={`h-1.5 transition-all duration-500 rounded-full ${
-              idx === current ? "w-8 bg-[var(--color-utama)]" : "w-2 bg-white/30"
+            className={`h-1 md:h-1.5 transition-all duration-500 rounded-full ${
+              idx === current ? "w-5 md:w-8 bg-[var(--color-utama)]" : "w-1.5 md:w-2 bg-white/30"
             }`}
           />
         ))}
+      </div>
+
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 md:hidden flex flex-col items-center gap-0.5 opacity-70 pointer-events-none">
+        <span className="text-[9px] text-white/50 uppercase tracking-widest font-medium">Scroll</span>
+        <div className="flex flex-col items-center -space-y-1">
+          <div className="w-2 h-2 border-b-2 border-r-2 border-white/60 rotate-45 animate-arrow-1"></div>
+          <div className="w-2 h-2 border-b-2 border-r-2 border-white/60 rotate-45 animate-arrow-2"></div>
+        </div>
       </div>
     </section>
   );

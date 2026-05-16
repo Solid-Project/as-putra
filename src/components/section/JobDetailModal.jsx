@@ -17,13 +17,16 @@ const JobDetailModal = ({ job, isOpen, onClose }) => {
   const modalRef = useRef(null);
   const contentRef = useRef(null);
 
+  const COLOR_NAVY = "#1D2B53";
+  const COLOR_GOLD = "#FFC619";
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
-      gsap.fromTo(modalRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3 });
+      gsap.fromTo(modalRef.current, { opacity: 0 }, { opacity: 1, duration: 0.25 });
       gsap.fromTo(contentRef.current, 
-        { y: 50, opacity: 0 }, 
-        { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }
+        { y: 30, opacity: 0 }, 
+        { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }
       );
     } else {
       document.body.style.overflow = "auto";
@@ -33,8 +36,8 @@ const JobDetailModal = ({ job, isOpen, onClose }) => {
   if (!isOpen || !job) return null;
 
   const requirements = [
-    "Pendidikan minimal sesuai bidang",
-    "Pengalaman kerja relevan minimal 2 tahun",
+    job.requirement,
+    "Pengalaman kerja relevan di bidangnya",
     "Adaptif terhadap perubahan & inovatif",
     "Mampu bekerja dalam ekosistem tim yang dinamis",
   ];
@@ -42,119 +45,127 @@ const JobDetailModal = ({ job, isOpen, onClose }) => {
   return (
     <div
       ref={modalRef}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-black/80 backdrop-blur-md"
+      className="fixed inset-0 z-[150] flex items-center justify-center p-4 md:p-6 bg-slate-900/60 backdrop-blur-sm"
       onClick={onClose}
     >
+      {/* PURE CARD: Menggunakan !bg-white mutlak dan inline style background #FFFFFF untuk menghancurkan sisa warna navy */}
       <div
         ref={contentRef}
-        className="relative bg-[#0F172A] border border-white/20 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col"
+        className="relative !bg-white border border-gray-200/80 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 md:p-10 flex flex-col gap-8 animate-none"
+        style={{ backgroundColor: '#FFFFFF', color: '#1D2B53' }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button - Dibuat lebih kontras */}
+        {/* Tombol Close */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-red-500 text-white rounded-full transition-all z-20"
+          className="absolute top-5 right-5 p-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-500 hover:text-gray-800 rounded-lg transition-all z-20"
           aria-label="Close modal"
         >
-          <XMarkIcon className="w-6 h-6" />
+          <XMarkIcon className="w-5 h-5" />
         </button>
 
-        <div className="flex flex-col md:flex-row h-full overflow-hidden">
-          
-          {/* Left Column: Visual & Quick Info - Menggunakan Navy yang lebih tajam */}
-          <div className="md:w-1/3 bg-gradient-to-br from-[#1E293B] to-[#0F172A] p-8 text-white border-b md:border-b-0 md:border-r border-white/10">
-            <div className="mb-10">
-               <div className="w-16 h-16 bg-[var(--color-utama)] rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-[var(--color-utama)]/20">
-                  <BriefcaseIcon className="w-8 h-8 text-[#0A1128]" />
-               </div>
-               <h2 className="text-3xl font-['Playfair_Display'] font-bold leading-tight mb-4">{job.title}</h2>
-               <span className="px-3 py-1 bg-[var(--color-utama)] text-[#0A1128] text-[10px] font-extrabold uppercase tracking-widest rounded-full">
-                  {job.type}
-               </span>
+        {/* SECTION 1: HEADER & META INFO */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-gray-100">
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center border border-gray-200 bg-gray-50">
+                <BriefcaseIcon className="w-4 h-4" style={{ color: COLOR_NAVY }} />
+              </div>
+              <span 
+                className="inline-block px-2.5 py-0.5 text-[9px] font-black uppercase tracking-widest rounded shadow-sm"
+                style={{ backgroundColor: COLOR_GOLD, color: COLOR_NAVY }}
+              >
+                {job.type}
+              </span>
             </div>
-
-            <div className="space-y-5">
-               <div className="flex items-center gap-3 text-white/90">
-                  <MapPinIcon className="w-5 h-5 text-[var(--color-utama)]" />
-                  <span className="text-sm font-medium">{job.location}</span>
-               </div>
-               <div className="flex items-center gap-3 text-white/90">
-                  <CurrencyDollarIcon className="w-5 h-5 text-[var(--color-utama)]" />
-                  <span className="text-sm font-medium">{job.salary}</span>
-               </div>
-               <div className="flex items-center gap-3 text-white/90">
-                  <ClockIcon className="w-5 h-5 text-[var(--color-utama)]" />
-                  <span className="text-sm font-medium">Full-time Position</span>
-               </div>
-            </div>
+            <h2 className="text-2xl md:text-4xl font-['Playfair_Display'] font-black leading-tight" style={{ color: COLOR_NAVY }}>
+              {job.title}
+            </h2>
           </div>
 
-          {/* Right Column: Details - Fokus pada Readability */}
-          <div className="flex-1 p-8 md:p-12 text-white overflow-y-auto custom-scrollbar">
-            {/* Overview */}
-            <div className="mb-12">
-              <h3 className="text-[var(--color-utama)] text-xs uppercase tracking-[0.3em] font-bold mb-4 flex items-center gap-2">
-                <SparklesIcon className="w-4 h-4" /> Overview
-              </h3>
-              <p className="text-gray-200 text-lg leading-relaxed italic font-light">
-                "Jadilah bagian dari revolusi industri bersama AS PUTRA. Kami mencari talenta yang tidak hanya bekerja, tapi juga menciptakan standar baru."
-              </p>
+          <div className="flex flex-wrap gap-4 text-gray-600 md:self-end">
+            <div className="flex items-center gap-2 bg-gray-50 border border-gray-200/60 px-3 py-1.5 rounded-lg text-xs font-semibold">
+              <MapPinIcon className="w-4 h-4 text-gray-400" />
+              <span>{job.location}</span>
             </div>
-
-            <div className="grid md:grid-cols-2 gap-12 mb-12">
-              {/* Requirements - Teks ditingkatkan ke gray-200 */}
-              <div>
-                <h3 className="text-white text-lg font-bold mb-5 flex items-center gap-2 border-b border-white/10 pb-2">
-                  <AcademicCapIcon className="w-5 h-5 text-[var(--color-utama)]" /> Kualifikasi
-                </h3>
-                <ul className="space-y-4">
-                  {requirements.map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm text-gray-200 leading-relaxed">
-                      <CheckBadgeIcon className="w-5 h-5 text-[var(--color-utama)] shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Benefits */}
-              <div>
-                <h3 className="text-white text-lg font-bold mb-5 flex items-center gap-2 border-b border-white/10 pb-2">
-                  <SparklesIcon className="w-5 h-5 text-[var(--color-utama)]" /> Benefit
-                </h3>
-                <div className="grid grid-cols-1 gap-3">
-                   {["Gaji & Bonus Kompetitif", "Asuransi Kesehatan", "Jenjang Karir Terbuka", "Lingkungan Kerja Positif"].map((b, i) => (
-                     <div key={i} className="bg-white/5 border border-white/10 p-3 rounded-xl text-xs text-gray-200 font-medium hover:bg-white/10 transition-colors">
-                        {b}
-                     </div>
-                   ))}
-                </div>
-              </div>
+            <div className="flex items-center gap-2 bg-gray-50 border border-gray-200/60 px-3 py-1.5 rounded-lg text-xs font-semibold">
+              <CurrencyDollarIcon className="w-4 h-4 text-gray-400" />
+              <span>{job.salary} Package</span>
             </div>
-
-            {/* 📩 THE EMAIL BUTTON (CTA) - Kontras Maksimal */}
-            <div className="p-8 rounded-3xl bg-[var(--color-utama)] text-[#0A1128] shadow-xl">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="text-center md:text-left">
-                  <h4 className="text-2xl font-bold mb-1 text-white font-['Playfair_Display']">Siap Bergabung?</h4>
-                  <p className="text-sm font-semibold opacity-80 text-white uppercase tracking-wider">Daftar Sekarang</p>
-                </div>
-                <a
-                  href={`mailto:recruitment@asputra.com?subject=Lamaran Kerja - ${job.title}`}
-                  className="group flex items-center gap-3 px-8 py-4 bg-[#0F172A] text-white rounded-2xl font-bold transition-all hover:bg-black hover:shadow-2xl shadow-lg"
-                >
-                  <EnvelopeIcon className="w-5 h-5" />
-                  <span>Daftar</span>
-                  <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </div>
+            <div className="flex items-center gap-2 bg-gray-50 border border-gray-200/60 px-3 py-1.5 rounded-lg text-xs font-semibold">
+              <ClockIcon className="w-4 h-4 text-gray-400" />
+              <span>Full-Time</span>
             </div>
-
-            <p className="mt-8 text-center text-[10px] text-gray-500 uppercase tracking-widest font-bold">
-              AS PUTRA • Recruitment Center • 2026
-            </p>
           </div>
         </div>
+
+        {/* SECTION 2: OVERVIEW */}
+        <div>
+          <h3 className="text-xs uppercase tracking-[0.25em] font-black mb-3 flex items-center gap-2" style={{ color: COLOR_NAVY }}>
+            <SparklesIcon className="w-4 h-4" style={{ color: COLOR_GOLD }} /> Overview
+          </h3>
+          <p className="text-gray-600 text-sm md:text-base leading-relaxed italic font-medium border-l-4 pl-4 py-0.5 border-gray-200">
+            "Jadilah bagian dari evolusi industri bersama AS PUTRA Group. Kami mencari talenta kompeten yang siap berkontribusi aktif dan bertumbuh bersama membangun masa depan."
+          </p>
+        </div>
+
+        {/* SECTION 3: KUALIFIKASI & BENEFIT */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 className="text-sm font-bold mb-4 flex items-center gap-2 border-b border-gray-100 pb-2" style={{ color: COLOR_NAVY }}>
+              <AcademicCapIcon className="w-4 h-4" style={{ color: COLOR_GOLD }} /> Kualifikasi
+            </h3>
+            <ul className="space-y-3">
+              {requirements.map((item, i) => (
+                <li key={i} className="flex items-start gap-2.5 text-xs md:text-sm text-gray-600 leading-relaxed font-medium">
+                  <CheckBadgeIcon className="w-4 h-4 shrink-0 mt-0.5" style={{ color: COLOR_NAVY }} />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-bold mb-4 flex items-center gap-2 border-b border-gray-100 pb-2" style={{ color: COLOR_NAVY }}>
+              <SparklesIcon className="w-4 h-4" style={{ color: COLOR_GOLD }} /> Benefit Kerja
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+               {["Gaji & Bonus Kompetitif", "Asuransi Kesehatan", "Jenjang Karir Terbuka", "Lingkungan Kerja Positif"].map((benefit, i) => (
+                 <div key={i} className="bg-gray-50 border border-gray-200/60 p-3 rounded-lg text-xs text-gray-600 font-semibold hover:bg-gray-100/70 transition-colors">
+                    {benefit}
+                 </div>
+               ))}
+            </div>
+          </div>
+        </div>
+
+        {/* SECTION 4: CTA BANNER */}
+        <div className="p-6 rounded-lg text-white shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 mt-2" style={{ backgroundColor: COLOR_NAVY }}>
+          <div className="text-center sm:text-left">
+            <h4 className="text-lg md:text-xl font-bold mb-0.5 font-['Playfair_Display']">Tertarik Bergabung?</h4>
+            <p className="text-[10px] font-bold opacity-75 uppercase tracking-wider">Kirimkan berkas lamaran Anda sekarang</p>
+          </div>
+          <a
+            href={`mailto:recruitment@asputra.com?subject=Lamaran Kerja - ${job.title}`}
+            className="group w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white text-sm font-black rounded-lg transition-all shadow-md"
+            style={{ color: COLOR_NAVY }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = COLOR_GOLD;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#FFFFFF';
+            }}
+          >
+            <EnvelopeIcon className="w-4 h-4" />
+            <span>Kirim Lamaran</span>
+            <ArrowRightIcon className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </a>
+        </div>
+
+        {/* Footer */}
+        <p className="text-center text-[9px] text-gray-400 uppercase tracking-widest font-bold pt-2">
+          AS PUTRA • Recruitment Center • 2026
+        </p>
       </div>
     </div>
   );

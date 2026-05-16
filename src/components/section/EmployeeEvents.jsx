@@ -23,7 +23,6 @@ const EmployeeEvents = ({ isActive }) => {
         const json = await response.json();
         
         if (json.status) {
-          // Filter hanya yang memiliki kategori "Event" (Case Insensitive)
           const eventData = json.data.details.filter(item => 
             item.categories.some(cat => cat.name.toLowerCase() === "event")
           );
@@ -48,7 +47,7 @@ const EmployeeEvents = ({ isActive }) => {
         {
           y: 0,
           opacity: 1,
-          duration: 0.8,
+          duration: 0.6,
           stagger: 0.1,
           ease: "power3.out",
           overwrite: true
@@ -58,110 +57,124 @@ const EmployeeEvents = ({ isActive }) => {
   }, [isActive, events]);
 
   if (loading && isActive) {
-    return <div className="py-20 text-center text-gray-400 animate-pulse uppercase tracking-widest">Menyelaraskan Event...</div>;
+    return (
+      <div className="py-24 text-center text-gray-400 animate-pulse text-xs font-bold uppercase tracking-[0.3em]">
+        Menyelaraskan Event...
+      </div>
+    );
   }
 
   return (
-    <div className={`py-10 w-full ${isActive ? "block" : "hidden"}`}>
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-        <div className="max-w-xl">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-[2px]" style={{ backgroundColor: COLOR_GOLD }}></div>
-            <h3 className="text-[10px] font-black uppercase tracking-[0.4em]" style={{ color: COLOR_NAVY }}>
-              Life at AS PUTRA
-            </h3>
-          </div>
-          <p className="text-3xl md:text-4xl font-['Playfair_Display'] font-bold" style={{ color: COLOR_NAVY }}>
-            Membangun <span className="italic" style={{ color: COLOR_GOLD }}>Keluarga</span>, Bukan Sekadar Tim.
-          </p>
+    <div className={`w-full ${isActive ? "block" : "hidden"}`}>
+      
+      {/* CONTEXT KICKER (Menggantikan Judul Raksasa agar Selaras dengan Parent Section) */}
+      <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-black uppercase tracking-[0.25em]" style={{ color: COLOR_NAVY }}>
+            Life at AS PUTRA
+          </span>
+          <span className="text-gray-300 text-xs">•</span>
+          <span className="text-xs text-gray-500 font-medium">Dokumentasi & Aktivitas Internal</span>
         </div>
-        <div className="h-[1px] flex-grow bg-gray-100 hidden md:block mx-10 mb-4"></div>
+        <div className="text-xs font-bold text-gray-400 hidden sm:block">
+          {events.length} Event Terarsip
+        </div>
       </div>
 
-      {/* Event Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-8">
+      {/* EVENT GRID (Slightly Rounded Design) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
         {events.length > 0 ? (
           events.map((event, index) => (
             <div
               key={event.slug}
               ref={(el) => (cardsRef.current[index] = el)}
-              className="group relative h-[480px] rounded-[2rem] overflow-hidden bg-gray-50 border border-gray-100 transition-all duration-500 shadow-lg hover:shadow-2xl"
+              className="group relative h-[460px] rounded-xl overflow-hidden bg-slate-900 border border-gray-200/60 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col justify-end"
             >
               {/* Background Image Area */}
-              <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute inset-0 overflow-hidden z-0">
                 <img
                   src={event.thumbnail}
                   alt={event.title}
-                  className="w-full h-full object-cover transition-all duration-1000 ease-out group-hover:scale-110"
+                  className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
+                {/* MODIFIKASI: Menggunakan gradasi gelap transparan agar teks di atasnya mutlak terbaca tajam */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent opacity-85 group-hover:opacity-95 transition-opacity duration-500" />
               </div>
 
-              {/* Content Layer */}
-              <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                <div className="mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+              {/* Content Layer (Z-10 di atas Image Overlay) */}
+              <div className="relative z-10 p-6 sm:p-8 w-full flex flex-col justify-end h-full">
+                
+                {/* Meta Tag Kategori */}
+                <div className="mb-2">
                   <span 
-                    className="inline-block px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest mb-3 shadow-sm"
+                    className="inline-block px-2.5 py-0.5 rounded text-[9px] font-black uppercase tracking-widest shadow-sm"
                     style={{ backgroundColor: COLOR_GOLD, color: COLOR_NAVY }}
                   >
                     {event.categories[0]?.name || "Event"}
                   </span>
-                  <h4 className="text-2xl md:text-3xl font-['Playfair_Display'] font-extrabold leading-tight line-clamp-2" style={{ color: COLOR_NAVY }}>
-                    {event.title}
-                  </h4>
                 </div>
 
-                <div className="opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-75">
-                  <p className="text-gray-600 text-sm mb-6 leading-relaxed line-clamp-2 font-medium">
-                    {event.excerpt}
-                  </p>
-                  
-                  <div className="flex flex-wrap items-center gap-4 text-[10px] font-bold uppercase tracking-widest mb-6 border-t border-gray-200 pt-4" style={{ color: COLOR_NAVY }}>
-                    <div className="flex items-center gap-2">
-                      <MapPinIcon className="w-4 h-4" style={{ color: COLOR_GOLD }} />
-                      {/* Ekstrak lokasi dari awal excerpt (sebelum tanda koma) */}
+                {/* Judul Event - Menggunakan teks putih bersih */}
+                <h4 className="text-xl sm:text-2xl font-['Playfair_Display'] font-bold leading-tight text-white line-clamp-2 mb-3">
+                  {event.title}
+                </h4>
+
+                {/* Deskripsi Singkat */}
+                <p className="text-gray-300 text-xs sm:text-sm mb-4 leading-relaxed line-clamp-2 font-medium opacity-90">
+                  {event.excerpt}
+                </p>
+                
+                {/* Info Lokasi & Tanggal */}
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] font-bold uppercase tracking-wider mb-5 border-t border-white/10 pt-3.5 text-gray-300">
+                  <div className="flex items-center gap-1.5">
+                    <MapPinIcon className="w-3.5 h-3.5" style={{ color: COLOR_GOLD }} />
+                    <span className="truncate max-w-[120px]">
                       {event.excerpt?.split(',')[0] || "Indonesia"}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <CalendarDaysIcon className="w-4 h-4" style={{ color: COLOR_GOLD }} />
-                      {event.created?.split(' ')[0]}
-                    </div>
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CalendarDaysIcon className="w-3.5 h-3.5" style={{ color: COLOR_GOLD }} />
+                    <span>{event.created?.split(' ')[0]}</span>
                   </div>
                 </div>
 
-                {/* PERBAIKAN: Navigasi diarahkan ke EventDetailPage */}
+                {/* CTA Button Link - Berubah menjadi Rounded-LG */}
                 <Link
                   to={`/event/${event.slug.split('/').pop()}`}
-                  className="w-full h-12 rounded-xl border flex items-center justify-center transition-all duration-500 overflow-hidden font-black text-[10px] uppercase tracking-[0.2em]"
+                  className="w-full h-11 rounded-lg border flex items-center justify-center transition-all duration-300 font-black text-[10px] uppercase tracking-[0.15em]"
                   style={{ 
-                    borderColor: COLOR_NAVY, 
-                    color: COLOR_NAVY,
-                    backgroundColor: 'transparent'
+                    borderColor: 'rgba(255,255,255,0.3)', 
+                    color: '#FFFFFF',
+                    backgroundColor: 'rgba(255,255,255,0.06)',
+                    backdropFilter: 'blur(4px)'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = COLOR_NAVY;
-                    e.currentTarget.style.color = '#FFFFFF';
+                    e.currentTarget.style.backgroundColor = '#FFFFFF';
+                    e.currentTarget.style.color = COLOR_NAVY;
+                    e.currentTarget.style.borderColor = '#FFFFFF';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = COLOR_NAVY;
+                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)';
+                    e.currentTarget.style.color = '#FFFFFF';
+                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)';
                   }}
                 >
                   <div className="flex items-center gap-2">
                     <span>Lihat Detail Event</span>
-                    <PlusIcon className="w-4 h-4" />
+                    <PlusIcon className="w-3.5 h-3.5" />
                   </div>
                 </Link>
+
               </div>
             </div>
           ))
         ) : (
-          <div className="col-span-full py-20 text-center text-gray-400 border border-dashed border-gray-200 rounded-[2rem]">
+          <div className="col-span-full py-16 text-center text-gray-400 border border-dashed border-gray-200 rounded-xl bg-gray-50/50 text-xs uppercase tracking-wider font-bold">
             Belum ada dokumentasi event keluarga besar saat ini.
           </div>
         )}
       </div>
+
     </div>
   );
 };
