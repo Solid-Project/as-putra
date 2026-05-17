@@ -6,7 +6,9 @@ const Navbar = () => {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [language, setLanguage] = useState("id");
+  
+  // 1. Ambil status bahasa awal langsung dari localStorage (Default ke 'id')
+  const [language, setLanguage] = useState(localStorage.getItem("user_lang") || "id");
   const [isVisible, setIsVisible] = useState(true);
 
   const [sectors, setSectors] = useState([]);
@@ -26,10 +28,33 @@ const Navbar = () => {
 
   const isSectorActive = location.pathname.includes("/sector/");
 
+  // ==========================================
+  // LOGIKA BAHASA BARU: SIARKAN KE LOCALSTORAGE
+  // ==========================================
+  const changeLanguage = (langCode) => {
+    setLanguage(langCode);
+    localStorage.setItem("user_lang", langCode);
+    
+    if (langCode === "id") {
+      // Jika kembali ke Indonesia, reload halaman untuk mengembalikan teks asli API admin
+      window.location.reload();
+    } else {
+      // Jika memilih EN atau JP, siarkan sinyal agar AutoTranslate langsung beraksi
+      window.dispatchEvent(new Event("storage")); 
+    }
+  };
+  // Kamus statis sangat simpel khusus menu inti Navbar agar loading tombol instan kilat
+  const staticMenu = {
+    Beranda: { id: "Beranda", en: "Home", jp: "ホーム" },
+    Tentang: { id: "Tentang", en: "About", jp: "会社概要" },
+    SektorBisnis: { id: "Sektor Bisnis", en: "Business Sectors", jp: "事業部門" },
+    Berita: { id: "Berita", en: "News", jp: "ニュース" },
+    Karir: { id: "Karir", en: "Career", jp: "採用情報" },
+    Hubungi: { id: "Hubungi Kami", en: "Contact Us", jp: "お問い合わせ" },
+    UnitBisnis: { id: "Unit Bisnis", en: "Business Units", jp: "ビジネスユニット" },
+  };
+
   // 1. FETCH SEKTOR DARI DATABASE
-  // 1. FETCH SEKTOR DARI DATABASE
-  // 1. FETCH SEKTOR DARI DATABASE (NAVBAR)
-  // 1. FETCH SEKTOR DARI DATABASE (NAVBAR)
   useEffect(() => {
     const fetchSectors = async () => {
       try {
@@ -39,14 +64,12 @@ const Navbar = () => {
 
         if (json.status && json.data) {
           const sectorPages = json.data
-            // AMAN & SEDERHANA: Cek apakah nama mengandung "sector" ATAU "sektor"
             .filter(p => {
               if (!p || !p.name) return false;
               const nameLower = p.name.toLowerCase();
               return nameLower.includes("sector") || nameLower.includes("sektor");
             })
             .map(p => {
-              // Potong kata depan "Sector " atau "Sektor " secara manual agar aman
               const cleanLabel = p.name
                 .replace(/Sector\s+/i, "")
                 .replace(/Sektor\s+/i, "")
@@ -54,12 +77,11 @@ const Navbar = () => {
 
               return {
                 label: cleanLabel,
-                // Mengubah spasi dan karakter khusus seperti & menjadi dash (-) untuk URL slug
                 slug: cleanLabel
                   .toLowerCase()
-                  .replace(/[^a-z0-9\s-]/g, "") // Buang karakter aneh seperti &
-                  .replace(/\s+/g, "-")         // Ganti spasi dengan (-)
-                  .replace(/-+/g, "-"),         // Bersihkan jika ada double dash (--)
+                  .replace(/[^a-z0-9\s-]/g, "") 
+                  .replace(/\s+/g, "-")         
+                  .replace(/-+/g, "-"),         
               };
             });
 
@@ -73,6 +95,7 @@ const Navbar = () => {
     };
     fetchSectors();
   }, []);
+
   // 2. AUTO-HIDE NAVBAR SAAT SCROLL
   useEffect(() => {
     const handleScroll = () => {
@@ -86,14 +109,6 @@ const Navbar = () => {
 
   const closeMenu = () => { setMenuOpen(false); setDropdownOpen(false); };
 
-  // 3. MENU DATA (Beranda menggunakan path /beranda)
-  const menuItems = [
-    { to: "/beranda", label: "Beranda" },
-    { to: "/tentang", label: "Tentang" },
-    { to: "/news", label: "Berita" },
-    { to: "/karir", label: "Karir" },
-  ];
-
   return (
     <>
       {/* NAVBAR MAIN */}
@@ -106,22 +121,26 @@ const Navbar = () => {
 
         {/* DESKTOP MENU - Font text-[10px] agar sleek */}
         <ul className="hidden md:flex items-center gap-6 lg:gap-8">
-          {menuItems.slice(0, 2).map((item) => (
-            <li key={item.to} className="relative group">
-              <NavLink
-                to={item.to}
-                className={({ isActive }) => `text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`}
-                style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}
-              >
-                {({ isActive }) => (
-                  <>
-                    {item.label}
-                    {isActive && <span className="absolute -bottom-1 left-0 w-full h-[1.5px]" style={{ backgroundColor: COLOR_ACCENT }} />}
-                  </>
-                )}
-              </NavLink>
-            </li>
-          ))}
+          <li className="relative group">
+            <NavLink to="/beranda" className={({ isActive }) => `text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`} style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}>
+              {({ isActive }) => (
+                <>
+                  {staticMenu.Beranda[language]}
+                  {isActive && <span className="absolute -bottom-1 left-0 w-full h-[1.5px]" style={{ backgroundColor: COLOR_ACCENT }} />}
+                </>
+              )}
+            </NavLink>
+          </li>
+          <li className="relative group">
+            <NavLink to="/tentang" className={({ isActive }) => `text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`} style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}>
+              {({ isActive }) => (
+                <>
+                  {staticMenu.Tentang[language]}
+                  {isActive && <span className="absolute -bottom-1 left-0 w-full h-[1.5px]" style={{ backgroundColor: COLOR_ACCENT }} />}
+                </>
+              )}
+            </NavLink>
+          </li>
 
           {/* DROPDOWN SEKTOR */}
           <li className="relative group">
@@ -129,7 +148,7 @@ const Navbar = () => {
               className={`flex items-center gap-1 cursor-pointer text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-colors ${isSectorActive ? "" : textColorClass}`}
               style={{ color: isSectorActive ? COLOR_ACCENT : '' }}
             >
-              <span>Sektor Bisnis</span>
+              <span>{staticMenu.SektorBisnis[language]}</span>
               <span className="text-[8px] transition-transform group-hover:rotate-180">▼</span>
               {isSectorActive && <span className="absolute -bottom-1 left-0 w-full h-[1.5px]" style={{ backgroundColor: COLOR_ACCENT }} />}
             </div>
@@ -144,39 +163,48 @@ const Navbar = () => {
             </ul>
           </li>
 
-          {menuItems.slice(2).map((item) => (
-            <li key={item.to} className="relative group">
-              <NavLink
-                to={item.to}
-                className={({ isActive }) => `text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`}
-                style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}
-              >
-                {({ isActive }) => (
-                  <>
-                    {item.label}
-                    {isActive && <span className="absolute -bottom-1 left-0 w-full h-[1.5px]" style={{ backgroundColor: COLOR_ACCENT }} />}
-                  </>
-                )}
-              </NavLink>
-            </li>
-          ))}
+          <li className="relative group">
+            <NavLink to="/news" className={({ isActive }) => `text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`} style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}>
+              {({ isActive }) => (
+                <>
+                  {staticMenu.Berita[language]}
+                  {isActive && <span className="absolute -bottom-1 left-0 w-full h-[1.5px]" style={{ backgroundColor: COLOR_ACCENT }} />}
+                </>
+              )}
+            </NavLink>
+          </li>
+          <li className="relative group">
+            <NavLink to="/karir" className={({ isActive }) => `text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`} style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}>
+              {({ isActive }) => (
+                <>
+                  {staticMenu.Karir[language]}
+                  {isActive && <span className="absolute -bottom-1 left-0 w-full h-[1.5px]" style={{ backgroundColor: COLOR_ACCENT }} />}
+                </>
+              )}
+            </NavLink>
+          </li>
         </ul>
 
-        {/* CTA & LANG */}
+        {/* CTA & LANG (DESKTOP) */}
         <div className="hidden md:flex items-center gap-5">
           <div className="flex items-center gap-2 pr-5 border-r border-slate-400/20 text-[9px] font-black">
-            {["id", "en"].map((lang) => (
-              <button key={lang} onClick={() => setLanguage(lang)} className={`transition-colors ${language === lang ? '' : 'opacity-30'} ${textColorClass}`} style={{ color: language === lang ? COLOR_ACCENT : '' }}>
+            {["id", "en", "jp"].map((lang) => (
+              <button 
+                key={lang} 
+                onClick={() => changeLanguage(lang)} 
+                className={`transition-colors ${language === lang ? '' : 'opacity-30'} ${textColorClass}`} 
+                style={{ color: language === lang ? COLOR_ACCENT : '' }}
+              >
                 {lang.toUpperCase()}
               </button>
             ))}
           </div>
           <Link to="/contact" className="px-5 py-2 text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-md transition-transform hover:scale-105 active:scale-95" style={{ backgroundColor: COLOR_ACCENT }}>
-            Hubungi Kami
+            {staticMenu.Hubungi[language]}
           </Link>
         </div>
 
-        {/* MOBILE TOGGLE */}
+        {/* MOBILE HAMBURGER TOGGLE BUTTON */}
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden flex flex-col gap-1 p-2 z-[100]">
           <span className={`w-5 h-0.5 transition-all ${hamburgerColor} ${menuOpen ? "rotate-45 translate-y-1.5" : ""}`} />
           <span className={`w-5 h-0.5 transition-all ${hamburgerColor} ${menuOpen ? "opacity-0" : ""}`} />
@@ -191,23 +219,48 @@ const Navbar = () => {
           <button onClick={closeMenu} className="text-slate-800 text-xl font-bold">✕</button>
         </div>
         <div className="flex-1 p-6 space-y-5 overflow-y-auto">
-          {menuItems.map((item, i) => (
-            <NavLink key={i} to={item.to} onClick={closeMenu} className={({ isActive }) => `block text-base font-black tracking-tight ${isActive ? "" : "text-slate-500"}`} style={({ isActive }) => ({ color: isActive ? COLOR_NAVY : '' })}>
-              {item.label}
-            </NavLink>
-          ))}
+          <NavLink to="/beranda" onClick={closeMenu} className={({ isActive }) => `block text-base font-black tracking-tight ${isActive ? "" : "text-slate-500"}`} style={({ isActive }) => ({ color: isActive ? COLOR_NAVY : '' })}>
+            {staticMenu.Beranda[language]}
+          </NavLink>
+          <NavLink to="/tentang" onClick={closeMenu} className={({ isActive }) => `block text-base font-black tracking-tight ${isActive ? "" : "text-slate-500"}`} style={({ isActive }) => ({ color: isActive ? COLOR_NAVY : '' })}>
+            {staticMenu.Tentang[language]}
+          </NavLink>
+          <NavLink to="/news" onClick={closeMenu} className={({ isActive }) => `block text-base font-black tracking-tight ${isActive ? "" : "text-slate-500"}`} style={({ isActive }) => ({ color: isActive ? COLOR_NAVY : '' })}>
+            {staticMenu.Berita[language]}
+          </NavLink>
+          <NavLink to="/karir" onClick={closeMenu} className={({ isActive }) => `block text-base font-black tracking-tight ${isActive ? "" : "text-slate-500"}`} style={({ isActive }) => ({ color: isActive ? COLOR_NAVY : '' })}>
+            {staticMenu.Karir[language]}
+          </NavLink>
 
           <div className="pt-5 border-t border-slate-50">
-            <p className="text-[9px] uppercase tracking-widest text-slate-300 font-bold mb-4">Unit Bisnis</p>
+            <p className="text-[9px] uppercase tracking-widest text-slate-300 font-bold mb-4">{staticMenu.UnitBisnis[language]}</p>
             <div className="grid grid-cols-1 gap-4">
               {sectors.map((s, i) => (
                 <Link key={i} to={`/sector/${s.slug}`} onClick={closeMenu} className="text-sm font-bold text-slate-700 capitalize hover:text-[#1D2B53] transition-colors">{s.label}</Link>
               ))}
             </div>
           </div>
+          
+          {/* LANG PICKER (MOBILE) */}
+          <div className="pt-5 border-t border-slate-100">
+            <p className="text-[9px] uppercase tracking-widest text-slate-300 font-bold mb-3">Bahasa / Language</p>
+            <div className="flex gap-4 text-xs font-black">
+              {["id", "en", "jp"].map((lang) => (
+                <button 
+                  key={lang} 
+                  onClick={() => { changeLanguage(lang); closeMenu(); }} 
+                  className={`transition-colors ${language === lang ? 'text-[#1D2B53]' : 'text-slate-400'}`}
+                >
+                  {lang.toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
         <div className="p-6 border-t bg-slate-50">
-          <Link to="/contact" onClick={closeMenu} className="block text-center py-4 text-white text-xs font-black uppercase tracking-widest rounded-xl shadow-lg" style={{ backgroundColor: COLOR_NAVY }}>Hubungi Kami</Link>
+          <Link to="/contact" onClick={closeMenu} className="block text-center py-4 text-white text-xs font-black uppercase tracking-widest rounded-xl shadow-lg" style={{ backgroundColor: COLOR_NAVY }}>
+            {staticMenu.Hubungi[language]}
+          </Link>
         </div>
       </div>
     </>

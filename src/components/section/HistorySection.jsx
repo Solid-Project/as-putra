@@ -25,7 +25,7 @@ const HistorySection = ({ data, isActive, index }) => {
     const fullText = data.subtitle;
 
     if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
-    
+
     currentIndexRef.current = 0;
     setDisplayText("");
     setIsTyping(true);
@@ -56,12 +56,12 @@ const HistorySection = ({ data, isActive, index }) => {
     const viewportHeight = window.innerHeight;
     const scrollPercentage = (viewportHeight - rect.top) / (viewportHeight + rect.height);
     const progress = Math.max(0, Math.min(1, scrollPercentage));
-    
+
     const contentY = -15 + (progress * 30);
     const imageY = 15 - (progress * 30);
-    
+
     contentRef.current.style.transform = `translate3d(0, ${contentY}px, 0)`;
-    
+
     if (imageRef.current && window.innerWidth >= 768) {
       imageRef.current.style.transform = `translate3d(0, ${imageY}px, 0)`;
     }
@@ -80,7 +80,7 @@ const HistorySection = ({ data, isActive, index }) => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll);
     updateParallax();
-    
+
     return () => {
       isMountedRef.current = false;
       window.removeEventListener('scroll', handleScroll);
@@ -91,7 +91,7 @@ const HistorySection = ({ data, isActive, index }) => {
 
   if (!data) return null;
 
-  const imageUrl = data.layout_data?.image 
+  const imageUrl = data.layout_data?.image
     ? `${import.meta.env.VITE_API_URL}/storage/${data.layout_data.image}`
     : null;
 
@@ -101,9 +101,9 @@ const HistorySection = ({ data, isActive, index }) => {
     <div ref={innerRef} className={`relative group will-change-transform flex justify-center items-center ${isMobile ? "my-6 w-full max-w-full mx-auto" : "w-full max-w-[420px]"}`}>
       <div className="relative w-full">
         <div className="absolute -inset-2.5 md:-inset-3 border border-[#FFC700]/20 rounded-2xl -z-10 translate-x-2.5 translate-y-2.5 md:translate-x-3 md:translate-y-3" />
-        
+
         <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-2">
-          <div 
+          <div
             className="overflow-hidden rounded-xl"
             style={{ clipPath: "polygon(0 0, 100% 0, 100% 94%, 94% 100%, 0 100%)" }}
           >
@@ -147,7 +147,7 @@ const HistorySection = ({ data, isActive, index }) => {
       {/* Main Content Container */}
       <div className="w-full max-w-[1300px] h-full md:max-h-[85vh] mx-auto px-6 md:px-12 z-10 flex items-center">
         <div className="flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-8 lg:gap-16 items-center w-full">
-          
+
           {/* TEXT CONTENT CONTAINER */}
           <div ref={contentRef} className="will-change-transform flex flex-col justify-center w-full">
             {/* Typing Subtitle */}
@@ -159,11 +159,13 @@ const HistorySection = ({ data, isActive, index }) => {
             </div>
 
             {/* Judul Utama */}
-            <h2 className="text-2xl md:text-4xl lg:text-5xl font-['Playfair_Display'] font-bold text-white mb-2 md:mb-4 leading-tight">
-              {data.title} <br/>
+            <h2
+              data-translate-group="true"
+              className="text-2xl md:text-4xl lg:text-5xl font-['Playfair_Display'] font-bold text-white mb-2 md:mb-4 leading-tight"
+            >
+              {data.title} <br />
               <span className="text-[#FFC700] italic">{data.more_text}</span>
             </h2>
-
             {/* Gambar Versi Mobile (Tepat di bawah H2, Aspek Rasio Penuh & Besar) */}
             <div className="block md:hidden w-full">
               <ImageCard innerRef={imageMobileRef} isMobile={true} />

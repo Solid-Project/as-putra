@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import logoIcon from "@/assets/logo.jpg"; 
 
+
 gsap.registerPlugin(ScrollTrigger);
 
 const puzzleShapes = [

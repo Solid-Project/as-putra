@@ -11,6 +11,7 @@ import {
   CheckBadgeIcon,
   SparklesIcon,
   ArrowRightIcon,
+  CalendarDaysIcon
 } from "@heroicons/react/24/outline";
 
 const JobDetailModal = ({ job, isOpen, onClose }) => {
@@ -23,10 +24,9 @@ const JobDetailModal = ({ job, isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
-      gsap.fromTo(modalRef.current, { opacity: 0 }, { opacity: 1, duration: 0.25 });
       gsap.fromTo(contentRef.current, 
-        { y: 30, opacity: 0 }, 
-        { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }
+        { scale: 0.95, opacity: 0 }, 
+        { scale: 1, opacity: 1, duration: 0.3, ease: "power2.out" }
       );
     } else {
       document.body.style.overflow = "auto";
@@ -35,89 +35,102 @@ const JobDetailModal = ({ job, isOpen, onClose }) => {
 
   if (!isOpen || !job) return null;
 
-  const requirements = [
-    job.requirement,
-    "Pengalaman kerja relevan di bidangnya",
-    "Adaptif terhadap perubahan & inovatif",
-    "Mampu bekerja dalam ekosistem tim yang dinamis",
-  ];
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("id-ID", { year: 'numeric', month: 'long', day: 'numeric' });
+  };
 
   return (
     <div
       ref={modalRef}
-      className="fixed inset-0 z-[150] flex items-center justify-center p-4 md:p-6 bg-slate-900/60 backdrop-blur-sm"
+      // Dibuat bg-transparent tanpa warna dasar dan tanpa backdrop-blur agar halaman utama bersih
+      className="fixed inset-0 z-[150] flex items-center justify-center p-4 md:p-6 bg-transparent"
       onClick={onClose}
     >
-      {/* PURE CARD: Menggunakan !bg-white mutlak dan inline style background #FFFFFF untuk menghancurkan sisa warna navy */}
       <div
         ref={contentRef}
-        className="relative !bg-white border border-gray-200/80 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 md:p-10 flex flex-col gap-8 animate-none"
-        style={{ backgroundColor: '#FFFFFF', color: '#1D2B53' }}
+        // Shadow ditingkatkan ke 'shadow-2xl' dengan ring border halus agar kartu tetap terpisah manis dari halaman belakang
+        className="relative w-full max-w-3xl bg-white border border-gray-100 ring-1 ring-black/5 rounded-2xl max-h-[85vh] overflow-y-auto shadow-2xl p-6 md:p-8 flex flex-col gap-6"
+        style={{ color: '#1D2B53', backgroundColor: '#FFFFFF' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Tombol Close */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-500 hover:text-gray-800 rounded-lg transition-all z-20"
+          className="absolute top-5 right-5 p-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-400 hover:text-gray-700 rounded-xl transition-all z-20"
           aria-label="Close modal"
         >
           <XMarkIcon className="w-5 h-5" />
         </button>
 
-        {/* SECTION 1: HEADER & META INFO */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-gray-100">
-          <div>
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center border border-gray-200 bg-gray-50">
-                <BriefcaseIcon className="w-4 h-4" style={{ color: COLOR_NAVY }} />
-              </div>
-              <span 
-                className="inline-block px-2.5 py-0.5 text-[9px] font-black uppercase tracking-widest rounded shadow-sm"
-                style={{ backgroundColor: COLOR_GOLD, color: COLOR_NAVY }}
-              >
-                {job.type}
-              </span>
-            </div>
-            <h2 className="text-2xl md:text-4xl font-['Playfair_Display'] font-black leading-tight" style={{ color: COLOR_NAVY }}>
-              {job.title}
-            </h2>
+        {/* HEADER SECTION */}
+        <div className="flex flex-col gap-4 pb-6 border-b border-gray-100">
+          <div className="flex flex-wrap items-center gap-2">
+            <span 
+              className="inline-block px-2.5 py-0.5 text-[9px] font-black uppercase tracking-widest rounded shadow-sm"
+              style={{ backgroundColor: COLOR_GOLD, color: COLOR_NAVY }}
+            >
+              {job.type}
+            </span>
+            <span className="text-gray-200 text-xs">•</span>
+            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${job.is_active ? 'bg-green-50 text-green-700 border border-green-200/50' : 'bg-red-50 text-red-700'}`}>
+              {job.is_active ? "Active Opening" : "Closed"}
+            </span>
           </div>
 
-          <div className="flex flex-wrap gap-4 text-gray-600 md:self-end">
-            <div className="flex items-center gap-2 bg-gray-50 border border-gray-200/60 px-3 py-1.5 rounded-lg text-xs font-semibold">
-              <MapPinIcon className="w-4 h-4 text-gray-400" />
-              <span>{job.location}</span>
+          <h2 className="text-2xl md:text-3xl font-['Playfair_Display'] font-black leading-tight tracking-tight" style={{ color: COLOR_NAVY }}>
+            {job.title}
+          </h2>
+
+          {/* Grid Informasi Utama */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-1">
+            <div className="flex items-center gap-2.5 bg-gray-50/80 border border-gray-200/50 px-3 py-2 rounded-xl">
+              <MapPinIcon className="w-4 h-4 text-gray-400 shrink-0" />
+              <div className="flex flex-col">
+                <span className="text-[9px] uppercase tracking-wider font-bold text-gray-400">Lokasi</span>
+                <span className="text-xs font-bold capitalize text-gray-700">{job.location}</span>
+              </div>
             </div>
-            <div className="flex items-center gap-2 bg-gray-50 border border-gray-200/60 px-3 py-1.5 rounded-lg text-xs font-semibold">
-              <CurrencyDollarIcon className="w-4 h-4 text-gray-400" />
-              <span>{job.salary} Package</span>
+
+            <div className="flex items-center gap-2.5 bg-gray-50/80 border border-gray-200/50 px-3 py-2 rounded-xl">
+              <CurrencyDollarIcon className="w-4 h-4 text-gray-400 shrink-0" />
+              <div className="flex flex-col">
+                <span className="text-[9px] uppercase tracking-wider font-bold text-gray-400">Gaji / Package</span>
+                <span className="text-xs font-bold text-gray-700">Rp {parseInt(job.salary).toLocaleString("id-ID")}</span>
+              </div>
             </div>
-            <div className="flex items-center gap-2 bg-gray-50 border border-gray-200/60 px-3 py-1.5 rounded-lg text-xs font-semibold">
-              <ClockIcon className="w-4 h-4 text-gray-400" />
-              <span>Full-Time</span>
+
+            <div className="flex items-center gap-2.5 bg-gray-50/80 border border-gray-200/50 px-3 py-2 rounded-xl col-span-2 sm:col-span-1">
+              <CalendarDaysIcon className="w-4 h-4 text-gray-400 shrink-0" />
+              <div className="flex flex-col">
+                <span className="text-[9px] uppercase tracking-wider font-bold text-gray-400">Diterbitkan</span>
+                <span className="text-xs font-semibold text-gray-600">{formatDate(job.created_at)}</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* SECTION 2: OVERVIEW */}
-        <div>
-          <h3 className="text-xs uppercase tracking-[0.25em] font-black mb-3 flex items-center gap-2" style={{ color: COLOR_NAVY }}>
-            <SparklesIcon className="w-4 h-4" style={{ color: COLOR_GOLD }} /> Overview
+        {/* DESKRIPSI / OVERVIEW SECTION */}
+        <div className="bg-gradient-to-r from-gray-50 to-transparent p-4 rounded-xl border-l-4" style={{ borderColor: COLOR_GOLD }}>
+          <h3 className="text-[10px] uppercase tracking-[0.2em] font-black mb-1.5 flex items-center gap-1.5 text-gray-400">
+            <BriefcaseIcon className="w-3.5 h-3.5 text-gray-400" /> Deskripsi Pekerjaan
           </h3>
-          <p className="text-gray-600 text-sm md:text-base leading-relaxed italic font-medium border-l-4 pl-4 py-0.5 border-gray-200">
-            "Jadilah bagian dari evolusi industri bersama AS PUTRA Group. Kami mencari talenta kompeten yang siap berkontribusi aktif dan bertumbuh bersama membangun masa depan."
+          <p className="text-gray-600 text-sm md:text-base leading-relaxed whitespace-pre-line font-medium">
+            {job.description}
           </p>
         </div>
 
-        {/* SECTION 3: KUALIFIKASI & BENEFIT */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <h3 className="text-sm font-bold mb-4 flex items-center gap-2 border-b border-gray-100 pb-2" style={{ color: COLOR_NAVY }}>
-              <AcademicCapIcon className="w-4 h-4" style={{ color: COLOR_GOLD }} /> Kualifikasi
+        {/* DETAIL GRID: KUALIFIKASI & BENEFIT */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Kolom Kualifikasi */}
+          <div className="bg-white border border-gray-100 p-4 rounded-xl shadow-sm">
+            <h3 className="text-xs uppercase tracking-widest font-black mb-3 flex items-center gap-2 border-b border-gray-100 pb-2 text-gray-400">
+              <AcademicCapIcon className="w-4 h-4" style={{ color: COLOR_GOLD }} /> Kualifikasi Utama
             </h3>
-            <ul className="space-y-3">
-              {requirements.map((item, i) => (
-                <li key={i} className="flex items-start gap-2.5 text-xs md:text-sm text-gray-600 leading-relaxed font-medium">
+            <ul className="space-y-2.5">
+              {job.qualifications?.map((item, i) => (
+                <li key={i} className="flex items-start gap-2.5 text-xs md:text-sm text-gray-600 leading-relaxed font-semibold">
                   <CheckBadgeIcon className="w-4 h-4 shrink-0 mt-0.5" style={{ color: COLOR_NAVY }} />
                   <span>{item}</span>
                 </li>
@@ -125,29 +138,31 @@ const JobDetailModal = ({ job, isOpen, onClose }) => {
             </ul>
           </div>
 
-          <div>
-            <h3 className="text-sm font-bold mb-4 flex items-center gap-2 border-b border-gray-100 pb-2" style={{ color: COLOR_NAVY }}>
-              <SparklesIcon className="w-4 h-4" style={{ color: COLOR_GOLD }} /> Benefit Kerja
+          {/* Kolom Benefit */}
+          <div className="bg-white border border-gray-100 p-4 rounded-xl shadow-sm">
+            <h3 className="text-xs uppercase tracking-widest font-black mb-3 flex items-center gap-2 border-b border-gray-100 pb-2 text-gray-400">
+              <SparklesIcon className="w-4 h-4" style={{ color: COLOR_GOLD }} /> Kompensasi & Benefit
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-               {["Gaji & Bonus Kompetitif", "Asuransi Kesehatan", "Jenjang Karir Terbuka", "Lingkungan Kerja Positif"].map((benefit, i) => (
-                 <div key={i} className="bg-gray-50 border border-gray-200/60 p-3 rounded-lg text-xs text-gray-600 font-semibold hover:bg-gray-100/70 transition-colors">
-                    {benefit}
-                 </div>
-               ))}
+            <div className="flex flex-col gap-2">
+              {job.benefits?.map((benefit, i) => (
+                <div key={i} className="bg-gray-50/80 border border-gray-200/40 px-3 py-2 rounded-lg text-xs text-gray-600 font-bold flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: COLOR_GOLD }} />
+                  <span>{benefit}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* SECTION 4: CTA BANNER */}
-        <div className="p-6 rounded-lg text-white shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 mt-2" style={{ backgroundColor: COLOR_NAVY }}>
+        {/* CTA BANNER */}
+        <div className="p-6 rounded-xl text-white flex flex-col sm:flex-row items-center justify-between gap-4 mt-2 shadow-lg shadow-slate-900/10" style={{ backgroundColor: COLOR_NAVY }}>
           <div className="text-center sm:text-left">
-            <h4 className="text-lg md:text-xl font-bold mb-0.5 font-['Playfair_Display']">Tertarik Bergabung?</h4>
-            <p className="text-[10px] font-bold opacity-75 uppercase tracking-wider">Kirimkan berkas lamaran Anda sekarang</p>
+            <h4 className="text-lg font-bold mb-0.5 font-['Playfair_Display'] tracking-wide">Tertarik Bergabung?</h4>
+            <p className="text-[10px] font-medium opacity-75 uppercase tracking-widest">Kirimkan berkas lamaran Anda langsung ke tim kami</p>
           </div>
           <a
             href={`mailto:recruitment@asputra.com?subject=Lamaran Kerja - ${job.title}`}
-            className="group w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white text-sm font-black rounded-lg transition-all shadow-md"
+            className="group w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 bg-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md"
             style={{ color: COLOR_NAVY }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = COLOR_GOLD;
@@ -163,9 +178,10 @@ const JobDetailModal = ({ job, isOpen, onClose }) => {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-[9px] text-gray-400 uppercase tracking-widest font-bold pt-2">
-          AS PUTRA • Recruitment Center • 2026
-        </p>
+        <div className="flex items-center justify-between border-t border-gray-100 pt-3 text-[9px] text-gray-400 font-bold uppercase tracking-wider">
+          <span>ID Lowongan: #{job.id}</span>
+          <span>AS PUTRA Group • 2026</span>
+        </div>
       </div>
     </div>
   );
