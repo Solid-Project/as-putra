@@ -75,7 +75,7 @@ const Layout10 = ({ data, index }) => {
           {/* KOLOM KIRI: JUDUL RAKSASA */}
           <div ref={titleRef} className="lg:col-span-6 flex flex-col">
             <span className="text-white/70 font-black tracking-[0.4em] text-[10px] uppercase mb-8 block">
-              {displaySubtitle}
+              {displayTitle}
             </span>
             {displayTitle.split(" ").map((word, i) => (
               <h1 key={i} className="font-['Playfair_Display'] text-6xl md:text-8xl lg:text-[7.5rem] text-white font-black leading-[0.85] tracking-tighter drop-shadow-2xl">
@@ -118,7 +118,7 @@ const Layout10 = ({ data, index }) => {
               </div>
 
               <h2 className="font-['Playfair_Display'] text-3xl text-slate-900 font-bold mb-8 leading-tight tracking-tight">
-                {displayTitle}
+                {displaySubtitle}
               </h2>
               
               {/* AREA DESKRIPSI DENGAN SOFT DEPTH BORDER */}
