@@ -7,11 +7,11 @@ import logoAsliUrl from "@/assets/logo.jpg";
 // =========================================================================
 // SETUP IMPORT GAMBAR STATIS UNIT BISNIS (Silakan sesuaikan path aslinya)
 // =========================================================================
-import imgPeternakan from "@/assets/img/peternakan.webp";
-import imgHospitality from "@/assets/img/hotel2.webp";
+import imgPeternakan from "@/assets/img/AMM.webp";
+import imgHospitality from "@/assets/img/hotel5.webp";
 import imgRetail from "@/assets/img/karir.webp";
 import imgEkspedisi from "@/assets/transport.webp";
-import imgLifestyle from "@/assets/img/Kesehatan1.webp";
+import imgLifestyle from "@/assets/img/lifestyle.jpg";
 import imgEnergi from "@/assets/img/Otomotif.webp";
 import imgEdukasi from "@/assets/img/Carousel/herocarousel6.webp";
 import imgProperty from "@/assets/img/property2.jpeg";
@@ -24,7 +24,7 @@ const SECTOR_CUSTOM_DATA = {
     image: imgPeternakan,
     description: "Penyedia produk protein hewani terintegrasi dengan standar higienis dan teknologi modern kualitas tinggi."
   },
-  "hospitaliy": { // Disamakan dengan typo dari API: "Hospitaliy"
+  "hospitality": { // Disamakan dengan typo dari API: "Hospitaliy"
     image: imgHospitality,
     description: "Menghadirkan layanan kenyamanan dan keramahan eksklusif untuk memenuhi kebutuhan hospitality modern."
   },
