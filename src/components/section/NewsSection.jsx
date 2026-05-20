@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -23,54 +23,85 @@ const NewsSection = ({ activeIndex }) => {
   const COLOR_NAVY = "#0F1A3E";
   const COLOR_GOLD = "#FFC700";
 
-  // 1. Fetching Data
+  // =========================
+  // FETCH DATA
+  // =========================
   useEffect(() => {
+    let isMounted = true;
+
     const fetchNews = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/news/all-news`);
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/v1/news/all-news`
+        );
+
         const json = await response.json();
-        
-        if (json.status && json.data.details) {
+
+        if (isMounted && json.status && json.data.details) {
           const details = json.data.details;
+
           setNewsData(details);
 
           const dynamicCats = [
             "all",
             ...new Set(
-              details.flatMap((item) => 
+              details.flatMap((item) =>
                 item.categories.map((cat) => cat.name.toLowerCase())
               )
             ),
           ];
+
           setCategories(dynamicCats);
         }
       } catch (error) {
         console.error("Error loading news list:", error);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
+
     fetchNews();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  // Filter logic
-  const filteredNews = newsData.filter((item) => {
-    const itemCategories = item.categories.map(c => c.name.toLowerCase());
-    const categoryMatch =
-      activeFilter === "all" || itemCategories.includes(activeFilter.toLowerCase());
+  // =========================
+  // FILTERED DATA
+  // =========================
+  const filteredNews = useMemo(() => {
+    return newsData.filter((item) => {
+      const itemCategories = item.categories.map((c) =>
+        c.name.toLowerCase()
+      );
 
-    const searchMatch =
-      searchQuery === "" ||
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.excerpt?.toLowerCase().includes(searchQuery.toLowerCase());
+      const categoryMatch =
+        activeFilter === "all" ||
+        itemCategories.includes(activeFilter.toLowerCase());
 
-    return categoryMatch && searchMatch;
-  });
+      const searchMatch =
+        searchQuery === "" ||
+        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.excerpt?.toLowerCase().includes(searchQuery.toLowerCase());
 
-  // 2. Animasi GSAP
+      return categoryMatch && searchMatch;
+    });
+  }, [newsData, activeFilter, searchQuery]);
+
+  // =========================
+  // GSAP ANIMATION
+  // =========================
   useEffect(() => {
-    mobileCardsRef.current = mobileCardsRef.current.slice(0, filteredNews.length);
-    
+    if (loading) return;
+
+    mobileCardsRef.current = mobileCardsRef.current.slice(
+      0,
+      filteredNews.length
+    );
+
     const ctx = gsap.context(() => {
       siluetRefs.current.forEach((el, i) => {
         if (el) {
@@ -90,7 +121,10 @@ const NewsSection = ({ activeIndex }) => {
       if (filteredNews.length > 0 && window.innerWidth >= 1024) {
         gsap.fromTo(
           [desktopHeroRef.current, desktopListRef.current],
-          { y: 40, opacity: 0 },
+          {
+            y: 40,
+            opacity: 0,
+          },
           {
             y: 0,
             opacity: 1,
@@ -100,7 +134,7 @@ const NewsSection = ({ activeIndex }) => {
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top 75%",
-            }
+            },
           }
         );
       }
@@ -108,7 +142,10 @@ const NewsSection = ({ activeIndex }) => {
       if (filteredNews.length > 0 && window.innerWidth < 1024) {
         gsap.fromTo(
           mobileCardsRef.current.filter(Boolean),
-          { x: 20, opacity: 0 },
+          {
+            x: 20,
+            opacity: 0,
+          },
           {
             x: 0,
             opacity: 1,
@@ -120,14 +157,15 @@ const NewsSection = ({ activeIndex }) => {
         );
       }
     }, sectionRef);
+
     return () => ctx.revert();
-  }, [filteredNews, loading]);
+  }, [loading, activeFilter, searchQuery, filteredNews.length]);
 
   const mobileFeatured = filteredNews.slice(0, 2);
   const mobileList = filteredNews.slice(2);
 
-  const desktopFeatured = filteredNews[0]; 
-  const desktopSideList = filteredNews.slice(1, 5); 
+  const desktopFeatured = filteredNews[0];
+  const desktopSideList = filteredNews.slice(1, 5);
 
   return (
     <section
@@ -144,10 +182,13 @@ const NewsSection = ({ activeIndex }) => {
             ref={(el) => (siluetRefs.current[i] = el)}
             src={logoIcon}
             className={`absolute opacity-[0.02] md:opacity-[0.03] grayscale ${
-              i === 0 ? "-top-10 -left-20 w-[400px] rotate-12" :
-              i === 1 ? "top-[30%] -right-32 w-[500px] -rotate-12" :
-              i === 2 ? "bottom-0 -left-10 w-[450px] rotate-[20deg]" :
-              "top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[800px]"
+              i === 0
+                ? "-top-10 -left-20 w-[400px] rotate-12"
+                : i === 1
+                ? "top-[30%] -right-32 w-[500px] -rotate-12"
+                : i === 2
+                ? "bottom-0 -left-10 w-[450px] rotate-[20deg]"
+                : "top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[800px]"
             }`}
             alt=""
           />
@@ -162,9 +203,13 @@ const NewsSection = ({ activeIndex }) => {
               Latest News & Activity
             </span>
           </div>
+
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 lg:gap-12">
             <h2 className="text-4xl lg:text-6xl font-['Playfair_Display'] font-bold text-[#0F1A3E] tracking-tight">
-              Jejak <span className="text-[#FFC700] italic font-normal">Informasi</span>
+              Jejak{" "}
+              <span className="text-[#FFC700] italic font-normal">
+                Informasi
+              </span>
             </h2>
           </div>
         </div>
@@ -186,6 +231,7 @@ const NewsSection = ({ activeIndex }) => {
               </button>
             ))}
           </div>
+
           <div className="relative w-full lg:w-80">
             <input
               type="text"
@@ -196,7 +242,7 @@ const NewsSection = ({ activeIndex }) => {
           </div>
         </div>
 
-        {/* ==================== 1. TAMPILAN MOBILE (< lg) ==================== */}
+        {/* MOBILE */}
         <div className="block lg:hidden w-full space-y-8">
           {loading ? (
             <div className="text-center py-20 text-gray-400 font-bold uppercase tracking-widest animate-pulse text-xs">
@@ -204,29 +250,41 @@ const NewsSection = ({ activeIndex }) => {
             </div>
           ) : filteredNews.length > 0 ? (
             <>
-              {/* Featured Slider */}
+              {/* Featured */}
               {mobileFeatured.length > 0 && (
                 <div className="w-full">
                   <div className="flex items-center justify-between mb-3 px-1">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-[#0F1A3E]/60">Berita Utama</h4>
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-[#0F1A3E]/60">
+                      Berita Utama
+                    </h4>
                     <div className="w-12 h-[1px] bg-gray-200"></div>
                   </div>
+
                   <div className="hide-scrollbar flex flex-row gap-4 overflow-x-auto snap-x snap-mandatory touch-pan-x -mx-4 px-4 pb-2">
                     {mobileFeatured.map((item, idx) => (
                       <Link
                         key={`mob-feat-${item.slug || idx}`}
-                        to={`/news/${item.slug.split('/').pop()}`}
+                        to={`/news/${item.slug.split("/").pop()}`}
                         ref={(el) => (mobileCardsRef.current[idx] = el)}
                         className="snap-center flex-none w-[85vw] bg-white border border-gray-200/70 rounded-[2rem] p-3 shadow-sm flex flex-col"
                       >
                         <div className="relative aspect-[16/10] overflow-hidden rounded-[1.3rem] bg-gray-100">
-                          <img src={item.thumbnail} className="w-full h-full object-cover" alt={item.title} />
+                          <img
+                            src={item.thumbnail}
+                            className="w-full h-full object-cover"
+                            alt={item.title}
+                          />
+
                           <span className="absolute top-3 left-3 bg-[#0F1A3E] text-[#FFC700] text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md">
                             {item.categories[0]?.name}
                           </span>
                         </div>
+
                         <div className="pt-3 pb-1 px-1 flex flex-col flex-1">
-                          <p className="text-[9px] text-gray-400 font-medium mb-1">{item.created.split(" ")[0]}</p>
+                          <p className="text-[9px] text-gray-400 font-medium mb-1">
+                            {item.created.split(" ")[0]}
+                          </p>
+
                           <h3 className="text-base font-bold text-[#0F1A3E] leading-snug line-clamp-2 font-['Playfair_Display']">
                             {item.title}
                           </h3>
@@ -237,34 +295,49 @@ const NewsSection = ({ activeIndex }) => {
                 </div>
               )}
 
-              {/* Latest Articles List */}
+              {/* List */}
               {mobileList.length > 0 && (
                 <div className="w-full space-y-4">
                   <div className="flex items-center justify-between mb-1 px-1">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-[#0F1A3E]/60">Artikel Lainnya</h4>
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-[#0F1A3E]/60">
+                      Artikel Lainnya
+                    </h4>
                     <div className="w-12 h-[1px] bg-gray-200"></div>
                   </div>
+
                   <div className="flex flex-col gap-3">
                     {mobileList.map((item, idx) => {
                       const actualIdx = idx + 2;
+
                       return (
                         <Link
                           key={`mob-list-${item.slug || actualIdx}`}
-                          to={`/news/${item.slug.split('/').pop()}`}
-                          ref={(el) => (mobileCardsRef.current[actualIdx] = el)}
+                          to={`/news/${item.slug.split("/").pop()}`}
+                          ref={(el) =>
+                            (mobileCardsRef.current[actualIdx] = el)
+                          }
                           className="flex flex-row items-center gap-4 bg-white p-2.5 border border-gray-100 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.02)] active:scale-[0.98] transition-all"
                         >
                           <div className="flex-1 min-w-0">
                             <span className="text-[#B8860B] text-[8px] font-black uppercase tracking-wider block mb-0.5">
                               {item.categories[0]?.name}
                             </span>
+
                             <h3 className="text-xs sm:text-sm font-bold text-[#0F1A3E] leading-snug line-clamp-2 mb-1">
                               {item.title}
                             </h3>
-                            <p className="text-[9px] text-gray-400">{item.created.split(" ")[0]}</p>
+
+                            <p className="text-[9px] text-gray-400">
+                              {item.created.split(" ")[0]}
+                            </p>
                           </div>
+
                           <div className="flex-none w-20 h-20 rounded-xl overflow-hidden bg-gray-50 border border-gray-100">
-                            <img src={item.thumbnail} className="w-full h-full object-cover" alt="" />
+                            <img
+                              src={item.thumbnail}
+                              className="w-full h-full object-cover"
+                              alt=""
+                            />
                           </div>
                         </Link>
                       );
@@ -280,20 +353,22 @@ const NewsSection = ({ activeIndex }) => {
           )}
         </div>
 
-
-        {/* ==================== 2. TAMPILAN DESKTOP PRO (>= lg) ==================== */}
+        {/* DESKTOP */}
         {loading ? (
           <div className="hidden lg:block text-center py-32 text-gray-400 font-bold uppercase tracking-widest animate-pulse">
             Menyelaraskan Sajian Data...
           </div>
         ) : filteredNews.length > 0 ? (
           <div className="hidden lg:grid grid-cols-12 gap-10 items-start">
-            
-            {/* HERO FEATURED (KIRI) */}
-            <div ref={desktopHeroRef} className="col-span-7 flex flex-col">
+            <div
+              ref={desktopHeroRef}
+              className="col-span-7 flex flex-col"
+            >
               {desktopFeatured && (
                 <Link
-                  to={`/news/${desktopFeatured.slug.split('/').pop()}`}
+                  to={`/news/${desktopFeatured.slug
+                    .split("/")
+                    .pop()}`}
                   className="group relative flex flex-col w-full bg-white border border-gray-100 rounded-[2.5rem] p-5 shadow-[0_15px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_70px_rgba(15,26,62,0.08)] transition-all duration-500 overflow-hidden"
                 >
                   <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[2rem] bg-gray-100">
@@ -302,8 +377,9 @@ const NewsSection = ({ activeIndex }) => {
                       className="w-full h-full object-cover transition-transform duration-1000 cubic-bezier(0.16,1,0.3,1) group-hover:scale-105"
                       alt={desktopFeatured.title}
                     />
+
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0F1A3E]/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    
+
                     <span className="absolute top-5 left-5 bg-[#0F1A3E] text-[#FFC700] text-[9px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-xl shadow-md">
                       {desktopFeatured.categories[0]?.name}
                     </span>
@@ -315,69 +391,53 @@ const NewsSection = ({ activeIndex }) => {
                         {desktopFeatured.created.split(" ")[0]}
                       </span>
                     </div>
-                    
+
                     <h3 className="text-3xl font-bold text-[#0F1A3E] leading-tight mb-4 group-hover:text-[#B8860B] transition-colors duration-300 font-['Playfair_Display']">
                       {desktopFeatured.title}
                     </h3>
-                    
+
                     <p className="text-gray-500 text-sm leading-relaxed mb-8 line-clamp-3 font-light">
                       {desktopFeatured.excerpt}
                     </p>
-
-                    <div className="mt-auto flex items-center gap-4 group/btn">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 bg-gray-50 group-hover:bg-[#0F1A3E] group-hover:border-[#0F1A3E] transition-all duration-300">
-                        <svg className="w-4 h-4 text-[#0F1A3E] group-hover:text-[#FFC700] transition-colors transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                        </svg>
-                      </div>
-                      <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#0F1A3E]">
-                        Baca Artikel Lengkap
-                      </span>
-                    </div>
                   </div>
                 </Link>
               )}
             </div>
 
-            {/* PERBAIKAN UTAMA: SIDE FEED LIST (KANAN - Rapat dari Atas) */}
-            {/* Mengubah col-span flex-col untuk menggunakan default justify-start (rapat atas) & gap-4 vertikal stabil */}
-            <div ref={desktopListRef} className="col-span-5 flex flex-col justify-start gap-4">
-              {desktopSideList.length > 0 ? (
-                desktopSideList.map((item, idx) => (
-                  <Link
-                    key={`desk-side-${item.slug || idx}`}
-                    to={`/news/${item.slug.split('/').pop()}`}
-                    className="group flex flex-row items-center gap-5 bg-white p-4 border border-gray-100 rounded-2xl shadow-[0_5px_25px_rgba(0,0,0,0.01)] hover:shadow-[0_15px_45px_rgba(15,26,62,0.05)] hover:border-gray-200/80 transition-all duration-300 w-full"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <span className="text-[#B8860B] text-[9px] font-black uppercase tracking-[0.15em] block mb-1">
-                        {item.categories[0]?.name}
-                      </span>
-                      <h4 className="text-base font-bold text-[#0F1A3E] leading-snug line-clamp-2 mb-1.5 group-hover:text-[#B8860B] transition-colors duration-300">
-                        {item.title}
-                      </h4>
-                      <span className="text-[11px] text-gray-400 font-medium">
-                        {item.created.split(" ")[0]}
-                      </span>
-                    </div>
+            <div
+              ref={desktopListRef}
+              className="col-span-5 flex flex-col justify-start gap-4"
+            >
+              {desktopSideList.map((item, idx) => (
+                <Link
+                  key={`desk-side-${item.slug || idx}`}
+                  to={`/news/${item.slug.split("/").pop()}`}
+                  className="group flex flex-row items-center gap-5 bg-white p-4 border border-gray-100 rounded-2xl shadow-[0_5px_25px_rgba(0,0,0,0.01)] hover:shadow-[0_15px_45px_rgba(15,26,62,0.05)] hover:border-gray-200/80 transition-all duration-300 w-full"
+                >
+                  <div className="flex-1 min-w-0">
+                    <span className="text-[#B8860B] text-[9px] font-black uppercase tracking-[0.15em] block mb-1">
+                      {item.categories[0]?.name}
+                    </span>
 
-                    <div className="flex-none w-24 h-24 rounded-xl overflow-hidden bg-gray-50 border border-gray-100 relative">
-                      <img 
-                        src={item.thumbnail} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                        alt="" 
-                      />
-                      <div className="absolute inset-0 bg-[#0F1A3E]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                  </Link>
-                ))
-              ) : (
-                <div className="w-full flex items-center justify-center border border-dashed border-gray-200 rounded-2xl bg-gray-50 p-12 text-center text-gray-400 text-xs font-bold uppercase tracking-widest">
-                  Eksplorasi artikel lainnya segera hadir
-                </div>
-              )}
+                    <h4 className="text-base font-bold text-[#0F1A3E] leading-snug line-clamp-2 mb-1.5 group-hover:text-[#B8860B] transition-colors duration-300">
+                      {item.title}
+                    </h4>
+
+                    <span className="text-[11px] text-gray-400 font-medium">
+                      {item.created.split(" ")[0]}
+                    </span>
+                  </div>
+
+                  <div className="flex-none w-24 h-24 rounded-xl overflow-hidden bg-gray-50 border border-gray-100 relative">
+                    <img
+                      src={item.thumbnail}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      alt=""
+                    />
+                  </div>
+                </Link>
+              ))}
             </div>
-
           </div>
         ) : (
           <div className="hidden lg:block text-center py-24 bg-gray-50 rounded-[3rem] border border-dashed border-gray-200">
@@ -389,8 +449,14 @@ const NewsSection = ({ activeIndex }) => {
       </div>
 
       <style>{`
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
       `}</style>
     </section>
   );
