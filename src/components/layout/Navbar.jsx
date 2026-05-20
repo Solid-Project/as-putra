@@ -45,13 +45,13 @@ const Navbar = () => {
   };
   // Kamus statis sangat simpel khusus menu inti Navbar agar loading tombol instan kilat
   const staticMenu = {
-    Beranda: { id: "Beranda", en: "Home", jp: "ホーム", su: "Bumi" },
-    Tentang: { id: "Tentang", en: "About", jp: "会社概要", su: "Ngeunaan" },
-    SektorBisnis: { id: "Sektor Bisnis", en: "Business Sectors", jp: "事業部門", su: "Sektor Bisnis" },
-    Berita: { id: "Berita", en: "News", jp: "ニュース", su: "Warta" },
-    Karir: { id: "Karir", en: "Career", jp: "採用情報", su: "Karir" },
-    Hubungi: { id: "Hubungi Kami", en: "Contact Us", jp: "お問い合わせ", su: "Kontak Kami" },
-    UnitBisnis: { id: "Unit Bisnis", en: "Business Units", jp: "ビジネスユニット", su: "Unit Bisnis" },
+    Beranda: { id: "Beranda", en: "Home", jp: "ホーム" },
+    Tentang: { id: "Tentang", en: "About", jp: "会社概要},"},
+    SektorBisnis: { id: "Sektor Bisnis", en: "Business Sectors", jp: "事業部門"},
+    Berita: { id: "Berita", en: "News", jp: "ニュース"},
+    Karir: { id: "Karir", en: "Career", jp: "採用情報"},
+    Hubungi: { id: "Hubungi Kami", en: "Contact Us", jp: "お問い合わせ"},
+    UnitBisnis: { id: "Unit Bisnis", en: "Business Units", jp: "ビジネスユニット"},
   };
 
   // 1. FETCH SEKTOR DARI DATABASE
@@ -188,7 +188,7 @@ const Navbar = () => {
         {/* CTA & LANG (DESKTOP) */}
         <div className="hidden md:flex items-center gap-5">
           <div className="flex items-center gap-2 pr-5 border-r border-slate-400/20 text-[9px] font-black">
-            {["id", "en", "jp", "su"].map((lang) => (
+            {["id", "en", "jp"].map((lang) => (
               <button 
                 key={lang} 
                 onClick={() => changeLanguage(lang)} 

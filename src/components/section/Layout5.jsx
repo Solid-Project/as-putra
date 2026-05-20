@@ -1,13 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { 
-  BuildingOffice2Icon, 
-  UsersIcon, 
-  CircleStackIcon, 
-  GlobeAltIcon 
-} from "@heroicons/react/24/outline";
-import logoAsliUrl from "@/assets/logo.jpg"; // FIX: Diperbaiki dari '=' menjadi 'from' agar tidak error
+import logoAsliUrl from "@/assets/logo.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,17 +15,20 @@ const Layout5 = ({ data, index }) => {
 
   const displayTitle = data?.title || "Aretha Farm";
   const displayDescription = data?.description || "";
-  const statsData = data?.layout_data?.items || [];
+  
+  const statsData = useMemo(() => {
+    return data?.layout_data?.items || [];
+  }, [data?.layout_data?.items]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      
+
       // 1. REVEAL JUDUL
-      gsap.fromTo(titleRef.current, 
+      gsap.fromTo(titleRef.current,
         { y: 30, opacity: 0 },
-        { 
-          y: 0, 
-          opacity: 1, 
+        {
+          y: 0,
+          opacity: 1,
           duration: 1,
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -40,13 +37,12 @@ const Layout5 = ({ data, index }) => {
         }
       );
 
-      // 2. PARALLAX EFFECT (HANYA AKTIF DI DESKTOP)
-      // FIX: Di mobile dimatikan karena y: -50 membuat teks merosot menabrak elemen lain
+      // 2. PARALLAX EFFECT (DESKTOP ONLY)
       if (window.innerWidth >= 1024) {
-        gsap.fromTo(leftColRef.current, 
-          { y: 50 }, 
-          { 
-            y: -50, 
+        gsap.fromTo(leftColRef.current,
+          { y: 50 },
+          {
+            y: -50,
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top bottom",
@@ -68,9 +64,10 @@ const Layout5 = ({ data, index }) => {
             ease: "power4.out",
             onUpdate: () => {
               if (statsRefs.current[idx]) {
-                const isDecimal = stat.target?.includes(".");
-                let value = isDecimal ? obj.val.toFixed(1) : Math.floor(obj.val);
-                statsRefs.current[idx].innerText = value + (stat.suffix || "");
+                const isDecimal = stat.target?.toString().includes(".");
+                statsRefs.current[idx].innerText = isDecimal 
+                  ? obj.val.toFixed(1) 
+                  : Math.floor(obj.val);
               }
             },
           });
@@ -99,7 +96,6 @@ const Layout5 = ({ data, index }) => {
   return (
     <section
       ref={sectionRef}
-      // FIX: Menggunakan items-start di mobile agar konten mengalir dari atas, tidak menumpuk di tengah layar
       className="section min-h-screen flex items-start lg:items-center py-20 md:py-32 px-6 sm:px-12 lg:px-[8%] bg-[#0F1A3E] relative overflow-hidden"
       id={`section-${index}`}
       data-theme="dark"
@@ -109,14 +105,13 @@ const Layout5 = ({ data, index }) => {
         <img src={logoAsliUrl} alt="" className="w-[90%] md:w-[80%] h-auto rotate-12 scale-110" />
       </div>
 
-      {/* Grid Utama (Otomatis menjadi 1 kolom di mobile, 2 kolom di desktop) */}
+      {/* Grid Utama */}
       <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 relative z-10 pt-10 lg:pt-0">
-        
+
         {/* KOLOM KIRI: NARASI */}
         <div ref={leftColRef} className="w-full max-w-[600px]">
-          <h2 
-            ref={titleRef} 
-            // FIX: Ukuran font judul disesuaikan (text-3xl di mobile) agar tidak meluber patah-patah
+          <h2
+            ref={titleRef}
             className="font-['Playfair_Display'] text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-[1.2] lg:leading-[1.1] mb-6 md:mb-12 font-bold tracking-tighter"
           >
             {displayTitle}
@@ -127,27 +122,41 @@ const Layout5 = ({ data, index }) => {
           </p>
         </div>
 
-        {/* KOLOM KANAN: GRID STATISTIK */}
-        {/* Tetap mempertahankan struktur grid-cols-2 asli Anda, tapi gap disesuaikan agar pas di layar HP */}
+        {/* KOLOM KANAN: GRID STATISTIK (Garis pemisah vertikal telah dihapus) */}
         <div ref={rightGridRef} className="grid grid-cols-2 gap-x-6 sm:gap-x-12 gap-y-12 md:gap-y-20 relative">
-          {/* Garis Vertikal Dekoratif (Disembunyikan di mobile kecil agar tidak menabrak teks) */}
-          <div className="absolute left-1/2 top-0 w-[1px] h-full bg-[#FFC700]/10 hidden sm:block" />
-
+          
           {statsData.map((item, idx) => (
-            // Tetap mempertahankan flex-col vertikal asli bawaan Anda
-            <div key={item.id || idx} className={`flex flex-col gap-4 md:gap-6 ${idx % 2 !== 0 ? "sm:pl-12" : ""}`}>
-              <div className="flex flex-col">
-                <span 
-                  ref={(el) => (statsRefs.current[idx] = el)} 
-                  // FIX: Angka stat di-scale down dari text-5xl (bawaan) menjadi text-4xl di mobile agar pas
-                  className="text-4xl md:text-7xl font-['Playfair_Display'] font-bold text-[#FFC700] tracking-tighter leading-none"
-                >
-                  0
-                </span>
-                {/* FIX: Tracking spasasi dikurangi sedikit di mobile agar text label panjang tidak hancur */}
-                <span className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] text-gray-500 font-black mt-2 leading-tight">
+            <div
+              key={item.id || idx}
+              className="flex flex-col gap-2 md:gap-4 justify-start items-start"
+            >
+              <div className="flex flex-col min-w-0 w-full">
+                
+                {/* WADAH UTAMA ANGKA & UNIT */}
+                <div className="flex items-baseline text-[#FFC700] font-['Playfair_Display'] font-bold leading-none">
+                  
+                  {/* 1. ANGKA UTAMA */}
+                  <span
+                    ref={(el) => (statsRefs.current[idx] = el)}
+                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tighter"
+                  >
+                    {item.target || "0"}
+                  </span>
+
+                  {/* 2. UNIT / SUFFIX */}
+                  {item.suffix && (
+                    <span className="ml-1.5 md:ml-2 text-xl sm:text-2xl md:text-3xl font-sans font-medium tracking-normal text-[#FFC700]/85 select-none">
+                      {item.suffix}
+                    </span>
+                  )}
+                  
+                </div>
+
+                {/* TEKS LABEL */}
+                <span className="text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.3em] text-gray-500 font-extrabold mt-2.5 md:mt-3 leading-snug break-words">
                   {item.label}
                 </span>
+                
               </div>
             </div>
           ))}

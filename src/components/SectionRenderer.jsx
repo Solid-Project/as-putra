@@ -23,7 +23,7 @@ import Layout9 from "@/components/section/Layout9";
 import Layout10 from "@/components/section/Layout10";
 import NewsSection from "@/components/section/NewsSection";
 
-export const COMPONENT_MAP = {
+const COMPONENT_MAP = {
   HeroCarousel, HistorySection, CareerSection, CardSection, StatsSection,
   SectorStrip, NewsTeaser, MilestoneSection, OurValues, VissionMission,
   IntroSection, HeroSector,
@@ -57,7 +57,7 @@ export const SectionRenderer = ({ sections, activeIndex }) => {
         // Cek mana komponen bebas (no-snap)
         const isNoSnap = [
           "CardSection", "StatsSection", "NewsTeaser",
-          "MilestoneSection", "CareerSection", "SectorStrip"
+          "MilestoneSection", "CareerSection", "SectorStrip","layout7"
         ].includes(layoutName);
 
         const currentTheme = section.theme || THEME_MAPPING[layoutName] || "dark";

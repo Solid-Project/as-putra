@@ -5,6 +5,8 @@ import useFullpageSnap from "@/hooks/useFullPageSnap";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import HeroSkeleton from "@/components/skeleton/HeroSkeleton";
+
+import AutoTranslate from "@/lib/AutoTranslate"; 
 //Import Layout
 import HeroSector from "@/components/section/HeroSector";
 import IntroSection from "@/components/section/IntroSection";
@@ -43,8 +45,26 @@ const SectorDetailPage = () => {
       setSections(null); 
       try {
         const baseUrl = import.meta.env.VITE_API_URL.replace(/\/$/, "");
-        const capitalizedSlug = slug.charAt(0).toUpperCase() + slug.slice(1).toLowerCase();
+        
+        // 1. Ubah strip (-) kembali menjadi spasi tunggal
+        const normalSpaces = slug.replace(/-/g, " ");
+
+        // 2. Ubah tiap kata jadi huruf besar di awal (Title Case)
+        // Contoh: "energi-dan-otomotif" -> "Energi Dan Otomotif"
+        let capitalizedSlug = normalSpaces
+          .split(" ")
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(" ");
+
+        // 3. TOLERANSI UNTUK KATA HUBUNG "dan"
+        // Jika di database backend Anda kata "dan" menggunakan huruf kecil ("Sector Energi dan Otomotif"),
+        // baris ini akan otomatis mengubah "Dan" menjadi "dan" kecil agar COCOK dengan database.
+        capitalizedSlug = capitalizedSlug.replace(/\bDan\b/g, "dan");
+
+        // 4. Gabungkan menjadi nama halaman lengkap yang dikenali backend
         const pageName = `Sector ${capitalizedSlug}`;
+        
+        // Tembak API dengan nama yang sudah dibersihkan dan di-encode
         const response = await fetch(`${baseUrl}/api/v1/page/${encodeURIComponent(pageName)}`);
         
         if (!response.ok) throw new Error("Halaman sektor tidak ditemukan");
@@ -64,10 +84,12 @@ const SectorDetailPage = () => {
 
     fetchSectorData();
   }, [slug]);
+
   const { activeIndex } = useFullpageSnap({ 
     enabled: !!sections && sections.length > 0,
     config: { sectionSelector: ".section" }
   });
+
   useEffect(() => {
     if (sections) {
       const timer = setTimeout(() => {
@@ -81,12 +103,20 @@ const SectorDetailPage = () => {
   return (
     <main className="relative bg-black min-h-screen">
       <Navbar />
+      
+      {/* 
+        Biarkan wrapper utama dan AutoTranslate selalu stand-by di DOM.
+        Ini memastikan MutationObserver dari AutoTranslate tidak kehilangan momentum saat teks muncul.
+      */}
+      <div className="fullpage-wrapper">
+        <AutoTranslate />
 
-      {!sections ? (
-        <HeroSkeleton />
-      ) : (
-        <div className="fullpage-wrapper">
-          {sections.map((section, index) => {
+        {!sections ? (
+          // Tampilkan skeleton di dalam wrapper jika data masih diambil
+          <HeroSkeleton />
+        ) : (
+          // Tampilkan komponen jika data sudah siap
+          sections.map((section, index) => {
             const Component = COMPONENT_MAP[section.layout_name];
             if (!Component) return null;
 
@@ -99,10 +129,12 @@ const SectorDetailPage = () => {
                 className="section"
               />
             );
-          })}
-          <Footer />
-        </div>
-      )}
+          })
+        )}
+        
+        {/* Footer hanya muncul jika sections sudah ada nilainya */}
+        {sections && <Footer />}
+      </div>
     </main>
   );
 };

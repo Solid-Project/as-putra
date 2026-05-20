@@ -50,6 +50,14 @@ html, body {
   flex-direction: column;
 }
 
+@media (max-width: 767px) {
+  .section {
+    height: auto !important; /* Biarkan tinggi mengikuti konten */
+    min-height: 100vh;       /* Setidaknya penuhi satu layar penuh */
+    overflow: visible !important;
+  }
+}
+
 /* Class pembantu untuk footer atau section yang boleh memanjang */
 .section.footer-snap, 
 .section.no-snap {

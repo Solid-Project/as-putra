@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react"; // 1. Tambah useState di sini
 import { useParams } from "react-router-dom";
 import { usePageData } from "@/hooks/usePageData";
 import useFullpageSnap from "@/hooks/useFullPageSnap";
@@ -10,7 +10,6 @@ import NewsTeaser from "@/components/section/NewsTeaser";
 import CareerSection from "@/components/section/CareerSection";
 import NewsSection from "@/components/section/NewsSection";
 
-// PANGGIL KOMPONEN AUTO TRANSLATE BARU KAMU DI SINI
 import AutoTranslate from "@/lib/AutoTranslate"; 
 
 import PrivacyPolicySection from "@/components/section/PrivacyPolicy";
@@ -20,12 +19,29 @@ const FullPage = ({ defaultSlug = "beranda" }) => {
   const { slug } = useParams();
   const currentSlug = slug || defaultSlug;
 
-  // Data diambil murni dari API admin, variabel asli TIDAK AKAN BERUBAH
   const { data, loading } = usePageData(currentSlug);
   const sections = data?.data || [];
 
+  // 2. State untuk mendeteksi apakah device saat ini adalah HP/Mobile (lebar < 768px)
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Fungsi untuk cek ukuran layar
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768); // 768px adalah breakpoint standard mobile (md di Tailwind)
+    };
+
+    // Cek saat pertama kali komponen di-mount
+    checkScreenSize();
+
+    // Dengarkan perubahan ukuran layar jika user memutar orientasi HP atau resize browser
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  // 3. Tambahkan kondisi !isMobile di properti enabled
   const { activeIndex } = useFullpageSnap({ 
-    enabled: !loading && sections.length >= 0
+    enabled: !loading && sections.length >= 0 && !isMobile
   });
 
   useEffect(() => {
@@ -42,16 +58,11 @@ const FullPage = ({ defaultSlug = "beranda" }) => {
     <main className="relative bg-black min-h-screen">
       <Navbar />
 
-      {/* Wrapper Utama Halaman */}
       <div className="fullpage-wrapper">
-        
-        {/* AKTIFKAN AUTO TRANSLATE DI SINI UNTUK MENYAPU BERSIH SEMUA KONTEN */}
         <AutoTranslate /> 
 
-        {/* Render komponen database (Tetap aman menggunakan data asli) */}
         <SectionRenderer sections={sections} activeIndex={activeIndex} />
         
-        {/* Render komponen manual bersyarat */}
         {currentSlug === "beranda" && (
           <section className="section no-snap w-full h-auto" data-title="News Updates">
             <NewsTeaser isActive={activeIndex === sections.length} />
@@ -70,7 +81,6 @@ const FullPage = ({ defaultSlug = "beranda" }) => {
           </section>
         )}
 
-        {/* HALAMAN LEGAL */}
         {currentSlug === "privacy-policy" && (
           <section className="section no-snap w-full h-auto bg-white text-slate-700 px-6 md:px-10 lg:px-[6%] py-12 md:py-20" data-theme="light" data-title="Privacy Policy">
             <div className="prose prose-slate max-w-4xl mx-auto text-slate-600 text-sm leading-relaxed text-justify">

@@ -40,7 +40,6 @@ const Layout7 = ({ data, index }) => {
 
     const container = scrollContainerRef.current;
     if (container) {
-      // Menggunakan ukuran scroll statis yang sesuai dengan lebar kartu baru Anda (280px + gap)
       const scrollAmount = window.innerWidth < 768 ? 300 : 340; 
       const targetScroll = direction === "left" 
         ? container.scrollLeft - scrollAmount 
@@ -57,9 +56,18 @@ const Layout7 = ({ data, index }) => {
     <section 
       ref={sectionRef} 
       id={`section-${index}`}
-      // h-auto di mobile agar membungkus pas, md:h-screen di desktop
-      className="section relative w-full h-auto md:h-screen flex flex-col bg-white overflow-hidden"
-      style={{ overflowAnchor: "none" }} 
+      /* 
+        KUNCI PERBAIKAN: Tambahkan 'no-snap' di className!
+        Ini memberi tahu GSAP/CSS Snap agar JANGAN memaksa komponen ini berukuran 100vh.
+        Sekarang tinggi halaman murni mengikuti isi konten (h-auto).
+      */
+      className="section no-snap relative w-full h-auto flex flex-col bg-white overflow-hidden"
+      style={{ 
+        overflowAnchor: "none",
+        // Mengamankan style inline agar tidak ditimpa oleh library luar
+        height: "auto",
+        minHeight: "100vh"
+      }} 
       data-theme="light"
     >
       {/* Background Decor Logo */}
@@ -67,8 +75,8 @@ const Layout7 = ({ data, index }) => {
         <img src={logoAsliUrl} alt="" className="w-[80%] md:w-[50%] h-auto rotate-6" />
       </div>
       
-      {/* Padding atas bawah disesuaikan agar pas dengan kontainer */}
-      <div className="relative z-10 w-full h-full flex flex-col justify-start lg:justify-center py-12 md:py-10 px-5 sm:px-12 lg:px-[8%]">
+      {/* Kontainer dalam sekarang menggunakan py-12 agar pas, tidak berlebih */}
+      <div className="relative z-10 w-full h-auto flex flex-col justify-start py-12 md:py-20 px-5 sm:px-12 lg:px-[8%]">
         
         {/* HEADER AREA */}
         <div ref={headerRef} className="w-full mb-6 flex flex-row justify-between items-end gap-4">
@@ -107,7 +115,7 @@ const Layout7 = ({ data, index }) => {
         {/* CONTAINER UTAMA CARD */}
         <div 
           ref={mainCardRef}
-          className="bg-white/95 backdrop-blur-md p-5 md:p-8 rounded-xl shadow-[0_15px_30px_-12px_rgba(0,0,0,0.04)] md:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.08)] border border-slate-100 w-full"
+          className="bg-white/95 backdrop-blur-md p-5 md:p-8 rounded-xl shadow-[0_15px_30px_-12px_rgba(0,0,0,0.04)] md:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.08)] border border-slate-100 w-full h-auto"
         >
           <div className="flex items-center gap-2 mb-5 pb-4 border-b border-slate-100">
              <BuildingOffice2Icon className="w-4 h-4 text-slate-400" />
@@ -118,9 +126,7 @@ const Layout7 = ({ data, index }) => {
 
           <div 
             ref={scrollContainerRef}
-            // PERBAIKAN UTAMA: Menggunakan grid-rows-2 dengan tinggi statis h-[480px] di mobile.
-            // Tinggi h-[480px] ini pas untuk menampung 2 baris kartu besar tanpa menyisakan ruang kosong di bawah.
-            className="hide-scrollbar grid grid-rows-2 grid-flow-col h-[480px] md:h-auto lg:flex lg:flex-row gap-x-6 gap-y-5 lg:gap-6 overflow-x-auto touch-pan-x w-full"
+            className="hide-scrollbar flex flex-row items-stretch h-auto gap-x-6 overflow-x-auto touch-pan-x w-full py-2"
             style={{ 
               scrollSnapType: "none", 
               WebkitOverflowScrolling: "touch"
@@ -129,34 +135,40 @@ const Layout7 = ({ data, index }) => {
             {unitBisnis.map((item, idx) => (
               <div 
                 key={item.id || idx}
-                // PERBAIKAN: Ukuran kartu dikembalikan besar (w-[280px]) agar mantap dan tidak kempis
-                className="unit-card flex-none w-[280px] md:w-[300px] group"
+                className="unit-card flex-none w-[280px] md:w-[310px] flex flex-col justify-between group bg-transparent"
               >
-                {/* PERBAIKAN: Tinggi gambar dikembalikan ke h-[140px] seperti semula */}
-                <div className="relative h-[140px] md:h-[180px] overflow-hidden rounded-lg bg-slate-100 mb-3 border border-slate-200/50 shadow-sm">
-                  {item.image ? (
-                    <img 
-                      src={`${import.meta.env.VITE_API_URL}/storage/${item.image}`} 
-                      alt={item.title} 
-                      className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-slate-300 italic text-xs">No Image</div>
-                  )}
+                <div className="flex flex-col h-auto">
+                  {/* Gambar Unit Bisnis */}
+                  <div className="relative h-[130px] md:h-[165px] overflow-hidden rounded-lg bg-slate-100 mb-3 border border-slate-200/50 shadow-sm flex-shrink-0">
+                    {item.image ? (
+                      <img 
+                        src={`${import.meta.env.VITE_API_URL}/storage/${item.image}`} 
+                        alt={item.title} 
+                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-slate-300 italic text-xs">No Image</div>
+                    )}
+                  </div>
+
+                  {/* Judul Unit Bisnis */}
+                  <h4 className="text-base md:text-lg font-bold text-slate-950 mb-2 tracking-tight group-hover:text-blue-600 transition-colors line-clamp-2">
+                    {item.title}
+                  </h4>
+
+                  {/* Teks Deskripsi Otomatis Melar Tanpa Batasan */}
+                  <p className="text-slate-500 text-[12px] md:text-[13px] leading-relaxed font-light h-auto italic text-justify break-words whitespace-normal pb-2">
+                    {item.desc}
+                  </p>
                 </div>
 
-                <h4 className="text-base md:text-lg font-bold text-slate-950 mb-1 tracking-tight group-hover:text-blue-600 transition-colors line-clamp-1">
-                  {item.title}
-                </h4>
-                <p className="text-slate-500 text-[12px] md:text-[13px] leading-relaxed font-light line-clamp-2 italic text-justify">
-                  {item.desc}
-                </p>
-                <div className="mt-4 w-6 group-hover:w-12 h-[2px] bg-slate-900 transition-all duration-500 hidden sm:block"></div>
+                {/* Garis dekoratif konstan di bagian bawah card */}
+                <div className="mt-auto pt-2 w-6 group-hover:w-12 h-[2px] bg-slate-900 transition-all duration-500 hidden sm:block"></div>
               </div>
             ))}
             
             {/* Spacer ujung kanan */}
-            <div className="w-2 md:w-10" />
+            <div className="w-2 md:w-10 flex-shrink-0" />
           </div>
         </div>
       </div>

@@ -74,8 +74,9 @@ const Layout10 = ({ data, index }) => {
           
           {/* KOLOM KIRI: JUDUL RAKSASA */}
           <div ref={titleRef} className="lg:col-span-6 flex flex-col">
+            {/* PERBAIKAN 1: Teks di atas judul raksasa sekarang menggunakan displayLabel (more_text) */}
             <span className="text-white/70 font-black tracking-[0.4em] text-[10px] uppercase mb-8 block">
-              {displayTitle}
+              {displayLabel}
             </span>
             {displayTitle.split(" ").map((word, i) => (
               <h1 key={i} className="font-['Playfair_Display'] text-6xl md:text-8xl lg:text-[7.5rem] text-white font-black leading-[0.85] tracking-tighter drop-shadow-2xl">
@@ -113,17 +114,13 @@ const Layout10 = ({ data, index }) => {
               ref={cardRef} 
               className="bg-white p-10 md:p-14 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] rounded-3xl relative overflow-hidden"
             >
-              <div className="flex items-center gap-3 mb-6">
-                 <span className="text-slate-900 font-black tracking-[0.3em] text-[9px] uppercase">{displayLabel}</span>
-              </div>
-
+              {/* PERBAIKAN 2: Title di dalam Card menggunakan displaySubtitle (subtitle) */}
               <h2 className="font-['Playfair_Display'] text-3xl text-slate-900 font-bold mb-8 leading-tight tracking-tight">
                 {displaySubtitle}
               </h2>
               
               {/* AREA DESKRIPSI DENGAN SOFT DEPTH BORDER */}
               <div className="relative group">
-                {/* Border Indah: Menggunakan shadow-inner dan border sangat tipis agar teks terpisah dari background kartu */}
                 <div 
                   className="absolute inset-0 -m-4 border border-slate-50 bg-slate-50/30 rounded-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] pointer-events-none transition-all duration-500 group-hover:bg-slate-50/50"
                 />
@@ -135,7 +132,7 @@ const Layout10 = ({ data, index }) => {
                   {displayDescription}
                 </div>
 
-                {/* Indikator Gradasi di bagian bawah agar teks tidak terpotong kaku saat scroll */}
+                {/* Indikator Gradasi di bagian bawah */}
                 <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-white/80 to-transparent pointer-events-none z-20" />
               </div>
             </div>
