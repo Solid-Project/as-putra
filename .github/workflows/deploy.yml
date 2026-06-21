@@ -20,11 +20,6 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Check Node Version
-        run: |
-          node -v
-          npm -v
-
       - name: Install Dependencies
         run: npm install
 
@@ -33,47 +28,16 @@ jobs:
           echo "VITE_BASE_NAME=/" > .env
           npm run build
 
-      - name: Debug Workspace
+      - name: Verify Build Output
         run: |
-          echo "========== CURRENT DIR =========="
-          pwd
-
-          echo "========== ROOT FILES =========="
-          ls -lah
-
-          echo "========== DIST EXISTS =========="
-          if [ -d "dist" ]; then
-            echo "dist folder found"
-          else
-            echo "dist folder NOT found"
-            exit 1
-          fi
-
-          echo "========== DIST CONTENT =========="
+          echo "===== DIST INFO ====="
           ls -lah dist
-
-          echo "========== DIST SIZE =========="
+          echo "SIZE:"
           du -sh dist
-
-          echo "========== TOTAL FILES =========="
+          echo "FILES:"
           find dist -type f | wc -l
 
-      - name: Create Test File
-        run: |
-          echo "HELLO FROM GITHUB ACTIONS" > test.txt
-          ls -lah test.txt
-
-      - name: Upload Test File
-        uses: appleboy/scp-action@v1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          source: "test.txt"
-          target: "/home/${{ secrets.SSH_USER }}/"
-
-      - name: Verify File On Server
+      - name: Clean Target Directory
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -81,11 +45,48 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            echo "========== HOME DIR =========="
-            pwd
+            find /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react \
+              -mindepth 1 -delete
 
-            echo "========== TEST FILE =========="
-            ls -lah /home/${{ secrets.SSH_USER }}/test.txt
+      - name: Upload Build
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "dist/*"
+          target: "/home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react"
 
-            echo "========== CONTENT =========="
-            cat /home/${{ secrets.SSH_USER }}/test.txt
+
+      - name: Verify Upload on Server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            ls -lah /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react
+
+      - name: Commit Frontend Build
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            set -e
+
+            cd /home/${{ secrets.SSH_USER }}/repositories/compro-asputra
+
+            git add public_html/react
+
+            if ! git diff --cached --quiet; then
+              git commit -m "🚀 Automated Frontend Deploy ${{ github.sha }}"
+              git push origin main
+              echo "Deploy committed & pushed successfully"
+            else
+              echo "No changes detected"
+            fi
