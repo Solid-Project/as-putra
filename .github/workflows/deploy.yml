@@ -1,0 +1,62 @@
+name: Deploy React to Shared Hosting Repo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    environment: Production CI/CD
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+
+    - name: Build React App
+      run: |
+        npm install
+        echo "VITE_BASE_NAME=/" > .env
+        npm run build
+
+    - name: Clean Target Directory
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          rm -rf /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react/*
+
+    - name: Upload Build
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        source: "dist/*"
+        target: "/home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react"
+        strip_components: 1
+
+    - name: Commit on Server Repo (Optional)
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd /home/${{ secrets.SSH_USER }}/repositories/compro-asputra
+
+          git add public_html/react || true
+          git commit -m "Automated Deploy ON $GITHUB_SHA" || true
+          git push origin main || true

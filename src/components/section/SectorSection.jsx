@@ -8,7 +8,7 @@ import logoAsliUrl from "@/assets/logo.jpg";
 // SETUP IMPORT GAMBAR STATIS UNIT BISNIS (Silakan sesuaikan path aslinya)
 // =========================================================================
 import imgPeternakan from "@/assets/img/AMM.webp";
-import imgHospitality from "@/assets/img/hotel5.webp";
+import imgHospitality from "@/assets/img/hotel5.jpeg";
 import imgRetail from "@/assets/img/karir.webp";
 import imgEkspedisi from "@/assets/transport.webp";
 import imgLifestyle from "@/assets/img/lifestyle.jpg";
