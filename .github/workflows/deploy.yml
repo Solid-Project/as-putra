@@ -42,13 +42,6 @@ jobs:
           cd ..
           ls -lah dist.zip
 
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-
       - name: Clean Target Directory
         run: |
           ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
@@ -57,7 +50,7 @@ jobs:
 
       - name: Upload ZIP to Server
         run: |
-          scp -i ~/.ssh/id_rsa -P ${{ secrets.SSH_PORT }} \
+          scp -i "${{ secrets.SSH_PRIVATE_KEY }}" -P ${{ secrets.SSH_PORT }} \
           dist.zip \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react/
 
@@ -75,7 +68,7 @@ jobs:
           ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
           "ls -lah /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react"
-          
+
       - name: Commit Frontend Build
         run: |
           ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
