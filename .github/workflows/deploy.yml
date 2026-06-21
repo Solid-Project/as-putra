@@ -48,14 +48,21 @@ jobs:
             find /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react \
               -mindepth 1 -delete
 
-      - name: Upload Build
+      - name: Zip Build
+        run: |
+          cd dist
+          zip -r ../dist.zip .
+          cd ..
+          ls -lah dist.zip
+
+      - name: Upload Zip
         uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "dist/*"
+          source: "dist.zip"
           target: "/home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react"
 
 
@@ -68,6 +75,19 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             ls -lah /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react
+
+      - name: Extract on Server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react
+
+            unzip -o dist.zip
+            rm -f dist.zip
 
       - name: Commit Frontend Build
         uses: appleboy/ssh-action@v1
