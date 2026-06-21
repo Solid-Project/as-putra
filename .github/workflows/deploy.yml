@@ -5,85 +5,75 @@ on:
     branches:
       - main
 
+env:
+  NODE_VERSION: 22
+  REMOTE_PATH: /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react
+  SSH_OPTS: -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }}
+
 jobs:
   deploy:
     environment: Production CI/CD
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build React App
+      - name: Install & build
         run: |
-          echo "VITE_BASE_NAME=/" > .env
+          npm ci
+          printf "VITE_BASE_NAME=/\nVITE_API_URL=${{ vars.VITE_API_URL }}\n" > .env
           npm run build
 
-      - name: Verify Build Output
+      - name: Verify & zip build
         run: |
-          ls -lah dist
+          echo "--- Build output ---"
           du -sh dist
           find dist -type f | wc -l
-
-      - name: Zip Build
-        run: |
-          cd dist
-          zip -r ../dist.zip .
-          cd ..
+          zip -rq dist.zip dist/
           ls -lah dist.zip
 
-      - name: Setup SSH Key
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
 
-      - name: Clean Target Directory
+      - name: Deploy to server
+        env:
+          TARGET: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.REMOTE_PATH }}/
         run: |
-          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
-          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-          "find /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react -mindepth 1 -delete"
+          ssh ${{ env.SSH_OPTS }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "find ${{ env.REMOTE_PATH }} -mindepth 1 -delete"
 
-      - name: Upload ZIP to Server
-        run: |
-          scp -i ~/.ssh/id_rsa -P ${{ secrets.SSH_PORT }} \
-          dist.zip \
-          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react/
+          scp ${{ env.SSH_OPTS }} dist.zip \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.REMOTE_PATH }}/
 
-      - name: Extract Build
-        run: |
-          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
-          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-          cd /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react
-          unzip -o dist.zip
-          rm -f dist.zip
-          EOF
+          ssh ${{ env.SSH_OPTS }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "cd ${{ env.REMOTE_PATH }} && unzip -oq dist.zip && mv dist/* . && rm -rf dist dist.zip"
 
-      - name: Verify Upload on Server
+      - name: Verify upload
         run: |
-          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
-          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-          "ls -lah /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react"
+          ssh ${{ env.SSH_OPTS }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "ls -lah ${{ env.REMOTE_PATH }}"
 
-      - name: Commit Frontend Build
+      - name: Commit frontend build
         run: |
-          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
-          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh ${{ env.SSH_OPTS }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
           set -e
           cd /home/${{ secrets.SSH_USER }}/repositories/compro-asputra
           git add public_html/react
           if ! git diff --cached --quiet; then
-            git commit -m "🚀 Automated Frontend Deploy ${{ github.sha }}"
+            git commit -m "deploy: frontend build ${{ github.sha }}"
             git push origin main
+          else
+            echo "No changes to commit, skipping."
           fi
           EOF
