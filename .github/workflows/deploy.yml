@@ -30,7 +30,6 @@ jobs:
 
       - name: Verify Build Output
         run: |
-          echo "===== DIST INFO ====="
           ls -lah dist
           du -sh dist
           find dist -type f | wc -l
@@ -42,49 +41,49 @@ jobs:
           cd ..
           ls -lah dist.zip
 
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
       - name: Clean Target Directory
         run: |
-          ssh -i "${{ secrets.SSH_PRIVATE_KEY }}" -p ${{ secrets.SSH_PORT }} \
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
           "find /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react -mindepth 1 -delete"
 
       - name: Upload ZIP to Server
         run: |
-          scp -i "${{ secrets.SSH_PRIVATE_KEY }}" -P ${{ secrets.SSH_PORT }} \
+          scp -i ~/.ssh/id_rsa -P ${{ secrets.SSH_PORT }} \
           dist.zip \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react/
 
       - name: Extract Build
         run: |
-          ssh -i "${{ secrets.SSH_PRIVATE_KEY }}" -p ${{ secrets.SSH_PORT }} \
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react
-            unzip -o dist.zip
-            rm -f dist.zip
+          cd /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react
+          unzip -o dist.zip
+          rm -f dist.zip
           EOF
 
       - name: Verify Upload on Server
         run: |
-          ssh -i "${{ secrets.SSH_PRIVATE_KEY }}" -p ${{ secrets.SSH_PORT }} \
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
           "ls -lah /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react"
 
       - name: Commit Frontend Build
         run: |
-          ssh -i "${{ secrets.SSH_PRIVATE_KEY }}" -p ${{ secrets.SSH_PORT }} \
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-
-            set -e
-            cd /home/${{ secrets.SSH_USER }}/repositories/compro-asputra
-
-            git add public_html/react
-
-            if ! git diff --cached --quiet; then
-              git commit -m "🚀 Automated Frontend Deploy ${{ github.sha }}"
-              git push origin main
-              echo "Deploy committed & pushed successfully"
-            else
-              echo "No changes detected"
-            fi
-
+          set -e
+          cd /home/${{ secrets.SSH_USER }}/repositories/compro-asputra
+          git add public_html/react
+          if ! git diff --cached --quiet; then
+            git commit -m "🚀 Automated Frontend Deploy ${{ github.sha }}"
+            git push origin main
+          fi
           EOF
