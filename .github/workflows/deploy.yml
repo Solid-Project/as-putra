@@ -17,6 +17,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Record start time
+        id: timer
+        run: echo "start_time=$(date +%s)" >> $GITHUB_OUTPUT
+
       - name: Setup Node ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
@@ -76,9 +80,106 @@ jobs:
           cd /home/${{ secrets.SSH_USER }}/repositories/compro-asputra
           git add public_html/react
           if ! git diff --cached --quiet; then
-            git commit -m "deploy: frontend build ${{ github.sha }}"
+            git commit -m "Deploy: Automated frontend build ${{ github.sha }}"
             git push origin main
           else
             echo "No changes to commit, skipping."
           fi
           EOF
+      
+      - name: Notify Discord - SUCCESS
+        if: success()
+        run: |
+          END_TIME=$(date +%s)
+          DURATION=$((END_TIME - ${{ steps.timer.outputs.start_time }}))
+          if [ $DURATION -ge 60 ]; then
+            DURATION_FMT="$((DURATION / 60))m $((DURATION % 60))s"
+          else
+            DURATION_FMT="${DURATION}s"
+          fi
+ 
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          COMMIT_MSG="${COMMIT_MSG//$'\n'/ }"
+          COMMIT_MSG="${COMMIT_MSG//$'\r'/ }"
+          SHORT_SHA="${GITHUB_SHA::7}"
+          JOB_URL="https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          COMMIT_URL="https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+          AVATAR_URL="https://avatars.githubusercontent.com/$GITHUB_ACTOR"
+ 
+          curl -s -H "Content-Type: application/json" -X POST \
+          -d "{
+            \"embeds\": [{
+              \"title\": \"🚀 Deployment Successful\",
+              \"url\": \"$JOB_URL\",
+              \"description\": \"> 💬 $COMMIT_MSG\",
+              \"color\": 3066993,
+              \"thumbnail\": { \"url\": \"$AVATAR_URL\" },
+              \"fields\": [
+                {
+                  \"name\": \"📊 Status  ·  ⏱ Duration  ·  🔢 Run\",
+                  \"value\": \"\`✅ SUCCESS\`  \`$DURATION_FMT\`  [#$GITHUB_RUN_NUMBER]($JOB_URL)\",
+                  \"inline\": false
+                },
+                {
+                  \"name\": \"🌿 Branch  ·  👤 Triggered by  ·  🔗 Commit\",
+                  \"value\": \"\`$GITHUB_REF_NAME\`  $GITHUB_ACTOR  [\`$SHORT_SHA\`]($COMMIT_URL)\",
+                  \"inline\": false
+                }
+              ],
+              \"footer\": {
+                \"text\": \"CI/CD Pipeline · compro-asputra · Node ${{ env.NODE_VERSION }} · ubuntu-latest\",
+                \"icon_url\": \"https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png\"
+              },
+              \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+            }]
+          }" \
+          ${{ secrets.DISCORD_WEBHOOK }}
+ 
+      - name: Notify Discord - FAILED
+        if: failure()
+        run: |
+          END_TIME=$(date +%s)
+          DURATION=$((END_TIME - ${{ steps.timer.outputs.start_time }}))
+          if [ $DURATION -ge 60 ]; then
+            DURATION_FMT="$((DURATION / 60))m $((DURATION % 60))s"
+          else
+            DURATION_FMT="${DURATION}s"
+          fi
+ 
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          COMMIT_MSG="${COMMIT_MSG//$'\n'/ }"
+          COMMIT_MSG="${COMMIT_MSG//$'\r'/ }"
+          SHORT_SHA="${GITHUB_SHA::7}"
+          JOB_URL="https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          COMMIT_URL="https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+          AVATAR_URL="https://avatars.githubusercontent.com/$GITHUB_ACTOR"
+ 
+          curl -s -H "Content-Type: application/json" -X POST \
+          -d "{
+            \"content\": \"@here ‼️ **DEPLOYMENT GAGAL**\",
+            \"embeds\": [{
+              \"title\": \"🔴 Deployment Failed\",
+              \"url\": \"$JOB_URL\",
+              \"description\": \"> 💬 $COMMIT_MSG\",
+              \"color\": 15158332,
+              \"thumbnail\": { \"url\": \"$AVATAR_URL\" },
+              \"fields\": [
+                {
+                  \"name\": \"📊 Status  ·  ⏱ Failed After  ·  🔢 Run\",
+                  \"value\": \"\`❌ FAILED\`  \`$DURATION_FMT\`  [#$GITHUB_RUN_NUMBER]($JOB_URL)\",
+                  \"inline\": false
+                },
+                {
+                  \"name\": \"🌿 Branch  ·  👤 Triggered by  ·  🔗 Commit\",
+                  \"value\": \"\`$GITHUB_REF_NAME\`  $GITHUB_ACTOR  [\`$SHORT_SHA\`]($COMMIT_URL)\",
+                  \"inline\": false
+                }
+              ],
+              \"footer\": {
+                \"text\": \"CI/CD Pipeline · compro-asputra · Node ${{ env.NODE_VERSION }} · ubuntu-latest\",
+                \"icon_url\": \"https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png\"
+              },
+              \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+            }]
+          }" \
+          ${{ secrets.DISCORD_WEBHOOK }}
