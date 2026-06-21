@@ -7,8 +7,6 @@ on:
 
 env:
   NODE_VERSION: 22
-  REMOTE_PATH: /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react
-  SSH_OPTS: -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }}
 
 jobs:
   deploy:
@@ -42,31 +40,38 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
 
       - name: Deploy to server
-        env:
-          TARGET: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.REMOTE_PATH }}/
         run: |
-          ssh ${{ env.SSH_OPTS }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "find ${{ env.REMOTE_PATH }} -mindepth 1 -delete"
+          REMOTE_PATH="/home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react"
+          SSH="ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }}"
 
-          scp ${{ env.SSH_OPTS }} dist.zip \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.REMOTE_PATH }}/
+          $SSH ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "find $REMOTE_PATH -mindepth 1 -delete"
 
-          ssh ${{ env.SSH_OPTS }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "cd ${{ env.REMOTE_PATH }} && unzip -oq dist.zip && mv dist/* . && rm -rf dist dist.zip"
+          scp -i ~/.ssh/id_rsa -P ${{ secrets.SSH_PORT }} dist.zip \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$REMOTE_PATH/
+
+          $SSH ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "cd $REMOTE_PATH && unzip -oq dist.zip && mv dist/* . && rm -rf dist dist.zip"
 
       - name: Verify upload
         run: |
-          ssh ${{ env.SSH_OPTS }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "ls -lah ${{ env.REMOTE_PATH }}"
+          REMOTE_PATH="/home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react"
+          SSH="ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }}"
+
+          $SSH ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "ls -lah $REMOTE_PATH"
 
       - name: Commit frontend build
         run: |
-          ssh ${{ env.SSH_OPTS }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          REPO_PATH="/home/${{ secrets.SSH_USER }}/repositories/compro-asputra"
+          SSH="ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }}"
+
+          $SSH ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
           set -e
           cd /home/${{ secrets.SSH_USER }}/repositories/compro-asputra
           git add public_html/react
