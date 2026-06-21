@@ -44,7 +44,7 @@ jobs:
 
       - name: Clean Target Directory
         run: |
-          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
+          ssh -i "${{ secrets.SSH_PRIVATE_KEY }}" -p ${{ secrets.SSH_PORT }} \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
           "find /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react -mindepth 1 -delete"
 
@@ -56,7 +56,7 @@ jobs:
 
       - name: Extract Build
         run: |
-          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
+          ssh -i "${{ secrets.SSH_PRIVATE_KEY }}" -p ${{ secrets.SSH_PORT }} \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react
             unzip -o dist.zip
@@ -65,13 +65,13 @@ jobs:
 
       - name: Verify Upload on Server
         run: |
-          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
+          ssh -i "${{ secrets.SSH_PRIVATE_KEY }}" -p ${{ secrets.SSH_PORT }} \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
           "ls -lah /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react"
 
       - name: Commit Frontend Build
         run: |
-          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
+          ssh -i "${{ secrets.SSH_PRIVATE_KEY }}" -p ${{ secrets.SSH_PORT }} \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
 
             set -e
