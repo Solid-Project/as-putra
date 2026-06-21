@@ -39,6 +39,27 @@ jobs:
             find /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react \
               -mindepth 1 -delete
 
+      - name: Upload Test File
+        run: echo "hello" > testpatch.txt
+
+      - name: Upload Test
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "test.txt"
+          target: "/home/${{ secrets.SSH_USER }}/"
+
+
+
+      - name: Check Build Output
+        run: |
+          ls -lah dist
+          du -sh dist
+          find dist -type f | wc -l
+
       - name: Upload Build
         uses: appleboy/scp-action@v1
         with:
@@ -46,9 +67,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "dist/*"
+          source: "dist/"
           target: "/home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react"
-          strip_components: 1
 
       - name: Commit Frontend Build
         uses: appleboy/ssh-action@v1
