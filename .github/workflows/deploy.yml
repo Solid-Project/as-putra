@@ -32,21 +32,8 @@ jobs:
         run: |
           echo "===== DIST INFO ====="
           ls -lah dist
-          echo "SIZE:"
           du -sh dist
-          echo "FILES:"
           find dist -type f | wc -l
-
-      - name: Clean Target Directory
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            find /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react \
-              -mindepth 1 -delete
 
       - name: Zip Build
         run: |
@@ -55,50 +42,46 @@ jobs:
           cd ..
           ls -lah dist.zip
 
-      - name: Upload Zip
-        uses: appleboy/scp-action@v1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          source: "dist.zip"
-          target: "/home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react"
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
+      - name: Clean Target Directory
+        run: |
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
+          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+          "find /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react -mindepth 1 -delete"
 
-      - name: Verify Upload on Server
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            ls -lah /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react
+      - name: Upload ZIP to Server
+        run: |
+          scp -i ~/.ssh/id_rsa -P ${{ secrets.SSH_PORT }} \
+          dist.zip \
+          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react/
 
-      - name: Extract on Server
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
+      - name: Extract Build
+        run: |
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
+          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react
-
             unzip -o dist.zip
             rm -f dist.zip
+          EOF
 
+      - name: Verify Upload on Server
+        run: |
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
+          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+          "ls -lah /home/${{ secrets.SSH_USER }}/repositories/compro-asputra/public_html/react"
+          
       - name: Commit Frontend Build
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            set -e
+        run: |
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} \
+          ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
 
+            set -e
             cd /home/${{ secrets.SSH_USER }}/repositories/compro-asputra
 
             git add public_html/react
@@ -110,3 +93,5 @@ jobs:
             else
               echo "No changes detected"
             fi
+
+          EOF
