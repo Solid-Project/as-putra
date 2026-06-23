@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import livestockImg from '@/assets/img/Carousel/herocarousel6.webp';
+import livestockImg from '@/assets/img/herocarousel6.webp';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,8 +13,8 @@ const IntroSection = ({ data, isActive, index }) => {
   const floatRef = useRef(null);
 
   const displayTitle = data?.title || "Peternakan";
-  const displayImage = data?.image 
-    ? `${import.meta.env.VITE_API_URL}/storage/${data.image}` 
+  const displayImage = data?.image
+    ? `${import.meta.env.VITE_API_URL}/storage/${data.image}`
     : livestockImg;
 
   const COLOR_NAVY = "#1D2B53";
@@ -83,7 +83,7 @@ const IntroSection = ({ data, isActive, index }) => {
         - `items-start lg:items-stretch`: Mencegah gambar ditarik melebar kaku ke bawah.
       */}
       <div className="relative z-10 w-full flex flex-col lg:flex-row justify-start items-start lg:items-stretch flex-grow">
-        
+
         {/* SISI KIRI: TEXT AREA */}
         {/* Mengubah `justify-center` menjadi `justify-start` di mobile dan memadatkan padding bawah (`pb-4`) */}
         <div className="w-full lg:w-[45%] flex flex-col justify-start lg:justify-center pt-16 pb-4 lg:py-0 px-6 sm:px-12 lg:px-[8%] lg:pr-4">
@@ -93,7 +93,7 @@ const IntroSection = ({ data, isActive, index }) => {
                 key={i}
                 className="font-['Playfair_Display'] font-black leading-[0.95] md:leading-[0.9] tracking-tighter text-[#1D2B53]"
                 style={{
-                  fontSize: "clamp(2.2rem, 6vw, 6.5rem)", 
+                  fontSize: "clamp(2.2rem, 6vw, 6.5rem)",
                 }}
               >
                 {word}
@@ -101,7 +101,7 @@ const IntroSection = ({ data, isActive, index }) => {
             ))}
 
             <div className="h-[2px] md:h-[3px] w-12 md:w-16 bg-[#1D2B53] my-4 lg:my-8" />
-            
+
             <p className="text-slate-500 text-sm md:text-base lg:text-lg leading-relaxed max-w-sm">
               Mendorong kemandirian pangan melalui pengelolaan sektor peternakan yang berkelanjutan dan modern.
             </p>
@@ -115,7 +115,7 @@ const IntroSection = ({ data, isActive, index }) => {
         */}
         <div className="w-full lg:w-[55%] aspect-[4/3] sm:aspect-[16/9] lg:h-full relative p-6 sm:p-8 lg:p-12 mt-4 lg:mt-0 flex-shrink-0">
           <div ref={imageWrapperRef} className="w-full h-full relative group">
-            
+
             {/* Frame Aksentuasi */}
             <div className="absolute -top-2 -left-2 w-10 h-10 border-t-2 border-l-2 opacity-30" style={{ borderColor: COLOR_NAVY }} />
             <div className="absolute -bottom-2 -right-2 w-10 h-10 border-b-2 border-r-2 opacity-50" style={{ borderColor: COLOR_GOLD }} />
@@ -134,7 +134,8 @@ const IntroSection = ({ data, isActive, index }) => {
 
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes bounce-slow {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-10px); }

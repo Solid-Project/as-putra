@@ -1,19 +1,17 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
+import logoAsliUrl from "@/assets/logo-trans.png";
 
-const OurValues = ({ data, activeIndex, index }) => {
+const OurValues = ({ data, isActive, index }) => {
   const sectionRef = useRef(null);
   const cardsRef = useRef([]);
   const headerRef = useRef(null);
   const bgLogoRef = useRef(null);
   const hasAnimatedRef = useRef(false);
-
-  const isActive = activeIndex === index;
   const COLOR_NAVY = "#1D2B53";
   const COLOR_GOLD = "#FFC619";
 
   const valueItems = data?.layout_data?.cards || [];
-  const logoAsliUrl = "/path-to-your-logo.png"; 
 
   useEffect(() => {
     if (!sectionRef.current || !data) return;
@@ -33,7 +31,7 @@ const OurValues = ({ data, activeIndex, index }) => {
     
     tl.fromTo(bgLogoRef.current, 
       { opacity: 0, scale: 1.2, rotate: 0 },
-      { opacity: 0.04, scale: 1.1, rotate: -12, duration: 2, ease: "power2.out" }
+      { opacity: 0.08, scale: 1.1, rotate: -8, duration: 2, ease: "power2.out" }
     );
 
     tl.fromTo(headerRef.current,
@@ -59,8 +57,8 @@ const OurValues = ({ data, activeIndex, index }) => {
     >
       {/* BACKGROUND ACCENTS */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <div ref={bgLogoRef} className="absolute top-1/4 md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[250px] md:max-w-[800px] opacity-[0.03]">
-          <img src={logoAsliUrl} alt="" className="w-full h-auto grayscale" />
+        <div ref={bgLogoRef} className="absolute top-1/4 md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[250px] md:max-w-[750px] opacity-0">
+          <img src={logoAsliUrl} alt="" className="w-full h-auto filter drop-shadow-[0_15px_40px_rgba(29,43,83,0.06)]" />
         </div>
       </div>
 

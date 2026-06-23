@@ -1,8 +1,9 @@
 // src/components/about/VissionMission.jsx
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import logoBg from "@/assets/logo-trans.png";
 
-const VissionMission = ({ data, activeIndex, index }) => {
+const VissionMission = ({ data, isActive, index }) => {
   const sectionRef = useRef(null);
   const leftRef = useRef(null);
   const rightRef = useRef(null);
@@ -11,8 +12,6 @@ const VissionMission = ({ data, activeIndex, index }) => {
   const [displayText, setDisplayText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const typingIntervalRef = useRef(null);
-
-  const isActive = activeIndex === index;
 
   // Warna Identitas APG
   const COLOR_NAVY = "#1D2B53";
@@ -51,6 +50,13 @@ const VissionMission = ({ data, activeIndex, index }) => {
         { opacity: 1, scale: 1, duration: 2, stagger: 0.3, ease: "power2.out" }
       );
 
+      // Animasi Logo Background
+      gsap.fromTo(
+        ".logo-bg",
+        { opacity: 0, scale: 1.15, rotate: 5 },
+        { opacity: 0.09, scale: 1, rotate: 12, duration: 2.2, ease: "power2.out" }
+      );
+
       // Animasi Floating subtle untuk elemen dekoratif
       gsap.to(".floating-shape", {
         y: 20,
@@ -81,7 +87,7 @@ const VissionMission = ({ data, activeIndex, index }) => {
       
       {/* 1. Subtle Image Backdrop (Tekstur halus) */}
       <div
-        className="absolute inset-0 z-0 opacity-10 grayscale"
+        className="absolute inset-0 z-0 opacity-[0.04] grayscale"
         style={{
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: "cover",
@@ -89,7 +95,12 @@ const VissionMission = ({ data, activeIndex, index }) => {
         }}
       />
 
-      {/* 2. Geometric Branding Accents (Aksen yang menonjolkan Logo tanpa split) */}
+      {/* 2. Logo AS Putra - Didesain khusus untuk VissionMission (di sebelah kiri bawah teks) */}
+      <div className="logo-bg absolute top-[20%] left-[2%] md:left-[5%] w-full max-w-[320px] md:max-w-[450px] opacity-0 pointer-events-none z-0">
+        <img src={logoBg} alt="" className="w-full h-auto object-contain filter drop-shadow-[0_15px_35px_rgba(29,43,83,0.06)]" />
+      </div>
+
+      {/* 3. Geometric Branding Accents */}
       <div ref={bgElementsRef} className="absolute inset-0 pointer-events-none z-0">
         
         {/* Elemen Sudut Navy di Kanan Atas */}

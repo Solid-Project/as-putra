@@ -6,12 +6,12 @@ import logoIcon from "@/assets/logo.jpg";
 const NewsTeaser = ({ activeIndex, index }) => {
   const [newsData, setNewsData] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
   const contentGridRef = useRef(null);
   const buttonRef = useRef(null);
-  
+
   const isActive = activeIndex === index;
 
   // Fetch Data Preview
@@ -21,12 +21,12 @@ const NewsTeaser = ({ activeIndex, index }) => {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/news/all-news`);
         const json = await response.json();
         if (json.status && json.data.details) {
-          setNewsData(json.data.details.slice(0, 3)); 
+          setNewsData(json.data.details.slice(0, 3));
         }
-      } catch (error) { 
-        console.error("Gagal memuat etalase berita:", error); 
-      } finally { 
-        setLoading(false); 
+      } catch (error) {
+        console.error("Gagal memuat etalase berita:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchNews();
@@ -38,7 +38,7 @@ const NewsTeaser = ({ activeIndex, index }) => {
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline();
-      
+
       tl.fromTo(headerRef.current, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" })
         .fromTo(".teaser-hero-card", { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, "-=0.25")
         .fromTo(".teaser-list-item", { x: 20, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.08, duration: 0.4, ease: "power2.out" }, "-=0.4")
@@ -48,7 +48,7 @@ const NewsTeaser = ({ activeIndex, index }) => {
     return () => ctx.revert();
   }, [isActive, loading, newsData]);
 
-  const featuredNews = newsData[0]; 
+  const featuredNews = newsData[0];
   const sideNewsList = newsData.slice(1, 3);
 
   return (
@@ -62,8 +62,8 @@ const NewsTeaser = ({ activeIndex, index }) => {
         <img src={logoIcon} alt="" className="w-[55%] h-auto rotate-[-8deg] select-none grayscale" />
       </div>
 
-      <div className="w-full relative z-10 flex flex-col max-w-[1440px] mx-auto h-full justify-between items-stretch">
-        
+      <div className="w-full relative z-10 flex flex-col max-w-[1440px] mx-auto h-full justify-between items-stretch gap-6 md:gap-8">
+
         {/* HEADER AREA */}
         <div ref={headerRef} className="text-left flex-shrink-0 mb-2 md:mb-4">
           <div className="inline-block px-3 py-0.5 border border-[#FFC700] rounded-full mb-2">
@@ -84,13 +84,12 @@ const NewsTeaser = ({ activeIndex, index }) => {
             Menyelaraskan Etalase Berita...
           </div>
         ) : newsData.length > 0 ? (
-          
-          /* PERBAIKAN UTAMA: Mengganti 'my-auto' menjadi 'mt-1 mb-auto md:my-auto' */
-          <div 
-            ref={contentGridRef} 
-            className="grid grid-cols-12 gap-4 md:gap-6 lg:gap-8 items-stretch mt-1 mb-auto md:my-auto max-h-[58vh] md:max-h-[45vh] w-full"
+
+          <div
+            ref={contentGridRef}
+            className="grid grid-cols-12 gap-4 md:gap-6 lg:gap-8 items-stretch my-auto max-h-[58vh] md:max-h-[45vh] w-full"
           >
-            
+
             {/* COLUMN 1: BERITA UTAMA / HERO */}
             <div className="col-span-12 md:col-span-7 flex flex-col h-full">
               {featuredNews && (
@@ -155,10 +154,10 @@ const NewsTeaser = ({ activeIndex, index }) => {
                     </div>
 
                     <div className="flex-none w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-lg overflow-hidden bg-white/5 border border-white/10 relative">
-                      <img 
-                        src={item.thumbnail} 
-                        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-103" 
-                        alt="" 
+                      <img
+                        src={item.thumbnail}
+                        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-103"
+                        alt=""
                       />
                     </div>
                   </Link>

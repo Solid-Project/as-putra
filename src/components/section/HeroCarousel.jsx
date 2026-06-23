@@ -245,7 +245,7 @@ const HeroCarousel = ({ data, isActive, index }) => {
                 className={
                   btn.primary
                     ? "relative px-7 md:px-9 py-3 md:py-4 rounded-full bg-[var(--color-utama)] text-white text-sm md:text-base font-bold tracking-wide transition-all duration-300 shadow-[0_4px_15px_rgba(0,0,0,0.15)] hover:shadow-[0_0_25px_var(--color-utama)] hover:scale-105 active:scale-95 overflow-hidden group"
-                    : "relative px-7 md:px-9 py-3 md:py-4 rounded-full bg-white/5 backdrop-blur-md text-white border border-white/20 text-sm md:text-base font-semibold tracking-wide transition-all duration-300 hover:border-white/60 hover:text-black hover:scale-105 active:scale-95 overflow-hidden group"
+                    : "relative px-7 md:px-9 py-3 md:py-4 rounded-full bg-black/30 backdrop-blur-md text-white border border-white/30 text-sm md:text-base font-semibold tracking-wide transition-all duration-300 hover:border-white/60 hover:text-black hover:scale-105 active:scale-95 overflow-hidden group"
                 }
               >
                 {/* Background Animation Sliding Layer */}

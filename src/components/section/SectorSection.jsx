@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger"; 
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import logoAsliUrl from "@/assets/logo.jpg";
 
 // =========================================================================
@@ -10,10 +10,10 @@ import logoAsliUrl from "@/assets/logo.jpg";
 import imgPeternakan from "@/assets/img/AMM.webp";
 import imgHospitality from "@/assets/img/hotel5.jpeg";
 import imgRetail from "@/assets/img/karir.webp";
-import imgEkspedisi from "@/assets/transport.webp";
+import imgEkspedisi from "@/assets/img/transport.webp";
 import imgLifestyle from "@/assets/img/lifestyle.jpg";
 import imgEnergi from "@/assets/img/Otomotif.webp";
-import imgEdukasi from "@/assets/img/Carousel/herocarousel6.webp";
+import imgEdukasi from "@/assets/img/herocarousel6.webp";
 import imgProperty from "@/assets/img/property2.jpeg";
 
 // =========================================================================
@@ -54,7 +54,7 @@ const SECTOR_CUSTOM_DATA = {
   }
 };
 
-gsap.registerPlugin(ScrollTrigger); 
+gsap.registerPlugin(ScrollTrigger);
 
 // --- SUB-KOMPONEN SKELETON LOADER ---
 const SectorSkeleton = () => {
@@ -75,7 +75,7 @@ const SectorSkeleton = () => {
 const SectorSection = ({ index, activeIndex, currentSlug }) => {
   const [sectors, setSectors] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
 
@@ -89,7 +89,7 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
         const baseUrl = import.meta.env.VITE_API_URL.replace(/\/$/, "");
         const response = await fetch(`${baseUrl}/api/v1/page/list`);
         const json = await response.json();
-        
+
         if (json.status && json.data) {
           const sectorPages = json.data
             .filter(p => {
@@ -100,7 +100,7 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
             .map(p => {
               // Bersihkan label ("Sector Peternakan" -> "Peternakan")
               const cleanLabel = p.name.replace(/Sector\s+/i, "").replace(/Sektor\s+/i, "").trim();
-              
+
               // Buat slug murni untuk dicocokkan ke kamus data lokal
               const generatedSlug = cleanLabel
                 .toLowerCase()
@@ -114,7 +114,7 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
               return {
                 id: p.id,
                 originalName: p.name,
-                label: cleanLabel, 
+                label: cleanLabel,
                 slug: generatedSlug,
                 // JALANKAN LOGIKA SINKRONISASI: Jika ada data statis lokal pakai itu, jika kosong cari backup API, jika kosong lagi beri placeholder default
                 image: localCustom?.image || (p.layout_data?.image ? `${baseUrl}/storage/${p.layout_data.image}` : "https://images.unsplash.com/photo-1516253593875-bd7ba052fbc5?q=80&w=800"),
@@ -176,7 +176,7 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
       </div>
 
       <div className="w-full relative z-10 max-w-[1440px] mx-auto flex flex-col items-stretch h-auto gap-16">
-        
+
         {/* AREA JUDUL */}
         <div ref={headerRef} className="text-center flex-shrink-0 opacity-100 md:opacity-0 flex flex-col items-center">
           <div className="inline-block px-4 py-1 border border-[#FFC619]/30 rounded-full mb-3 bg-white/[0.02] backdrop-blur-sm">
@@ -202,8 +202,8 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
                 >
                   {/* MEDIA BACKGROUND IMAGE KARTU KUSTOM STATIS */}
                   <div className="absolute inset-0 z-0 overflow-hidden">
-                    <img 
-                      src={sector.image} 
+                    <img
+                      src={sector.image}
                       alt={sector.label}
                       className="w-full h-full object-cover filter brightness-[0.75] group-hover:brightness-90 transition-all duration-500"
                     />
@@ -215,7 +215,7 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
                     <span style={{ color: COLOR_GOLD }} className="text-[9px] font-black uppercase tracking-[0.25em] block mb-1.5 opacity-80">
                       AS PUTRA GROUP
                     </span>
-                    
+
                     <h3 className="text-xl lg:text-2xl font-bold text-white mb-2 font-['Playfair_Display'] group-hover:text-[#FFC619] transition-colors duration-300">
                       Sektor {sector.label}
                     </h3>
@@ -223,7 +223,7 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
                     <p className="text-gray-300 text-xs leading-relaxed font-light line-clamp-3 opacity-70 group-hover:opacity-95 transition-opacity duration-300 mb-2">
                       {sector.description}
                     </p>
-                    
+
                     {/* Tombol Aksi Indikator */}
                     <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] mt-2 text-[#FFC619]">
                       <span>Jelajahi Unit</span>

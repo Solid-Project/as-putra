@@ -122,7 +122,7 @@ const Navbar = () => {
         {/* DESKTOP MENU - Font text-[10px] agar sleek */}
         <ul className="hidden md:flex items-center gap-6 lg:gap-8">
           <li className="relative group">
-            <NavLink to="/beranda" className={({ isActive }) => `text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`} style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}>
+            <NavLink to="/beranda" className={({ isActive }) => `inline-flex items-center text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`} style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}>
               {({ isActive }) => (
                 <>
                   {staticMenu.Beranda[language]}
@@ -132,7 +132,7 @@ const Navbar = () => {
             </NavLink>
           </li>
           <li className="relative group">
-            <NavLink to="/tentang" className={({ isActive }) => `text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`} style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}>
+            <NavLink to="/tentang" className={({ isActive }) => `inline-flex items-center text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`} style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}>
               {({ isActive }) => (
                 <>
                   {staticMenu.Tentang[language]}
@@ -145,7 +145,7 @@ const Navbar = () => {
           {/* DROPDOWN SEKTOR */}
           <li className="relative group">
             <div
-              className={`flex items-center gap-1 cursor-pointer text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-colors ${isSectorActive ? "" : textColorClass}`}
+              className={`inline-flex items-center gap-1 cursor-pointer text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-colors ${isSectorActive ? "" : textColorClass}`}
               style={{ color: isSectorActive ? COLOR_ACCENT : '' }}
             >
               <span>{staticMenu.SektorBisnis[language]}</span>
@@ -164,7 +164,7 @@ const Navbar = () => {
           </li>
 
           <li className="relative group">
-            <NavLink to="/news" className={({ isActive }) => `text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`} style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}>
+            <NavLink to="/news" className={({ isActive }) => `inline-flex items-center text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`} style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}>
               {({ isActive }) => (
                 <>
                   {staticMenu.Berita[language]}
@@ -174,7 +174,7 @@ const Navbar = () => {
             </NavLink>
           </li>
           <li className="relative group">
-            <NavLink to="/karir" className={({ isActive }) => `text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`} style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}>
+            <NavLink to="/karir" className={({ isActive }) => `inline-flex items-center text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-black transition-all duration-300 ${isActive ? "" : textColorClass} hover:opacity-70`} style={({ isActive }) => ({ color: isActive ? COLOR_ACCENT : '' })}>
               {({ isActive }) => (
                 <>
                   {staticMenu.Karir[language]}
