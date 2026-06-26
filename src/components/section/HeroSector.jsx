@@ -1,3 +1,4 @@
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -60,16 +61,23 @@ const HeroSector = ({ data, index }) => {
   return (
     <section
       ref={sectionRef}
+      className="relative flex items-center justify-center text-center min-h-[80vh] md:min-h-screen overflow-hidden bg-slate-900"
       id={`section-${index}`}
-      className="section relative h-screen flex items-center justify-center text-center overflow-hidden"
-      style={{
-        backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url(${displayImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
       data-theme="dark"
       data-title={displayTitle}
     >
+      <OptimizedImage
+        src={displayImage}
+        alt="Hero Background"
+        className="absolute inset-0 z-0"
+        style={{
+          objectFit: "cover",
+          objectPosition: "center",
+          width: "100%",
+          height: "100%",
+          filter: "brightness(0.6)",
+        }}
+      />
       {/* Konten Utama Tengah */}
       <div ref={contentRef} className="relative z-10 px-5">
         <h1

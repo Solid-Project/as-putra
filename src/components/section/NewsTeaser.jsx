@@ -59,7 +59,7 @@ const NewsTeaser = ({ activeIndex, index }) => {
     >
       {/* Background Decor Siluet */}
       <div className="absolute inset-0 flex items-center justify-center opacity-[0.01] pointer-events-none -z-0">
-        <img src={logoIcon} alt="" className="w-[55%] h-auto rotate-[-8deg] select-none grayscale" />
+        <img src={logoIcon} alt="" loading="lazy" className="w-[55%] h-auto rotate-[-8deg] select-none grayscale" />
       </div>
 
       <div className="w-full relative z-10 flex flex-col max-w-[1440px] mx-auto h-full justify-between items-stretch gap-6 md:gap-8">
@@ -100,6 +100,7 @@ const NewsTeaser = ({ activeIndex, index }) => {
                   <div className="relative overflow-hidden rounded-lg bg-white/5 max-h-[160px] md:max-h-[150px] lg:max-h-[200px] w-full flex-shrink-0 aspect-[16/9] md:aspect-auto">
                     <img
                       src={featuredNews.thumbnail}
+                      loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-103"
                       alt={featuredNews.title}
                     />
@@ -156,6 +157,7 @@ const NewsTeaser = ({ activeIndex, index }) => {
                     <div className="flex-none w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-lg overflow-hidden bg-white/5 border border-white/10 relative">
                       <img
                         src={item.thumbnail}
+                        loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-103"
                         alt=""
                       />

@@ -34,7 +34,7 @@ const Layout3 = ({ data, isActive, index }) => {
     data-theme="dark">
       {/* 1. BACKGROUND */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        {displayImage && <img ref={bgRef} src={displayImage} className="w-full h-[116%] object-cover opacity-45" alt="" />}
+        {displayImage && <img ref={bgRef} src={displayImage} loading="lazy" className="w-full h-[116%] object-cover opacity-45" alt="" />}
         <div className="absolute inset-0 bg-gradient-to-r from-[#0F1A3E] via-[#0F1A3E]/70 to-transparent" />
       </div>
 

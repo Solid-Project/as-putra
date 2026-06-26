@@ -1,4 +1,5 @@
 // src/components/layouts/IntroSection.jsx
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -121,8 +122,7 @@ const IntroSection = ({ data, isActive, index }) => {
             <div className="absolute -bottom-2 -right-2 w-10 h-10 border-b-2 border-r-2 opacity-50" style={{ borderColor: COLOR_GOLD }} />
 
             {/* Container Gambar */}
-            <div className="w-full h-full overflow-hidden shadow-xl lg:shadow-2xl rounded-sm">
-              <img
+              <OptimizedImage
                 src={displayImage}
                 alt={displayTitle}
                 className="w-full h-full object-cover transition-transform duration-1000 lg:group-hover:scale-105"
@@ -130,9 +130,8 @@ const IntroSection = ({ data, isActive, index }) => {
               <div className="absolute inset-0 bg-[#1D2B53]/5 pointer-events-none" />
             </div>
           </div>
-        </div>
 
-      </div>
+        </div>
 
       <style dangerouslySetInnerHTML={{
         __html: `

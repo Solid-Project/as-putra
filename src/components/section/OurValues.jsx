@@ -58,7 +58,7 @@ const OurValues = ({ data, isActive, index }) => {
       {/* BACKGROUND ACCENTS */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div ref={bgLogoRef} className="absolute top-1/4 md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[250px] md:max-w-[750px] opacity-0">
-          <img src={logoAsliUrl} alt="" className="w-full h-auto filter drop-shadow-[0_15px_40px_rgba(29,43,83,0.06)]" />
+          <img src={logoAsliUrl} alt="" loading="lazy" className="w-full h-auto filter drop-shadow-[0_15px_40px_rgba(29,43,83,0.06)]" />
         </div>
       </div>
 
@@ -111,6 +111,7 @@ const OurValues = ({ data, isActive, index }) => {
                   <img 
                     src={imageSrc} 
                     alt={item.title}
+                    loading="lazy"
                     className="w-full h-full object-cover md:grayscale md:group-hover:grayscale-0 transition-transform duration-700 md:group-hover:scale-110"
                     onError={(e) => { 
                       e.target.src = logoAsliUrl; 

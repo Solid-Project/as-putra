@@ -73,7 +73,7 @@ const Layout4 = ({ data, index, isActive }) => {
     >
       {/* Background Decor Logo */}
       <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none -z-0">
-        <img src={logoAsliUrl} alt="" className="w-[80%] h-auto rotate-12 scale-110" />
+        <img src={logoAsliUrl} alt="" loading="lazy" className="w-[80%] h-auto rotate-12 scale-110" />
       </div>
 
       <div className={`w-full flex-grow flex items-center px-[8%] z-10 ${isLongText ? "py-32" : "py-10"}`}>
@@ -118,6 +118,7 @@ const Layout4 = ({ data, index, isActive }) => {
                     <img
                       src={displayImage}
                       alt={displayTitle}
+                      loading="lazy"
                       className="w-full aspect-[4/5] object-cover transition-transform duration-1000 hover:scale-105"
                     />
                   )}

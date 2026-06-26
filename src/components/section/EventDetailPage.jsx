@@ -16,6 +16,14 @@ const EventDetailPage = () => {
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [otherEvents, setOtherEvents] = useState([]);
+  const [language] = useState(localStorage.getItem("user_lang") || "id");
+
+  const t = {
+    id: { back: "Kembali", event: "Event", allNews: "Semua Berita", info: "Informasi Event", date: "Tanggal", author: "Penulis", other: "Event Lainnya" },
+    en: { back: "Back", event: "Event", allNews: "All News", info: "Event Information", date: "Date", author: "Author", other: "Other Events" },
+    jp: { back: "戻る", event: "イベント", allNews: "すべてのニュース", info: "イベント情報", date: "日付", author: "著者", other: "他のイベント" }
+  };
+  const lang = t[language] || t.id;
 
   const heroRef = useRef(null);
   const contentRef = useRef(null);
@@ -81,15 +89,15 @@ const EventDetailPage = () => {
         {/* 1. KHUSUS MOBILE: Floating di atas (DESAIN ASLI ANDA) */}
         <div className="md:hidden absolute top-6 left-0 w-full z-20 px-5">
           <div className="flex items-center justify-between">
-            <button
+              <button
               onClick={() => navigate(-1)}
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black/30 backdrop-blur-md text-white border border-white/10 shadow-2xl"
             >
               <ArrowLeftIcon className="w-4 h-4" />
-              <span className="text-[10px] font-black uppercase tracking-widest">Back</span>
+              <span className="text-[10px] font-black uppercase tracking-widest">{lang.back}</span>
             </button>
             <span className="px-4 py-2 rounded-xl bg-[#FFC700] text-[#0F1A3E] text-[9px] font-black uppercase tracking-widest">
-              {event.categories?.[0]?.name || "Event"}
+              {event.categories?.[0]?.name || lang.event}
             </span>
           </div>
         </div>
@@ -101,15 +109,15 @@ const EventDetailPage = () => {
 
               {/* 2. KHUSUS DESKTOP: Sejajar di atas judul */}
               <div className="hidden md:flex animate-content flex-row items-center gap-6 mb-8">
-                <button
+                  <button
                   onClick={() => navigate(-1)}
                   className="group flex items-center gap-3 px-6 py-3 rounded-2xl bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-[#FFC700] hover:text-[#0F1A3E] transition-all duration-500 shadow-xl"
                 >
                   <ArrowLeftIcon className="w-4 h-4 transition-transform duration-500 group-hover:-translate-x-1" />
-                  <span className="text-xs font-black uppercase tracking-widest">Kembali</span>
+                  <span className="text-xs font-black uppercase tracking-widest">{lang.back}</span>
                 </button>
                 <span className="inline-flex items-center px-5 py-2 rounded-full text-[10px] font-black tracking-[0.2em] uppercase bg-[#FFC700] text-[#0F1A3E]">
-                  {event.categories?.[0]?.name || "Event"}
+                  {event.categories?.[0]?.name || lang.event}
                 </span>
               </div>
 
@@ -151,7 +159,7 @@ const EventDetailPage = () => {
                 <ShareButtons title={event.title} url={window.location.href} />
 
                 <Link to="/news" className="text-[10px] font-black uppercase tracking-widest text-[#0F1A3E] border-b-2 border-[#FFC700] pb-1">
-                  Semua Berita
+                  {lang.allNews}
                 </Link>
               </div>
             </article>
@@ -160,11 +168,11 @@ const EventDetailPage = () => {
           {/* SIDEBAR */}
           <aside ref={sidebarRef} className="animate-content space-y-8 order-2 lg:order-2">
             <div className="bg-[#0F1A3E] rounded-[2rem] p-6 md:p-8 text-white shadow-xl relative overflow-hidden group">
-              <h4 className="text-lg md:text-xl font-bold mb-6 md:mb-10 font-['Playfair_Display']">Informasi Event</h4>
+              <h4 className="text-lg md:text-xl font-bold mb-6 md:mb-10 font-['Playfair_Display']">{lang.info}</h4>
               <div className="space-y-6 md:space-y-8 relative z-10">
                 {[
-                  { icon: CalendarIcon, label: "Tanggal", value: event.created?.split(' ')[0] },
-                  { icon: UserIcon, label: "Penulis", value: event.author }
+                  { icon: CalendarIcon, label: lang.date, value: event.created?.split(' ')[0] },
+                  { icon: UserIcon, label: lang.author, value: event.author }
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-4">
                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
@@ -181,7 +189,7 @@ const EventDetailPage = () => {
 
             {/* EVENT LAINNYA */}
             <div className="bg-white border border-gray-100 rounded-[2rem] p-6 md:p-8 shadow-sm">
-              <h4 className="text-lg md:text-xl font-bold text-[#0F1A3E] mb-6 font-['Playfair_Display']">Event Lainnya</h4>
+              <h4 className="text-lg md:text-xl font-bold text-[#0F1A3E] mb-6 font-['Playfair_Display']">{lang.other}</h4>
               <div className="space-y-5">
                 {otherEvents.map((item) => (
                   <Link

@@ -4,6 +4,14 @@ import { Link } from 'react-router-dom';
 const NewsSidebar = ({ currentSlug }) => {
   const [otherNews, setOtherNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [language] = useState(localStorage.getItem("user_lang") || "id");
+
+  const t = {
+    id: { title: "Berita Lainnya", btn: "Lihat Semua Berita" },
+    en: { title: "Other News", btn: "View All News" },
+    jp: { title: "その他のニュース", btn: "すべてのニュースを見る" }
+  };
+  const lang = t[language] || t.id;
 
   useEffect(() => {
     const fetchOtherNews = async () => {
@@ -33,7 +41,7 @@ const NewsSidebar = ({ currentSlug }) => {
   return (
     <aside className="lg:sticky lg:top-[100px]">
       <h4 className="text-[var(--color-utama)] border-b border-[var(--color-utama)]/20 pb-2 mb-6 font-bold uppercase tracking-wider text-sm">
-        Berita Lainnya
+        {lang.title}
       </h4>
       
       <div className="space-y-6">
@@ -70,7 +78,7 @@ const NewsSidebar = ({ currentSlug }) => {
           className="group relative flex items-center justify-center w-full px-4 py-3 bg-[#0F1A3E] text-white rounded-xl overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-[var(--color-utama)]/20"
         >
           <span className="relative z-10 font-bold text-xs uppercase tracking-widest">
-            Lihat Semua Berita
+            {lang.btn}
           </span>
           <div className="absolute inset-0 bg-[var(--color-utama)] translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
           <style dangerouslySetInnerHTML={{ __html: `

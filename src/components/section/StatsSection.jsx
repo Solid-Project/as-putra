@@ -88,7 +88,7 @@ const StatsSection = ({ data, index }) => {
         ref={bgRef}
         className="absolute left-[2%] top-1/2 -translate-y-1/2 w-[20vw] opacity-[0.02] pointer-events-none -z-0"
       >
-        <img src={logoIcon} alt="" className="w-full h-auto grayscale invert" />
+        <img src={logoIcon} alt="" loading="lazy" className="w-full h-auto grayscale invert" />
       </div>
 
       {/* Konten Utama - Lebih Rapat */}

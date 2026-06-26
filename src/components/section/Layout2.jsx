@@ -74,11 +74,13 @@ const Layout2 = ({ data, isActive, index }) => {
         <img 
           ref={silhouetteLeftRef}
           src={logoAsPutra} 
+          loading="lazy"
           className="absolute -top-10 -left-10 w-[65vw] md:w-[55vw] opacity-[0.04] md:opacity-[0.06] object-contain"
         />
         <img 
           ref={silhouetteRightRef}
           src={logoAsPutra} 
+          loading="lazy"
           className="absolute -bottom-10 -right-10 w-[55vw] md:w-[45vw] opacity-[0.03] md:opacity-[0.04] object-contain"
         />
       </div>
@@ -117,7 +119,7 @@ const Layout2 = ({ data, isActive, index }) => {
               <div className="absolute top-0 w-full h-1.5 md:h-2.5" style={{ backgroundColor: COLOR_GOLD }} />
               
               <div className="mb-3 md:mb-6 w-16 h-12 md:w-24 md:h-20 flex items-center justify-center">
-                <img src={logoCounter} alt="Icon" className="w-full h-full object-contain" />
+                <img src={logoCounter} alt="Icon" loading="lazy" className="w-full h-full object-contain" />
               </div>
               
               <div className="flex items-start">
@@ -147,6 +149,7 @@ const Layout2 = ({ data, isActive, index }) => {
                 <div key={idx} className="group h-20 md:h-28 flex items-center justify-center p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-100 shadow-sm transition-all duration-500">
                   <img 
                     src={`${storageUrl}/${item.image}`} 
+                    loading="lazy"
                     className="max-w-full max-h-full object-contain filter grayscale-0 md:grayscale md:group-hover:grayscale-0 opacity-80 md:opacity-40 md:group-hover:opacity-100"
                   />
                 </div>

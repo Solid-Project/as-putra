@@ -184,6 +184,7 @@ const NewsSection = ({ activeIndex }) => {
             key={i}
             ref={(el) => (siluetRefs.current[i] = el)}
             src={logoIcon}
+            loading="lazy"
             className={`absolute opacity-[0.02] md:opacity-[0.03] grayscale ${
               i === 0
                 ? "-top-10 -left-20 w-[400px] rotate-12"
@@ -274,6 +275,7 @@ const NewsSection = ({ activeIndex }) => {
                         <div className="relative aspect-[16/10] overflow-hidden rounded-[1.3rem] bg-gray-100">
                           <img
                             src={item.thumbnail}
+                            loading="lazy"
                             className="w-full h-full object-cover"
                             alt={item.title}
                           />
@@ -338,6 +340,7 @@ const NewsSection = ({ activeIndex }) => {
                           <div className="flex-none w-20 h-20 rounded-xl overflow-hidden bg-gray-50 border border-gray-100">
                             <img
                               src={item.thumbnail}
+                              loading="lazy"
                               className="w-full h-full object-cover"
                               alt=""
                             />
@@ -377,6 +380,7 @@ const NewsSection = ({ activeIndex }) => {
                   <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[2rem] bg-gray-100">
                     <img
                       src={desktopFeatured.thumbnail}
+                      loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-1000 cubic-bezier(0.16,1,0.3,1) group-hover:scale-105"
                       alt={desktopFeatured.title}
                     />
@@ -434,6 +438,7 @@ const NewsSection = ({ activeIndex }) => {
                   <div className="flex-none w-24 h-24 rounded-xl overflow-hidden bg-gray-50 border border-gray-100 relative">
                     <img
                       src={item.thumbnail}
+                      loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       alt=""
                     />

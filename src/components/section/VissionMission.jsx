@@ -98,7 +98,7 @@ const VissionMission = ({ data, isActive, index }) => {
 
       {/* 2. Logo AS Putra - Didesain khusus untuk VissionMission (di sebelah kiri bawah teks) */}
       <div className="logo-bg absolute top-[20%] left-[2%] md:left-[5%] w-full max-w-[320px] md:max-w-[450px] opacity-0 pointer-events-none z-0">
-        <img src={logoBg} alt="" className="w-full h-auto object-contain filter drop-shadow-[0_15px_35px_rgba(29,43,83,0.06)]" />
+        <img src={logoBg} alt="" loading="lazy" className="w-full h-auto object-contain filter drop-shadow-[0_15px_35px_rgba(29,43,83,0.06)]" />
       </div>
 
       {/* 3. Geometric Branding Accents */}

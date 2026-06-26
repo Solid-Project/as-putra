@@ -67,7 +67,7 @@ const HeroCarousel = ({ data, isActive, index }) => {
   const currentSlide = slides[current] || {};
   const isVideo = currentSlide?.type?.startsWith("video");
 
-  // Preload Images
+  // Preload Images (optimasi: hanya preload 1 gambar pertama, sisanya lazy)
   useEffect(() => {
     if (!slides.length) return;
 
@@ -77,19 +77,11 @@ const HeroCarousel = ({ data, isActive, index }) => {
       return;
     }
 
-    let loadedCount = 0;
-    images.forEach((slide) => {
-      const img = new Image();
-      img.src = `${ASSET_URL}/storage/${slide.src}`;
-      img.onload = () => {
-        loadedCount++;
-        if (loadedCount === images.length) setIsInitialLoading(false);
-      };
-      img.onerror = () => {
-        loadedCount++;
-        if (loadedCount === images.length) setIsInitialLoading(false);
-      };
-    });
+    // Hanya preload slide pertama, sisanya biarkan loading="lazy" yang handle
+    const img = new Image();
+    img.src = `${ASSET_URL}/storage/${images[0].src}`;
+    img.onload = () => setIsInitialLoading(false);
+    img.onerror = () => setIsInitialLoading(false);
   }, [slides]);
 
   // Delay Content
@@ -181,31 +173,37 @@ const HeroCarousel = ({ data, isActive, index }) => {
     >
       {/* Media Wrapper */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
-        {slides.map((slide, idx) => (
-          <div
-            key={idx}
-            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
-              idx === current ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
-            }`}
-          >
-            {slide.type?.startsWith("video") ? (
-              <video
-                ref={idx === current ? videoRef : null}
-                src={`${ASSET_URL}/storage/${slide.src}`}
-                muted
-                playsInline
-                className="w-full h-full object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-              />
-            ) : (
-              <img
-                src={`${ASSET_URL}/storage/${slide.src}`}
-                className="w-full h-full object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                alt=""
-              />
-            )}
-            <div className="absolute inset-0 bg-black/50 md:bg-gradient-to-b md:from-black/60 md:via-black/30 md:to-black/70" />
-          </div>
-        ))}
+          {slides.map((slide, idx) => {
+            const prevIdx = current === 0 ? slides.length - 1 : current - 1;
+            const nextIdx = current === slides.length - 1 ? 0 : current + 1;
+            const needImage = idx === current || idx === prevIdx || idx === nextIdx;
+
+            return (
+            <div
+              key={idx}
+              className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
+                idx === current ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+              }`}
+            >
+              {slide.type?.startsWith("video") ? (
+                <video
+                  ref={idx === current ? videoRef : null}
+                  src={`${ASSET_URL}/storage/${slide.src}`}
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                />
+              ) : needImage ? (
+                <img
+                  src={`${ASSET_URL}/storage/${slide.src}`}
+                  className="w-full h-full object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                  alt=""
+                />
+              ) : null}
+              <div className="absolute inset-0 bg-black/50 md:bg-gradient-to-b md:from-black/60 md:via-black/30 md:to-black/70" />
+            </div>
+            );
+          })}
       </div>
 
       {/* Main Content */}

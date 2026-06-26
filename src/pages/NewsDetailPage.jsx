@@ -17,6 +17,14 @@ const NewsDetailPage = () => {
 
   const [news, setNews] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [language] = useState(localStorage.getItem("user_lang") || "id");
+
+  const t = {
+    id: { back: "Kembali", category: "Resmi", allNews: "Semua Berita" },
+    en: { back: "Back", category: "Official", allNews: "All News" },
+    jp: { back: "戻る", category: "公式", allNews: "すべてのニュース" }
+  };
+  const lang = t[language] || t.id;
 
   const heroRef = useRef(null);
 
@@ -150,19 +158,19 @@ const NewsDetailPage = () => {
         {/* TOP NAV */}
         <div className="absolute top-0 left-0 w-full z-30">
           <div className="max-w-[1400px] mx-auto px-5 md:px-[5%] pt-6 md:pt-10 flex items-center justify-between">
-            <button
+              <button
               onClick={() => navigate(-1)}
               className="group flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 text-white hover:bg-[#D4AF37] hover:text-[#0F1A3E] transition-all duration-500"
             >
               <ArrowLeftIcon className="w-4 h-4 transition-transform duration-500 group-hover:-translate-x-1" />
 
               <span className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em]">
-                Back
+                {lang.back}
               </span>
             </button>
 
             <span className="hidden md:inline-flex px-5 py-2 rounded-full bg-[#D4AF37] text-[#0F1A3E] text-[10px] font-black uppercase tracking-[0.25em]">
-              {news.categories?.[0]?.name || "Official"}
+              {news.categories?.[0]?.name || lang.category}
             </span>
           </div>
         </div>
@@ -174,7 +182,7 @@ const NewsDetailPage = () => {
               {/* MOBILE CATEGORY */}
               <div className="md:hidden mb-5">
                 <span className="inline-flex px-4 py-2 rounded-full bg-[#D4AF37] text-[#0F1A3E] text-[9px] font-black uppercase tracking-[0.25em]">
-                  {news.categories?.[0]?.name || "Official"}
+                  {news.categories?.[0]?.name || lang.category}
                 </span>
               </div>
 
@@ -252,7 +260,7 @@ const NewsDetailPage = () => {
                     className="group inline-flex items-center gap-3 text-[#0F1A3E] hover:text-[#D4AF37] transition-all duration-300"
                   >
                     <span className="text-[10px] uppercase tracking-[0.25em] font-black">
-                      Semua Berita
+                      {lang.allNews}
                     </span>
 
                     <div className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center group-hover:border-[#D4AF37] transition-all">
