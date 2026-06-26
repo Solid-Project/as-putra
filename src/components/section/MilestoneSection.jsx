@@ -4,8 +4,8 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
 // Import 2 Logo
-import logoAsliUrl from "@/assets/logo-teks-asli.png"; 
-import logoVarianUrl from "@/assets/logo.jpg"; 
+import logoAsliUrl from "@/assets/logo-teks-asli.png";
+import logoVarianUrl from "@/assets/logo.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -38,7 +38,7 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
       const fetchTimeline = async () => {
         try {
           const baseUrl = import.meta.env.VITE_API_URL;
-          const response = await axios.get(`${baseUrl}/sections/history`); 
+          const response = await axios.get(`${baseUrl}/sections/history`);
           setData(response.data);
         } catch (error) {
           console.error("Error fetching timeline:", error);
@@ -57,7 +57,7 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
       // 1. ANIMASI CARD MUNCUL PER SATU SAAT SCROLL
       cardsRef.current.forEach((card, i) => {
         if (!card) return;
-        gsap.fromTo(card, 
+        gsap.fromTo(card,
           { opacity: 0, y: 60, x: i % 2 === 0 ? -40 : 40 },
           {
             opacity: 1,
@@ -92,10 +92,10 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
       });
 
       // 3. ANIMASI LINE CENTRAL TIMELINE
-      gsap.fromTo(lineRef.current, 
+      gsap.fromTo(lineRef.current,
         { scaleY: 0 },
-        { 
-          scaleY: 1, 
+        {
+          scaleY: 1,
           transformOrigin: "top",
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -126,10 +126,10 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
       }}
     >
       {/* --- BACKGROUND ELEMENTS --- */}
-      
+
       {/* 1. Dot Grid Texture (Navy) */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.07]" 
-           style={{ backgroundImage: `radial-gradient(#1D2B53 1.5px, transparent 1.5px)`, backgroundSize: '45px 45px' }} />
+      <div className="absolute inset-0 pointer-events-none opacity-[0.07]"
+        style={{ backgroundImage: `radial-gradient(#1D2B53 1.5px, transparent 1.5px)`, backgroundSize: '45px 45px' }} />
 
       {/* 2. Logo Utama (Stay di Tengah - Warna Asli) */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[800px] opacity-[0.06] pointer-events-none z-0">
@@ -139,7 +139,7 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
       {/* 3. 20 Scattered Logo Varian (Warna Asli - Lebih Besar & Tajam) */}
       <div className="absolute inset-0 pointer-events-none z-0">
         {scatteredPositions.current.map((pos, i) => (
-          <div 
+          <div
             key={i}
             ref={el => scatteredLogosRef.current[i] = el}
             className="absolute w-24 md:w-40 pointer-events-none" // Ukuran diperbesar
@@ -181,8 +181,8 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
 
         {/* --- TIMELINE BODY --- */}
         <div className="relative max-w-[1000px] mx-auto pb-20">
-          <div ref={lineRef} className="absolute left-1/2 -translate-x-1/2 w-[2px] top-0 bottom-0 hidden md:block -z-10" 
-               style={{ background: `linear-gradient(to bottom, transparent, var(--color-utama) 15%, var(--color-utama) 85%, transparent)` }} />
+          <div ref={lineRef} className="absolute left-1/2 -translate-x-1/2 w-[2px] top-0 bottom-0 hidden md:block -z-10"
+            style={{ background: `linear-gradient(to bottom, transparent, var(--color-utama) 15%, var(--color-utama) 85%, transparent)` }} />
 
           {data.layout_data?.map((item, idx) => {
             const isLeft = idx % 2 === 0;
@@ -190,23 +190,22 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
               <div
                 key={idx}
                 ref={(el) => (cardsRef.current[idx] = el)}
-                className={`timeline-card relative md:w-1/2 px-4 md:px-14 mb-10 md:mb-16 ${
-                  isLeft ? "md:left-0 md:text-right" : "md:left-1/2 md:text-left"
-                }`}
+                className={`timeline-card relative md:w-1/2 px-4 md:px-14 mb-10 md:mb-16 ${isLeft ? "md:left-0 md:text-right" : "md:left-1/2 md:text-left"
+                  }`}
               >
                 <div className={`hidden md:flex absolute top-6 items-center justify-center w-6 h-6 z-10 ${isLeft ? "right-[-12px]" : "left-[-12px]"}`}>
-                    <div className="absolute inset-0 rounded-full bg-[var(--color-utama)] opacity-20 animate-ping" />
-                    <div className="w-4 h-4 rounded-full bg-white border-[3px] border-[var(--color-utama)] shadow-md relative z-10" />
+                  <div className="absolute inset-0 rounded-full bg-[var(--color-utama)] opacity-20 animate-ping" />
+                  <div className="w-4 h-4 rounded-full bg-white border-[3px] border-[var(--color-utama)] shadow-md relative z-10" />
                 </div>
 
                 {/* --- CARD CONTENT --- */}
                 <div 
                   className="group relative rounded-2xl p-6 md:p-8 border border-slate-100 bg-white/80 backdrop-blur-sm shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
                 >
-                  <div className={`absolute top-0 bottom-0 w-1.5 transition-all duration-500 bg-gradient-to-b from-[var(--color-utama)] to-[#FFC619] opacity-100 ${isLeft ? "right-0 rounded-l-full" : "left-0 rounded-r-full"}`} />
+                  <div className={`absolute top-0 bottom-0 w-1.5 transition-all duration-500 bg-gradient-to-b from-[var(--color-utama)] to-[#FFC619] opacity-100 ${isLeft ? "left-0 rounded-r-none rounded-l-full" : "right-0 rounded-l-none rounded-r-full"}`} />
 
                   <div className={`flex items-center gap-4 mb-5 ${isLeft ? "md:flex-row-reverse" : "flex-row"}`}>
-                    <span className="font-black text-2xl lg:text-4xl tracking-tighter text-[var(--color-utama)] font-['Cinzel_Decorative',cursive]">
+                    <span className="text-[var(--color-utama)] text-2xl lg:text-3xl font-['Playfair_Display'] font-bold italic">
                       {item.timelineYear}
                     </span>
                     <div className="h-[1px] flex-grow bg-slate-200" />
