@@ -199,35 +199,26 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
                     <div className="w-4 h-4 rounded-full bg-white border-[3px] border-[var(--color-utama)] shadow-md relative z-10" />
                 </div>
 
-                {/* --- CARD CONTENT (ORIGINAL) --- */}
+                {/* --- CARD CONTENT --- */}
                 <div 
-                  className="group relative rounded-3xl p-6 md:p-8 transition-all duration-500 hover:-translate-y-2"
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    border: "1px solid rgba(0,0,0,0.03)",
-                    boxShadow: "0 15px 35px -15px rgba(0,0,0,0.06)"
-                  }}
+                  className="group relative rounded-2xl p-6 md:p-8 border border-slate-100 bg-white/80 backdrop-blur-sm shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
                 >
-                  <div className={`absolute top-0 bottom-0 w-1 transition-all duration-500 bg-[var(--color-utama)] opacity-0 group-hover:opacity-100 ${isLeft ? "right-0" : "left-0"}`} />
+                  <div className={`absolute top-0 bottom-0 w-1.5 transition-all duration-500 bg-gradient-to-b from-[var(--color-utama)] to-[#FFC619] opacity-100 ${isLeft ? "right-0 rounded-l-full" : "left-0 rounded-r-full"}`} />
 
-                  <div className={`flex items-center gap-3 mb-5 ${isLeft ? "md:flex-row-reverse" : "flex-row"}`}>
-                    <span className="font-black text-xl md:text-2xl lg:text-3xl tracking-tight text-[var(--color-utama)]">
+                  <div className={`flex items-center gap-4 mb-5 ${isLeft ? "md:flex-row-reverse" : "flex-row"}`}>
+                    <span className="font-black text-2xl lg:text-4xl tracking-tighter text-[var(--color-utama)] font-['Cinzel_Decorative',cursive]">
                       {item.timelineYear}
                     </span>
-                    <div className="h-[2px] flex-grow bg-gray-100 group-hover:bg-[#FFC619] transition-colors duration-500" />
+                    <div className="h-[1px] flex-grow bg-slate-200" />
                   </div>
 
-                  <h3 className="font-bold mb-3 text-[var(--color-teks)] text-xl lg:text-2xl font-['Playfair_Display']">
+                  <h3 className="font-bold mb-4 text-[var(--color-teks)] text-xl lg:text-2xl font-['Playfair_Display']">
                     {item.timelineTitle}
                   </h3>
                   
-                  <p className="leading-relaxed text-gray-500 text-sm md:text-[0.9rem] font-medium">
+                  <p className="leading-relaxed text-slate-600 text-sm md:text-[0.95rem] font-medium italic text-left">
                     {item.timelineDescription}
                   </p>
-
-                  <div className={`mt-5 flex ${isLeft ? "justify-start" : "justify-end"}`}>
-                    <div className="w-2 h-2 rounded-full opacity-20 bg-[var(--color-utama)]" />
-                  </div>
                 </div>
               </div>
             );

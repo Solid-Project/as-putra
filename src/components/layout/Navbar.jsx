@@ -98,10 +98,14 @@ const Navbar = () => {
 
   // 2. AUTO-HIDE NAVBAR SAAT SCROLL
   useEffect(() => {
+    let lastScrollY = window.scrollY;
     const handleScroll = () => {
-      setIsVisible(false);
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-      scrollTimeoutRef.current = setTimeout(() => setIsVisible(true), 150);
+      if (window.scrollY > lastScrollY && window.scrollY > 100) {
+        setIsVisible(false); // Sembunyikan saat scroll ke bawah
+      } else {
+        setIsVisible(true); // Tampilkan saat scroll ke atas
+      }
+      lastScrollY = window.scrollY;
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -112,12 +116,11 @@ const Navbar = () => {
   return (
     <>
       {/* NAVBAR MAIN */}
-      <nav className={`fixed top-0 w-full z-50 px-4 md:px-8 lg:px-[5%] flex justify-between items-center py-2 transition-all duration-500 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
+      <nav className={`fixed top-0 w-full z-50 px-4 md:px-8 lg:px-[5%] flex justify-between items-center py-2 transition-all duration-700 ease-in-out ${isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}`}
            style={{
              backgroundColor: needsBlur ? (isDark ? "rgba(17,17,17,0.65)" : "rgba(249,249,249,0.65)") : "transparent",
              backdropFilter: needsBlur ? "blur(14px)" : "none",
              WebkitBackdropFilter: needsBlur ? "blur(14px)" : "none",
-             transition: "background-color 0.4s ease, backdrop-filter 0.4s ease"
            }}>
 
         {/* LOGO */}

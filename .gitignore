@@ -26,4 +26,5 @@ dist-ssr
 
 # Backups
 src/_backup_animasi_penuh/
+graphify-out/
 
