@@ -70,7 +70,8 @@ const CardSection = ({ data, isLoading, isActive, index }) => {
               stagger: 0.12,
               duration: 0.8,
               ease: "power3.out",
-              overwrite: "auto"
+              overwrite: "auto",
+              force3D: true
             }
           );
         } else {
@@ -80,7 +81,8 @@ const CardSection = ({ data, isLoading, isActive, index }) => {
             opacity: 0,
             rotate: 2,
             duration: 0.5,
-            overwrite: "auto"
+            overwrite: "auto",
+            force3D: true
           });
         }
       } else {

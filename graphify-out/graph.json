@@ -1,0 +1,4580 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "graphify.js",
+      "file_type": "code",
+      "source_file": ".opencode/plugins/graphify.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "plugins_graphify",
+      "community": 28,
+      "norm_label": "graphify.js"
+    },
+    {
+      "label": "GraphifyPlugin()",
+      "file_type": "code",
+      "source_file": ".opencode/plugins/graphify.js",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "plugins_graphify_graphifyplugin",
+      "community": 28,
+      "norm_label": "graphifyplugin()"
+    },
+    {
+      "label": "eslint.config.js",
+      "file_type": "code",
+      "source_file": "eslint.config.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "eslint_config",
+      "community": 101,
+      "norm_label": "eslint.config.js"
+    },
+    {
+      "label": "package.json",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "package",
+      "community": 0,
+      "norm_label": "package.json"
+    },
+    {
+      "label": "name",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L2",
+      "_origin": "ast",
+      "id": "package_name",
+      "community": 0,
+      "norm_label": "name"
+    },
+    {
+      "label": "private",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "package_private",
+      "community": 0,
+      "norm_label": "private"
+    },
+    {
+      "label": "version",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "package_version",
+      "community": 0,
+      "norm_label": "version"
+    },
+    {
+      "label": "type",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "package_type",
+      "community": 0,
+      "norm_label": "type"
+    },
+    {
+      "label": "scripts",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "package_scripts",
+      "community": 0,
+      "norm_label": "scripts"
+    },
+    {
+      "label": "dev",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "package_scripts_dev",
+      "community": 0,
+      "norm_label": "dev"
+    },
+    {
+      "label": "build",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "package_scripts_build",
+      "community": 0,
+      "norm_label": "build"
+    },
+    {
+      "label": "lint",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "package_scripts_lint",
+      "community": 0,
+      "norm_label": "lint"
+    },
+    {
+      "label": "preview",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "package_scripts_preview",
+      "community": 0,
+      "norm_label": "preview"
+    },
+    {
+      "label": "dependencies",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "package_dependencies",
+      "community": 0,
+      "norm_label": "dependencies"
+    },
+    {
+      "label": "@heroicons/react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "package_dependencies_heroicons_react",
+      "community": 0,
+      "norm_label": "@heroicons/react"
+    },
+    {
+      "label": "@tailwindcss/vite",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "package_dependencies_tailwindcss_vite",
+      "community": 0,
+      "norm_label": "@tailwindcss/vite"
+    },
+    {
+      "label": "axios",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "package_dependencies_axios",
+      "community": 0,
+      "norm_label": "axios"
+    },
+    {
+      "label": "framer-motion",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "package_dependencies_framer_motion",
+      "community": 0,
+      "norm_label": "framer-motion"
+    },
+    {
+      "label": "gsap",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "package_dependencies_gsap",
+      "community": 0,
+      "norm_label": "gsap"
+    },
+    {
+      "label": "lenis",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "package_dependencies_lenis",
+      "community": 0,
+      "norm_label": "lenis"
+    },
+    {
+      "label": "lucide-react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "package_dependencies_lucide_react",
+      "community": 0,
+      "norm_label": "lucide-react"
+    },
+    {
+      "label": "react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "package_dependencies_react",
+      "community": 0,
+      "norm_label": "react"
+    },
+    {
+      "label": "react-dom",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "package_dependencies_react_dom",
+      "community": 0,
+      "norm_label": "react-dom"
+    },
+    {
+      "label": "react-icon",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "package_dependencies_react_icon",
+      "community": 0,
+      "norm_label": "react-icon"
+    },
+    {
+      "label": "react-icons",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "package_dependencies_react_icons",
+      "community": 0,
+      "norm_label": "react-icons"
+    },
+    {
+      "label": "react-router-dom",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "package_dependencies_react_router_dom",
+      "community": 0,
+      "norm_label": "react-router-dom"
+    },
+    {
+      "label": "devDependencies",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "package_devdependencies",
+      "community": 1,
+      "norm_label": "devdependencies"
+    },
+    {
+      "label": "@babel/core",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "package_devdependencies_babel_core",
+      "community": 1,
+      "norm_label": "@babel/core"
+    },
+    {
+      "label": "@eslint/js",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "package_devdependencies_eslint_js",
+      "community": 1,
+      "norm_label": "@eslint/js"
+    },
+    {
+      "label": "@rolldown/plugin-babel",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "package_devdependencies_rolldown_plugin_babel",
+      "community": 1,
+      "norm_label": "@rolldown/plugin-babel"
+    },
+    {
+      "label": "@types/react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "package_devdependencies_types_react",
+      "community": 1,
+      "norm_label": "@types/react"
+    },
+    {
+      "label": "@types/react-dom",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "package_devdependencies_types_react_dom",
+      "community": 1,
+      "norm_label": "@types/react-dom"
+    },
+    {
+      "label": "@vitejs/plugin-react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "package_devdependencies_vitejs_plugin_react",
+      "community": 1,
+      "norm_label": "@vitejs/plugin-react"
+    },
+    {
+      "label": "autoprefixer",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "package_devdependencies_autoprefixer",
+      "community": 1,
+      "norm_label": "autoprefixer"
+    },
+    {
+      "label": "babel-plugin-react-compiler",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "package_devdependencies_babel_plugin_react_compiler",
+      "community": 1,
+      "norm_label": "babel-plugin-react-compiler"
+    },
+    {
+      "label": "eslint",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "package_devdependencies_eslint",
+      "community": 1,
+      "norm_label": "eslint"
+    },
+    {
+      "label": "eslint-plugin-react-hooks",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "package_devdependencies_eslint_plugin_react_hooks",
+      "community": 1,
+      "norm_label": "eslint-plugin-react-hooks"
+    },
+    {
+      "label": "eslint-plugin-react-refresh",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "package_devdependencies_eslint_plugin_react_refresh",
+      "community": 1,
+      "norm_label": "eslint-plugin-react-refresh"
+    },
+    {
+      "label": "globals",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "package_devdependencies_globals",
+      "community": 1,
+      "norm_label": "globals"
+    },
+    {
+      "label": "postcss",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L39",
+      "_origin": "ast",
+      "id": "package_devdependencies_postcss",
+      "community": 1,
+      "norm_label": "postcss"
+    },
+    {
+      "label": "tailwindcss",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "package_devdependencies_tailwindcss",
+      "community": 1,
+      "norm_label": "tailwindcss"
+    },
+    {
+      "label": "vite",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L41",
+      "_origin": "ast",
+      "id": "package_devdependencies_vite",
+      "community": 1,
+      "norm_label": "vite"
+    },
+    {
+      "label": "App.jsx",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_app",
+      "community": 4,
+      "norm_label": "app.jsx"
+    },
+    {
+      "label": "App()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "src_app_app",
+      "community": 4,
+      "norm_label": "app()"
+    },
+    {
+      "label": "SectionRenderer.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/SectionRenderer.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_sectionrenderer_jsx_components_sectionrenderer",
+      "community": 5,
+      "norm_label": "sectionrenderer.jsx"
+    },
+    {
+      "label": "COMPONENT_MAP",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/SectionRenderer.jsx",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_sectionrenderer_jsx_components_sectionrenderer_component_map",
+      "community": 5,
+      "norm_label": "component_map"
+    },
+    {
+      "label": "THEME_MAPPING",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/SectionRenderer.jsx",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_sectionrenderer_jsx_components_sectionrenderer_theme_mapping",
+      "community": 5,
+      "norm_label": "theme_mapping"
+    },
+    {
+      "label": "SafeComponentWrapper",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/SectionRenderer.jsx",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_sectionrenderer_jsx_components_sectionrenderer_safecomponentwrapper",
+      "community": 5,
+      "norm_label": "safecomponentwrapper"
+    },
+    {
+      "label": "SectionRenderer()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/SectionRenderer.jsx",
+      "source_location": "L47",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_sectionrenderer_jsx_components_sectionrenderer_sectionrenderer",
+      "community": 5,
+      "norm_label": "sectionrenderer()"
+    },
+    {
+      "label": "TitleManager.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/TitleManager.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_titlemanager_jsx_components_titlemanager",
+      "community": 62,
+      "norm_label": "titlemanager.jsx"
+    },
+    {
+      "label": "TitleManager()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/TitleManager.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_titlemanager_jsx_components_titlemanager_titlemanager",
+      "community": 62,
+      "norm_label": "titlemanager()"
+    },
+    {
+      "label": "Footer.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/layout/Footer.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_layout_footer_jsx_layout_footer",
+      "community": 29,
+      "norm_label": "footer.jsx"
+    },
+    {
+      "label": "Footer()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/layout/Footer.jsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_layout_footer_jsx_layout_footer_footer",
+      "community": 29,
+      "norm_label": "footer()"
+    },
+    {
+      "label": "LegalLayoutWrapper.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/layout/LegalLayoutWrapper.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_layout_legallayoutwrapper_jsx_layout_legallayoutwrapper",
+      "community": 30,
+      "norm_label": "legallayoutwrapper.jsx"
+    },
+    {
+      "label": "LegalLayoutWrapper()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/layout/LegalLayoutWrapper.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_layout_legallayoutwrapper_jsx_layout_legallayoutwrapper_legallayoutwrapper",
+      "community": 30,
+      "norm_label": "legallayoutwrapper()"
+    },
+    {
+      "label": "Navbar.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/layout/Navbar.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_layout_navbar_jsx_layout_navbar",
+      "community": 3,
+      "norm_label": "navbar.jsx"
+    },
+    {
+      "label": "Navbar()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/layout/Navbar.jsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_layout_navbar_jsx_layout_navbar_navbar",
+      "community": 3,
+      "norm_label": "navbar()"
+    },
+    {
+      "label": "CardSection.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/CardSection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_cardsection_jsx_section_cardsection",
+      "community": 9,
+      "norm_label": "cardsection.jsx"
+    },
+    {
+      "label": "puzzleShapes",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/CardSection.jsx",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_cardsection_jsx_section_cardsection_puzzleshapes",
+      "community": 9,
+      "norm_label": "puzzleshapes"
+    },
+    {
+      "label": "SkeletonLoader()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/CardSection.jsx",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_cardsection_jsx_section_cardsection_skeletonloader",
+      "community": 9,
+      "norm_label": "skeletonloader()"
+    },
+    {
+      "label": "CardSection()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/CardSection.jsx",
+      "source_location": "L41",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_cardsection_jsx_section_cardsection_cardsection",
+      "community": 9,
+      "norm_label": "cardsection()"
+    },
+    {
+      "label": "CareerJobs.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/CareerJobs.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_careerjobs_jsx_section_careerjobs",
+      "community": 31,
+      "norm_label": "careerjobs.jsx"
+    },
+    {
+      "label": "CareerJobs()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/CareerJobs.jsx",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_careerjobs_jsx_section_careerjobs_careerjobs",
+      "community": 31,
+      "norm_label": "careerjobs()"
+    },
+    {
+      "label": "CareerNavigator.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/CareerNavigator.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_careernavigator_jsx_section_careernavigator",
+      "community": 32,
+      "norm_label": "careernavigator.jsx"
+    },
+    {
+      "label": "CareerNavigator()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/CareerNavigator.jsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_careernavigator_jsx_section_careernavigator_careernavigator",
+      "community": 32,
+      "norm_label": "careernavigator()"
+    },
+    {
+      "label": "CareerSection.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/CareerSection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_careersection_jsx_section_careersection",
+      "community": 33,
+      "norm_label": "careersection.jsx"
+    },
+    {
+      "label": "CareerSection()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/CareerSection.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_careersection_jsx_section_careersection_careersection",
+      "community": 33,
+      "norm_label": "careersection()"
+    },
+    {
+      "label": "EmployeeEvents.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/EmployeeEvents.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_employeeevents_jsx_section_employeeevents",
+      "community": 34,
+      "norm_label": "employeeevents.jsx"
+    },
+    {
+      "label": "EmployeeEvents()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/EmployeeEvents.jsx",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_employeeevents_jsx_section_employeeevents_employeeevents",
+      "community": 34,
+      "norm_label": "employeeevents()"
+    },
+    {
+      "label": "EventDetailPage.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/EventDetailPage.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_eventdetailpage_jsx_section_eventdetailpage",
+      "community": 35,
+      "norm_label": "eventdetailpage.jsx"
+    },
+    {
+      "label": "EventDetailPage()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/EventDetailPage.jsx",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_eventdetailpage_jsx_section_eventdetailpage_eventdetailpage",
+      "community": 35,
+      "norm_label": "eventdetailpage()"
+    },
+    {
+      "label": "HeroCarousel.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/HeroCarousel.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_herocarousel_jsx_section_herocarousel",
+      "community": 36,
+      "norm_label": "herocarousel.jsx"
+    },
+    {
+      "label": "HeroCarousel()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/HeroCarousel.jsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_herocarousel_jsx_section_herocarousel_herocarousel",
+      "community": 36,
+      "norm_label": "herocarousel()"
+    },
+    {
+      "label": "HeroSector.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/HeroSector.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_herosector_jsx_section_herosector",
+      "community": 37,
+      "norm_label": "herosector.jsx"
+    },
+    {
+      "label": "HeroSector()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/HeroSector.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_herosector_jsx_section_herosector_herosector",
+      "community": 37,
+      "norm_label": "herosector()"
+    },
+    {
+      "label": "HistorySection.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/HistorySection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_historysection_jsx_section_historysection",
+      "community": 38,
+      "norm_label": "historysection.jsx"
+    },
+    {
+      "label": "HistorySection()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/HistorySection.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_historysection_jsx_section_historysection_historysection",
+      "community": 38,
+      "norm_label": "historysection()"
+    },
+    {
+      "label": "IntroSection.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/IntroSection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_introsection_jsx_section_introsection",
+      "community": 39,
+      "norm_label": "introsection.jsx"
+    },
+    {
+      "label": "IntroSection()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/IntroSection.jsx",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_introsection_jsx_section_introsection_introsection",
+      "community": 39,
+      "norm_label": "introsection()"
+    },
+    {
+      "label": "JobDetailModal.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/JobDetailModal.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_jobdetailmodal_jsx_section_jobdetailmodal",
+      "community": 40,
+      "norm_label": "jobdetailmodal.jsx"
+    },
+    {
+      "label": "JobDetailModal()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/JobDetailModal.jsx",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_jobdetailmodal_jsx_section_jobdetailmodal_jobdetailmodal",
+      "community": 40,
+      "norm_label": "jobdetailmodal()"
+    },
+    {
+      "label": "Layout1.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout1.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout1_jsx_section_layout1",
+      "community": 42,
+      "norm_label": "layout1.jsx"
+    },
+    {
+      "label": "Layout1()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout1.jsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout1_jsx_section_layout1_layout1",
+      "community": 42,
+      "norm_label": "layout1()"
+    },
+    {
+      "label": "Layout10.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout10.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout10_jsx_section_layout10",
+      "community": 41,
+      "norm_label": "layout10.jsx"
+    },
+    {
+      "label": "Layout10()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout10.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout10_jsx_section_layout10_layout10",
+      "community": 41,
+      "norm_label": "layout10()"
+    },
+    {
+      "label": "Layout2.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout2.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout2_jsx_section_layout2",
+      "community": 43,
+      "norm_label": "layout2.jsx"
+    },
+    {
+      "label": "Layout2()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout2.jsx",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout2_jsx_section_layout2_layout2",
+      "community": 43,
+      "norm_label": "layout2()"
+    },
+    {
+      "label": "Layout3.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout3.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout3_jsx_section_layout3",
+      "community": 44,
+      "norm_label": "layout3.jsx"
+    },
+    {
+      "label": "Layout3()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout3.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout3_jsx_section_layout3_layout3",
+      "community": 44,
+      "norm_label": "layout3()"
+    },
+    {
+      "label": "Layout4.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout4.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout4_jsx_section_layout4",
+      "community": 45,
+      "norm_label": "layout4.jsx"
+    },
+    {
+      "label": "Layout4()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout4.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout4_jsx_section_layout4_layout4",
+      "community": 45,
+      "norm_label": "layout4()"
+    },
+    {
+      "label": "Layout5.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout5.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout5_jsx_section_layout5",
+      "community": 46,
+      "norm_label": "layout5.jsx"
+    },
+    {
+      "label": "Layout5()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout5.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout5_jsx_section_layout5_layout5",
+      "community": 46,
+      "norm_label": "layout5()"
+    },
+    {
+      "label": "Layout6.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout6.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout6_jsx_section_layout6",
+      "community": 47,
+      "norm_label": "layout6.jsx"
+    },
+    {
+      "label": "Layout6()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout6.jsx",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout6_jsx_section_layout6_layout6",
+      "community": 47,
+      "norm_label": "layout6()"
+    },
+    {
+      "label": "Layout7.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout7.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout7_jsx_section_layout7",
+      "community": 48,
+      "norm_label": "layout7.jsx"
+    },
+    {
+      "label": "Layout7()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout7.jsx",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout7_jsx_section_layout7_layout7",
+      "community": 48,
+      "norm_label": "layout7()"
+    },
+    {
+      "label": "Layout8.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout8.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout8_jsx_section_layout8",
+      "community": 49,
+      "norm_label": "layout8.jsx"
+    },
+    {
+      "label": "Layout8()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout8.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout8_jsx_section_layout8_layout8",
+      "community": 49,
+      "norm_label": "layout8()"
+    },
+    {
+      "label": "Layout9.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout9.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout9_jsx_section_layout9",
+      "community": 50,
+      "norm_label": "layout9.jsx"
+    },
+    {
+      "label": "Layout9()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout9.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_layout9_jsx_section_layout9_layout9",
+      "community": 50,
+      "norm_label": "layout9()"
+    },
+    {
+      "label": "LegalLayoutWrapper.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/LegalLayoutWrapper.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_legallayoutwrapper_jsx_section_legallayoutwrapper",
+      "community": 51,
+      "norm_label": "legallayoutwrapper.jsx"
+    },
+    {
+      "label": "LegalLayoutWrapper()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/LegalLayoutWrapper.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_legallayoutwrapper_jsx_section_legallayoutwrapper_legallayoutwrapper",
+      "community": 51,
+      "norm_label": "legallayoutwrapper()"
+    },
+    {
+      "label": "MilestoneSection.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/MilestoneSection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_milestonesection_jsx_section_milestonesection",
+      "community": 52,
+      "norm_label": "milestonesection.jsx"
+    },
+    {
+      "label": "MilestoneSection()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/MilestoneSection.jsx",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_milestonesection_jsx_section_milestonesection_milestonesection",
+      "community": 52,
+      "norm_label": "milestonesection()"
+    },
+    {
+      "label": "NewsSection.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/NewsSection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_newssection_jsx_section_newssection",
+      "community": 53,
+      "norm_label": "newssection.jsx"
+    },
+    {
+      "label": "NewsSection()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/NewsSection.jsx",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_newssection_jsx_section_newssection_newssection",
+      "community": 53,
+      "norm_label": "newssection()"
+    },
+    {
+      "label": "NewsTeaser.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/NewsTeaser.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_newsteaser_jsx_section_newsteaser",
+      "community": 54,
+      "norm_label": "newsteaser.jsx"
+    },
+    {
+      "label": "NewsTeaser()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/NewsTeaser.jsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_newsteaser_jsx_section_newsteaser_newsteaser",
+      "community": 54,
+      "norm_label": "newsteaser()"
+    },
+    {
+      "label": "OurValues.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/OurValues.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_ourvalues_jsx_section_ourvalues",
+      "community": 55,
+      "norm_label": "ourvalues.jsx"
+    },
+    {
+      "label": "OurValues()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/OurValues.jsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_ourvalues_jsx_section_ourvalues_ourvalues",
+      "community": 55,
+      "norm_label": "ourvalues()"
+    },
+    {
+      "label": "PrivacyPolicy.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/PrivacyPolicy.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_privacypolicy_jsx_section_privacypolicy",
+      "community": 56,
+      "norm_label": "privacypolicy.jsx"
+    },
+    {
+      "label": "PrivacyPolicy()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/PrivacyPolicy.jsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_privacypolicy_jsx_section_privacypolicy_privacypolicy",
+      "community": 56,
+      "norm_label": "privacypolicy()"
+    },
+    {
+      "label": "SectorSection.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/SectorSection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_sectorsection_jsx_section_sectorsection",
+      "community": 10,
+      "norm_label": "sectorsection.jsx"
+    },
+    {
+      "label": "SECTOR_CUSTOM_DATA",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/SectorSection.jsx",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_sectorsection_jsx_section_sectorsection_sector_custom_data",
+      "community": 10,
+      "norm_label": "sector_custom_data"
+    },
+    {
+      "label": "SectorSkeleton()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/SectorSection.jsx",
+      "source_location": "L60",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_sectorsection_jsx_section_sectorsection_sectorskeleton",
+      "community": 10,
+      "norm_label": "sectorskeleton()"
+    },
+    {
+      "label": "SectorSection()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/SectorSection.jsx",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_sectorsection_jsx_section_sectorsection_sectorsection",
+      "community": 10,
+      "norm_label": "sectorsection()"
+    },
+    {
+      "label": "SectorStrip.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/SectorStrip.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_sectorstrip_jsx_section_sectorstrip",
+      "community": 57,
+      "norm_label": "sectorstrip.jsx"
+    },
+    {
+      "label": "SectorStrip()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/SectorStrip.jsx",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_sectorstrip_jsx_section_sectorstrip_sectorstrip",
+      "community": 57,
+      "norm_label": "sectorstrip()"
+    },
+    {
+      "label": "StatsSection.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/StatsSection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_statssection_jsx_section_statssection",
+      "community": 15,
+      "norm_label": "statssection.jsx"
+    },
+    {
+      "label": "Counter()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/StatsSection.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_statssection_jsx_section_statssection_counter",
+      "community": 15,
+      "norm_label": "counter()"
+    },
+    {
+      "label": "StatsSection()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/StatsSection.jsx",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_statssection_jsx_section_statssection_statssection",
+      "community": 15,
+      "norm_label": "statssection()"
+    },
+    {
+      "label": "TermsConditions.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/TermsConditions.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_termsconditions_jsx_section_termsconditions",
+      "community": 58,
+      "norm_label": "termsconditions.jsx"
+    },
+    {
+      "label": "TermsConditions()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/TermsConditions.jsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_termsconditions_jsx_section_termsconditions_termsconditions",
+      "community": 58,
+      "norm_label": "termsconditions()"
+    },
+    {
+      "label": "VissionMission.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/VissionMission.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_vissionmission_jsx_section_vissionmission",
+      "community": 59,
+      "norm_label": "vissionmission.jsx"
+    },
+    {
+      "label": "VissionMission()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/VissionMission.jsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_vissionmission_jsx_section_vissionmission_vissionmission",
+      "community": 59,
+      "norm_label": "vissionmission()"
+    },
+    {
+      "label": "WhyJoin.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/WhyJoin.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_whyjoin_jsx_section_whyjoin",
+      "community": 16,
+      "norm_label": "whyjoin.jsx"
+    },
+    {
+      "label": "whyJoinData",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/WhyJoin.jsx",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_whyjoin_jsx_section_whyjoin_whyjoindata",
+      "community": 16,
+      "norm_label": "whyjoindata"
+    },
+    {
+      "label": "WhyJoin()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/section/WhyJoin.jsx",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_section_whyjoin_jsx_section_whyjoin_whyjoin",
+      "community": 16,
+      "norm_label": "whyjoin()"
+    },
+    {
+      "label": "HeroSkeleton.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/skeleton/HeroSkeleton.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_skeleton_heroskeleton_jsx_skeleton_heroskeleton",
+      "community": 60,
+      "norm_label": "heroskeleton.jsx"
+    },
+    {
+      "label": "HeroSkeleton()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/skeleton/HeroSkeleton.jsx",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_skeleton_heroskeleton_jsx_skeleton_heroskeleton_heroskeleton",
+      "community": 60,
+      "norm_label": "heroskeleton()"
+    },
+    {
+      "label": "IntroSectionSkeleton.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/skeleton/IntroSectionSkeleton.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_skeleton_introsectionskeleton_jsx_skeleton_introsectionskeleton",
+      "community": 61,
+      "norm_label": "introsectionskeleton.jsx"
+    },
+    {
+      "label": "IntroSectionSkeleton()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/skeleton/IntroSectionSkeleton.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_skeleton_introsectionskeleton_jsx_skeleton_introsectionskeleton_introsectionskeleton",
+      "community": 61,
+      "norm_label": "introsectionskeleton()"
+    },
+    {
+      "label": "GooeyFilter.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/ui/GooeyFilter.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_ui_gooeyfilter_jsx_ui_gooeyfilter",
+      "community": 63,
+      "norm_label": "gooeyfilter.jsx"
+    },
+    {
+      "label": "GooeyFilter()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/ui/GooeyFilter.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_ui_gooeyfilter_jsx_ui_gooeyfilter_gooeyfilter",
+      "community": 63,
+      "norm_label": "gooeyfilter()"
+    },
+    {
+      "label": "ShareButtons.jsx",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/ui/ShareButtons.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_ui_sharebuttons_jsx_ui_sharebuttons",
+      "community": 64,
+      "norm_label": "sharebuttons.jsx"
+    },
+    {
+      "label": "ShareButtons()",
+      "file_type": "code",
+      "source_file": "src/_backup_animasi_penuh/components/ui/ShareButtons.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_backup_animasi_penuh_components_ui_sharebuttons_jsx_ui_sharebuttons_sharebuttons",
+      "community": 64,
+      "norm_label": "sharebuttons()"
+    },
+    {
+      "label": "SectionRenderer.jsx",
+      "file_type": "code",
+      "source_file": "src/components/SectionRenderer.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_sectionrenderer_jsx_components_sectionrenderer",
+      "community": 6,
+      "norm_label": "sectionrenderer.jsx"
+    },
+    {
+      "label": "COMPONENT_MAP",
+      "file_type": "code",
+      "source_file": "src/components/SectionRenderer.jsx",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "src_components_sectionrenderer_jsx_components_sectionrenderer_component_map",
+      "community": 6,
+      "norm_label": "component_map"
+    },
+    {
+      "label": "THEME_MAPPING",
+      "file_type": "code",
+      "source_file": "src/components/SectionRenderer.jsx",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "src_components_sectionrenderer_jsx_components_sectionrenderer_theme_mapping",
+      "community": 6,
+      "norm_label": "theme_mapping"
+    },
+    {
+      "label": "SafeComponentWrapper",
+      "file_type": "code",
+      "source_file": "src/components/SectionRenderer.jsx",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "src_components_sectionrenderer_jsx_components_sectionrenderer_safecomponentwrapper",
+      "community": 6,
+      "norm_label": "safecomponentwrapper"
+    },
+    {
+      "label": "SectionRenderer()",
+      "file_type": "code",
+      "source_file": "src/components/SectionRenderer.jsx",
+      "source_location": "L47",
+      "_origin": "ast",
+      "id": "src_components_sectionrenderer_jsx_components_sectionrenderer_sectionrenderer",
+      "community": 6,
+      "norm_label": "sectionrenderer()"
+    },
+    {
+      "label": "TitleManager.jsx",
+      "file_type": "code",
+      "source_file": "src/components/TitleManager.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_titlemanager_jsx_components_titlemanager",
+      "community": 98,
+      "norm_label": "titlemanager.jsx"
+    },
+    {
+      "label": "TitleManager()",
+      "file_type": "code",
+      "source_file": "src/components/TitleManager.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_components_titlemanager_jsx_components_titlemanager_titlemanager",
+      "community": 98,
+      "norm_label": "titlemanager()"
+    },
+    {
+      "label": "Footer.jsx",
+      "file_type": "code",
+      "source_file": "src/components/layout/Footer.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_layout_footer_jsx_layout_footer",
+      "community": 65,
+      "norm_label": "footer.jsx"
+    },
+    {
+      "label": "Footer()",
+      "file_type": "code",
+      "source_file": "src/components/layout/Footer.jsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "src_components_layout_footer_jsx_layout_footer_footer",
+      "community": 65,
+      "norm_label": "footer()"
+    },
+    {
+      "label": "LegalLayoutWrapper.jsx",
+      "file_type": "code",
+      "source_file": "src/components/layout/LegalLayoutWrapper.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_layout_legallayoutwrapper_jsx_layout_legallayoutwrapper",
+      "community": 66,
+      "norm_label": "legallayoutwrapper.jsx"
+    },
+    {
+      "label": "LegalLayoutWrapper()",
+      "file_type": "code",
+      "source_file": "src/components/layout/LegalLayoutWrapper.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_components_layout_legallayoutwrapper_jsx_layout_legallayoutwrapper_legallayoutwrapper",
+      "community": 66,
+      "norm_label": "legallayoutwrapper()"
+    },
+    {
+      "label": "Navbar.jsx",
+      "file_type": "code",
+      "source_file": "src/components/layout/Navbar.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_layout_navbar_jsx_layout_navbar",
+      "community": 3,
+      "norm_label": "navbar.jsx"
+    },
+    {
+      "label": "Navbar()",
+      "file_type": "code",
+      "source_file": "src/components/layout/Navbar.jsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "src_components_layout_navbar_jsx_layout_navbar_navbar",
+      "community": 3,
+      "norm_label": "navbar()"
+    },
+    {
+      "label": "CardSection.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/CardSection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_cardsection_jsx_section_cardsection",
+      "community": 11,
+      "norm_label": "cardsection.jsx"
+    },
+    {
+      "label": "puzzleShapes",
+      "file_type": "code",
+      "source_file": "src/components/section/CardSection.jsx",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_components_section_cardsection_jsx_section_cardsection_puzzleshapes",
+      "community": 11,
+      "norm_label": "puzzleshapes"
+    },
+    {
+      "label": "SkeletonLoader()",
+      "file_type": "code",
+      "source_file": "src/components/section/CardSection.jsx",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "src_components_section_cardsection_jsx_section_cardsection_skeletonloader",
+      "community": 11,
+      "norm_label": "skeletonloader()"
+    },
+    {
+      "label": "CardSection()",
+      "file_type": "code",
+      "source_file": "src/components/section/CardSection.jsx",
+      "source_location": "L41",
+      "_origin": "ast",
+      "id": "src_components_section_cardsection_jsx_section_cardsection_cardsection",
+      "community": 11,
+      "norm_label": "cardsection()"
+    },
+    {
+      "label": "CareerJobs.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/CareerJobs.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_careerjobs_jsx_section_careerjobs",
+      "community": 67,
+      "norm_label": "careerjobs.jsx"
+    },
+    {
+      "label": "CareerJobs()",
+      "file_type": "code",
+      "source_file": "src/components/section/CareerJobs.jsx",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "src_components_section_careerjobs_jsx_section_careerjobs_careerjobs",
+      "community": 67,
+      "norm_label": "careerjobs()"
+    },
+    {
+      "label": "CareerNavigator.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/CareerNavigator.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_careernavigator_jsx_section_careernavigator",
+      "community": 68,
+      "norm_label": "careernavigator.jsx"
+    },
+    {
+      "label": "CareerNavigator()",
+      "file_type": "code",
+      "source_file": "src/components/section/CareerNavigator.jsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "src_components_section_careernavigator_jsx_section_careernavigator_careernavigator",
+      "community": 68,
+      "norm_label": "careernavigator()"
+    },
+    {
+      "label": "CareerSection.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/CareerSection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_careersection_jsx_section_careersection",
+      "community": 69,
+      "norm_label": "careersection.jsx"
+    },
+    {
+      "label": "CareerSection()",
+      "file_type": "code",
+      "source_file": "src/components/section/CareerSection.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_components_section_careersection_jsx_section_careersection_careersection",
+      "community": 69,
+      "norm_label": "careersection()"
+    },
+    {
+      "label": "EmployeeEvents.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/EmployeeEvents.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_employeeevents_jsx_section_employeeevents",
+      "community": 70,
+      "norm_label": "employeeevents.jsx"
+    },
+    {
+      "label": "EmployeeEvents()",
+      "file_type": "code",
+      "source_file": "src/components/section/EmployeeEvents.jsx",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "src_components_section_employeeevents_jsx_section_employeeevents_employeeevents",
+      "community": 70,
+      "norm_label": "employeeevents()"
+    },
+    {
+      "label": "EventDetailPage.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/EventDetailPage.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_eventdetailpage_jsx_section_eventdetailpage",
+      "community": 71,
+      "norm_label": "eventdetailpage.jsx"
+    },
+    {
+      "label": "EventDetailPage()",
+      "file_type": "code",
+      "source_file": "src/components/section/EventDetailPage.jsx",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "src_components_section_eventdetailpage_jsx_section_eventdetailpage_eventdetailpage",
+      "community": 71,
+      "norm_label": "eventdetailpage()"
+    },
+    {
+      "label": "HeroCarousel.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/HeroCarousel.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_herocarousel_jsx_section_herocarousel",
+      "community": 72,
+      "norm_label": "herocarousel.jsx"
+    },
+    {
+      "label": "HeroCarousel()",
+      "file_type": "code",
+      "source_file": "src/components/section/HeroCarousel.jsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "src_components_section_herocarousel_jsx_section_herocarousel_herocarousel",
+      "community": 72,
+      "norm_label": "herocarousel()"
+    },
+    {
+      "label": "HeroSector.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/HeroSector.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_herosector_jsx_section_herosector",
+      "community": 73,
+      "norm_label": "herosector.jsx"
+    },
+    {
+      "label": "HeroSector()",
+      "file_type": "code",
+      "source_file": "src/components/section/HeroSector.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_components_section_herosector_jsx_section_herosector_herosector",
+      "community": 73,
+      "norm_label": "herosector()"
+    },
+    {
+      "label": "HistorySection.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/HistorySection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_historysection_jsx_section_historysection",
+      "community": 74,
+      "norm_label": "historysection.jsx"
+    },
+    {
+      "label": "HistorySection()",
+      "file_type": "code",
+      "source_file": "src/components/section/HistorySection.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_components_section_historysection_jsx_section_historysection_historysection",
+      "community": 74,
+      "norm_label": "historysection()"
+    },
+    {
+      "label": "IntroSection.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/IntroSection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_introsection_jsx_section_introsection",
+      "community": 75,
+      "norm_label": "introsection.jsx"
+    },
+    {
+      "label": "IntroSection()",
+      "file_type": "code",
+      "source_file": "src/components/section/IntroSection.jsx",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_components_section_introsection_jsx_section_introsection_introsection",
+      "community": 75,
+      "norm_label": "introsection()"
+    },
+    {
+      "label": "JobDetailModal.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/JobDetailModal.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_jobdetailmodal_jsx_section_jobdetailmodal",
+      "community": 76,
+      "norm_label": "jobdetailmodal.jsx"
+    },
+    {
+      "label": "JobDetailModal()",
+      "file_type": "code",
+      "source_file": "src/components/section/JobDetailModal.jsx",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "src_components_section_jobdetailmodal_jsx_section_jobdetailmodal_jobdetailmodal",
+      "community": 76,
+      "norm_label": "jobdetailmodal()"
+    },
+    {
+      "label": "Layout1.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout1.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_layout1_jsx_section_layout1",
+      "community": 78,
+      "norm_label": "layout1.jsx"
+    },
+    {
+      "label": "Layout1()",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout1.jsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "src_components_section_layout1_jsx_section_layout1_layout1",
+      "community": 78,
+      "norm_label": "layout1()"
+    },
+    {
+      "label": "Layout10.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout10.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_layout10_jsx_section_layout10",
+      "community": 77,
+      "norm_label": "layout10.jsx"
+    },
+    {
+      "label": "Layout10()",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout10.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_components_section_layout10_jsx_section_layout10_layout10",
+      "community": 77,
+      "norm_label": "layout10()"
+    },
+    {
+      "label": "Layout2.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout2.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_layout2_jsx_section_layout2",
+      "community": 79,
+      "norm_label": "layout2.jsx"
+    },
+    {
+      "label": "Layout2()",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout2.jsx",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "src_components_section_layout2_jsx_section_layout2_layout2",
+      "community": 79,
+      "norm_label": "layout2()"
+    },
+    {
+      "label": "Layout3.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout3.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_layout3_jsx_section_layout3",
+      "community": 80,
+      "norm_label": "layout3.jsx"
+    },
+    {
+      "label": "Layout3()",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout3.jsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "src_components_section_layout3_jsx_section_layout3_layout3",
+      "community": 80,
+      "norm_label": "layout3()"
+    },
+    {
+      "label": "Layout4.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout4.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_layout4_jsx_section_layout4",
+      "community": 81,
+      "norm_label": "layout4.jsx"
+    },
+    {
+      "label": "Layout4()",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout4.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_components_section_layout4_jsx_section_layout4_layout4",
+      "community": 81,
+      "norm_label": "layout4()"
+    },
+    {
+      "label": "Layout5.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout5.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_layout5_jsx_section_layout5",
+      "community": 82,
+      "norm_label": "layout5.jsx"
+    },
+    {
+      "label": "Layout5()",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout5.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_components_section_layout5_jsx_section_layout5_layout5",
+      "community": 82,
+      "norm_label": "layout5()"
+    },
+    {
+      "label": "Layout6.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout6.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_layout6_jsx_section_layout6",
+      "community": 83,
+      "norm_label": "layout6.jsx"
+    },
+    {
+      "label": "Layout6()",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout6.jsx",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "src_components_section_layout6_jsx_section_layout6_layout6",
+      "community": 83,
+      "norm_label": "layout6()"
+    },
+    {
+      "label": "Layout7.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout7.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_layout7_jsx_section_layout7",
+      "community": 84,
+      "norm_label": "layout7.jsx"
+    },
+    {
+      "label": "Layout7()",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout7.jsx",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_components_section_layout7_jsx_section_layout7_layout7",
+      "community": 84,
+      "norm_label": "layout7()"
+    },
+    {
+      "label": "Layout8.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout8.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_layout8_jsx_section_layout8",
+      "community": 85,
+      "norm_label": "layout8.jsx"
+    },
+    {
+      "label": "Layout8()",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout8.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_components_section_layout8_jsx_section_layout8_layout8",
+      "community": 85,
+      "norm_label": "layout8()"
+    },
+    {
+      "label": "Layout9.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout9.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_layout9_jsx_section_layout9",
+      "community": 86,
+      "norm_label": "layout9.jsx"
+    },
+    {
+      "label": "Layout9()",
+      "file_type": "code",
+      "source_file": "src/components/section/Layout9.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_components_section_layout9_jsx_section_layout9_layout9",
+      "community": 86,
+      "norm_label": "layout9()"
+    },
+    {
+      "label": "LegalLayoutWrapper.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/LegalLayoutWrapper.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_legallayoutwrapper_jsx_section_legallayoutwrapper",
+      "community": 87,
+      "norm_label": "legallayoutwrapper.jsx"
+    },
+    {
+      "label": "LegalLayoutWrapper()",
+      "file_type": "code",
+      "source_file": "src/components/section/LegalLayoutWrapper.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_components_section_legallayoutwrapper_jsx_section_legallayoutwrapper_legallayoutwrapper",
+      "community": 87,
+      "norm_label": "legallayoutwrapper()"
+    },
+    {
+      "label": "MilestoneSection.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/MilestoneSection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_milestonesection_jsx_section_milestonesection",
+      "community": 88,
+      "norm_label": "milestonesection.jsx"
+    },
+    {
+      "label": "MilestoneSection()",
+      "file_type": "code",
+      "source_file": "src/components/section/MilestoneSection.jsx",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "src_components_section_milestonesection_jsx_section_milestonesection_milestonesection",
+      "community": 88,
+      "norm_label": "milestonesection()"
+    },
+    {
+      "label": "NewsSection.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/NewsSection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_newssection_jsx_section_newssection",
+      "community": 89,
+      "norm_label": "newssection.jsx"
+    },
+    {
+      "label": "NewsSection()",
+      "file_type": "code",
+      "source_file": "src/components/section/NewsSection.jsx",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_components_section_newssection_jsx_section_newssection_newssection",
+      "community": 89,
+      "norm_label": "newssection()"
+    },
+    {
+      "label": "NewsTeaser.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/NewsTeaser.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_newsteaser_jsx_section_newsteaser",
+      "community": 90,
+      "norm_label": "newsteaser.jsx"
+    },
+    {
+      "label": "NewsTeaser()",
+      "file_type": "code",
+      "source_file": "src/components/section/NewsTeaser.jsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "src_components_section_newsteaser_jsx_section_newsteaser_newsteaser",
+      "community": 90,
+      "norm_label": "newsteaser()"
+    },
+    {
+      "label": "OurValues.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/OurValues.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_ourvalues_jsx_section_ourvalues",
+      "community": 91,
+      "norm_label": "ourvalues.jsx"
+    },
+    {
+      "label": "OurValues()",
+      "file_type": "code",
+      "source_file": "src/components/section/OurValues.jsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "src_components_section_ourvalues_jsx_section_ourvalues_ourvalues",
+      "community": 91,
+      "norm_label": "ourvalues()"
+    },
+    {
+      "label": "PrivacyPolicy.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/PrivacyPolicy.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_privacypolicy_jsx_section_privacypolicy",
+      "community": 92,
+      "norm_label": "privacypolicy.jsx"
+    },
+    {
+      "label": "PrivacyPolicy()",
+      "file_type": "code",
+      "source_file": "src/components/section/PrivacyPolicy.jsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "src_components_section_privacypolicy_jsx_section_privacypolicy_privacypolicy",
+      "community": 92,
+      "norm_label": "privacypolicy()"
+    },
+    {
+      "label": "SectorSection.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/SectorSection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_sectorsection_jsx_section_sectorsection",
+      "community": 12,
+      "norm_label": "sectorsection.jsx"
+    },
+    {
+      "label": "SECTOR_CUSTOM_DATA",
+      "file_type": "code",
+      "source_file": "src/components/section/SectorSection.jsx",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "src_components_section_sectorsection_jsx_section_sectorsection_sector_custom_data",
+      "community": 12,
+      "norm_label": "sector_custom_data"
+    },
+    {
+      "label": "SectorSkeleton()",
+      "file_type": "code",
+      "source_file": "src/components/section/SectorSection.jsx",
+      "source_location": "L60",
+      "_origin": "ast",
+      "id": "src_components_section_sectorsection_jsx_section_sectorsection_sectorskeleton",
+      "community": 12,
+      "norm_label": "sectorskeleton()"
+    },
+    {
+      "label": "SectorSection()",
+      "file_type": "code",
+      "source_file": "src/components/section/SectorSection.jsx",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "src_components_section_sectorsection_jsx_section_sectorsection_sectorsection",
+      "community": 12,
+      "norm_label": "sectorsection()"
+    },
+    {
+      "label": "SectorStrip.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/SectorStrip.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_sectorstrip_jsx_section_sectorstrip",
+      "community": 93,
+      "norm_label": "sectorstrip.jsx"
+    },
+    {
+      "label": "SectorStrip()",
+      "file_type": "code",
+      "source_file": "src/components/section/SectorStrip.jsx",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_components_section_sectorstrip_jsx_section_sectorstrip_sectorstrip",
+      "community": 93,
+      "norm_label": "sectorstrip()"
+    },
+    {
+      "label": "StatsSection.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/StatsSection.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_statssection_jsx_section_statssection",
+      "community": 17,
+      "norm_label": "statssection.jsx"
+    },
+    {
+      "label": "Counter()",
+      "file_type": "code",
+      "source_file": "src/components/section/StatsSection.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_components_section_statssection_jsx_section_statssection_counter",
+      "community": 17,
+      "norm_label": "counter()"
+    },
+    {
+      "label": "StatsSection()",
+      "file_type": "code",
+      "source_file": "src/components/section/StatsSection.jsx",
+      "source_location": "L54",
+      "_origin": "ast",
+      "id": "src_components_section_statssection_jsx_section_statssection_statssection",
+      "community": 17,
+      "norm_label": "statssection()"
+    },
+    {
+      "label": "TermsConditions.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/TermsConditions.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_termsconditions_jsx_section_termsconditions",
+      "community": 94,
+      "norm_label": "termsconditions.jsx"
+    },
+    {
+      "label": "TermsConditions()",
+      "file_type": "code",
+      "source_file": "src/components/section/TermsConditions.jsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "src_components_section_termsconditions_jsx_section_termsconditions_termsconditions",
+      "community": 94,
+      "norm_label": "termsconditions()"
+    },
+    {
+      "label": "VissionMission.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/VissionMission.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_vissionmission_jsx_section_vissionmission",
+      "community": 95,
+      "norm_label": "vissionmission.jsx"
+    },
+    {
+      "label": "VissionMission()",
+      "file_type": "code",
+      "source_file": "src/components/section/VissionMission.jsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "src_components_section_vissionmission_jsx_section_vissionmission_vissionmission",
+      "community": 95,
+      "norm_label": "vissionmission()"
+    },
+    {
+      "label": "WhyJoin.jsx",
+      "file_type": "code",
+      "source_file": "src/components/section/WhyJoin.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_section_whyjoin_jsx_section_whyjoin",
+      "community": 18,
+      "norm_label": "whyjoin.jsx"
+    },
+    {
+      "label": "whyJoinData",
+      "file_type": "code",
+      "source_file": "src/components/section/WhyJoin.jsx",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "src_components_section_whyjoin_jsx_section_whyjoin_whyjoindata",
+      "community": 18,
+      "norm_label": "whyjoindata"
+    },
+    {
+      "label": "WhyJoin()",
+      "file_type": "code",
+      "source_file": "src/components/section/WhyJoin.jsx",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "src_components_section_whyjoin_jsx_section_whyjoin_whyjoin",
+      "community": 18,
+      "norm_label": "whyjoin()"
+    },
+    {
+      "label": "HeroSkeleton.jsx",
+      "file_type": "code",
+      "source_file": "src/components/skeleton/HeroSkeleton.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_skeleton_heroskeleton_jsx_skeleton_heroskeleton",
+      "community": 96,
+      "norm_label": "heroskeleton.jsx"
+    },
+    {
+      "label": "HeroSkeleton()",
+      "file_type": "code",
+      "source_file": "src/components/skeleton/HeroSkeleton.jsx",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "src_components_skeleton_heroskeleton_jsx_skeleton_heroskeleton_heroskeleton",
+      "community": 96,
+      "norm_label": "heroskeleton()"
+    },
+    {
+      "label": "IntroSectionSkeleton.jsx",
+      "file_type": "code",
+      "source_file": "src/components/skeleton/IntroSectionSkeleton.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_skeleton_introsectionskeleton_jsx_skeleton_introsectionskeleton",
+      "community": 97,
+      "norm_label": "introsectionskeleton.jsx"
+    },
+    {
+      "label": "IntroSectionSkeleton()",
+      "file_type": "code",
+      "source_file": "src/components/skeleton/IntroSectionSkeleton.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_components_skeleton_introsectionskeleton_jsx_skeleton_introsectionskeleton_introsectionskeleton",
+      "community": 97,
+      "norm_label": "introsectionskeleton()"
+    },
+    {
+      "label": "GooeyFilter.jsx",
+      "file_type": "code",
+      "source_file": "src/components/ui/GooeyFilter.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_ui_gooeyfilter_jsx_ui_gooeyfilter",
+      "community": 99,
+      "norm_label": "gooeyfilter.jsx"
+    },
+    {
+      "label": "GooeyFilter()",
+      "file_type": "code",
+      "source_file": "src/components/ui/GooeyFilter.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_components_ui_gooeyfilter_jsx_ui_gooeyfilter_gooeyfilter",
+      "community": 99,
+      "norm_label": "gooeyfilter()"
+    },
+    {
+      "label": "ShareButtons.jsx",
+      "file_type": "code",
+      "source_file": "src/components/ui/ShareButtons.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_ui_sharebuttons_jsx_ui_sharebuttons",
+      "community": 100,
+      "norm_label": "sharebuttons.jsx"
+    },
+    {
+      "label": "ShareButtons()",
+      "file_type": "code",
+      "source_file": "src/components/ui/ShareButtons.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_components_ui_sharebuttons_jsx_ui_sharebuttons_sharebuttons",
+      "community": 100,
+      "norm_label": "sharebuttons()"
+    },
+    {
+      "label": "SectorContext.jsx",
+      "file_type": "code",
+      "source_file": "src/context/SectorContext.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "context_sectorcontext",
+      "community": 7,
+      "norm_label": "sectorcontext.jsx"
+    },
+    {
+      "label": "SectorContext",
+      "file_type": "code",
+      "source_file": "src/context/SectorContext.jsx",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "context_sectorcontext_sectorcontext",
+      "community": 7,
+      "norm_label": "sectorcontext"
+    },
+    {
+      "label": "SectorProvider()",
+      "file_type": "code",
+      "source_file": "src/context/SectorContext.jsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "context_sectorcontext_sectorprovider",
+      "community": 7,
+      "norm_label": "sectorprovider()"
+    },
+    {
+      "label": "useSector()",
+      "file_type": "code",
+      "source_file": "src/context/SectorContext.jsx",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "context_sectorcontext_usesector",
+      "community": 7,
+      "norm_label": "usesector()"
+    },
+    {
+      "label": "SectionNavigation.jsx",
+      "file_type": "code",
+      "source_file": "src/hooks/SectionNavigation.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "hooks_sectionnavigation",
+      "community": 20,
+      "norm_label": "sectionnavigation.jsx"
+    },
+    {
+      "label": "SectionNavigation()",
+      "file_type": "code",
+      "source_file": "src/hooks/SectionNavigation.jsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "hooks_sectionnavigation_sectionnavigation",
+      "community": 20,
+      "norm_label": "sectionnavigation()"
+    },
+    {
+      "label": "useAllPagesData.jsx",
+      "file_type": "code",
+      "source_file": "src/hooks/useAllPagesData.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "hooks_useallpagesdata",
+      "community": 21,
+      "norm_label": "useallpagesdata.jsx"
+    },
+    {
+      "label": "useAllPagesData()",
+      "file_type": "code",
+      "source_file": "src/hooks/useAllPagesData.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "hooks_useallpagesdata_useallpagesdata",
+      "community": 21,
+      "norm_label": "useallpagesdata()"
+    },
+    {
+      "label": "useFullPageSnap.jsx",
+      "file_type": "code",
+      "source_file": "src/hooks/useFullPageSnap.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "hooks_usefullpagesnap",
+      "community": 2,
+      "norm_label": "usefullpagesnap.jsx"
+    },
+    {
+      "label": "useFullPageSnap()",
+      "file_type": "code",
+      "source_file": "src/hooks/useFullPageSnap.jsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "hooks_usefullpagesnap_usefullpagesnap",
+      "community": 2,
+      "norm_label": "usefullpagesnap()"
+    },
+    {
+      "label": "useNavbarTheme.jsx",
+      "file_type": "code",
+      "source_file": "src/hooks/useNavbarTheme.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "hooks_usenavbartheme",
+      "community": 3,
+      "norm_label": "usenavbartheme.jsx"
+    },
+    {
+      "label": "useNavbarTheme()",
+      "file_type": "code",
+      "source_file": "src/hooks/useNavbarTheme.jsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "hooks_usenavbartheme_usenavbartheme",
+      "community": 3,
+      "norm_label": "usenavbartheme()"
+    },
+    {
+      "label": "usePageData.js",
+      "file_type": "code",
+      "source_file": "src/hooks/usePageData.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "hooks_usepagedata",
+      "community": 2,
+      "norm_label": "usepagedata.js"
+    },
+    {
+      "label": "usePageData()",
+      "file_type": "code",
+      "source_file": "src/hooks/usePageData.js",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "hooks_usepagedata_usepagedata",
+      "community": 2,
+      "norm_label": "usepagedata()"
+    },
+    {
+      "label": "AutoTranslate.jsx",
+      "file_type": "code",
+      "source_file": "src/lib/AutoTranslate.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "lib_autotranslate",
+      "community": 14,
+      "norm_label": "autotranslate.jsx"
+    },
+    {
+      "label": "translateDynamicText()",
+      "file_type": "code",
+      "source_file": "src/lib/AutoTranslate.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "lib_autotranslate_translatedynamictext",
+      "community": 14,
+      "norm_label": "translatedynamictext()"
+    },
+    {
+      "label": "AutoTranslate()",
+      "file_type": "code",
+      "source_file": "src/lib/AutoTranslate.jsx",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "lib_autotranslate_autotranslate",
+      "community": 14,
+      "norm_label": "autotranslate()"
+    },
+    {
+      "label": "api.js",
+      "file_type": "code",
+      "source_file": "src/lib/api.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "lib_api",
+      "community": 22,
+      "norm_label": "api.js"
+    },
+    {
+      "label": "api",
+      "file_type": "code",
+      "source_file": "src/lib/api.js",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "lib_api_api",
+      "community": 22,
+      "norm_label": "api"
+    },
+    {
+      "label": "translateService.jsx",
+      "file_type": "code",
+      "source_file": "src/lib/translateService.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "lib_translateservice",
+      "community": 23,
+      "norm_label": "translateservice.jsx"
+    },
+    {
+      "label": "translateText()",
+      "file_type": "code",
+      "source_file": "src/lib/translateService.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "lib_translateservice_translatetext",
+      "community": 23,
+      "norm_label": "translatetext()"
+    },
+    {
+      "label": "translator.js",
+      "file_type": "code",
+      "source_file": "src/lib/translator.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "lib_translator",
+      "community": 24,
+      "norm_label": "translator.js"
+    },
+    {
+      "label": "translateDynamicText()",
+      "file_type": "code",
+      "source_file": "src/lib/translator.js",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "lib_translator_translatedynamictext",
+      "community": 24,
+      "norm_label": "translatedynamictext()"
+    },
+    {
+      "label": "main.jsx",
+      "file_type": "code",
+      "source_file": "src/main.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_main",
+      "community": 4,
+      "norm_label": "main.jsx"
+    },
+    {
+      "label": "FullPage.jsx",
+      "file_type": "code",
+      "source_file": "src/pages/FullPage.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "pages_fullpage",
+      "community": 2,
+      "norm_label": "fullpage.jsx"
+    },
+    {
+      "label": "FullPage()",
+      "file_type": "code",
+      "source_file": "src/pages/FullPage.jsx",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "pages_fullpage_fullpage",
+      "community": 2,
+      "norm_label": "fullpage()"
+    },
+    {
+      "label": "LegalPage.jsx",
+      "file_type": "code",
+      "source_file": "src/pages/LegalPage.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "pages_legalpage",
+      "community": 4,
+      "norm_label": "legalpage.jsx"
+    },
+    {
+      "label": "LegalPage()",
+      "file_type": "code",
+      "source_file": "src/pages/LegalPage.jsx",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "pages_legalpage_legalpage",
+      "community": 4,
+      "norm_label": "legalpage()"
+    },
+    {
+      "label": "NewsDetailPage.jsx",
+      "file_type": "code",
+      "source_file": "src/pages/NewsDetailPage.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "pages_newsdetailpage",
+      "community": 25,
+      "norm_label": "newsdetailpage.jsx"
+    },
+    {
+      "label": "NewsDetailPage()",
+      "file_type": "code",
+      "source_file": "src/pages/NewsDetailPage.jsx",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "pages_newsdetailpage_newsdetailpage",
+      "community": 25,
+      "norm_label": "newsdetailpage()"
+    },
+    {
+      "label": "NewsSidebar.jsx",
+      "file_type": "code",
+      "source_file": "src/pages/NewsSidebar.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "pages_newssidebar",
+      "community": 26,
+      "norm_label": "newssidebar.jsx"
+    },
+    {
+      "label": "NewsSidebar()",
+      "file_type": "code",
+      "source_file": "src/pages/NewsSidebar.jsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "pages_newssidebar_newssidebar",
+      "community": 26,
+      "norm_label": "newssidebar()"
+    },
+    {
+      "label": "SectorDetailPage.jsx",
+      "file_type": "code",
+      "source_file": "src/pages/SectorDetailPage.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "pages_sectordetailpage",
+      "community": 2,
+      "norm_label": "sectordetailpage.jsx"
+    },
+    {
+      "label": "COMPONENT_MAP",
+      "file_type": "code",
+      "source_file": "src/pages/SectorDetailPage.jsx",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "pages_sectordetailpage_component_map",
+      "community": 2,
+      "norm_label": "component_map"
+    },
+    {
+      "label": "SectorDetailPage()",
+      "file_type": "code",
+      "source_file": "src/pages/SectorDetailPage.jsx",
+      "source_location": "L39",
+      "_origin": "ast",
+      "id": "pages_sectordetailpage_sectordetailpage",
+      "community": 2,
+      "norm_label": "sectordetailpage()"
+    },
+    {
+      "label": "SectorPage.jsx",
+      "file_type": "code",
+      "source_file": "src/pages/SectorPage.jsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "pages_sectorpage",
+      "community": 27,
+      "norm_label": "sectorpage.jsx"
+    },
+    {
+      "label": "SectorPage()",
+      "file_type": "code",
+      "source_file": "src/pages/SectorPage.jsx",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "pages_sectorpage_sectorpage",
+      "community": 27,
+      "norm_label": "sectorpage()"
+    },
+    {
+      "label": "vite.config.js",
+      "file_type": "code",
+      "source_file": "vite.config.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "vite_config",
+      "community": 102,
+      "norm_label": "vite.config.js"
+    },
+    {
+      "label": "AGENTS.md",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "agents",
+      "community": 19,
+      "norm_label": "agents.md"
+    },
+    {
+      "label": "graphify",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "agents_graphify",
+      "community": 19,
+      "norm_label": "graphify"
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "readme",
+      "community": 8,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "React + Vite",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "readme_react_vite",
+      "community": 8,
+      "norm_label": "react + vite"
+    },
+    {
+      "label": "React Compiler",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "readme_react_compiler",
+      "community": 8,
+      "norm_label": "react compiler"
+    },
+    {
+      "label": "Expanding the ESLint configuration",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "readme_expanding_the_eslint_configuration",
+      "community": 8,
+      "norm_label": "expanding the eslint configuration"
+    },
+    {
+      "label": "TODO.md",
+      "file_type": "document",
+      "source_file": "TODO.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "todo",
+      "community": 13,
+      "norm_label": "todo.md"
+    },
+    {
+      "label": "Fix Mouse Scroll Issue on All Pages",
+      "file_type": "document",
+      "source_file": "TODO.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "todo_fix_mouse_scroll_issue_on_all_pages",
+      "community": 13,
+      "norm_label": "fix mouse scroll issue on all pages"
+    },
+    {
+      "label": "Status: In Progress",
+      "file_type": "document",
+      "source_file": "TODO.md",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "todo_status_in_progress",
+      "community": 13,
+      "norm_label": "status: in progress"
+    },
+    {
+      "label": "Breakdown of Approved Plan:",
+      "file_type": "document",
+      "source_file": "TODO.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "todo_breakdown_of_approved_plan",
+      "community": 13,
+      "norm_label": "breakdown of approved plan:"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".opencode/plugins/graphify.js",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "plugins_graphify",
+      "target": "plugins_graphify_graphifyplugin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_dependencies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_devdependencies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_name",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_private",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_scripts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_type",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_version",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_build",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_dev",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_lint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_preview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_axios",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_framer_motion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_gsap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_heroicons_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_lenis",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_lucide_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_react_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_react_icon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_react_icons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_react_router_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_tailwindcss_vite",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_autoprefixer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_babel_core",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_babel_plugin_react_compiler",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_eslint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_eslint_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_eslint_plugin_react_hooks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_eslint_plugin_react_refresh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_globals",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_postcss",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_rolldown_plugin_babel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_tailwindcss",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_types_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_types_react_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_vite",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_vitejs_plugin_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "pages_legalpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "pages_legalpage_legalpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_app",
+      "target": "src_app_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_app_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/SectionRenderer.jsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_sectionrenderer_jsx_components_sectionrenderer",
+      "target": "src_backup_animasi_penuh_components_sectionrenderer_jsx_components_sectionrenderer_component_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/SectionRenderer.jsx",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_sectionrenderer_jsx_components_sectionrenderer",
+      "target": "src_backup_animasi_penuh_components_sectionrenderer_jsx_components_sectionrenderer_safecomponentwrapper",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/SectionRenderer.jsx",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_sectionrenderer_jsx_components_sectionrenderer",
+      "target": "src_backup_animasi_penuh_components_sectionrenderer_jsx_components_sectionrenderer_sectionrenderer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/SectionRenderer.jsx",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_sectionrenderer_jsx_components_sectionrenderer",
+      "target": "src_backup_animasi_penuh_components_sectionrenderer_jsx_components_sectionrenderer_theme_mapping",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/TitleManager.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_titlemanager_jsx_components_titlemanager",
+      "target": "src_backup_animasi_penuh_components_titlemanager_jsx_components_titlemanager_titlemanager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/layout/Footer.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_layout_footer_jsx_layout_footer",
+      "target": "src_backup_animasi_penuh_components_layout_footer_jsx_layout_footer_footer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/layout/LegalLayoutWrapper.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_layout_legallayoutwrapper_jsx_layout_legallayoutwrapper",
+      "target": "src_backup_animasi_penuh_components_layout_legallayoutwrapper_jsx_layout_legallayoutwrapper_legallayoutwrapper",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/layout/Navbar.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_layout_navbar_jsx_layout_navbar",
+      "target": "src_backup_animasi_penuh_components_layout_navbar_jsx_layout_navbar_navbar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/_backup_animasi_penuh/components/layout/Navbar.jsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_layout_navbar_jsx_layout_navbar_navbar",
+      "target": "hooks_usenavbartheme_usenavbartheme"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/CardSection.jsx",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_cardsection_jsx_section_cardsection",
+      "target": "src_backup_animasi_penuh_components_section_cardsection_jsx_section_cardsection_cardsection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/CardSection.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_cardsection_jsx_section_cardsection",
+      "target": "src_backup_animasi_penuh_components_section_cardsection_jsx_section_cardsection_puzzleshapes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/CardSection.jsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_cardsection_jsx_section_cardsection",
+      "target": "src_backup_animasi_penuh_components_section_cardsection_jsx_section_cardsection_skeletonloader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/CareerJobs.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_careerjobs_jsx_section_careerjobs",
+      "target": "src_backup_animasi_penuh_components_section_careerjobs_jsx_section_careerjobs_careerjobs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/CareerNavigator.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_careernavigator_jsx_section_careernavigator",
+      "target": "src_backup_animasi_penuh_components_section_careernavigator_jsx_section_careernavigator_careernavigator",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/CareerSection.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_careersection_jsx_section_careersection",
+      "target": "src_backup_animasi_penuh_components_section_careersection_jsx_section_careersection_careersection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/EmployeeEvents.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_employeeevents_jsx_section_employeeevents",
+      "target": "src_backup_animasi_penuh_components_section_employeeevents_jsx_section_employeeevents_employeeevents",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/EventDetailPage.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_eventdetailpage_jsx_section_eventdetailpage",
+      "target": "src_backup_animasi_penuh_components_section_eventdetailpage_jsx_section_eventdetailpage_eventdetailpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/HeroCarousel.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_herocarousel_jsx_section_herocarousel",
+      "target": "src_backup_animasi_penuh_components_section_herocarousel_jsx_section_herocarousel_herocarousel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/HeroSector.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_herosector_jsx_section_herosector",
+      "target": "src_backup_animasi_penuh_components_section_herosector_jsx_section_herosector_herosector",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/HistorySection.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_historysection_jsx_section_historysection",
+      "target": "src_backup_animasi_penuh_components_section_historysection_jsx_section_historysection_historysection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/IntroSection.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_introsection_jsx_section_introsection",
+      "target": "src_backup_animasi_penuh_components_section_introsection_jsx_section_introsection_introsection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/JobDetailModal.jsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_jobdetailmodal_jsx_section_jobdetailmodal",
+      "target": "src_backup_animasi_penuh_components_section_jobdetailmodal_jsx_section_jobdetailmodal_jobdetailmodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout1.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_layout1_jsx_section_layout1",
+      "target": "src_backup_animasi_penuh_components_section_layout1_jsx_section_layout1_layout1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout10.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_layout10_jsx_section_layout10",
+      "target": "src_backup_animasi_penuh_components_section_layout10_jsx_section_layout10_layout10",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout2.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_layout2_jsx_section_layout2",
+      "target": "src_backup_animasi_penuh_components_section_layout2_jsx_section_layout2_layout2",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout3.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_layout3_jsx_section_layout3",
+      "target": "src_backup_animasi_penuh_components_section_layout3_jsx_section_layout3_layout3",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout4.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_layout4_jsx_section_layout4",
+      "target": "src_backup_animasi_penuh_components_section_layout4_jsx_section_layout4_layout4",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout5.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_layout5_jsx_section_layout5",
+      "target": "src_backup_animasi_penuh_components_section_layout5_jsx_section_layout5_layout5",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout6.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_layout6_jsx_section_layout6",
+      "target": "src_backup_animasi_penuh_components_section_layout6_jsx_section_layout6_layout6",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout7.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_layout7_jsx_section_layout7",
+      "target": "src_backup_animasi_penuh_components_section_layout7_jsx_section_layout7_layout7",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout8.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_layout8_jsx_section_layout8",
+      "target": "src_backup_animasi_penuh_components_section_layout8_jsx_section_layout8_layout8",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/Layout9.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_layout9_jsx_section_layout9",
+      "target": "src_backup_animasi_penuh_components_section_layout9_jsx_section_layout9_layout9",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/LegalLayoutWrapper.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_legallayoutwrapper_jsx_section_legallayoutwrapper",
+      "target": "src_backup_animasi_penuh_components_section_legallayoutwrapper_jsx_section_legallayoutwrapper_legallayoutwrapper",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/MilestoneSection.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_milestonesection_jsx_section_milestonesection",
+      "target": "src_backup_animasi_penuh_components_section_milestonesection_jsx_section_milestonesection_milestonesection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/NewsSection.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_newssection_jsx_section_newssection",
+      "target": "src_backup_animasi_penuh_components_section_newssection_jsx_section_newssection_newssection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/NewsTeaser.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_newsteaser_jsx_section_newsteaser",
+      "target": "src_backup_animasi_penuh_components_section_newsteaser_jsx_section_newsteaser_newsteaser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/OurValues.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_ourvalues_jsx_section_ourvalues",
+      "target": "src_backup_animasi_penuh_components_section_ourvalues_jsx_section_ourvalues_ourvalues",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/PrivacyPolicy.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_privacypolicy_jsx_section_privacypolicy",
+      "target": "src_backup_animasi_penuh_components_section_privacypolicy_jsx_section_privacypolicy_privacypolicy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/SectorSection.jsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_sectorsection_jsx_section_sectorsection",
+      "target": "src_backup_animasi_penuh_components_section_sectorsection_jsx_section_sectorsection_sector_custom_data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/SectorSection.jsx",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_sectorsection_jsx_section_sectorsection",
+      "target": "src_backup_animasi_penuh_components_section_sectorsection_jsx_section_sectorsection_sectorsection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/SectorSection.jsx",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_sectorsection_jsx_section_sectorsection",
+      "target": "src_backup_animasi_penuh_components_section_sectorsection_jsx_section_sectorsection_sectorskeleton",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/SectorStrip.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_sectorstrip_jsx_section_sectorstrip",
+      "target": "src_backup_animasi_penuh_components_section_sectorstrip_jsx_section_sectorstrip_sectorstrip",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/StatsSection.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_statssection_jsx_section_statssection",
+      "target": "src_backup_animasi_penuh_components_section_statssection_jsx_section_statssection_counter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/StatsSection.jsx",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_statssection_jsx_section_statssection",
+      "target": "src_backup_animasi_penuh_components_section_statssection_jsx_section_statssection_statssection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/TermsConditions.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_termsconditions_jsx_section_termsconditions",
+      "target": "src_backup_animasi_penuh_components_section_termsconditions_jsx_section_termsconditions_termsconditions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/VissionMission.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_vissionmission_jsx_section_vissionmission",
+      "target": "src_backup_animasi_penuh_components_section_vissionmission_jsx_section_vissionmission_vissionmission",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/WhyJoin.jsx",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_whyjoin_jsx_section_whyjoin",
+      "target": "src_backup_animasi_penuh_components_section_whyjoin_jsx_section_whyjoin_whyjoin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/section/WhyJoin.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_section_whyjoin_jsx_section_whyjoin",
+      "target": "src_backup_animasi_penuh_components_section_whyjoin_jsx_section_whyjoin_whyjoindata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/skeleton/HeroSkeleton.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_skeleton_heroskeleton_jsx_skeleton_heroskeleton",
+      "target": "src_backup_animasi_penuh_components_skeleton_heroskeleton_jsx_skeleton_heroskeleton_heroskeleton",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/skeleton/IntroSectionSkeleton.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_skeleton_introsectionskeleton_jsx_skeleton_introsectionskeleton",
+      "target": "src_backup_animasi_penuh_components_skeleton_introsectionskeleton_jsx_skeleton_introsectionskeleton_introsectionskeleton",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/ui/GooeyFilter.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_ui_gooeyfilter_jsx_ui_gooeyfilter",
+      "target": "src_backup_animasi_penuh_components_ui_gooeyfilter_jsx_ui_gooeyfilter_gooeyfilter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/_backup_animasi_penuh/components/ui/ShareButtons.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_backup_animasi_penuh_components_ui_sharebuttons_jsx_ui_sharebuttons",
+      "target": "src_backup_animasi_penuh_components_ui_sharebuttons_jsx_ui_sharebuttons_sharebuttons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/SectionRenderer.jsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "src_components_sectionrenderer_jsx_components_sectionrenderer",
+      "target": "src_components_sectionrenderer_jsx_components_sectionrenderer_component_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/SectionRenderer.jsx",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "src_components_sectionrenderer_jsx_components_sectionrenderer",
+      "target": "src_components_sectionrenderer_jsx_components_sectionrenderer_safecomponentwrapper",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/SectionRenderer.jsx",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "src_components_sectionrenderer_jsx_components_sectionrenderer",
+      "target": "src_components_sectionrenderer_jsx_components_sectionrenderer_sectionrenderer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/SectionRenderer.jsx",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "src_components_sectionrenderer_jsx_components_sectionrenderer",
+      "target": "src_components_sectionrenderer_jsx_components_sectionrenderer_theme_mapping",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/TitleManager.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_components_titlemanager_jsx_components_titlemanager",
+      "target": "src_components_titlemanager_jsx_components_titlemanager_titlemanager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/layout/Footer.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_components_layout_footer_jsx_layout_footer",
+      "target": "src_components_layout_footer_jsx_layout_footer_footer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/layout/LegalLayoutWrapper.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_components_layout_legallayoutwrapper_jsx_layout_legallayoutwrapper",
+      "target": "src_components_layout_legallayoutwrapper_jsx_layout_legallayoutwrapper_legallayoutwrapper",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/layout/Navbar.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_components_layout_navbar_jsx_layout_navbar",
+      "target": "src_components_layout_navbar_jsx_layout_navbar_navbar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/components/layout/Navbar.jsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "src_components_layout_navbar_jsx_layout_navbar_navbar",
+      "target": "hooks_usenavbartheme_usenavbartheme"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/CardSection.jsx",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "src_components_section_cardsection_jsx_section_cardsection",
+      "target": "src_components_section_cardsection_jsx_section_cardsection_cardsection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/CardSection.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_components_section_cardsection_jsx_section_cardsection",
+      "target": "src_components_section_cardsection_jsx_section_cardsection_puzzleshapes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/CardSection.jsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "src_components_section_cardsection_jsx_section_cardsection",
+      "target": "src_components_section_cardsection_jsx_section_cardsection_skeletonloader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/CareerJobs.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_components_section_careerjobs_jsx_section_careerjobs",
+      "target": "src_components_section_careerjobs_jsx_section_careerjobs_careerjobs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/CareerNavigator.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_components_section_careernavigator_jsx_section_careernavigator",
+      "target": "src_components_section_careernavigator_jsx_section_careernavigator_careernavigator",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/CareerSection.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_components_section_careersection_jsx_section_careersection",
+      "target": "src_components_section_careersection_jsx_section_careersection_careersection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/EmployeeEvents.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_components_section_employeeevents_jsx_section_employeeevents",
+      "target": "src_components_section_employeeevents_jsx_section_employeeevents_employeeevents",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/EventDetailPage.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_components_section_eventdetailpage_jsx_section_eventdetailpage",
+      "target": "src_components_section_eventdetailpage_jsx_section_eventdetailpage_eventdetailpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/HeroCarousel.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_components_section_herocarousel_jsx_section_herocarousel",
+      "target": "src_components_section_herocarousel_jsx_section_herocarousel_herocarousel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/HeroSector.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_components_section_herosector_jsx_section_herosector",
+      "target": "src_components_section_herosector_jsx_section_herosector_herosector",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/HistorySection.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_components_section_historysection_jsx_section_historysection",
+      "target": "src_components_section_historysection_jsx_section_historysection_historysection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/IntroSection.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_components_section_introsection_jsx_section_introsection",
+      "target": "src_components_section_introsection_jsx_section_introsection_introsection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/JobDetailModal.jsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "src_components_section_jobdetailmodal_jsx_section_jobdetailmodal",
+      "target": "src_components_section_jobdetailmodal_jsx_section_jobdetailmodal_jobdetailmodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/Layout1.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_components_section_layout1_jsx_section_layout1",
+      "target": "src_components_section_layout1_jsx_section_layout1_layout1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/Layout10.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_components_section_layout10_jsx_section_layout10",
+      "target": "src_components_section_layout10_jsx_section_layout10_layout10",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/Layout2.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_components_section_layout2_jsx_section_layout2",
+      "target": "src_components_section_layout2_jsx_section_layout2_layout2",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/Layout3.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_components_section_layout3_jsx_section_layout3",
+      "target": "src_components_section_layout3_jsx_section_layout3_layout3",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/Layout4.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_components_section_layout4_jsx_section_layout4",
+      "target": "src_components_section_layout4_jsx_section_layout4_layout4",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/Layout5.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_components_section_layout5_jsx_section_layout5",
+      "target": "src_components_section_layout5_jsx_section_layout5_layout5",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/Layout6.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_components_section_layout6_jsx_section_layout6",
+      "target": "src_components_section_layout6_jsx_section_layout6_layout6",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/Layout7.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_components_section_layout7_jsx_section_layout7",
+      "target": "src_components_section_layout7_jsx_section_layout7_layout7",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/Layout8.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_components_section_layout8_jsx_section_layout8",
+      "target": "src_components_section_layout8_jsx_section_layout8_layout8",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/Layout9.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_components_section_layout9_jsx_section_layout9",
+      "target": "src_components_section_layout9_jsx_section_layout9_layout9",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/LegalLayoutWrapper.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_components_section_legallayoutwrapper_jsx_section_legallayoutwrapper",
+      "target": "src_components_section_legallayoutwrapper_jsx_section_legallayoutwrapper_legallayoutwrapper",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/MilestoneSection.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_components_section_milestonesection_jsx_section_milestonesection",
+      "target": "src_components_section_milestonesection_jsx_section_milestonesection_milestonesection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/NewsSection.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_components_section_newssection_jsx_section_newssection",
+      "target": "src_components_section_newssection_jsx_section_newssection_newssection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/NewsTeaser.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_components_section_newsteaser_jsx_section_newsteaser",
+      "target": "src_components_section_newsteaser_jsx_section_newsteaser_newsteaser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/OurValues.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_components_section_ourvalues_jsx_section_ourvalues",
+      "target": "src_components_section_ourvalues_jsx_section_ourvalues_ourvalues",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/PrivacyPolicy.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_components_section_privacypolicy_jsx_section_privacypolicy",
+      "target": "src_components_section_privacypolicy_jsx_section_privacypolicy_privacypolicy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/SectorSection.jsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "src_components_section_sectorsection_jsx_section_sectorsection",
+      "target": "src_components_section_sectorsection_jsx_section_sectorsection_sector_custom_data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/SectorSection.jsx",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "src_components_section_sectorsection_jsx_section_sectorsection",
+      "target": "src_components_section_sectorsection_jsx_section_sectorsection_sectorsection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/SectorSection.jsx",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "src_components_section_sectorsection_jsx_section_sectorsection",
+      "target": "src_components_section_sectorsection_jsx_section_sectorsection_sectorskeleton",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/SectorStrip.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_components_section_sectorstrip_jsx_section_sectorstrip",
+      "target": "src_components_section_sectorstrip_jsx_section_sectorstrip_sectorstrip",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/StatsSection.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_components_section_statssection_jsx_section_statssection",
+      "target": "src_components_section_statssection_jsx_section_statssection_counter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/StatsSection.jsx",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "src_components_section_statssection_jsx_section_statssection",
+      "target": "src_components_section_statssection_jsx_section_statssection_statssection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/TermsConditions.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_components_section_termsconditions_jsx_section_termsconditions",
+      "target": "src_components_section_termsconditions_jsx_section_termsconditions_termsconditions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/VissionMission.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_components_section_vissionmission_jsx_section_vissionmission",
+      "target": "src_components_section_vissionmission_jsx_section_vissionmission_vissionmission",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/WhyJoin.jsx",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "src_components_section_whyjoin_jsx_section_whyjoin",
+      "target": "src_components_section_whyjoin_jsx_section_whyjoin_whyjoin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/section/WhyJoin.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_components_section_whyjoin_jsx_section_whyjoin",
+      "target": "src_components_section_whyjoin_jsx_section_whyjoin_whyjoindata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/skeleton/HeroSkeleton.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_components_skeleton_heroskeleton_jsx_skeleton_heroskeleton",
+      "target": "src_components_skeleton_heroskeleton_jsx_skeleton_heroskeleton_heroskeleton",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/skeleton/IntroSectionSkeleton.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_components_skeleton_introsectionskeleton_jsx_skeleton_introsectionskeleton",
+      "target": "src_components_skeleton_introsectionskeleton_jsx_skeleton_introsectionskeleton_introsectionskeleton",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ui/GooeyFilter.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_components_ui_gooeyfilter_jsx_ui_gooeyfilter",
+      "target": "src_components_ui_gooeyfilter_jsx_ui_gooeyfilter_gooeyfilter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ui/ShareButtons.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_components_ui_sharebuttons_jsx_ui_sharebuttons",
+      "target": "src_components_ui_sharebuttons_jsx_ui_sharebuttons_sharebuttons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/context/SectorContext.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "context_sectorcontext",
+      "target": "context_sectorcontext_sectorcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/context/SectorContext.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "context_sectorcontext",
+      "target": "context_sectorcontext_sectorprovider",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/context/SectorContext.jsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "context_sectorcontext",
+      "target": "context_sectorcontext_usesector",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/SectionNavigation.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "hooks_sectionnavigation",
+      "target": "hooks_sectionnavigation_sectionnavigation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/useAllPagesData.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "hooks_useallpagesdata",
+      "target": "hooks_useallpagesdata_useallpagesdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/useFullPageSnap.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "hooks_usefullpagesnap",
+      "target": "hooks_usefullpagesnap_usefullpagesnap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/pages/FullPage.jsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "pages_fullpage_fullpage",
+      "target": "hooks_usefullpagesnap_usefullpagesnap"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/pages/SectorDetailPage.jsx",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "pages_sectordetailpage_sectordetailpage",
+      "target": "hooks_usefullpagesnap_usefullpagesnap"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/useNavbarTheme.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "hooks_usenavbartheme",
+      "target": "hooks_usenavbartheme_usenavbartheme",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/usePageData.js",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "hooks_usepagedata",
+      "target": "hooks_usepagedata_usepagedata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/pages/FullPage.jsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "pages_fullpage_fullpage",
+      "target": "hooks_usepagedata_usepagedata"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/AutoTranslate.jsx",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "lib_autotranslate",
+      "target": "lib_autotranslate_autotranslate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/AutoTranslate.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "lib_autotranslate",
+      "target": "lib_autotranslate_translatedynamictext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/api.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "lib_api",
+      "target": "lib_api_api",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/translateService.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "lib_translateservice",
+      "target": "lib_translateservice_translatetext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/translator.js",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "lib_translator",
+      "target": "lib_translator_translatedynamictext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/FullPage.jsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "pages_fullpage",
+      "target": "pages_fullpage_fullpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/LegalPage.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "pages_legalpage",
+      "target": "pages_legalpage_legalpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/NewsDetailPage.jsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "pages_newsdetailpage",
+      "target": "pages_newsdetailpage_newsdetailpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/NewsSidebar.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "pages_newssidebar",
+      "target": "pages_newssidebar_newssidebar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/SectorDetailPage.jsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "pages_sectordetailpage",
+      "target": "pages_sectordetailpage_component_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/SectorDetailPage.jsx",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "pages_sectordetailpage",
+      "target": "pages_sectordetailpage_sectordetailpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/SectorPage.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "pages_sectorpage",
+      "target": "pages_sectorpage_sectorpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "agents",
+      "target": "agents_graphify",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "readme_react_vite",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "readme_react_vite",
+      "target": "readme_expanding_the_eslint_configuration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "readme_react_vite",
+      "target": "readme_react_compiler",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "TODO.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "todo",
+      "target": "todo_fix_mouse_scroll_issue_on_all_pages",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "TODO.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "todo_fix_mouse_scroll_issue_on_all_pages",
+      "target": "todo_status_in_progress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "TODO.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "todo_status_in_progress",
+      "target": "todo_breakdown_of_approved_plan",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "d2b41efc36d51e87d3a585bb9783d25fa7343173"
+}

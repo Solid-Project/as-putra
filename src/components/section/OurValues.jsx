@@ -31,16 +31,16 @@ const OurValues = ({ data, isActive, index }) => {
     
     tl.fromTo(bgLogoRef.current, 
       { opacity: 0, scale: 1.2, rotate: 0 },
-      { opacity: 0.08, scale: 1.1, rotate: -8, duration: 2, ease: "power2.out" }
+      { opacity: 0.08, scale: 1.1, rotate: -8, duration: 2, ease: "power2.out", force3D: true }
     );
 
     tl.fromTo(headerRef.current,
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6 },
+      { opacity: 1, y: 0, duration: 0.6, force3D: true },
       "-=1.5"
     ).fromTo(cards,
       { opacity: 0, y: 30, scale: 0.95 },
-      { opacity: 1, y: 0, scale: 1, stagger: 0.1, duration: 0.6, ease: "power2.out" },
+      { opacity: 1, y: 0, scale: 1, stagger: 0.1, duration: 0.6, ease: "power2.out", force3D: true },
       "-=0.4"
     );
   }, [isActive, data, valueItems]);

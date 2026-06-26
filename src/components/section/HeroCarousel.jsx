@@ -129,19 +129,19 @@ const HeroCarousel = ({ data, isActive, index }) => {
         },
       });
 
-      tl.fromTo(titleRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power4.out" });
+      tl.fromTo(titleRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power4.out", force3D: true });
       
       if (lineRef.current) {
-        tl.fromTo(lineRef.current, { width: 0 }, { width: 80, duration: 0.6, ease: "power2.inOut" }, "-=0.5");
+        tl.fromTo(lineRef.current, { width: 0 }, { width: 80, duration: 0.6, ease: "power2.inOut", force3D: true }, "-=0.5");
       }
 
-      tl.fromTo(subtitleRef.current, { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, "-=0.4");
+      tl.fromTo(subtitleRef.current, { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, force3D: true }, "-=0.4");
       
       if (activeButtons.length > 0 && buttonsRef.current?.children?.length) {
         tl.fromTo(
           buttonsRef.current.children,
           { y: 15, opacity: 0 },
-          { y: 0, opacity: 1, stagger: 0.1, duration: 0.5, ease: "power2.out" },
+          { y: 0, opacity: 1, stagger: 0.1, duration: 0.5, ease: "power2.out", force3D: true },
           "-=0.3"
         );
       }

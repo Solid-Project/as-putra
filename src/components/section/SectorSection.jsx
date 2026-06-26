@@ -151,8 +151,8 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
       if (triggerAnim) {
         ScrollTrigger.refresh();
         const tl = gsap.timeline();
-        tl.fromTo(headerRef.current, { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" })
-          .fromTo(".sector-card-item", { y: 35, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.7, ease: "power2.out" }, "-=0.3");
+        tl.fromTo(headerRef.current, { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", force3D: true })
+          .fromTo(".sector-card-item", { y: 35, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.7, ease: "power2.out", force3D: true }, "-=0.3");
       } else if (!isDesktop) {
         gsap.set([headerRef.current, ".sector-card-item"], { opacity: 1, y: 0, clearProps: "all" });
       }

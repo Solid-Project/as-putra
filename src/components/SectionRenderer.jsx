@@ -67,6 +67,7 @@ export const SectionRenderer = ({ sections, activeIndex }) => {
             key={section.id || `section-${index}`}
             data-theme={currentTheme}
             data-title={section.section_name}
+            data-blur={layoutName === "MilestoneSection" ? "true" : undefined}
             // KELAS WAJIB: Gunakan kombinasi 'section' dan 'no-snap' agar dibaca oleh hitungan GSAP
             className={`section w-full relative ${isNoSnap ? "no-snap h-auto" : "h-screen"}`}
             style={{

@@ -6,6 +6,7 @@ import logoDark from "@/assets/logo-teks-asli.png";
 const useNavbarTheme = () => {
   const [theme, setTheme] = useState("dark");
   const [logo, setLogo] = useState(logoLight);
+  const [needsBlur, setNeedsBlur] = useState(false);
 
   useEffect(() => {
     const handleThemeChange = () => {
@@ -13,6 +14,7 @@ const useNavbarTheme = () => {
       
       // Kita cek section yang berada di area atas layar (posisi navbar)
       const navbarHeight = 80; 
+      let foundBlur = false;
       
       sections.forEach((section) => {
         const rect = section.getBoundingClientRect();
@@ -24,6 +26,9 @@ const useNavbarTheme = () => {
          */
         if (rect.top <= navbarHeight && rect.bottom >= navbarHeight) {
           const sectionTheme = section.getAttribute("data-theme");
+          const sectionBlur = section.getAttribute("data-blur");
+          
+          if (sectionBlur === "true") foundBlur = true;
           
           if (sectionTheme && sectionTheme !== theme) {
             setTheme(sectionTheme);
@@ -36,6 +41,8 @@ const useNavbarTheme = () => {
           }
         }
       });
+
+      setNeedsBlur(foundBlur);
     };
 
     // Jalankan saat scroll dan resize
@@ -51,7 +58,7 @@ const useNavbarTheme = () => {
     };
   }, [theme]); // Dependency theme agar pengecekan lebih akurat
 
-  return { theme, logo };
+  return { theme, logo, needsBlur };
 };
 
 export default useNavbarTheme;

@@ -49,10 +49,12 @@ const Layout2 = ({ data, isActive, index }) => {
     let ctx = gsap.context(() => {
       gsap.to(silhouetteLeftRef.current, {
         y: -60, rotate: -5,
+        force3D: true,
         scrollTrigger: { trigger: sectionRef.current, scrub: 1 }
       });
       gsap.to(silhouetteRightRef.current, {
         y: 60, rotate: 5,
+        force3D: true,
         scrollTrigger: { trigger: sectionRef.current, scrub: 1 }
       });
     }, sectionRef);

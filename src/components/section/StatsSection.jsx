@@ -17,6 +17,7 @@ const Counter = ({ target, suffix, label, sectionRef }) => {
         value: target,
         duration: 2,
         ease: "power2.out",
+        force3D: true,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top 90%",
@@ -62,6 +63,7 @@ const StatsSection = ({ data, index }) => {
       gsap.to(bgRef.current, {
         x: 30,
         rotate: 5,
+        force3D: true,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top bottom",

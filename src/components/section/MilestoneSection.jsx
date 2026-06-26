@@ -81,6 +81,7 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
         gsap.to(logo, {
           y: -speed * 2.5,
           rotation: "+=30",
+          force3D: true,
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top bottom",
@@ -180,7 +181,7 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
 
         {/* --- TIMELINE BODY --- */}
         <div className="relative max-w-[1000px] mx-auto pb-20">
-          <div ref={lineRef} className="absolute left-1/2 -translate-x-1/2 w-[2px] top-0 bottom-0 hidden md:block" 
+          <div ref={lineRef} className="absolute left-1/2 -translate-x-1/2 w-[2px] top-0 bottom-0 hidden md:block -z-10" 
                style={{ background: `linear-gradient(to bottom, transparent, var(--color-utama) 15%, var(--color-utama) 85%, transparent)` }} />
 
           {data.layout_data?.map((item, idx) => {
@@ -209,11 +210,11 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
                 >
                   <div className={`absolute top-0 bottom-0 w-1 transition-all duration-500 bg-[var(--color-utama)] opacity-0 group-hover:opacity-100 ${isLeft ? "right-0" : "left-0"}`} />
 
-                  <div className={`flex items-center gap-3 mb-4 ${isLeft ? "md:flex-row-reverse" : "flex-row"}`}>
-                    <div className="px-5 py-1.5 rounded-full text-[10px] font-black tracking-[0.2em] bg-[#1D2B53] text-[#FFC619] shadow-xl">
+                  <div className={`flex items-center gap-3 mb-5 ${isLeft ? "md:flex-row-reverse" : "flex-row"}`}>
+                    <span className="font-black text-xl md:text-2xl lg:text-3xl tracking-tight text-[var(--color-utama)]">
                       {item.timelineYear}
-                    </div>
-                    <div className="h-[2px] flex-grow bg-gray-100 group-hover:bg-[var(--color-utama)]/20 transition-colors" />
+                    </span>
+                    <div className="h-[2px] flex-grow bg-gray-100 group-hover:bg-[#FFC619] transition-colors duration-500" />
                   </div>
 
                   <h3 className="font-bold mb-3 text-[var(--color-teks)] text-xl lg:text-2xl font-['Playfair_Display']">

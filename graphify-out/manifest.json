@@ -1,0 +1,652 @@
+{
+  ".opencode/opencode.json": {
+    "mtime": 1782403255.3030534,
+    "ast_hash": "abcc8b9dcd80bca5f9dde6d9f0c3ae79",
+    "semantic_hash": ""
+  },
+  ".opencode/plugins/graphify.js": {
+    "mtime": 1782403255.302857,
+    "ast_hash": "d12d57c380c6f01a0a3c3d480824d09f",
+    "semantic_hash": ""
+  },
+  "eslint.config.js": {
+    "mtime": 1778396002.650591,
+    "ast_hash": "49c8473bcfcec3aef596a5fb04a6df06",
+    "semantic_hash": ""
+  },
+  "package.json": {
+    "mtime": 1778398958.518081,
+    "ast_hash": "86222f7dbca545ad9881ecba0a77b422",
+    "semantic_hash": ""
+  },
+  "src/App.jsx": {
+    "mtime": 1778989883.090331,
+    "ast_hash": "15a13a58b661c672391c087f4aa0ec4d",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/SectionRenderer.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "a34e2348bd0dab6b3266d9e859a5afe1",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/TitleManager.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "8fe52414a2411fc531ef9a661b3e3977",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/layout/Footer.jsx": {
+    "mtime": 1782305121.2405386,
+    "ast_hash": "3ce06848dc2c757f90c02fe38720831c",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/layout/LegalLayoutWrapper.jsx": {
+    "mtime": 1782305121.2405386,
+    "ast_hash": "d971455bd116c83235d2bfeabc5f6020",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/layout/Navbar.jsx": {
+    "mtime": 1782305121.2405386,
+    "ast_hash": "1b50fb2eb99c9da36ec17cf2472e26d5",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/CardSection.jsx": {
+    "mtime": 1782305121.2410243,
+    "ast_hash": "e7866bced5f4124037ac3467161ef1d7",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/CareerJobs.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "aa481f1d3a12e8977b5c210edd50b832",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/CareerNavigator.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "86b54188f7bba57a78a29151db0bd6ac",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/CareerSection.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "d2ffee2061ce879cb62a76d3710eaf56",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/EmployeeEvents.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "24615e9d5a3b529c865ee9e719bb4f9c",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/EventDetailPage.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "42631d8c437783c66fb6f434d507025b",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/HeroCarousel.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "2766e43e0f94a69821ad7cb181415286",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/HeroSector.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "abed6fbee6f2e18d2e87eec2f3005fc0",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/HistorySection.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "8b3736682a3b699c57ca007163bdab64",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/IntroSection.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "f1875318f8549103faa69e3ffe050a8e",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/JobDetailModal.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "de5552ac6f6d6c4985b8bd63069cb8e5",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/Layout1.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "bf7d0b24151643b35321c49dc25a7e22",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/Layout10.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "7766eed70896ecd11d9a21e0fefcddfa",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/Layout2.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "54f5c9969d687369fb467d7715c6665c",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/Layout3.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "9ffdabcb78ba3bfc13ed9b960f4221ad",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/Layout4.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "05fc070245b845a4268240ff34aa7bbb",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/Layout5.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "e2d2018ce8866138bdd8bc6ee403e186",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/Layout6.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "11f6dd2ba8571730cc937782a1f8eea2",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/Layout7.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "8b7558b246321e9beab433ec4f0e993f",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/Layout8.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "458359b6a26b19593978fbcaa620ee71",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/Layout9.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "efbba8b1e39e4815a022a15fd225836b",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/LegalLayoutWrapper.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "d971455bd116c83235d2bfeabc5f6020",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/MilestoneSection.jsx": {
+    "mtime": 1782305121.2410243,
+    "ast_hash": "03c836e3f91cf02beb7fc65540489812",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/NewsSection.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "6a1f8c893ffaf6e6b4b9e153ee3194ad",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/NewsTeaser.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "fe80079fb6d8f188d7f8a63bd19d56ad",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/OurValues.jsx": {
+    "mtime": 1782305121.2410243,
+    "ast_hash": "fe0fe017f97fcddbecf23d8fde19f776",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/PrivacyPolicy.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "a76c069b1366330c424be7be2af0e3b6",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/SectorSection.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "6a70af4ffd1659d5659b9513e9cf3b2b",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/SectorStrip.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "8e8e1b769e4a757771ea062ac58f4a3e",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/StatsSection.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "cd4e24835e010edc5a8e6c1c4d691e31",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/TermsConditions.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "be701bf9614dabfdc0b9fdafd601712d",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/VissionMission.jsx": {
+    "mtime": 1782305121.2410243,
+    "ast_hash": "cfdc080f2c49a989a43c2860d8999335",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/section/WhyJoin.jsx": {
+    "mtime": 1782305121.241175,
+    "ast_hash": "80ca2ae72a4460401603dc9b64838a14",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/skeleton/HeroSkeleton.jsx": {
+    "mtime": 1782305121.2407556,
+    "ast_hash": "63755960b8afddc8ad88c66db98cca03",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/skeleton/IntroSectionSkeleton.jsx": {
+    "mtime": 1782305121.2407556,
+    "ast_hash": "4dc102b0cc825915a22586ec92e06239",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/ui/GooeyFilter.jsx": {
+    "mtime": 1782305121.2409017,
+    "ast_hash": "3f18d9cd2afc8d3cd9c65cd76542b1fa",
+    "semantic_hash": ""
+  },
+  "src/_backup_animasi_penuh/components/ui/ShareButtons.jsx": {
+    "mtime": 1782305121.2409403,
+    "ast_hash": "13dcf31ead81d659531631f9a00f3632",
+    "semantic_hash": ""
+  },
+  "src/components/SectionRenderer.jsx": {
+    "mtime": 1782308312.149913,
+    "ast_hash": "6f7cd427d8619afb6351423dd1e026c6",
+    "semantic_hash": ""
+  },
+  "src/components/TitleManager.jsx": {
+    "mtime": 1778796041.4350967,
+    "ast_hash": "8fe52414a2411fc531ef9a661b3e3977",
+    "semantic_hash": ""
+  },
+  "src/components/layout/Footer.jsx": {
+    "mtime": 1778990852.6431978,
+    "ast_hash": "3ce06848dc2c757f90c02fe38720831c",
+    "semantic_hash": ""
+  },
+  "src/components/layout/LegalLayoutWrapper.jsx": {
+    "mtime": 1778989968.609527,
+    "ast_hash": "d971455bd116c83235d2bfeabc5f6020",
+    "semantic_hash": ""
+  },
+  "src/components/layout/Navbar.jsx": {
+    "mtime": 1782308475.6884084,
+    "ast_hash": "c87f373224121e283f00b06ecda66cba",
+    "semantic_hash": ""
+  },
+  "src/components/section/CardSection.jsx": {
+    "mtime": 1782305334.1694415,
+    "ast_hash": "4e68a9737af9abcf3a2487666a8a3e71",
+    "semantic_hash": ""
+  },
+  "src/components/section/CareerJobs.jsx": {
+    "mtime": 1779001825.9376411,
+    "ast_hash": "aa481f1d3a12e8977b5c210edd50b832",
+    "semantic_hash": ""
+  },
+  "src/components/section/CareerNavigator.jsx": {
+    "mtime": 1782306358.567426,
+    "ast_hash": "df66e1c59ef4b3750e3812e35e85f55c",
+    "semantic_hash": ""
+  },
+  "src/components/section/CareerSection.jsx": {
+    "mtime": 1782306385.4473596,
+    "ast_hash": "4c30ed843c41c93d4f90b74b604ce5c6",
+    "semantic_hash": ""
+  },
+  "src/components/section/EmployeeEvents.jsx": {
+    "mtime": 1782305392.0446906,
+    "ast_hash": "2baab6e4b2de41062dbf1122e3a782fe",
+    "semantic_hash": ""
+  },
+  "src/components/section/EventDetailPage.jsx": {
+    "mtime": 1779001882.9174013,
+    "ast_hash": "42631d8c437783c66fb6f434d507025b",
+    "semantic_hash": ""
+  },
+  "src/components/section/HeroCarousel.jsx": {
+    "mtime": 1782305426.9747472,
+    "ast_hash": "b81899df84aaf314d8dc3220baf655c8",
+    "semantic_hash": ""
+  },
+  "src/components/section/HeroSector.jsx": {
+    "mtime": 1779001892.324215,
+    "ast_hash": "abed6fbee6f2e18d2e87eec2f3005fc0",
+    "semantic_hash": ""
+  },
+  "src/components/section/HistorySection.jsx": {
+    "mtime": 1779015154.5377843,
+    "ast_hash": "8b3736682a3b699c57ca007163bdab64",
+    "semantic_hash": ""
+  },
+  "src/components/section/IntroSection.jsx": {
+    "mtime": 1782305238.5306768,
+    "ast_hash": "9e4ee313df879a951df51502b8a74c03",
+    "semantic_hash": ""
+  },
+  "src/components/section/JobDetailModal.jsx": {
+    "mtime": 1779001961.158954,
+    "ast_hash": "de5552ac6f6d6c4985b8bd63069cb8e5",
+    "semantic_hash": ""
+  },
+  "src/components/section/Layout1.jsx": {
+    "mtime": 1779001971.955388,
+    "ast_hash": "bf7d0b24151643b35321c49dc25a7e22",
+    "semantic_hash": ""
+  },
+  "src/components/section/Layout10.jsx": {
+    "mtime": 1779272618.741332,
+    "ast_hash": "7766eed70896ecd11d9a21e0fefcddfa",
+    "semantic_hash": ""
+  },
+  "src/components/section/Layout2.jsx": {
+    "mtime": 1782305398.2612493,
+    "ast_hash": "c0c85ece9290c23b5c43921e9596eb91",
+    "semantic_hash": ""
+  },
+  "src/components/section/Layout3.jsx": {
+    "mtime": 1782309917.0526989,
+    "ast_hash": "48190a67acaac42851e1d7d169a95f4c",
+    "semantic_hash": ""
+  },
+  "src/components/section/Layout4.jsx": {
+    "mtime": 1778682080.549593,
+    "ast_hash": "05fc070245b845a4268240ff34aa7bbb",
+    "semantic_hash": ""
+  },
+  "src/components/section/Layout5.jsx": {
+    "mtime": 1779272618.7513323,
+    "ast_hash": "e2d2018ce8866138bdd8bc6ee403e186",
+    "semantic_hash": ""
+  },
+  "src/components/section/Layout6.jsx": {
+    "mtime": 1778936762.0210896,
+    "ast_hash": "11f6dd2ba8571730cc937782a1f8eea2",
+    "semantic_hash": ""
+  },
+  "src/components/section/Layout7.jsx": {
+    "mtime": 1779272618.7513323,
+    "ast_hash": "8b7558b246321e9beab433ec4f0e993f",
+    "semantic_hash": ""
+  },
+  "src/components/section/Layout8.jsx": {
+    "mtime": 1778759253.336171,
+    "ast_hash": "458359b6a26b19593978fbcaa620ee71",
+    "semantic_hash": ""
+  },
+  "src/components/section/Layout9.jsx": {
+    "mtime": 1779263888.9805646,
+    "ast_hash": "efbba8b1e39e4815a022a15fd225836b",
+    "semantic_hash": ""
+  },
+  "src/components/section/LegalLayoutWrapper.jsx": {
+    "mtime": 1778989232.1077163,
+    "ast_hash": "d971455bd116c83235d2bfeabc5f6020",
+    "semantic_hash": ""
+  },
+  "src/components/section/MilestoneSection.jsx": {
+    "mtime": 1782308354.4604502,
+    "ast_hash": "d61446012438dc8425724308770e53a3",
+    "semantic_hash": ""
+  },
+  "src/components/section/NewsSection.jsx": {
+    "mtime": 1782305394.2246528,
+    "ast_hash": "6f5a17ae7bbf533ba3d8b5dc2c2e691a",
+    "semantic_hash": ""
+  },
+  "src/components/section/NewsTeaser.jsx": {
+    "mtime": 1782305298.2696483,
+    "ast_hash": "3c46d7ada67625627817d50635d601b5",
+    "semantic_hash": ""
+  },
+  "src/components/section/OurValues.jsx": {
+    "mtime": 1782305300.2881863,
+    "ast_hash": "daee6db609c3fb1aa96a67ddf577d9fe",
+    "semantic_hash": ""
+  },
+  "src/components/section/PrivacyPolicy.jsx": {
+    "mtime": 1778989432.9866278,
+    "ast_hash": "a76c069b1366330c424be7be2af0e3b6",
+    "semantic_hash": ""
+  },
+  "src/components/section/SectorSection.jsx": {
+    "mtime": 1782305302.316245,
+    "ast_hash": "13cd16ff7f4642f106617c3f963a5314",
+    "semantic_hash": ""
+  },
+  "src/components/section/SectorStrip.jsx": {
+    "mtime": 1778933649.187005,
+    "ast_hash": "8e8e1b769e4a757771ea062ac58f4a3e",
+    "semantic_hash": ""
+  },
+  "src/components/section/StatsSection.jsx": {
+    "mtime": 1782305332.152396,
+    "ast_hash": "2278743a09f23866addcbd451655762b",
+    "semantic_hash": ""
+  },
+  "src/components/section/TermsConditions.jsx": {
+    "mtime": 1778990028.5145876,
+    "ast_hash": "be701bf9614dabfdc0b9fdafd601712d",
+    "semantic_hash": ""
+  },
+  "src/components/section/VissionMission.jsx": {
+    "mtime": 1782305852.6488185,
+    "ast_hash": "ca08c384805fffafe1499adb468aec90",
+    "semantic_hash": ""
+  },
+  "src/components/section/WhyJoin.jsx": {
+    "mtime": 1782305396.237951,
+    "ast_hash": "84b16266644171bbf801d8696165f678",
+    "semantic_hash": ""
+  },
+  "src/components/skeleton/HeroSkeleton.jsx": {
+    "mtime": 1778689209.6943898,
+    "ast_hash": "63755960b8afddc8ad88c66db98cca03",
+    "semantic_hash": ""
+  },
+  "src/components/skeleton/IntroSectionSkeleton.jsx": {
+    "mtime": 1778689223.0345452,
+    "ast_hash": "4dc102b0cc825915a22586ec92e06239",
+    "semantic_hash": ""
+  },
+  "src/components/ui/GooeyFilter.jsx": {
+    "mtime": 1778396002.9335904,
+    "ast_hash": "3f18d9cd2afc8d3cd9c65cd76542b1fa",
+    "semantic_hash": ""
+  },
+  "src/components/ui/ShareButtons.jsx": {
+    "mtime": 1778396002.9345903,
+    "ast_hash": "13dcf31ead81d659531631f9a00f3632",
+    "semantic_hash": ""
+  },
+  "src/context/SectorContext.jsx": {
+    "mtime": 1778396002.9345903,
+    "ast_hash": "12644b0f1ac78498b224a0577d010e4d",
+    "semantic_hash": ""
+  },
+  "src/hooks/SectionNavigation.jsx": {
+    "mtime": 1778763202.9262586,
+    "ast_hash": "6677aaa00fce6508a4c6a05bd69bb722",
+    "semantic_hash": ""
+  },
+  "src/hooks/useAllPagesData.jsx": {
+    "mtime": 1778784976.6112068,
+    "ast_hash": "34b19698c384845da6cbdbfacc61a869",
+    "semantic_hash": ""
+  },
+  "src/hooks/useFullPageSnap.jsx": {
+    "mtime": 1778985838.2798202,
+    "ast_hash": "7bf0993e556fb8d9f558a0e14d941ae9",
+    "semantic_hash": ""
+  },
+  "src/hooks/useNavbarTheme.jsx": {
+    "mtime": 1782308324.5183432,
+    "ast_hash": "2074ae6aec27176462faba46121eba49",
+    "semantic_hash": ""
+  },
+  "src/hooks/usePageData.js": {
+    "mtime": 1778830424.4644692,
+    "ast_hash": "55a1b05e79a4860a4ea501bf15cf6418",
+    "semantic_hash": ""
+  },
+  "src/lib/AutoTranslate.jsx": {
+    "mtime": 1779014840.025936,
+    "ast_hash": "12fdf5054f8068cec19ff0418065e665",
+    "semantic_hash": ""
+  },
+  "src/lib/api.js": {
+    "mtime": 1778984015.539,
+    "ast_hash": "bc17d498396a515f8b0e75d6224cf61e",
+    "semantic_hash": ""
+  },
+  "src/lib/translateService.jsx": {
+    "mtime": 1778994553.1367774,
+    "ast_hash": "b87a832fc865bae40e83f6a4f6d717c0",
+    "semantic_hash": ""
+  },
+  "src/lib/translator.js": {
+    "mtime": 1779013397.1746078,
+    "ast_hash": "8282709fe562a5c94cd6a760e7e7e4a5",
+    "semantic_hash": ""
+  },
+  "src/main.jsx": {
+    "mtime": 1782208950.2208326,
+    "ast_hash": "78d1a33e9f2d2485bef0c65d10fc3444",
+    "semantic_hash": ""
+  },
+  "src/pages/FullPage.jsx": {
+    "mtime": 1779272618.7513323,
+    "ast_hash": "2f8a83156bf776bce93d109503525a41",
+    "semantic_hash": ""
+  },
+  "src/pages/LegalPage.jsx": {
+    "mtime": 1778990288.7088017,
+    "ast_hash": "6ffa936ddb7f6df4d6a6e733417bec26",
+    "semantic_hash": ""
+  },
+  "src/pages/NewsDetailPage.jsx": {
+    "mtime": 1779272618.7979999,
+    "ast_hash": "15904d3ec32689f8fb5db9846b97d702",
+    "semantic_hash": ""
+  },
+  "src/pages/NewsSidebar.jsx": {
+    "mtime": 1778795058.901393,
+    "ast_hash": "eb5899d3dbc5049acc6b2f11619c2ecd",
+    "semantic_hash": ""
+  },
+  "src/pages/SectorDetailPage.jsx": {
+    "mtime": 1779272618.7513323,
+    "ast_hash": "11e44139d8a572395e766255697fb411",
+    "semantic_hash": ""
+  },
+  "src/pages/SectorPage.jsx": {
+    "mtime": 1778947113.4014838,
+    "ast_hash": "f48bd9611ec30669a8154c8c3f9a1228",
+    "semantic_hash": ""
+  },
+  "vite.config.js": {
+    "mtime": 1778396002.9355903,
+    "ast_hash": "02ccf92de289182bf55454296e50f79a",
+    "semantic_hash": ""
+  },
+  ".github/workflows/deploy.yml": {
+    "mtime": 1782208950.2208326,
+    "ast_hash": "a2ccf4df10178d70cb83e916a8c5f9f4",
+    "semantic_hash": ""
+  },
+  "AGENTS.md": {
+    "mtime": 1782403255.3025384,
+    "ast_hash": "62c05a2bf20bf036a0b2633478663e64",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1778396002.650591,
+    "ast_hash": "605639d96a22351e50e0f3da0e9335f9",
+    "semantic_hash": ""
+  },
+  "TODO.md": {
+    "mtime": 1778396002.650591,
+    "ast_hash": "78badaedfba2dbf5a9113a09806bb358",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1778993328.491435,
+    "ast_hash": "1b4ad38ca4d7ef21f6756b4f00ff4217",
+    "semantic_hash": ""
+  },
+  "logo-teks-asli.png": {
+    "mtime": 1778795726.37968,
+    "ast_hash": "0786d75eb855f2db602829f32ed026d3",
+    "semantic_hash": ""
+  },
+  "src/assets/img/AMM.webp": {
+    "mtime": 1778396002.7885907,
+    "ast_hash": "2102eb93b0f37dc349db7bcea13a335e",
+    "semantic_hash": ""
+  },
+  "src/assets/img/Otomotif.webp": {
+    "mtime": 1778949429.7551682,
+    "ast_hash": "6e92483a7745a1e58bd2421a1a5863f2",
+    "semantic_hash": ""
+  },
+  "src/assets/img/herocarousel6.webp": {
+    "mtime": 1778328493.414543,
+    "ast_hash": "e69de6b25b23bea955c33e159cac78be",
+    "semantic_hash": ""
+  },
+  "src/assets/img/hotel5.jpeg": {
+    "mtime": 1778396002.8705904,
+    "ast_hash": "2730d4c9c6abd3565274b358c00e3f49",
+    "semantic_hash": ""
+  },
+  "src/assets/img/karir.webp": {
+    "mtime": 1778396002.8775904,
+    "ast_hash": "9cac613ee23622316e1fa67b47f84358",
+    "semantic_hash": ""
+  },
+  "src/assets/img/lifestyle.jpg": {
+    "mtime": 1779272618.5146606,
+    "ast_hash": "43e90b7addeb4062bf8c01863559ae57",
+    "semantic_hash": ""
+  },
+  "src/assets/img/property2.jpeg": {
+    "mtime": 1778948833.2696085,
+    "ast_hash": "fd952ec373ccfd565f256760afe8e3e5",
+    "semantic_hash": ""
+  },
+  "src/assets/img/sektor.webp": {
+    "mtime": 1778396002.9235902,
+    "ast_hash": "75a46fd4b5d9dd384d64cf0f36cfe023",
+    "semantic_hash": ""
+  },
+  "src/assets/img/transport.webp": {
+    "mtime": 1778948596.0389569,
+    "ast_hash": "ff72b7ba2baa50395245691520d836bd",
+    "semantic_hash": ""
+  },
+  "src/assets/logo-new.jpg": {
+    "mtime": 1778396002.9265902,
+    "ast_hash": "1e5eb1beeb2cea853abf1224c57f9c1b",
+    "semantic_hash": ""
+  },
+  "src/assets/logo-teks-asli.png": {
+    "mtime": 1777887692.0,
+    "ast_hash": "0786d75eb855f2db602829f32ed026d3",
+    "semantic_hash": ""
+  },
+  "src/assets/logo-teks-putih.png": {
+    "mtime": 1777887692.0,
+    "ast_hash": "364c97e82e901fc3d9eeee0d8f317901",
+    "semantic_hash": ""
+  },
+  "src/assets/logo-teks.jpg": {
+    "mtime": 1777887692.0,
+    "ast_hash": "d89b4b085803835a4aa87b168017d1fe",
+    "semantic_hash": ""
+  },
+  "src/assets/logo-trans.png": {
+    "mtime": 1777887692.0,
+    "ast_hash": "00b25b94d80f55dc0e9bc49db2197c1d",
+    "semantic_hash": ""
+  },
+  "src/assets/logo.jpg": {
+    "mtime": 1777887692.0,
+    "ast_hash": "58f646ba1561bb547969ea7f2ed5dd9d",
+    "semantic_hash": ""
+  },
+  "src/assets/react.svg": {
+    "mtime": 1778396002.9265902,
+    "ast_hash": "f0402b67b6ce880f65666bb49e841696",
+    "semantic_hash": ""
+  },
+  "src/assets/vite.svg": {
+    "mtime": 1778396002.9265902,
+    "ast_hash": "9960a24288958394ac50e57ff638b036",
+    "semantic_hash": ""
+  }
+}

@@ -108,6 +108,7 @@ const NewsSection = ({ activeIndex }) => {
           gsap.to(el, {
             y: i % 2 === 0 ? -80 : 80,
             ease: "none",
+            force3D: true,
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top bottom",
@@ -131,6 +132,7 @@ const NewsSection = ({ activeIndex }) => {
             duration: 0.8,
             stagger: 0.15,
             ease: "power3.out",
+            force3D: true,
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top 75%",
@@ -153,6 +155,7 @@ const NewsSection = ({ activeIndex }) => {
             duration: 0.5,
             ease: "power2.out",
             overwrite: true,
+            force3D: true
           }
         );
       }

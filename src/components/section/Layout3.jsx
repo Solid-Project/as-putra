@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,19 +8,11 @@ const Layout3 = ({ data, isActive, index }) => {
   const sectionRef = useRef(null);
   const cardRef = useRef(null);
   const bgRef = useRef(null);
-  const [activePage, setActivePage] = useState(0);
 
   const displayTitle = data?.title || "Sektor Bisnis";
   const displayImage = data?.image ? `${import.meta.env.VITE_API_URL}/storage/${data.image}` : ""; 
   const layoutData = typeof data?.layout_data === 'string' ? JSON.parse(data.layout_data) : data?.layout_data;
   const points = layoutData?.points || [];
-  
-  const itemsPerPage = 2; 
-  const totalPages = Math.ceil(points.length / itemsPerPage);
-  const currentPoints = points.slice(activePage * itemsPerPage, (activePage * itemsPerPage) + itemsPerPage);
-
-  const handleNext = () => { if (activePage < totalPages - 1) setActivePage(activePage + 1); };
-  const handlePrev = () => { if (activePage > 0) setActivePage(activePage - 1); };
 
   useEffect(() => {
     ScrollTrigger.refresh();
@@ -63,9 +54,9 @@ const Layout3 = ({ data, isActive, index }) => {
               <div className="h-[1px] w-full bg-slate-50 mt-6" />
             </div>
 
-            {/* CONTENT AREA - FIT KE FOOTER JIKA TEKS PENDEK */}
+            {/* CONTENT AREA - SCROLL KE BAWAH */}
             <div className="flex-grow space-y-6 mb-6 overflow-y-auto pr-2 custom-scroll">
-              {currentPoints.map((p, i) => (
+              {points.map((p, i) => (
                 <div key={i} className="animate-fadeIn" style={{ animationDelay: `${i * 0.1}s` }}>
                   <span className="font-black block mb-2 tracking-[0.15em] text-[10px] uppercase text-[#1D2B53]">{p.title}</span>
                   <p className="font-light text-slate-500 text-sm lg:text-[14px] leading-relaxed border-l-2 border-[#FFC619]/50 pl-4">{p.description}</p>
@@ -73,25 +64,8 @@ const Layout3 = ({ data, isActive, index }) => {
               ))}
             </div>
 
-            {/* FOOTER */}
-            <div className="flex-none flex items-center justify-between pt-6 border-t border-slate-50 mt-auto">
-              <div className="flex items-center gap-5">
-                <button onClick={handlePrev} disabled={activePage === 0} className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${activePage === 0 ? 'opacity-10' : 'hover:text-[#FFC619]'}`} style={{ color: "#1D2B53" }}>
-                  <ChevronLeftIcon className="w-3 h-3 stroke-[3]" /> Prev
-                </button>
-                <div className="w-[1px] h-3 bg-slate-200" />
-                <button onClick={handleNext} disabled={activePage === totalPages - 1} className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest ${activePage === totalPages - 1 ? 'opacity-10' : 'hover:text-[#FFC619]'}`} style={{ color: "#1D2B53" }}>
-                  Next <ChevronRightIcon className="w-3 h-3 stroke-[3]" />
-                </button>
-              </div>
-              {totalPages > 1 && (
-                <div className="flex gap-1.5">
-                  {[...Array(totalPages)].map((_, i) => (
-                    <div key={i} className={`h-[3px] transition-all duration-500 rounded-full ${activePage === i ? "w-6 bg-[#FFC619]" : "w-1.5 bg-slate-200"}`} />
-                  ))}
-                </div>
-              )}
-            </div>
+            {/* FOOTER DECORATIVE */}
+            <div className="flex-none pt-6 border-t border-slate-50 mt-auto" />
           </div>
         </div>
       </div>

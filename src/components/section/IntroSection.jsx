@@ -25,15 +25,15 @@ const IntroSection = ({ data, isActive, index }) => {
       // Animasi Floating Background (Halus)
       const shapes = floatRef.current?.children;
       if (shapes) {
-        gsap.to(shapes[0], { y: 30, duration: 10, repeat: -1, yoyo: true, ease: "sine.inOut" });
-        gsap.to(shapes[1], { x: -20, duration: 8, repeat: -1, yoyo: true, ease: "sine.inOut" });
+        gsap.to(shapes[0], { y: 30, duration: 10, repeat: -1, yoyo: true, ease: "sine.inOut", force3D: true });
+        gsap.to(shapes[1], { x: -20, duration: 8, repeat: -1, yoyo: true, ease: "sine.inOut", force3D: true });
       }
 
       // Animasi Judul
       gsap.fromTo(titleWrapperRef.current.children,
         { y: 50, opacity: 0 },
         {
-          y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power4.out",
+          y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power4.out", force3D: true,
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top center",
@@ -46,7 +46,7 @@ const IntroSection = ({ data, isActive, index }) => {
       gsap.fromTo(imageWrapperRef.current,
         { scale: 1.05, opacity: 0 },
         {
-          scale: 1, opacity: 1, duration: 1.8, ease: "expo.out",
+          scale: 1, opacity: 1, duration: 1.8, ease: "expo.out", force3D: true,
           scrollTrigger: { trigger: sectionRef.current, start: "top center" }
         }
       );

@@ -50,7 +50,8 @@ const EmployeeEvents = ({ isActive }) => {
           duration: 0.6,
           stagger: 0.1,
           ease: "power3.out",
-          overwrite: true
+          overwrite: true,
+          force3D: true
         }
       );
     }
