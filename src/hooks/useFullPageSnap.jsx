@@ -43,18 +43,21 @@ const useFullPageSnap = ({ enabled = true } = {}) => {
   const handleWheel = useCallback((e) => {
     if (!enabled) return;
 
+    // Abaikan scroll event non-pixel (seperti gesture trackpad tertentu yang bisa bikin jitter)
+    if (e.deltaMode !== 0) return;
+
     const all = getElements();
     if (all.length === 0) return;
 
-    // Filter 1: Jika animasi sedang berjalan, kunci total & abaikan sisa geseran jari
+    // Filter 1: Jika sedang animasi, kunci total
     if (lockRef.current) {
       e.preventDefault();
       return;
     }
 
-    // Filter 2: Threshold ditingkatkan ke 40 agar scroll yang tidak sengaja/terlalu pelan
-    // tidak memicu kejutan perpindahan halaman. Harus ada niat geser yang jelas.
-    if (Math.abs(e.deltaY) < 40) return;
+    // Filter 2: Threshold ditingkatkan untuk meredam sensitivitas trackpad
+    // agar tidak memicu transisi saat scrolling belum stabil
+    if (Math.abs(e.deltaY) < 50) return;
 
     const currentIdx = indexRef.current;
     const currentEl = all[currentIdx];
@@ -64,7 +67,6 @@ const useFullPageSnap = ({ enabled = true } = {}) => {
     const rect = currentEl.getBoundingClientRect();
     const vh = window.innerHeight;
 
-    // Logika No-Snap milikmu tetap aman untuk area konten panjang
     if (currentEl.classList.contains("no-snap")) {
       if (isDown) {
         if (rect.bottom > vh + 5) return; 
@@ -76,7 +78,6 @@ const useFullPageSnap = ({ enabled = true } = {}) => {
     const nextIdx = isDown ? currentIdx + 1 : currentIdx - 1;
     
     if (nextIdx >= 0 && nextIdx < all.length) {
-      // Kunci default scroll native agar browser tidak ikut menggerakkan layar secara kasar
       e.preventDefault();
       scrollToElement(nextIdx);
     }
