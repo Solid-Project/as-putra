@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import JobDetailModal from "@/components/section/JobDetailModal";
 import { 
   MapPinIcon, 
@@ -20,46 +21,27 @@ const CareerJobs = ({ isActive }) => {
   const COLOR_NAVY = "#1D2B53";
   const COLOR_GOLD = "#FFC619";
 
-  // Fetch data dari API
   useEffect(() => {
     const fetchCareers = async () => {
       try {
         setIsLoading(true);
         const apiUrl = `${import.meta.env.VITE_API_URL}/api/v1/career/list`;
         const response = await fetch(apiUrl);
-        
-        if (!response.ok) {
-          throw new Error("Gagal mengambil data karir");
-        }
-        
+        if (!response.ok) throw new Error("Gagal mengambil data karir");
         const result = await response.json();
-        const activeJobs = result.data.filter((job) => job.is_active);
-        setJobOpeningsData(activeJobs);
+        setJobOpeningsData(result.data.filter((job) => job.is_active));
       } catch (err) {
         setError(err.message);
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchCareers();
   }, []);
 
-  // Animasi GSAP
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     if (isActive && !isLoading && jobOpeningsData.length > 0) {
-      gsap.fromTo(
-        jobsRef.current,
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          stagger: 0.08,
-          ease: "power3.out",
-          overwrite: true
-        }
-      );
+      gsap.fromTo(jobsRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: "power3.out", overwrite: true });
     }
   }, [isActive, isLoading, jobOpeningsData]);
 

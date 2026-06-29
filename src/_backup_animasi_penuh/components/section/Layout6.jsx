@@ -85,7 +85,7 @@ const Layout6 = ({ data, index }) => {
     >
       {/* Background Decor Logo */}
       <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none -z-0">
-        <img src={logoAsliUrl} alt="" className="w-[90%] md:w-[80%] h-auto -rotate-12 scale-125" />
+        <img src={logoAsliUrl} alt="" loading="lazy" className="w-[90%] md:w-[80%] h-auto -rotate-12 scale-125" />
       </div>
 
       {/* OPTIMASI: Padding disesuaikan menjadi px-6 di mobile agar konten tidak terhimpit/terpotong kaku */}
@@ -135,6 +135,7 @@ const Layout6 = ({ data, index }) => {
                   <img 
                     src={`${import.meta.env.VITE_API_URL}/storage/${logo.file}`} 
                     alt={`Partner ${idx}`} 
+                    loading="lazy"
                     className="w-full h-full object-contain" 
                   />
                 </div>

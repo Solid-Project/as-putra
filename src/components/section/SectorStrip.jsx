@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -19,35 +20,28 @@ const SectorStrip = ({ data, isActive, index }) => {
     return `${cleanBase}/storage/${path}`;
   };
 
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     const bgs = bgRefs.current.filter(Boolean);
-    
-    if (bgs.length > 0) {
-      const ctx = gsap.context(() => {
-        const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
-        if (!isDesktop) return;
+    if (bgs.length === 0) return;
 
-        bgs.forEach((bg) => {
-          gsap.fromTo(bg, 
-            { y: "-10%" }, 
-            {
-              y: "10%", 
-              ease: "none",
-              scrollTrigger: {
-                trigger: sectionRef.current,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1.2,
-                fastScrollEnd: true,
-                anticipatePin: 1,
-              }
-            }
-          );
-        });
-      }, sectionRef);
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+    if (!isDesktop) return;
 
-      return () => ctx.revert();
-    }
+    bgs.forEach((bg) => {
+      gsap.fromTo(bg, 
+        { y: "-10%" }, 
+        { y: "10%", ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.2,
+            fastScrollEnd: true,
+            anticipatePin: 1,
+          }
+        }
+      );
+    });
   }, [sectors]);
 
   if (!sectors.length) return null;
@@ -62,10 +56,10 @@ const SectorStrip = ({ data, isActive, index }) => {
         {sectors.map((item, idx) => (
           <div
             key={item.id || idx}
-            className="relative flex flex-col justify-center items-start text-white border-b md:border-b-0 md:border-r border-white/10 last:border-none px-6 py-20 min-h-[50vh] md:min-h-0 md:h-full overflow-hidden bg-[#1a1a1a]"
+            className="relative flex flex-col justify-center items-start text-white border-b md:border-b-0 md:border-r border-white/10 last:border-none px-6 py-20 min-h-[50vh] md:min-h-0 md:h-full overflow-hidden bg-[#0F1A3E]"
           >
-            {/* BACKGROUND LAYER PARALAKS */}
-            <div className="absolute inset-0 z-0 overflow-hidden">
+            {/* BACKGROUND LAYER PARALLAKS & OVERLAY */}
+            <div className="absolute inset-0 z-0 bg-[#0F1A3E]">
               <div 
                 ref={(el) => (bgRefs.current[idx] = el)}
                 className="absolute inset-0 will-change-transform" 
@@ -73,13 +67,11 @@ const SectorStrip = ({ data, isActive, index }) => {
                 <OptimizedImage 
                   src={getFullImageUrl(item.image)} 
                   alt={item.title}
-                  className="w-full h-[130%] top-[-15%] absolute"
+                  className="w-full h-[130%] top-[-15%] absolute object-cover opacity-60"
                 />
-                {/* Overlay untuk keterbacaan teks */}
-                <div className="absolute inset-0 bg-[#0F1A3E]/70" />
+                <div className="absolute inset-0 bg-[#0F1A3E]/60" />
               </div>
             </div>
-
             {/* CONTENT CONTAINER */}
             <div className="relative z-10 w-full text-left flex flex-col justify-start items-start max-w-md mx-auto md:mx-0 md:h-[350px]">
               

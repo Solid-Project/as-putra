@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import gsap from "gsap";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import CareerNavigator from "@/components/section/CareerNavigator";
 import EmployeeEvents from "@/components/section/EmployeeEvents";
 import CareerJobs from "@/components/section/CareerJobs";
@@ -16,19 +17,14 @@ const CareerSection = ({ activeIndex }) => {
 
   const COLOR_GOLD = "#FFC619";
 
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     if (!isActive) return;
-
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline();
-      
-      tl.fromTo(".reveal-item", 
-        { y: 25, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.75, stagger: 0.12, ease: "power3.out", force3D: true }
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
+    const tl = gsap.timeline();
+    
+    tl.fromTo(".reveal-item", 
+      { y: 25, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.75, stagger: 0.12, ease: "power3.out", force3D: true }
+    );
   }, [isActive]);
 
   return (

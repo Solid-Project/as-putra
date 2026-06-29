@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import logoAsliUrl from "@/assets/logo.jpg";
 
-// =========================================================================
-// SETUP IMPORT GAMBAR STATIS UNIT BISNIS (Silakan sesuaikan path aslinya)
-// =========================================================================
 import imgPeternakan from "@/assets/img/AMM.webp";
 import imgHospitality from "@/assets/img/hotel5.jpeg";
 import imgRetail from "@/assets/img/karir.webp";
@@ -16,62 +14,31 @@ import imgEnergi from "@/assets/img/Otomotif.webp";
 import imgEdukasi from "@/assets/img/herocarousel6.webp";
 import imgProperty from "@/assets/img/property2.jpeg";
 
-// =========================================================================
-// KAMUS DATA STATIS: Mapping Image & Deskripsi Berdasarkan Label Bersih Sektor
-// =========================================================================
 const SECTOR_CUSTOM_DATA = {
-  "peternakan": {
-    image: imgPeternakan,
-    description: "Penyedia produk protein hewani terintegrasi dengan standar higienis dan teknologi modern kualitas tinggi."
-  },
-  "hospitality": { // Disamakan dengan typo dari API: "Hospitaliy"
-    image: imgHospitality,
-    description: "Menghadirkan layanan kenyamanan dan keramahan eksklusif untuk memenuhi kebutuhan hospitality modern."
-  },
-  "retail": {
-    image: imgRetail,
-    description: "Jaringan distribusi dan pemenuhan kebutuhan harian masyarakat yang efisien, andal, dan terjangkau."
-  },
-  "ekspedisi": {
-    image: imgEkspedisi,
-    description: "Solusi logistik dan rantai pasok terintegrasi guna mendukung kelancaran distribusi multi-industri."
-  },
-  "lifestyle": {
-    image: imgLifestyle,
-    description: "Inovasi tren gaya hidup modern yang memberikan nilai tambah bagi ekspresi dan kenyamanan harian Anda."
-  },
-  "energi-dan-otomotif": { // Karakter khusus disesuaikan dengan hasil slug generator
-    image: imgEnergi,
-    description: "Pengembangan energi alternatif dan ekosistem otomotif masa depan yang efisien serta ramah lingkungan."
-  },
-  "edukasi": {
-    image: imgEdukasi,
-    description: "Membangun pilar peradaban bangsa lewat penyediaan fasilitas edukasi dan pelatihan yang kompeten."
-  },
-  "property": {
-    image: imgProperty,
-    description: "Infrastruktur hunian dan kawasan komersial bernilai investasi tinggi dengan konsep tata ruang visioner."
-  }
+  "peternakan": { image: imgPeternakan, description: "Penyedia produk protein hewani terintegrasi dengan standar higienis dan teknologi modern kualitas tinggi." },
+  "hospitality": { image: imgHospitality, description: "Menghadirkan layanan kenyamanan dan keramahan eksklusif untuk memenuhi kebutuhan hospitality modern." },
+  "retail": { image: imgRetail, description: "Jaringan distribusi dan pemenuhan kebutuhan harian masyarakat yang efisien, andal, dan terjangkau." },
+  "ekspedisi": { image: imgEkspedisi, description: "Solusi logistik dan rantai pasok terintegrasi guna mendukung kelancaran distribusi multi-industri." },
+  "lifestyle": { image: imgLifestyle, description: "Inovasi tren gaya hidup modern yang memberikan nilai tambah bagi ekspresi dan kenyamanan harian Anda." },
+  "energi-dan-otomotif": { image: imgEnergi, description: "Pengembangan energi alternatif dan ekosistem otomotif masa depan yang efisien serta ramah lingkungan." },
+  "edukasi": { image: imgEdukasi, description: "Membangun pilar peradaban bangsa lewat penyediaan fasilitas edukasi dan pelatihan yang kompeten." },
+  "property": { image: imgProperty, description: "Infrastruktur hunian dan kawasan komersial bernilai investasi tinggi dengan konsep tata ruang visioner." }
 };
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- SUB-KOMPONEN SKELETON LOADER ---
-const SectorSkeleton = () => {
-  return (
-    <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.33%-1.5rem)] max-w-sm animate-pulse">
-      <div className="bg-white/5 border border-white/10 rounded-3xl p-6 flex flex-col justify-end aspect-video sm:aspect-[4/3]">
-        <div className="space-y-3 w-full">
-          <div className="h-3 bg-neutral-700/50 rounded-full w-1/4 mb-1" />
-          <div className="h-6 bg-neutral-700/50 rounded-lg w-1/2 mb-2" />
-          <div className="h-3 bg-neutral-700/50 rounded w-full" />
-        </div>
+const SectorSkeleton = () => (
+  <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.33%-1.5rem)] max-w-sm animate-pulse">
+    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 flex flex-col justify-end aspect-video sm:aspect-[4/3]">
+      <div className="space-y-3 w-full">
+        <div className="h-3 bg-neutral-700/50 rounded-full w-1/4 mb-1" />
+        <div className="h-6 bg-neutral-700/50 rounded-lg w-1/2 mb-2" />
+        <div className="h-3 bg-neutral-700/50 rounded w-full" />
       </div>
     </div>
-  );
-};
+  </div>
+);
 
-// --- KOMPONEN UTAMA ---
 const SectorSection = ({ index, activeIndex, currentSlug }) => {
   const [sectors, setSectors] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -82,7 +49,6 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
   const isActive = activeIndex === index;
   const COLOR_GOLD = "#FFC619";
 
-  // 1. FETCH DATA API & KAWINKAN DENGAN DATA STATIS LOCAL
   useEffect(() => {
     const fetchSectors = async () => {
       try {
@@ -92,42 +58,22 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
 
         if (json.status && json.data) {
           const sectorPages = json.data
-            .filter(p => {
-              if (!p || !p.name) return false;
-              const nameLower = p.name.toLowerCase();
-              return nameLower.includes("sector") || nameLower.includes("sektor");
-            })
+            .filter(p => p && p.name && (p.name.toLowerCase().includes("sector") || p.name.toLowerCase().includes("sektor")))
             .map(p => {
-              // Bersihkan label ("Sector Peternakan" -> "Peternakan")
               const cleanLabel = p.name.replace(/Sector\s+/i, "").replace(/Sektor\s+/i, "").trim();
-
-              // Buat slug murni untuk dicocokkan ke kamus data lokal
-              const generatedSlug = cleanLabel
-                .toLowerCase()
-                .replace(/[^a-z0-9\s-]/g, "")
-                .replace(/\s+/g, "-")
-                .replace(/-+/g, "-");
-
-              // CARI DATA KUSTOM STATISNYA DI ATAS
+              const generatedSlug = cleanLabel.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-");
               const localCustom = SECTOR_CUSTOM_DATA[generatedSlug];
-
               return {
-                id: p.id,
-                originalName: p.name,
-                label: cleanLabel,
-                slug: generatedSlug,
-                // JALANKAN LOGIKA SINKRONISASI: Jika ada data statis lokal pakai itu, jika kosong cari backup API, jika kosong lagi beri placeholder default
-                image: localCustom?.image || (p.layout_data?.image ? `${baseUrl}/storage/${p.layout_data.image}` : "https://images.unsplash.com/photo-1516253593875-bd7ba052fbc5?q=80&w=800"),
+                id: p.id, originalName: p.name, label: cleanLabel, slug: generatedSlug,
+                image: localCustom?.image || `https://images.unsplash.com/photo-1516253593875-bd7ba052fbc5?q=80&w=800`,
                 description: localCustom?.description || "Bagian dari pilar ekosistem bisnis terintegrasi AS PUTRA Group Indonesia."
               };
             })
-            // Saring agar sektor aktif tidak muncul di bagian rekomendasi bawah
             .filter(p => p.slug !== currentSlug);
-
           setSectors(sectorPages);
         }
       } catch (error) {
-        console.error("Gagal memuat daftar sektor bisnis:", error);
+        console.error("Gagal memuat daftar sektor:", error);
       } finally {
         setIsLoading(false);
       }
@@ -135,30 +81,20 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
     fetchSectors();
   }, [currentSlug]);
 
-  // 2. GSAP ENTRANCE ANIMATION
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     if (isLoading || sectors.length === 0) return;
 
-    const mm = gsap.matchMedia();
+    if (window.innerWidth < 768) {
+      gsap.set([headerRef.current, ".sector-card-item"], { opacity: 1, y: 0, clearProps: "all" });
+      return;
+    }
 
-    mm.add({
-      isDesktop: "(min-width: 768px)",
-      isMobile: "(max-w-767px)"
-    }, (context) => {
-      const { isDesktop } = context.conditions;
-      const triggerAnim = isDesktop && (isActive || currentSlug);
+    if (!isActive && !currentSlug) return;
 
-      if (triggerAnim) {
-        ScrollTrigger.refresh();
-        const tl = gsap.timeline();
-        tl.fromTo(headerRef.current, { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", force3D: true })
-          .fromTo(".sector-card-item", { y: 35, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.7, ease: "power2.out", force3D: true }, "-=0.3");
-      } else if (!isDesktop) {
-        gsap.set([headerRef.current, ".sector-card-item"], { opacity: 1, y: 0, clearProps: "all" });
-      }
-    }, sectionRef);
-
-    return () => mm.revert();
+    ScrollTrigger.refresh();
+    const tl = gsap.timeline();
+    tl.fromTo(headerRef.current, { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", force3D: true })
+      .fromTo(".sector-card-item", { y: 35, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.7, ease: "power2.out", force3D: true }, "-=0.3");
   }, [isActive, isLoading, sectors, currentSlug]);
 
   if (!isLoading && sectors.length === 0) return null;

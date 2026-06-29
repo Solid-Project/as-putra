@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import logoIcon from "@/assets/logo.jpg";
 
 const NewsTeaser = ({ activeIndex, index }) => {
@@ -32,20 +33,14 @@ const NewsTeaser = ({ activeIndex, index }) => {
     fetchNews();
   }, []);
 
-  // GSAP Entrance Animation
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     if (!isActive || loading || !newsData.length) return;
 
-    const ctx = gsap.context(() => {
       const tl = gsap.timeline();
-
       tl.fromTo(headerRef.current, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out", force3D: true })
         .fromTo(".teaser-hero-card", { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", force3D: true }, "-=0.25")
         .fromTo(".teaser-list-item", { x: 20, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.08, duration: 0.4, ease: "power2.out", force3D: true }, "-=0.4")
         .fromTo(buttonRef.current, { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out", force3D: true }, "-=0.2");
-    });
-
-    return () => ctx.revert();
   }, [isActive, loading, newsData]);
 
   const featuredNews = newsData[0];

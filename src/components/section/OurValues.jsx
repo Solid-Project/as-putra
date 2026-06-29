@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import gsap from "gsap";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import logoAsliUrl from "@/assets/logo-trans.png";
 
 const OurValues = ({ data, isActive, index }) => {
@@ -13,7 +14,7 @@ const OurValues = ({ data, isActive, index }) => {
 
   const valueItems = data?.layout_data?.cards || [];
 
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     if (!sectionRef.current || !data) return;
     
     const cards = cardsRef.current.slice(0, valueItems.length).filter(Boolean);
@@ -31,17 +32,17 @@ const OurValues = ({ data, isActive, index }) => {
     
     tl.fromTo(bgLogoRef.current, 
       { opacity: 0, scale: 1.2, rotate: 0 },
-      { opacity: 0.08, scale: 1.1, rotate: -8, duration: 2, ease: "power2.out", force3D: true }
+      { opacity: 0.08, scale: 1.1, rotate: -8, duration: 0.8, ease: "power2.out", force3D: true }
     );
 
     tl.fromTo(headerRef.current,
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6, force3D: true },
-      "-=1.5"
+      { opacity: 1, y: 0, duration: 0.4, force3D: true },
+      "-=0.6"
     ).fromTo(cards,
       { opacity: 0, y: 30, scale: 0.95 },
-      { opacity: 1, y: 0, scale: 1, stagger: 0.1, duration: 0.6, ease: "power2.out", force3D: true },
-      "-=0.4"
+      { opacity: 1, y: 0, scale: 1, stagger: 0.06, duration: 0.4, ease: "power2.out", force3D: true },
+      "-=0.3"
     );
   }, [isActive, data, valueItems]);
 

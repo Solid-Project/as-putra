@@ -3,7 +3,21 @@
 ========================= */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=KoHo:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Bauer+Bodoni+Roman&display=swap'); */
+
+@font-face {
+  font-family: 'Bauer Bodoni';
+  src: url('/src/assets/Bauer_Bodoni/Bauer Bodoni Roman.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-bauer-bodoni {
+  font-family: 'Bauer Bodoni', serif !important;
+}
 @import "tailwindcss";
 
 /* =========================

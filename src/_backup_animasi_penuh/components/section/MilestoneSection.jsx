@@ -4,8 +4,8 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
 // Import 2 Logo
-import logoAsliUrl from "@/assets/logo-teks-asli.png"; 
-import logoVarianUrl from "@/assets/logo.jpg"; 
+import logoAsliUrl from "@/assets/logo-teks-asli.png";
+import logoVarianUrl from "@/assets/logo.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -38,7 +38,7 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
       const fetchTimeline = async () => {
         try {
           const baseUrl = import.meta.env.VITE_API_URL;
-          const response = await axios.get(`${baseUrl}/sections/history`); 
+          const response = await axios.get(`${baseUrl}/sections/history`);
           setData(response.data);
         } catch (error) {
           console.error("Error fetching timeline:", error);
@@ -57,7 +57,7 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
       // 1. ANIMASI CARD MUNCUL PER SATU SAAT SCROLL
       cardsRef.current.forEach((card, i) => {
         if (!card) return;
-        gsap.fromTo(card, 
+        gsap.fromTo(card,
           { opacity: 0, y: 60, x: i % 2 === 0 ? -40 : 40 },
           {
             opacity: 1,
@@ -81,6 +81,7 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
         gsap.to(logo, {
           y: -speed * 2.5,
           rotation: "+=30",
+          force3D: true,
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top bottom",
@@ -91,10 +92,10 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
       });
 
       // 3. ANIMASI LINE CENTRAL TIMELINE
-      gsap.fromTo(lineRef.current, 
+      gsap.fromTo(lineRef.current,
         { scaleY: 0 },
-        { 
-          scaleY: 1, 
+        {
+          scaleY: 1,
           transformOrigin: "top",
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -125,10 +126,10 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
       }}
     >
       {/* --- BACKGROUND ELEMENTS --- */}
-      
+
       {/* 1. Dot Grid Texture (Navy) */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.07]" 
-           style={{ backgroundImage: `radial-gradient(#1D2B53 1.5px, transparent 1.5px)`, backgroundSize: '45px 45px' }} />
+      <div className="absolute inset-0 pointer-events-none opacity-[0.07]"
+        style={{ backgroundImage: `radial-gradient(#1D2B53 1.5px, transparent 1.5px)`, backgroundSize: '45px 45px' }} />
 
       {/* 2. Logo Utama (Stay di Tengah - Warna Asli) */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[800px] opacity-[0.06] pointer-events-none z-0">
@@ -138,7 +139,7 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
       {/* 3. 20 Scattered Logo Varian (Warna Asli - Lebih Besar & Tajam) */}
       <div className="absolute inset-0 pointer-events-none z-0">
         {scatteredPositions.current.map((pos, i) => (
-          <div 
+          <div
             key={i}
             ref={el => scatteredLogosRef.current[i] = el}
             className="absolute w-24 md:w-40 pointer-events-none" // Ukuran diperbesar
@@ -180,8 +181,8 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
 
         {/* --- TIMELINE BODY --- */}
         <div className="relative max-w-[1000px] mx-auto pb-20">
-          <div ref={lineRef} className="absolute left-1/2 -translate-x-1/2 w-[2px] top-0 bottom-0 hidden md:block" 
-               style={{ background: `linear-gradient(to bottom, transparent, var(--color-utama) 15%, var(--color-utama) 85%, transparent)` }} />
+          <div ref={lineRef} className="absolute left-1/2 -translate-x-1/2 w-[2px] top-0 bottom-0 hidden md:block -z-10"
+            style={{ background: `linear-gradient(to bottom, transparent, var(--color-utama) 15%, var(--color-utama) 85%, transparent)` }} />
 
           {data.layout_data?.map((item, idx) => {
             const isLeft = idx % 2 === 0;
@@ -189,44 +190,34 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
               <div
                 key={idx}
                 ref={(el) => (cardsRef.current[idx] = el)}
-                className={`timeline-card relative md:w-1/2 px-4 md:px-14 mb-10 md:mb-16 ${
-                  isLeft ? "md:left-0 md:text-right" : "md:left-1/2 md:text-left"
-                }`}
+                className={`timeline-card relative md:w-1/2 px-4 md:px-14 mb-10 md:mb-16 ${isLeft ? "md:left-0 md:text-right" : "md:left-1/2 md:text-left"
+                  }`}
               >
                 <div className={`hidden md:flex absolute top-6 items-center justify-center w-6 h-6 z-10 ${isLeft ? "right-[-12px]" : "left-[-12px]"}`}>
-                    <div className="absolute inset-0 rounded-full bg-[var(--color-utama)] opacity-20 animate-ping" />
-                    <div className="w-4 h-4 rounded-full bg-white border-[3px] border-[var(--color-utama)] shadow-md relative z-10" />
+                  <div className="absolute inset-0 rounded-full bg-[var(--color-utama)] opacity-20 animate-ping" />
+                  <div className="w-4 h-4 rounded-full bg-white border-[3px] border-[var(--color-utama)] shadow-md relative z-10" />
                 </div>
 
-                {/* --- CARD CONTENT (ORIGINAL) --- */}
+                {/* --- CARD CONTENT --- */}
                 <div 
-                  className="group relative rounded-3xl p-6 md:p-8 transition-all duration-500 hover:-translate-y-2"
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    border: "1px solid rgba(0,0,0,0.03)",
-                    boxShadow: "0 15px 35px -15px rgba(0,0,0,0.06)"
-                  }}
+                  className="group relative rounded-2xl p-6 md:p-8 border border-slate-100 bg-white/80 backdrop-blur-sm shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
                 >
-                  <div className={`absolute top-0 bottom-0 w-1 transition-all duration-500 bg-[var(--color-utama)] opacity-0 group-hover:opacity-100 ${isLeft ? "right-0" : "left-0"}`} />
+                  <div className={`absolute top-0 bottom-0 w-1.5 transition-all duration-500 bg-gradient-to-b from-[var(--color-utama)] to-[#FFC619] opacity-100 ${isLeft ? "left-0 rounded-r-none rounded-l-full" : "right-0 rounded-l-none rounded-r-full"}`} />
 
-                  <div className={`flex items-center gap-3 mb-4 ${isLeft ? "md:flex-row-reverse" : "flex-row"}`}>
-                    <div className="px-5 py-1.5 rounded-full text-[10px] font-black tracking-[0.2em] bg-[#1D2B53] text-[#FFC619] shadow-xl">
+                  <div className={`flex items-center gap-6 mb-5 ${isLeft ? "md:flex-row-reverse" : "flex-row"}`}>
+                    <span className="text-[var(--color-utama)] text-3xl lg:text-4xl font-bauer-bodoni font-semibold italic tracking-tight">
                       {item.timelineYear}
-                    </div>
-                    <div className="h-[2px] flex-grow bg-gray-100 group-hover:bg-[var(--color-utama)]/20 transition-colors" />
+                    </span>
+                    <div className="flex-grow h-[1px] bg-gradient-to-r from-[var(--color-utama)] to-transparent opacity-40" />
                   </div>
 
-                  <h3 className="font-bold mb-3 text-[var(--color-teks)] text-xl lg:text-2xl font-['Playfair_Display']">
+                  <h3 className="font-bold mb-4 text-[var(--color-teks)] text-xl lg:text-2xl font-['Playfair_Display']">
                     {item.timelineTitle}
                   </h3>
                   
-                  <p className="leading-relaxed text-gray-500 text-sm md:text-[0.9rem] font-medium">
+                  <p className="leading-relaxed text-slate-600 text-sm md:text-[0.95rem] font-medium italic text-left">
                     {item.timelineDescription}
                   </p>
-
-                  <div className={`mt-5 flex ${isLeft ? "justify-start" : "justify-end"}`}>
-                    <div className="w-2 h-2 rounded-full opacity-20 bg-[var(--color-utama)]" />
-                  </div>
                 </div>
               </div>
             );

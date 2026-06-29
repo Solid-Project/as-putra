@@ -24,27 +24,34 @@ const HistorySection = ({ data, isActive, index }) => {
     let isCancelled = false;
     const fullText = data.subtitle;
 
+    // Reset dan mulai animasi HANYA saat aktif
     if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
 
     currentIndexRef.current = 0;
     setDisplayText("");
     setIsTyping(true);
 
-    typingIntervalRef.current = setInterval(() => {
-      if (isCancelled || !isMountedRef.current) return;
-      currentIndexRef.current += 1;
-      const nextText = fullText.slice(0, currentIndexRef.current);
-      setDisplayText(nextText);
+    // Tambahkan delay kecil agar terlihat natural saat baru muncul
+    const startDelay = setTimeout(() => {
+      if (isCancelled) return;
+      
+      typingIntervalRef.current = setInterval(() => {
+        if (isCancelled || !isMountedRef.current) return;
+        currentIndexRef.current += 1;
+        const nextText = fullText.slice(0, currentIndexRef.current);
+        setDisplayText(nextText);
 
-      if (currentIndexRef.current >= fullText.length) {
-        clearInterval(typingIntervalRef.current);
-        typingIntervalRef.current = null;
-        setIsTyping(false);
-      }
-    }, 80);
+        if (currentIndexRef.current >= fullText.length) {
+          clearInterval(typingIntervalRef.current);
+          typingIntervalRef.current = null;
+          setIsTyping(false);
+        }
+      }, 120);
+    }, 300);
 
     return () => {
       isCancelled = true;
+      clearTimeout(startDelay);
       if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
     };
   }, [isActive, data?.subtitle]);

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import { 
   MapPinIcon, 
   PlusIcon,
@@ -10,12 +11,12 @@ import {
 const EmployeeEvents = ({ isActive }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const sectionRef = useRef(null);
   const cardsRef = useRef([]);
   
   const COLOR_NAVY = "#1D2B53";
   const COLOR_GOLD = "#FFC619";
 
-  // 1. Fetch Data dari API News dengan filter kategori "Event"
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -38,8 +39,7 @@ const EmployeeEvents = ({ isActive }) => {
     fetchEvents();
   }, []);
 
-  // 2. Animasi GSAP saat section aktif
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     if (isActive && events.length > 0) {
       gsap.fromTo(
         cardsRef.current,
@@ -66,7 +66,7 @@ const EmployeeEvents = ({ isActive }) => {
   }
 
   return (
-    <div className={`w-full ${isActive ? "block" : "hidden"}`}>
+    <div ref={sectionRef} className={`w-full ${isActive ? "block" : "hidden"}`}>
       
       {/* CONTEXT KICKER (Menggantikan Judul Raksasa agar Selaras dengan Parent Section) */}
       <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">

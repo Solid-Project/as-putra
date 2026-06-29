@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,47 +13,41 @@ const Layout1 = ({ data, isActive, index }) => {
   const displayImage = data?.image 
     ? `${import.meta.env.VITE_API_URL}/storage/${data.image}` 
     : ""; // Atau kasih placeholder image
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     if (!data) return;
 
-    const ctx = gsap.context(() => {
-      // Animasi Floating Background
-      const shapes = floatRef.current?.children;
-      if (shapes) {
-        [...shapes].forEach((shape, i) => {
-          gsap.to(shape, {
-            y: i % 2 === 0 ? 30 : -30,
-            duration: 10 + i,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut"
-          });
+    // Animasi Floating Background
+    const shapes = floatRef.current?.children;
+    if (shapes) {
+      [...shapes].forEach((shape, i) => {
+        gsap.to(shape, {
+          y: i % 2 === 0 ? 30 : -30,
+          duration: 10 + i,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut"
         });
-      }
-
-      // Animasi Konten (ScrollTrigger)
-      // Kita pakai timeline sederhana agar sinkron dengan snap scroll
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top center",
-          toggleActions: "play none none reverse",
-        }
       });
+    }
 
-      tl.fromTo(imageFrameRef.current, 
-        { x: -100, opacity: 0 },
-        { x: 0, opacity: 1, duration: 1.2, ease: "power4.out" }
-      )
-      .fromTo(textGroupRef.current, 
-        { x: 100, opacity: 0 },
-        { x: 0, opacity: 1, duration: 1.2, ease: "power4.out" },
-        "-=0.8" // Overlap animasi
-      );
+    // Animasi Konten (ScrollTrigger)
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top center",
+        toggleActions: "play none none reverse",
+      }
+    });
 
-    }, sectionRef);
-
-    return () => ctx.revert();
+    tl.fromTo(imageFrameRef.current, 
+      { x: -100, opacity: 0 },
+      { x: 0, opacity: 1, duration: 1.2, ease: "power4.out" }
+    )
+    .fromTo(textGroupRef.current, 
+      { x: 100, opacity: 0 },
+      { x: 0, opacity: 1, duration: 1.2, ease: "power4.out" },
+      "-=0.8"
+    );
   }, [data]);
 
   return (

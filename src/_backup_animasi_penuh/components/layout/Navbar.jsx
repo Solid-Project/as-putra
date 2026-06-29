@@ -14,7 +14,7 @@ const Navbar = () => {
   const [sectors, setSectors] = useState([]);
   const [isSectorLoading, setIsSectorLoading] = useState(true);
 
-  const { theme, logo } = useNavbarTheme();
+  const { theme, logo, needsBlur } = useNavbarTheme();
   const scrollTimeoutRef = useRef(null);
 
   // KONFIGURASI WARNA & UKURAN (SLIM & SLEEK)
@@ -98,10 +98,14 @@ const Navbar = () => {
 
   // 2. AUTO-HIDE NAVBAR SAAT SCROLL
   useEffect(() => {
+    let lastScrollY = window.scrollY;
     const handleScroll = () => {
-      setIsVisible(false);
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-      scrollTimeoutRef.current = setTimeout(() => setIsVisible(true), 150);
+      if (window.scrollY > lastScrollY && window.scrollY > 100) {
+        setIsVisible(false); // Sembunyikan saat scroll ke bawah
+      } else {
+        setIsVisible(true); // Tampilkan saat scroll ke atas
+      }
+      lastScrollY = window.scrollY;
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -112,11 +116,16 @@ const Navbar = () => {
   return (
     <>
       {/* NAVBAR MAIN */}
-      <nav className={`fixed top-0 w-full z-50 px-4 md:px-8 lg:px-[5%] flex justify-between items-center py-2 transition-all duration-500 ${isVisible ? "translate-y-0" : "-translate-y-full"} bg-transparent`}>
+      <nav className={`fixed top-0 w-full z-50 px-4 md:px-8 lg:px-[5%] flex justify-between items-center py-2 transition-all duration-700 ease-in-out ${isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}`}
+           style={{
+             backgroundColor: needsBlur ? (isDark ? "rgba(17,17,17,0.65)" : "rgba(249,249,249,0.65)") : "transparent",
+             backdropFilter: needsBlur ? "blur(14px)" : "none",
+             WebkitBackdropFilter: needsBlur ? "blur(14px)" : "none",
+           }}>
 
         {/* LOGO */}
         <Link to="/beranda" className="flex items-center" onClick={closeMenu}>
-          <img src={logo} alt="AS PUTRA" className="h-7 md:h-8 object-contain transition-transform hover:scale-105" />
+          <img src={logo} alt="AS PUTRA" className="h-10 md:h-12 object-contain transition-transform hover:scale-105" />
         </Link>
 
         {/* DESKTOP MENU - Font text-[10px] agar sleek */}
@@ -199,7 +208,7 @@ const Navbar = () => {
               </button>
             ))}
           </div>
-          <Link to="/contact" className="px-5 py-2 text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-md transition-transform hover:scale-105 active:scale-95" style={{ backgroundColor: COLOR_ACCENT }}>
+          <Link to="/contact" className={`px-5 py-2 text-[10px] font-black uppercase tracking-widest rounded-full shadow-md transition-transform hover:scale-105 active:scale-95 ${isDark ? "text-[#1D2B53]" : "text-white"}`} style={{ backgroundColor: COLOR_ACCENT }}>
             {staticMenu.Hubungi[language]}
           </Link>
         </div>

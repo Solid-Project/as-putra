@@ -24,7 +24,7 @@ const CareerSection = ({ activeIndex }) => {
       
       tl.fromTo(".reveal-item", 
         { y: 25, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.75, stagger: 0.12, ease: "power3.out" }
+        { y: 0, opacity: 1, duration: 0.75, stagger: 0.12, ease: "power3.out", force3D: true }
       );
     }, sectionRef);
 
@@ -81,9 +81,7 @@ const CareerSection = ({ activeIndex }) => {
           
           {/* TAB NAVIGATOR */}
           <div className="reveal-item flex justify-center w-full">
-            <div className="bg-white/90 backdrop-blur-md p-1.5 rounded-lg border border-gray-200/80 shadow-[0_4px_20px_rgba(0,0,0,0.04)] inline-block max-w-full">
-              <CareerNavigator activeTab={activeTab} setActiveTab={setActiveTab} />
-            </div>
+            <CareerNavigator activeTab={activeTab} setActiveTab={setActiveTab} />
           </div>
 
           {/* AREA SUB-KONTEN DINAMIS */}

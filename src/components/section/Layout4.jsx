@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import logoAsliUrl from "@/assets/logo.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -42,8 +43,7 @@ const Layout4 = ({ data, index, isActive }) => {
     return () => clearInterval(typingIntervalRef.current);
   }, [isActive, displaySubtitle]);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
+  useSectionAnimation(sectionRef, () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -56,8 +56,6 @@ const Layout4 = ({ data, index, isActive }) => {
         { y: 40, opacity: 0 },
         { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power3.out" }
       );
-    }, sectionRef);
-    return () => ctx.revert();
   }, []);
 
   return (

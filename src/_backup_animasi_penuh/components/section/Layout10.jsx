@@ -62,6 +62,7 @@ const Layout10 = ({ data, index }) => {
             ref={parallaxBgRef}
             src={displayImage} 
             alt={displayTitle} 
+            loading="lazy"
             className="w-full h-full object-cover origin-top scale-110 opacity-90 lg:opacity-100" 
           />
         )}

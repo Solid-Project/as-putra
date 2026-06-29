@@ -1,8 +1,9 @@
 // src/components/layouts/IntroSection.jsx
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import livestockImg from '@/assets/img/herocarousel6.webp';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -21,39 +22,31 @@ const IntroSection = ({ data, isActive, index }) => {
   const COLOR_NAVY = "#1D2B53";
   const COLOR_GOLD = "#FFC619";
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animasi Floating Background (Halus)
-      const shapes = floatRef.current?.children;
-      if (shapes) {
-        gsap.to(shapes[0], { y: 30, duration: 10, repeat: -1, yoyo: true, ease: "sine.inOut", force3D: true });
-        gsap.to(shapes[1], { x: -20, duration: 8, repeat: -1, yoyo: true, ease: "sine.inOut", force3D: true });
+  useSectionAnimation(sectionRef, () => {
+    // Animasi Floating Background (Halus)
+    const shapes = floatRef.current?.children;
+    if (shapes) {
+      gsap.to(shapes[0], { y: 30, duration: 10, repeat: -1, yoyo: true, ease: "sine.inOut", force3D: true });
+      gsap.to(shapes[1], { x: -20, duration: 8, repeat: -1, yoyo: true, ease: "sine.inOut", force3D: true });
+    }
+
+    // Animasi Judul
+    gsap.fromTo(titleWrapperRef.current.children,
+      { y: 50, opacity: 0 },
+      {
+        y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power4.out", force3D: true,
+        scrollTrigger: { trigger: sectionRef.current, start: "top center", toggleActions: "play none none reverse" }
       }
+    );
 
-      // Animasi Judul
-      gsap.fromTo(titleWrapperRef.current.children,
-        { y: 50, opacity: 0 },
-        {
-          y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power4.out", force3D: true,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top center",
-            toggleActions: "play none none reverse",
-          }
-        }
-      );
-
-      // Animasi Gambar
-      gsap.fromTo(imageWrapperRef.current,
-        { scale: 1.05, opacity: 0 },
-        {
-          scale: 1, opacity: 1, duration: 1.8, ease: "expo.out", force3D: true,
-          scrollTrigger: { trigger: sectionRef.current, start: "top center" }
-        }
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
+    // Animasi Gambar
+    gsap.fromTo(imageWrapperRef.current,
+      { scale: 1.05, opacity: 0 },
+      {
+        scale: 1, opacity: 1, duration: 1.8, ease: "expo.out", force3D: true,
+        scrollTrigger: { trigger: sectionRef.current, start: "top center" }
+      }
+    );
   }, [displayTitle]);
 
   const titleWords = displayTitle.split(' ');

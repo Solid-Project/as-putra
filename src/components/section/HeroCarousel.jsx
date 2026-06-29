@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import gsap from "gsap";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 
 const ASSET_URL = import.meta.env.VITE_API_URL;
 
@@ -63,6 +64,7 @@ const HeroCarousel = ({ data, isActive, index }) => {
   const lineRef = useRef(null);
   const subtitleRef = useRef(null);
   const buttonsRef = useRef(null);
+  const sectionRef = useRef(null);
 
   const currentSlide = slides[current] || {};
   const isVideo = currentSlide?.type?.startsWith("video");
@@ -108,38 +110,32 @@ const HeroCarousel = ({ data, isActive, index }) => {
     clearInterval(intervalRef.current);
   }, []);
 
-  // GSAP Entrance Animation
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     if (!isActive || !showContent || isFirstLoaded) return;
-
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        onComplete: () => {
-          isReadyRef.current = true;
-          startAutoPlay();
-          setIsFirstLoaded(true);
-        },
-      });
-
-      tl.fromTo(titleRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power4.out", force3D: true });
-      
-      if (lineRef.current) {
-        tl.fromTo(lineRef.current, { width: 0 }, { width: 80, duration: 0.6, ease: "power2.inOut", force3D: true }, "-=0.5");
-      }
-
-      tl.fromTo(subtitleRef.current, { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, force3D: true }, "-=0.4");
-      
-      if (activeButtons.length > 0 && buttonsRef.current?.children?.length) {
-        tl.fromTo(
-          buttonsRef.current.children,
-          { y: 15, opacity: 0 },
-          { y: 0, opacity: 1, stagger: 0.1, duration: 0.5, ease: "power2.out", force3D: true },
-          "-=0.3"
-        );
-      }
+    const tl = gsap.timeline({
+      onComplete: () => {
+        isReadyRef.current = true;
+        startAutoPlay();
+        setIsFirstLoaded(true);
+      },
     });
 
-    return () => ctx.revert();
+    tl.fromTo(titleRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power4.out", force3D: true });
+    
+    if (lineRef.current) {
+      tl.fromTo(lineRef.current, { width: 0 }, { width: 80, duration: 0.6, ease: "power2.inOut", force3D: true }, "-=0.5");
+    }
+
+    tl.fromTo(subtitleRef.current, { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, force3D: true }, "-=0.4");
+    
+    if (activeButtons.length > 0 && buttonsRef.current?.children?.length) {
+      tl.fromTo(
+        buttonsRef.current.children,
+        { y: 15, opacity: 0 },
+        { y: 0, opacity: 1, stagger: 0.1, duration: 0.5, ease: "power2.out", force3D: true },
+        "-=0.3"
+      );
+    }
   }, [isActive, showContent, isFirstLoaded, startAutoPlay, activeButtons]);
 
   // Video Handler
@@ -166,6 +162,7 @@ const HeroCarousel = ({ data, isActive, index }) => {
 
   return (
     <section 
+      ref={sectionRef}
       className="relative block h-dvh w-full text-center overflow-hidden bg-black snap-start"
       id={`section-${index}`}
       data-title={data?.title || "Hero"}

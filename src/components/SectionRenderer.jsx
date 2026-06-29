@@ -1,27 +1,28 @@
-import React, { memo } from "react";
+import React, { memo, Suspense, lazy } from "react";
 import HeroCarousel from "@/components/section/HeroCarousel";
-import HistorySection from "@/components/section/HistorySection";
-import CareerSection from "@/components/section/CareerSection";
-import CardSection from "@/components/section/CardSection";
-import StatsSection from "@/components/section/StatsSection";
-import SectorStrip from "@/components/section/SectorStrip";
-import NewsTeaser from "@/components/section/NewsTeaser";
-import MilestoneSection from "@/components/section/MilestoneSection";
-import OurValues from "@/components/section/OurValues";
-import VissionMission from "@/components/section/VissionMission";
-import IntroSection from "@/components/section/IntroSection";
 import HeroSector from "@/components/section/HeroSector";
-import Layout1 from "@/components/section/Layout1";
-import Layout2 from "@/components/section/Layout2";
-import Layout3 from "@/components/section/Layout3";
-import Layout4 from "@/components/section/Layout4";
-import Layout5 from "@/components/section/Layout5";
-import Layout6 from "@/components/section/Layout6";
-import Layout7 from "@/components/section/Layout7";
-import Layout8 from "@/components/section/Layout8";
-import Layout9 from "@/components/section/Layout9";
-import Layout10 from "@/components/section/Layout10";
-import NewsSection from "@/components/section/NewsSection";
+
+const HistorySection = lazy(() => import("@/components/section/HistorySection"));
+const CareerSection = lazy(() => import("@/components/section/CareerSection"));
+const CardSection = lazy(() => import("@/components/section/CardSection"));
+const StatsSection = lazy(() => import("@/components/section/StatsSection"));
+const SectorStrip = lazy(() => import("@/components/section/SectorStrip"));
+const NewsTeaser = lazy(() => import("@/components/section/NewsTeaser"));
+const MilestoneSection = lazy(() => import("@/components/section/MilestoneSection"));
+const OurValues = lazy(() => import("@/components/section/OurValues"));
+const VissionMission = lazy(() => import("@/components/section/VissionMission"));
+const IntroSection = lazy(() => import("@/components/section/IntroSection"));
+const Layout1 = lazy(() => import("@/components/section/Layout1"));
+const Layout2 = lazy(() => import("@/components/section/Layout2"));
+const Layout3 = lazy(() => import("@/components/section/Layout3"));
+const Layout4 = lazy(() => import("@/components/section/Layout4"));
+const Layout5 = lazy(() => import("@/components/section/Layout5"));
+const Layout6 = lazy(() => import("@/components/section/Layout6"));
+const Layout7 = lazy(() => import("@/components/section/Layout7"));
+const Layout8 = lazy(() => import("@/components/section/Layout8"));
+const Layout9 = lazy(() => import("@/components/section/Layout9"));
+const Layout10 = lazy(() => import("@/components/section/Layout10"));
+const NewsSection = lazy(() => import("@/components/section/NewsSection"));
 
 const COMPONENT_MAP = {
   HeroCarousel, HistorySection, CareerSection, CardSection, StatsSection,
@@ -68,6 +69,7 @@ export const SectionRenderer = ({ sections, activeIndex }) => {
             data-theme={currentTheme}
             data-title={section.section_name}
             data-blur={layoutName === "MilestoneSection" ? "true" : undefined}
+            data-hide-nav={(layoutName === "HeroCarousel" || layoutName === "HeroSector") ? "true" : "false"}
             // KELAS WAJIB: Gunakan kombinasi 'section' dan 'no-snap' agar dibaca oleh hitungan GSAP
             className={`section w-full relative ${isNoSnap ? "no-snap h-auto" : "h-screen"}`}
             style={{
@@ -76,12 +78,14 @@ export const SectionRenderer = ({ sections, activeIndex }) => {
               containIntrinsicSize: "0 500px"
             }}
           >
-            <SafeComponentWrapper 
-              Component={Component} 
-              contentData={section.content_data || section} 
-              isActive={activeIndex === index} 
-              index={index} 
-            />
+            <Suspense fallback={<div className="w-full h-full min-h-[50vh] bg-black/5 animate-pulse" />}>
+              <SafeComponentWrapper 
+                Component={Component} 
+                contentData={section.content_data || section} 
+                isActive={activeIndex === index} 
+                index={index} 
+              />
+            </Suspense>
           </section>
         );
       })}

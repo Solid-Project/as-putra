@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import logoIcon from "@/assets/logo.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -94,15 +95,11 @@ const NewsSection = ({ activeIndex }) => {
   // =========================
   // GSAP ANIMATION
   // =========================
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     if (loading) return;
 
-    mobileCardsRef.current = mobileCardsRef.current.slice(
-      0,
-      filteredNews.length
-    );
+    mobileCardsRef.current = mobileCardsRef.current.slice(0, filteredNews.length);
 
-    const ctx = gsap.context(() => {
       siluetRefs.current.forEach((el, i) => {
         if (el) {
           gsap.to(el, {
@@ -122,21 +119,9 @@ const NewsSection = ({ activeIndex }) => {
       if (filteredNews.length > 0 && window.innerWidth >= 1024) {
         gsap.fromTo(
           [desktopHeroRef.current, desktopListRef.current],
-          {
-            y: 40,
-            opacity: 0,
-          },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "power3.out",
-            force3D: true,
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 75%",
-            },
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out", force3D: true,
+            scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
           }
         );
       }
@@ -144,24 +129,10 @@ const NewsSection = ({ activeIndex }) => {
       if (filteredNews.length > 0 && window.innerWidth < 1024) {
         gsap.fromTo(
           mobileCardsRef.current.filter(Boolean),
-          {
-            x: 20,
-            opacity: 0,
-          },
-          {
-            x: 0,
-            opacity: 1,
-            stagger: 0.04,
-            duration: 0.5,
-            ease: "power2.out",
-            overwrite: true,
-            force3D: true
-          }
+          { x: 20, opacity: 0 },
+          { x: 0, opacity: 1, stagger: 0.04, duration: 0.5, ease: "power2.out", overwrite: true, force3D: true }
         );
       }
-    }, sectionRef);
-
-    return () => ctx.revert();
   }, [loading, activeFilter, searchQuery, filteredNews.length]);
 
   const mobileFeatured = filteredNews.slice(0, 2);

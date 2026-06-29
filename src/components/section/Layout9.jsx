@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import logoSiluet from "@/assets/logo.jpg"; 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -18,8 +19,7 @@ const Layout9 = ({ data, index }) => {
 
   const isLongContent = lists.length > 3 || (displayTitle && displayTitle.length > 60);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
+  useSectionAnimation(sectionRef, () => {
       gsap.fromTo(titleRef.current, { y: -20 }, { 
         y: 20, ease: "none",
         scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "bottom top", scrub: 1 }
@@ -29,8 +29,6 @@ const Layout9 = ({ data, index }) => {
         y: -40, ease: "none",
         scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "bottom top", scrub: 1.5 }
       });
-    }, sectionRef);
-    return () => ctx.revert();
   }, [lists]);
 
   return (

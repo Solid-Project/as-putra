@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense, lazy } from "react";
 import { useParams } from "react-router-dom";
 //import Hooks & Layout Utama
 import useFullpageSnap from "@/hooks/useFullPageSnap"; 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import HeroSkeleton from "@/components/skeleton/HeroSkeleton";
+import HeroSector from "@/components/section/HeroSector";
 
 import AutoTranslate from "@/lib/AutoTranslate"; 
 //Import Layout
-import HeroSector from "@/components/section/HeroSector";
-import IntroSection from "@/components/section/IntroSection";
-import Layout1 from "@/components/section/Layout1";
-import Layout2 from "@/components/section/Layout2";
-import Layout3 from "@/components/section/Layout3";
-import Layout4 from "@/components/section/Layout4";
-import Layout5 from "@/components/section/Layout5";
-import Layout6 from "@/components/section/Layout6";
-import Layout7 from "@/components/section/Layout7";
-import Layout8 from "@/components/section/Layout8";
-import Layout9 from "@/components/section/Layout9";
-import Layout10 from "@/components/section/Layout10";
+const IntroSection = lazy(() => import("@/components/section/IntroSection"));
+const Layout1 = lazy(() => import("@/components/section/Layout1"));
+const Layout2 = lazy(() => import("@/components/section/Layout2"));
+const Layout3 = lazy(() => import("@/components/section/Layout3"));
+const Layout4 = lazy(() => import("@/components/section/Layout4"));
+const Layout5 = lazy(() => import("@/components/section/Layout5"));
+const Layout6 = lazy(() => import("@/components/section/Layout6"));
+const Layout7 = lazy(() => import("@/components/section/Layout7"));
+const Layout8 = lazy(() => import("@/components/section/Layout8"));
+const Layout9 = lazy(() => import("@/components/section/Layout9"));
+const Layout10 = lazy(() => import("@/components/section/Layout10"));
 
 const COMPONENT_MAP = {
   "HeroSector": HeroSector,
@@ -121,13 +121,14 @@ const SectorDetailPage = () => {
             if (!Component) return null;
 
             return (
-              <Component
-                key={section.id || index}
-                data={section}
-                isActive={activeIndex === index}
-                index={index}
-                className="section"
-              />
+              <Suspense fallback={<div className="w-full h-full min-h-[50vh] bg-black/5 animate-pulse" />} key={section.id || index}>
+                <Component
+                  data={section}
+                  isActive={activeIndex === index}
+                  index={index}
+                  className="section"
+                />
+              </Suspense>
             );
           })
         )}

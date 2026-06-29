@@ -151,8 +151,8 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
       if (triggerAnim) {
         ScrollTrigger.refresh();
         const tl = gsap.timeline();
-        tl.fromTo(headerRef.current, { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" })
-          .fromTo(".sector-card-item", { y: 35, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.7, ease: "power2.out" }, "-=0.3");
+        tl.fromTo(headerRef.current, { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", force3D: true })
+          .fromTo(".sector-card-item", { y: 35, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.7, ease: "power2.out", force3D: true }, "-=0.3");
       } else if (!isDesktop) {
         gsap.set([headerRef.current, ".sector-card-item"], { opacity: 1, y: 0, clearProps: "all" });
       }
@@ -172,7 +172,7 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
     >
       {/* Background Decor Siluet Logo */}
       <div className="absolute inset-0 flex items-center justify-center opacity-[0.012] pointer-events-none -z-0">
-        <img src={logoAsliUrl} alt="" className="w-[60%] h-auto rotate-[-8deg] grayscale object-contain" />
+        <img src={logoAsliUrl} alt="" loading="lazy" className="w-[60%] h-auto rotate-[-8deg] grayscale object-contain" />
       </div>
 
       <div className="w-full relative z-10 max-w-[1440px] mx-auto flex flex-col items-stretch h-auto gap-16">
@@ -205,6 +205,7 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
                     <img
                       src={sector.image}
                       alt={sector.label}
+                      loading="lazy"
                       className="w-full h-full object-cover filter brightness-[0.75] group-hover:brightness-90 transition-all duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#070D22] via-[#070D22]/60 to-transparent opacity-95" />

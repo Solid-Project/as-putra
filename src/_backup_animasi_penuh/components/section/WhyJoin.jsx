@@ -46,7 +46,7 @@ const WhyJoin = ({ activeIndex }) => {
 
       tl.fromTo(titleRef.current, 
         { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: "power4.out" }
+        { y: 0, opacity: 1, duration: 1, ease: "power4.out", force3D: true }
       )
       .fromTo(
         cardsRef.current,
@@ -58,6 +58,7 @@ const WhyJoin = ({ activeIndex }) => {
           stagger: 0.2,
           duration: 0.8,
           ease: "expo.out",
+          force3D: true
         },
         "-=0.6"
       );

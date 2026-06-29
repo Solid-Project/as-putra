@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 
 // Import 2 Logo
 import logoAsliUrl from "@/assets/logo-teks-asli.png";
@@ -50,65 +51,61 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
     }
   }, [initialData]);
 
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     if (!data) return;
 
-    const ctx = gsap.context(() => {
-      // 1. ANIMASI CARD MUNCUL PER SATU SAAT SCROLL
-      cardsRef.current.forEach((card, i) => {
-        if (!card) return;
-        gsap.fromTo(card,
-          { opacity: 0, y: 60, x: i % 2 === 0 ? -40 : 40 },
-          {
-            opacity: 1,
-            y: 0,
-            x: 0,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 85%",
-              toggleActions: "play none none reverse"
-            }
-          }
-        );
-      });
-
-      // 2. PARALLAX UNTUK 20 LOGO VARIAN (Lebih Dinamis)
-      scatteredLogosRef.current.forEach((logo, i) => {
-        if (!logo) return;
-        const speed = (i % 5 + 1) * 60;
-        gsap.to(logo, {
-          y: -speed * 2.5,
-          rotation: "+=30",
-          force3D: true,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.2,
-          }
-        });
-      });
-
-      // 3. ANIMASI LINE CENTRAL TIMELINE
-      gsap.fromTo(lineRef.current,
-        { scaleY: 0 },
+    // 1. ANIMASI CARD MUNCUL PER SATU SAAT SCROLL
+    cardsRef.current.forEach((card, i) => {
+      if (!card) return;
+      gsap.fromTo(card,
+        { opacity: 0, y: 60, x: i % 2 === 0 ? -40 : 40 },
         {
-          scaleY: 1,
-          transformOrigin: "top",
+          opacity: 1,
+          y: 0,
+          x: 0,
+          duration: 1,
+          ease: "power3.out",
           scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 30%",
-            end: "bottom 70%",
-            scrub: true
+            trigger: card,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
           }
         }
       );
+    });
 
-    }, sectionRef);
+    // 2. PARALLAX UNTUK 20 LOGO VARIAN (Lebih Dinamis)
+    scatteredLogosRef.current.forEach((logo, i) => {
+      if (!logo) return;
+      const speed = (i % 5 + 1) * 60;
+      gsap.to(logo, {
+        y: -speed * 2.5,
+        rotation: "+=30",
+        force3D: true,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.2,
+        }
+      });
+    });
 
-    return () => ctx.revert();
+    // 3. ANIMASI LINE CENTRAL TIMELINE
+    gsap.fromTo(lineRef.current,
+      { scaleY: 0 },
+      {
+        scaleY: 1,
+        transformOrigin: "top",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 30%",
+          end: "bottom 70%",
+          scrub: true
+        }
+      }
+    );
+
   }, [data]);
 
   if (loading || !data) return null;
@@ -204,11 +201,11 @@ const MilestoneSection = ({ data: initialData, activeIndex, index }) => {
                 >
                   <div className={`absolute top-0 bottom-0 w-1.5 transition-all duration-500 bg-gradient-to-b from-[var(--color-utama)] to-[#FFC619] opacity-100 ${isLeft ? "left-0 rounded-r-none rounded-l-full" : "right-0 rounded-l-none rounded-r-full"}`} />
 
-                  <div className={`flex items-center gap-4 mb-5 ${isLeft ? "md:flex-row-reverse" : "flex-row"}`}>
-                    <span className="text-[var(--color-utama)] text-2xl lg:text-3xl font-['Playfair_Display'] font-bold italic">
+                  <div className={`flex items-center gap-6 mb-5 ${isLeft ? "md:flex-row-reverse" : "flex-row"}`}>
+                    <span className="text-[var(--color-utama)] text-3xl lg:text-4xl font-bauer-bodoni font-semibold italic tracking-tight">
                       {item.timelineYear}
                     </span>
-                    <div className="h-[1px] flex-grow bg-slate-200" />
+                    <div className="flex-grow h-[1px] bg-gradient-to-r from-[var(--color-utama)] to-transparent opacity-40" />
                   </div>
 
                   <h3 className="font-bold mb-4 text-[var(--color-teks)] text-xl lg:text-2xl font-['Playfair_Display']">

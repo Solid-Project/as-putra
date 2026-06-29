@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useRef, useMemo } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import logoAsliUrl from "@/assets/logo.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -20,8 +21,7 @@ const Layout5 = ({ data, index }) => {
     return data?.layout_data?.items || [];
   }, [data?.layout_data?.items]);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
+  useSectionAnimation(sectionRef, () => {
 
       // 1. REVEAL JUDUL
       gsap.fromTo(titleRef.current,
@@ -88,9 +88,6 @@ const Layout5 = ({ data, index }) => {
         }
       });
 
-    }, sectionRef);
-
-    return () => ctx.revert();
   }, [statsData]);
 
   return (

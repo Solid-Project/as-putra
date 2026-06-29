@@ -18,7 +18,9 @@ const SectionNavigation = () => {
     const wrapper = document.querySelector(".fullpage-wrapper");
     if (!wrapper) return;
 
-    const secs = Array.from(wrapper.querySelectorAll(":scope > .section"));
+    const secs = Array.from(wrapper.querySelectorAll(":scope > .section")).filter(
+      (sec) => sec.getAttribute("data-hide-nav") !== "true"
+    );
     
     // Hanya update state jika jumlahnya berubah untuk cegah flicker
     setSections((prev) => {
@@ -49,12 +51,13 @@ const SectionNavigation = () => {
     const handleScroll = () => {
       if (sections.length === 0) return;
       const vh = window.innerHeight;
-      let current = 0;
+      let current = -1;
 
       sections.forEach((section, i) => {
         const rect = section.getBoundingClientRect();
         // Deteksi yang paling dominan di tengah layar
-        if (rect.top <= vh / 2 && rect.bottom >= vh / 2) {
+        // Tambahkan toleransi sedikit agar lebih responsif
+        if (rect.top <= vh * 0.6 && rect.bottom >= vh * 0.4) {
           current = i;
         }
       });

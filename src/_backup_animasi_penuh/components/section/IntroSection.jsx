@@ -1,4 +1,5 @@
 // src/components/layouts/IntroSection.jsx
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -25,15 +26,15 @@ const IntroSection = ({ data, isActive, index }) => {
       // Animasi Floating Background (Halus)
       const shapes = floatRef.current?.children;
       if (shapes) {
-        gsap.to(shapes[0], { y: 30, duration: 10, repeat: -1, yoyo: true, ease: "sine.inOut" });
-        gsap.to(shapes[1], { x: -20, duration: 8, repeat: -1, yoyo: true, ease: "sine.inOut" });
+        gsap.to(shapes[0], { y: 30, duration: 10, repeat: -1, yoyo: true, ease: "sine.inOut", force3D: true });
+        gsap.to(shapes[1], { x: -20, duration: 8, repeat: -1, yoyo: true, ease: "sine.inOut", force3D: true });
       }
 
       // Animasi Judul
       gsap.fromTo(titleWrapperRef.current.children,
         { y: 50, opacity: 0 },
         {
-          y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power4.out",
+          y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power4.out", force3D: true,
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top center",
@@ -46,7 +47,7 @@ const IntroSection = ({ data, isActive, index }) => {
       gsap.fromTo(imageWrapperRef.current,
         { scale: 1.05, opacity: 0 },
         {
-          scale: 1, opacity: 1, duration: 1.8, ease: "expo.out",
+          scale: 1, opacity: 1, duration: 1.8, ease: "expo.out", force3D: true,
           scrollTrigger: { trigger: sectionRef.current, start: "top center" }
         }
       );
@@ -121,8 +122,7 @@ const IntroSection = ({ data, isActive, index }) => {
             <div className="absolute -bottom-2 -right-2 w-10 h-10 border-b-2 border-r-2 opacity-50" style={{ borderColor: COLOR_GOLD }} />
 
             {/* Container Gambar */}
-            <div className="w-full h-full overflow-hidden shadow-xl lg:shadow-2xl rounded-sm">
-              <img
+              <OptimizedImage
                 src={displayImage}
                 alt={displayTitle}
                 className="w-full h-full object-cover transition-transform duration-1000 lg:group-hover:scale-105"
@@ -130,9 +130,8 @@ const IntroSection = ({ data, isActive, index }) => {
               <div className="absolute inset-0 bg-[#1D2B53]/5 pointer-events-none" />
             </div>
           </div>
-        </div>
 
-      </div>
+        </div>
 
       <style dangerouslySetInnerHTML={{
         __html: `

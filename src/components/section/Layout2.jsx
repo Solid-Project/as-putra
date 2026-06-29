@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 
 // IMPORT LOGO
 import logoAsPutra from "@/assets/logo.jpg";     
@@ -44,21 +45,18 @@ const Layout2 = ({ data, isActive, index }) => {
     }
   }, [isActive, counterValue]);
 
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     ScrollTrigger.refresh();
-    let ctx = gsap.context(() => {
-      gsap.to(silhouetteLeftRef.current, {
-        y: -60, rotate: -5,
-        force3D: true,
-        scrollTrigger: { trigger: sectionRef.current, scrub: 1 }
-      });
-      gsap.to(silhouetteRightRef.current, {
-        y: 60, rotate: 5,
-        force3D: true,
-        scrollTrigger: { trigger: sectionRef.current, scrub: 1 }
-      });
-    }, sectionRef);
-    return () => ctx.revert();
+    gsap.to(silhouetteLeftRef.current, {
+      y: -60, rotate: -5,
+      force3D: true,
+      scrollTrigger: { trigger: sectionRef.current, scrub: 1 }
+    });
+    gsap.to(silhouetteRightRef.current, {
+      y: 60, rotate: 5,
+      force3D: true,
+      scrollTrigger: { trigger: sectionRef.current, scrub: 1 }
+    });
   }, [data]);
 
   return (

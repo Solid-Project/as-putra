@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import logoAsliUrl from "@/assets/logo.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -20,8 +21,7 @@ const Layout8 = ({ data, index }) => {
   const layoutData = data?.layout_data || {};
   const stats = layoutData?.stats || [];
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
+  useSectionAnimation(sectionRef, () => {
       gsap.fromTo(imageRef.current, 
         { y: 30 }, 
         { 
@@ -35,9 +35,6 @@ const Layout8 = ({ data, index }) => {
           }
         }
       );
-    }, sectionRef);
-
-    return () => ctx.revert();
   }, [stats]);
 
   return (

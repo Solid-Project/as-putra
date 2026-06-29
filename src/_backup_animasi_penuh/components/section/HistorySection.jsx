@@ -24,27 +24,34 @@ const HistorySection = ({ data, isActive, index }) => {
     let isCancelled = false;
     const fullText = data.subtitle;
 
+    // Reset dan mulai animasi HANYA saat aktif
     if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
 
     currentIndexRef.current = 0;
     setDisplayText("");
     setIsTyping(true);
 
-    typingIntervalRef.current = setInterval(() => {
-      if (isCancelled || !isMountedRef.current) return;
-      currentIndexRef.current += 1;
-      const nextText = fullText.slice(0, currentIndexRef.current);
-      setDisplayText(nextText);
+    // Tambahkan delay kecil agar terlihat natural saat baru muncul
+    const startDelay = setTimeout(() => {
+      if (isCancelled) return;
+      
+      typingIntervalRef.current = setInterval(() => {
+        if (isCancelled || !isMountedRef.current) return;
+        currentIndexRef.current += 1;
+        const nextText = fullText.slice(0, currentIndexRef.current);
+        setDisplayText(nextText);
 
-      if (currentIndexRef.current >= fullText.length) {
-        clearInterval(typingIntervalRef.current);
-        typingIntervalRef.current = null;
-        setIsTyping(false);
-      }
-    }, 80);
+        if (currentIndexRef.current >= fullText.length) {
+          clearInterval(typingIntervalRef.current);
+          typingIntervalRef.current = null;
+          setIsTyping(false);
+        }
+      }, 120);
+    }, 300);
 
     return () => {
       isCancelled = true;
+      clearTimeout(startDelay);
       if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
     };
   }, [isActive, data?.subtitle]);
@@ -111,6 +118,7 @@ const HistorySection = ({ data, isActive, index }) => {
               <img
                 src={imageUrl}
                 alt={data.layout_data?.caption || "Gallery"}
+                loading="lazy"
                 /* PERBAIKAN 2: Gunakan aspect-[4/5] yang tegak, tinggi, dan gagah baik di mobile maupun desktop sesuai arahan */
                 className="w-full aspect-[4/5] object-cover transition-transform duration-1000 group-hover:scale-105"
               />
@@ -141,7 +149,7 @@ const HistorySection = ({ data, isActive, index }) => {
     >
       {/* Background Decor */}
       <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none -z-0">
-        <img src={logoAsliUrl} alt="" className="w-[80%] h-auto rotate-12 scale-110" />
+        <img src={logoAsliUrl} alt="" loading="lazy" className="w-[80%] h-auto rotate-12 scale-110" />
       </div>
 
       {/* Main Content Container */}

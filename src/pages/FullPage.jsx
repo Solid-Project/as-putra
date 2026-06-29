@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"; // 1. Tambah useState di sini
+import React, { useEffect, useState, Suspense, lazy } from "react"; // 1. Tambah useState di sini
 import { useParams } from "react-router-dom";
 import { usePageData } from "@/hooks/usePageData";
 import useFullpageSnap from "@/hooks/useFullPageSnap";
@@ -6,14 +6,14 @@ import SectionRenderer from "@/components/SectionRenderer";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import HeroSkeleton from "@/components/skeleton/HeroSkeleton";
-import NewsTeaser from "@/components/section/NewsTeaser";
-import CareerSection from "@/components/section/CareerSection";
-import NewsSection from "@/components/section/NewsSection";
 
 import AutoTranslate from "@/lib/AutoTranslate"; 
 
-import PrivacyPolicySection from "@/components/section/PrivacyPolicy";
-import TermsConditionsSection from "@/components/section/TermsConditions";
+const NewsTeaser = lazy(() => import("@/components/section/NewsTeaser"));
+const CareerSection = lazy(() => import("@/components/section/CareerSection"));
+const NewsSection = lazy(() => import("@/components/section/NewsSection"));
+const PrivacyPolicySection = lazy(() => import("@/components/section/PrivacyPolicy"));
+const TermsConditionsSection = lazy(() => import("@/components/section/TermsConditions"));
 
 const FullPage = ({ defaultSlug = "beranda" }) => {
   const { slug } = useParams();
@@ -65,26 +65,34 @@ const FullPage = ({ defaultSlug = "beranda" }) => {
         
         {currentSlug === "beranda" && (
           <section className="section no-snap w-full h-auto" data-title="News Updates">
-            <NewsTeaser isActive={activeIndex === sections.length} />
+            <Suspense fallback={<div className="w-full min-h-[50vh] bg-black/5 animate-pulse" />}>
+              <NewsTeaser isActive={activeIndex === sections.length} />
+            </Suspense>
           </section>
         )}
 
         {currentSlug === "news" && (
           <section className="section no-snap w-full h-auto" data-title="Latest News">
-            <NewsSection isActive={activeIndex === sections.length} />
+            <Suspense fallback={<div className="w-full min-h-[50vh] bg-black/5 animate-pulse" />}>
+              <NewsSection isActive={activeIndex === sections.length} />
+            </Suspense>
           </section>
         )}
 
         {currentSlug === "karir" && (
           <section className="section no-snap w-full h-auto" data-theme="light" data-title="Join Our Team">
-            <CareerSection isActive={activeIndex === sections.length} />
+            <Suspense fallback={<div className="w-full min-h-[50vh] bg-black/5 animate-pulse" />}>
+              <CareerSection isActive={activeIndex === sections.length} />
+            </Suspense>
           </section>
         )}
 
         {currentSlug === "privacy-policy" && (
           <section className="section no-snap w-full h-auto bg-white text-slate-700 px-6 md:px-10 lg:px-[6%] py-12 md:py-20" data-theme="light" data-title="Privacy Policy">
             <div className="prose prose-slate max-w-4xl mx-auto text-slate-600 text-sm leading-relaxed text-justify">
-              <PrivacyPolicySection />
+              <Suspense fallback={<div className="w-full min-h-[50vh] bg-black/5 animate-pulse" />}>
+                <PrivacyPolicySection />
+              </Suspense>
             </div>
           </section>
         )}
@@ -92,7 +100,9 @@ const FullPage = ({ defaultSlug = "beranda" }) => {
         {currentSlug === "terms-conditions" && (
           <section className="section no-snap w-full h-auto bg-white text-slate-700 px-6 md:px-10 lg:px-[6%] py-12 md:py-20" data-theme="light" data-title="Terms & Conditions">
             <div className="prose prose-slate max-w-4xl mx-auto text-slate-600 text-sm leading-relaxed text-justify">
-              <TermsConditionsSection />
+              <Suspense fallback={<div className="w-full min-h-[50vh] bg-black/5 animate-pulse" />}>
+                <TermsConditionsSection />
+              </Suspense>
             </div>
           </section>
         )}

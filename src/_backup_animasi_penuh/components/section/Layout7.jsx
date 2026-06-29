@@ -72,7 +72,7 @@ const Layout7 = ({ data, index }) => {
     >
       {/* Background Decor Logo */}
       <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] md:opacity-[0.03] pointer-events-none -z-0">
-        <img src={logoAsliUrl} alt="" className="w-[80%] md:w-[50%] h-auto rotate-6" />
+        <img src={logoAsliUrl} alt="" loading="lazy" className="w-[80%] md:w-[50%] h-auto rotate-6" />
       </div>
       
       {/* Kontainer dalam sekarang menggunakan py-12 agar pas, tidak berlebih */}
@@ -144,6 +144,7 @@ const Layout7 = ({ data, index }) => {
                       <img 
                         src={`${import.meta.env.VITE_API_URL}/storage/${item.image}`} 
                         alt={item.title} 
+                        loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
                       />
                     ) : (

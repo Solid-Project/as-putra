@@ -47,14 +47,14 @@ const VissionMission = ({ data, isActive, index }) => {
       gsap.fromTo(
         ".bg-accent",
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 2, stagger: 0.3, ease: "power2.out" }
+        { opacity: 1, scale: 1, duration: 2, stagger: 0.3, ease: "power2.out", force3D: true }
       );
 
       // Animasi Logo Background
       gsap.fromTo(
         ".logo-bg",
         { opacity: 0, scale: 1.15, rotate: 5 },
-        { opacity: 0.09, scale: 1, rotate: 12, duration: 2.2, ease: "power2.out" }
+        { opacity: 0.09, scale: 1, rotate: 12, duration: 2.2, ease: "power2.out", force3D: true }
       );
 
       // Animasi Floating subtle untuk elemen dekoratif
@@ -64,7 +64,8 @@ const VissionMission = ({ data, isActive, index }) => {
         duration: 5,
         repeat: -1,
         yoyo: true,
-        ease: "sine.inOut"
+        ease: "sine.inOut",
+        force3D: true
       });
     }, sectionRef);
 
@@ -97,7 +98,7 @@ const VissionMission = ({ data, isActive, index }) => {
 
       {/* 2. Logo AS Putra - Didesain khusus untuk VissionMission (di sebelah kiri bawah teks) */}
       <div className="logo-bg absolute top-[20%] left-[2%] md:left-[5%] w-full max-w-[320px] md:max-w-[450px] opacity-0 pointer-events-none z-0">
-        <img src={logoBg} alt="" className="w-full h-auto object-contain filter drop-shadow-[0_15px_35px_rgba(29,43,83,0.06)]" />
+        <img src={logoBg} alt="" loading="lazy" className="w-full h-auto object-contain filter drop-shadow-[0_15px_35px_rgba(29,43,83,0.06)]" />
       </div>
 
       {/* 3. Geometric Branding Accents */}
@@ -177,13 +178,15 @@ const VissionMission = ({ data, isActive, index }) => {
               
               <ul className="space-y-4">
                 {data.layout_data?.misi_text?.map((item, i) => (
-                  <li key={i} className="flex items-start gap-4">
-                    <div className="mt-1 w-6 h-6 flex-shrink-0 flex items-center justify-center rounded-md bg-[#1D2B53] text-[#FFC619] text-[10px] font-black">
+                  <li key={i} className="flex items-start gap-3.5">
+                    <div className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-md bg-[#1D2B53] text-[#FFC619] text-[10px] font-black mt-[1px]">
                       {i + 1}
                     </div>
-                    <span className="text-sm font-semibold text-gray-700 leading-tight">
-                      {item}
-                    </span>
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold text-gray-700 leading-snug text-justify">
+                        {item}
+                      </p>
+                    </div>
                   </li>
                 ))}
               </ul>

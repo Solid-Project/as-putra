@@ -1,10 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { 
-  CurrencyDollarIcon, 
-  GlobeAsiaAustraliaIcon 
-} from "@heroicons/react/24/outline";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import logoAsliUrl from "@/assets/logo.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -23,54 +20,41 @@ const Layout6 = ({ data, index }) => {
   const isLongContent = displayDescription.length > 600; 
   const sectionClass = isLongContent ? "section no-snap" : "section";
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      
-      // 1. PARALLAX BI-DIRECTIONAL (HANYA AKTIF DI DESKTOP >= 1024px)
-      // Di mobile dimatikan total agar posisi elemen tidak saling menabrak atau meluber
-      if (window.innerWidth >= 1024) {
-        // Kolom Kiri: Naik pelan
-        gsap.fromTo(leftColRef.current, { y: 40 }, { 
-          y: -40, scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "bottom top", scrub: 1 } 
-        });
-
-        // Kolom Tengah: Turun pelan
-        gsap.fromTo(midColRef.current, { y: -60 }, { 
-          y: 60, scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "bottom top", scrub: 1.2 } 
-        });
-
-        // Kolom Kanan: Naik lebih cepat
-        gsap.fromTo(rightColRef.current, { y: 100 }, { 
-          y: -100, scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "bottom top", scrub: 1.5 } 
-        });
-      }
-
-      // 2. ANIMASI COUNTER
-      const statsToAnimate = [
-        parseFloat(layoutData.stat1_val) || 0,
-        parseFloat(layoutData.stat2_val) || 0
-      ];
-
-      statsToAnimate.forEach((target, idx) => {
-        const obj = { val: 0 };
-        gsap.to(obj, {
-          val: target,
-          duration: 2.5,
-          ease: "expo.out",
-          scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
-          onUpdate: () => {
-            if (statsRefs.current[idx]) {
-              statsRefs.current[idx].innerText = obj.val.toLocaleString("id-ID", {
-                minimumFractionDigits: 1,
-                maximumFractionDigits: 1,
-              });
-            }
-          }
-        });
+  useSectionAnimation(sectionRef, () => {
+    if (window.innerWidth >= 1024) {
+      gsap.fromTo(leftColRef.current, { y: 40 }, { 
+        y: -40, scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "bottom top", scrub: 1 } 
       });
+      gsap.fromTo(midColRef.current, { y: -60 }, { 
+        y: 60, scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "bottom top", scrub: 1.2 } 
+      });
+      gsap.fromTo(rightColRef.current, { y: 100 }, { 
+        y: -100, scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "bottom top", scrub: 1.5 } 
+      });
+    }
 
-    }, sectionRef);
-    return () => ctx.revert();
+    const statsToAnimate = [
+      parseFloat(layoutData.stat1_val) || 0,
+      parseFloat(layoutData.stat2_val) || 0
+    ];
+
+    statsToAnimate.forEach((target, idx) => {
+      const obj = { val: 0 };
+      gsap.to(obj, {
+        val: target,
+        duration: 2.5,
+        ease: "expo.out",
+        scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
+        onUpdate: () => {
+          if (statsRefs.current[idx]) {
+            statsRefs.current[idx].innerText = obj.val.toLocaleString("id-ID", {
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            });
+          }
+        }
+      });
+    });
   }, [layoutData, displayDescription]);
 
   return (

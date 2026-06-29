@@ -6,36 +6,47 @@ gsap.registerPlugin(ScrollToPlugin);
 const useFullPageSnap = ({ enabled = true } = {}) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const lockRef = useRef(false);
+  const isAnimatingRef = useRef(false);
   const indexRef = useRef(0);
+  const wheelTimeoutRef = useRef(null);
 
-  const getElements = useCallback(() => 
-    Array.from(document.querySelectorAll(".fullpage-wrapper > .section")), 
-  []);
+  const getElements = useCallback(() =>
+    Array.from(document.querySelectorAll(".fullpage-wrapper > .section")),
+    []);
 
-  const scrollToElement = useCallback((targetIndex) => {
+  const scrollToElement = useCallback((targetIndex, alignBottom = false) => {
     const all = getElements();
     const targetEl = all[targetIndex];
     if (!targetEl || lockRef.current) return;
 
     // KUNCI INSTAN: Begitu terdeteksi, langsung kunci agar tidak ada sentuhan beruntun
     lockRef.current = true;
+    isAnimatingRef.current = true;
     indexRef.current = targetIndex;
     setActiveIndex(targetIndex);
 
+    let targetY = targetEl; // Default behavior GSAP (align ke atas elemen)
+
+    // Jika user scroll ke atas (UP) menuju section no-snap yang tinggi, 
+    // kita sejajarkan layar dengan bagian BAWAH elemen tersebut
+    if (alignBottom && targetEl.offsetHeight > window.innerHeight) {
+      const elTop = targetEl.getBoundingClientRect().top + window.scrollY;
+      targetY = elTop + targetEl.offsetHeight - window.innerHeight;
+    }
+
     // TATA.COM SECRET FEEL:
-    // 1. Menggunakan 'power3.inOut' -> Kecepatan awal naik secara perlahan (tidak bikin kaget),
-    //    lalu meluncur konstan, dan mengerem dengan sangat presisi & lembut di akhir.
-    // 2. Durasi dinaikkan ke 1.35s agar pergerakan sinematik dan anggunnya terasa nyata.
+    // Menggunakan 'power2.inOut' agar konsisten, durasi 1.2s untuk keseimbangan antara kecepatan dan kehalusan.
     gsap.to(window, {
-      duration: 1.35,
-      ease: "power3.inOut",
-      scrollTo: { y: targetEl, autoKill: false },
+      duration: 1.2,
+      ease: "power2.inOut",
+      scrollTo: { y: targetY, autoKill: false },
       overwrite: "auto",
       onComplete: () => {
-        // Meredam sisa inersia trackpad MacBook / Mouse mahal secara total
-        setTimeout(() => {
+        isAnimatingRef.current = false;
+        // Buka kunci jika trackpad sudah diam (inertia selesai)
+        if (!wheelTimeoutRef.current) {
           lockRef.current = false;
-        }, 500);
+        }
       },
     });
   }, [getElements]);
@@ -43,21 +54,28 @@ const useFullPageSnap = ({ enabled = true } = {}) => {
   const handleWheel = useCallback((e) => {
     if (!enabled) return;
 
-    // Abaikan scroll event non-pixel (seperti gesture trackpad tertentu yang bisa bikin jitter)
+    // Abaikan scroll event non-pixel (gesture spesifik perangkat)
     if (e.deltaMode !== 0) return;
 
     const all = getElements();
     if (all.length === 0) return;
 
-    // Filter 1: Jika sedang animasi, kunci total
+    // Filter 1: Manajemen Inertia Trackpad
     if (lockRef.current) {
       e.preventDefault();
+
+      // Perbarui timer inertia: setiap ada event wheel beruntun (inertia),
+      // tunda pembukaan kunci agar tidak bergetar/memicu scroll baru.
+      clearTimeout(wheelTimeoutRef.current);
+      wheelTimeoutRef.current = setTimeout(() => {
+        wheelTimeoutRef.current = null;
+        // Hanya buka kunci jika animasi GSAP sudah selesai
+        if (!isAnimatingRef.current) {
+          lockRef.current = false;
+        }
+      }, 50); // 50ms tanpa event = trackpad dianggap sudah diam
       return;
     }
-
-    // Filter 2: Threshold ditingkatkan untuk meredam sensitivitas trackpad
-    // agar tidak memicu transisi saat scrolling belum stabil
-    if (Math.abs(e.deltaY) < 50) return;
 
     const currentIdx = indexRef.current;
     const currentEl = all[currentIdx];
@@ -67,19 +85,44 @@ const useFullPageSnap = ({ enabled = true } = {}) => {
     const rect = currentEl.getBoundingClientRect();
     const vh = window.innerHeight;
 
+    // Cek apakah user sedang berada di area footer (di bawah batas bawah slide terakhir)
+    const minValidTop = Math.min(0, vh - currentEl.offsetHeight);
+    const isAtFooter = currentIdx === all.length - 1 && rect.top < minValidTop - 5;
+
+    // Jika user di footer dan scroll KE ATAS, berikan efek snap kembali ke slide terakhir
+    if (isAtFooter && !isDown) {
+      e.preventDefault();
+      if (Math.abs(e.deltaY) < 10) return;
+      scrollToElement(currentIdx, true); // Snap ke batas bawah slide terakhir
+      return;
+    }
+
+    // Bagian No-Snap (hanya untuk kehati-hatian ganda)
     if (currentEl.classList.contains("no-snap")) {
       if (isDown) {
-        if (rect.bottom > vh + 5) return; 
+        if (rect.bottom > vh + 5) return;
       } else {
         if (rect.top < -5) return;
       }
     }
 
     const nextIdx = isDown ? currentIdx + 1 : currentIdx - 1;
-    
+
+    // Jika mencoba scroll ke luar batas slide GSAP (misal: scroll down di slide terakhir untuk melihat footer)
+    if (nextIdx < 0 || nextIdx >= all.length) {
+      return; // Biarkan browser native scroll
+    }
+
+    // CEGAH SCROLL NATIVE DALAM BATAS GSAP: 
+    // Ini menghilangkan efek "patah-patah" / bentrokan dengan GSAP.
+    e.preventDefault();
+
+    // Threshold diturunkan sedikit untuk menyeimbangkan responsivitas
+    if (Math.abs(e.deltaY) < 8) return;
+
     if (nextIdx >= 0 && nextIdx < all.length) {
-      e.preventDefault();
-      scrollToElement(nextIdx);
+      // Jika scroll UP (!isDown), aktifkan alignBottom agar snap ke bawah elemen
+      scrollToElement(nextIdx, !isDown);
     }
   }, [enabled, getElements, scrollToElement]);
 
@@ -91,10 +134,11 @@ const useFullPageSnap = ({ enabled = true } = {}) => {
     }
 
     window.addEventListener("wheel", handleWheel, { passive: false });
-    
+
     const handleResize = () => {
       const all = getElements();
       if (all[indexRef.current]) {
+        // Simple resize handler (selalu align top saat resize untuk aman)
         window.scrollTo(0, all[indexRef.current].offsetTop);
       }
     };
@@ -103,12 +147,13 @@ const useFullPageSnap = ({ enabled = true } = {}) => {
     return () => {
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("resize", handleResize);
+      clearTimeout(wheelTimeoutRef.current);
     };
   }, [enabled, handleWheel, getElements]);
 
-  return { 
-    activeIndex, 
-    scrollToSection: scrollToElement 
+  return {
+    activeIndex,
+    scrollToSection: scrollToElement
   };
 };
 

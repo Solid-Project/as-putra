@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -18,8 +19,7 @@ const Layout10 = ({ data, index }) => {
   const displayImage = data?.image ? `${import.meta.env.VITE_API_URL}/storage/${data.image}` : "";
   const displayLabel = data?.more_text || "AS Putra Group";
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
+  useSectionAnimation(sectionRef, () => {
       gsap.fromTo(parallaxBgRef.current, { y: "-10%" }, {
         y: "10%",
         ease: "none",
@@ -30,8 +30,6 @@ const Layout10 = ({ data, index }) => {
           scrub: 1,
         }
       });
-    }, sectionRef);
-    return () => ctx.revert();
   }, []);
 
   const handleScroll = (direction) => {

@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,18 +15,15 @@ const Layout3 = ({ data, isActive, index }) => {
   const layoutData = typeof data?.layout_data === 'string' ? JSON.parse(data.layout_data) : data?.layout_data;
   const points = layoutData?.points || [];
 
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     ScrollTrigger.refresh();
-    let ctx = gsap.context(() => {
-      gsap.fromTo(bgRef.current, { scale: 1.2, y: "-8%" }, {
-        scale: 1.1, y: "8%", ease: "none",
-        scrollTrigger: { trigger: sectionRef.current, scrub: true }
-      });
-      if (isActive) {
-        gsap.fromTo(cardRef.current, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 1, ease: "power3.out" });
-      }
-    }, sectionRef);
-    return () => ctx.revert();
+    gsap.fromTo(bgRef.current, { scale: 1.2, y: "-8%" }, {
+      scale: 1.1, y: "8%", ease: "none",
+      scrollTrigger: { trigger: sectionRef.current, scrub: true }
+    });
+    if (isActive) {
+      gsap.fromTo(cardRef.current, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 1, ease: "power3.out" });
+    }
   }, [isActive, data]);
 
   return (

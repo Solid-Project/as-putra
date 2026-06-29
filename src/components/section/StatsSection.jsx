@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import logoIcon from "@/assets/logo.jpg"; 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -9,41 +10,22 @@ const Counter = ({ target, suffix, label, sectionRef }) => {
   const [count, setCount] = useState(0);
   const countRef = useRef({ value: 0 });
 
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     if (!target) return;
-
-    const ctx = gsap.context(() => {
-      gsap.to(countRef.current, {
-        value: target,
-        duration: 2,
-        ease: "power2.out",
-        force3D: true,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 90%",
-          toggleActions: "play none none none",
-        },
-        onUpdate: () => {
-          setCount(Math.floor(countRef.current.value));
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, [target, sectionRef]);
+    gsap.to(countRef.current, {
+      value: target, duration: 2, ease: "power2.out", force3D: true,
+      scrollTrigger: { trigger: sectionRef.current, start: "top 90%", toggleActions: "play none none none" },
+      onUpdate: () => { setCount(Math.floor(countRef.current.value)); },
+    });
+  }, [target]);
 
   return (
     <div className="flex flex-col items-center group py-4">
-      {/* Angka Statistik - Diperkecil skalanya */}
       <h3 className="text-3xl md:text-4xl text-[#FFC700] font-bold tracking-tight transition-transform duration-500 group-hover:scale-105">
         {count.toLocaleString("id-ID")}
         <span className="text-white/40 ml-0.5 font-light text-xl md:text-2xl">{suffix}</span>
       </h3>
-      
-      {/* Aksen Garis - Lebih tipis & pendek */}
       <div className="h-[1.5px] w-6 bg-[#FFC700]/50 my-2 rounded-full transition-all duration-500 group-hover:w-10 group-hover:bg-[#FFC700]" />
-      
-      {/* Label Deskripsi - Ukuran teks dioptimalkan */}
       <p className="text-blue-100/50 uppercase tracking-[0.2em] text-[9px] md:text-[10px] font-semibold text-center max-w-[120px] leading-snug">
         {label}
       </p>
@@ -57,22 +39,11 @@ const StatsSection = ({ data, index }) => {
 
   const statsData = data?.layout_data || [];
 
-  useEffect(() => {
-    if (!sectionRef.current) return;
-    const ctx = gsap.context(() => {
-      gsap.to(bgRef.current, {
-        x: 30,
-        rotate: 5,
-        force3D: true,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-        },
-      });
-    }, sectionRef);
-    return () => ctx.revert();
+  useSectionAnimation(sectionRef, () => {
+    gsap.to(bgRef.current, {
+      x: 30, rotate: 5, force3D: true,
+      scrollTrigger: { trigger: sectionRef.current, start: "top bottom", end: "bottom top", scrub: 1 },
+    });
   }, []);
 
   if (!data || statsData.length === 0) return null;

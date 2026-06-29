@@ -1,8 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import { ArrowRightIcon, ArrowLeftIcon, BuildingOffice2Icon } from "@heroicons/react/24/outline";
 import logoAsliUrl from "@/assets/logo.jpg";
+
+gsap.registerPlugin(ScrollTrigger);
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,8 +20,7 @@ const Layout7 = ({ data, index }) => {
   const displayLabel = data?.more_text || "Unit Bisnis";
   const unitBisnis = data?.layout_data?.items || [];
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
+  useSectionAnimation(sectionRef, () => {
       gsap.fromTo(headerRef.current, 
         { y: 20, opacity: 0 }, 
         {
@@ -28,8 +30,6 @@ const Layout7 = ({ data, index }) => {
           scrollTrigger: { trigger: sectionRef.current, start: "top 85%" }
         }
       );
-    }, sectionRef);
-    return () => ctx.revert();
   }, []);
 
   const handleScroll = (e, direction) => {

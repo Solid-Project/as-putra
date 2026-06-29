@@ -1,6 +1,6 @@
-// src/components/about/VissionMission.jsx
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import logoBg from "@/assets/logo-trans.png";
 
 const VissionMission = ({ data, isActive, index }) => {
@@ -13,7 +13,6 @@ const VissionMission = ({ data, isActive, index }) => {
   const [isTyping, setIsTyping] = useState(false);
   const typingIntervalRef = useRef(null);
 
-  // Warna Identitas APG
   const COLOR_NAVY = "#1D2B53";
   const COLOR_GOLD = "#FFC619";
 
@@ -39,37 +38,22 @@ const VissionMission = ({ data, isActive, index }) => {
     return () => clearInterval(typingIntervalRef.current);
   }, [isActive, data?.subtitle]);
 
-  useEffect(() => {
+  useSectionAnimation(sectionRef, () => {
     if (!isActive || !data) return;
 
-    const ctx = gsap.context(() => {
-      // Animasi Elemen Background agar terasa hidup
-      gsap.fromTo(
-        ".bg-accent",
+      gsap.fromTo(".bg-accent",
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 2, stagger: 0.3, ease: "power2.out", force3D: true }
       );
 
-      // Animasi Logo Background
-      gsap.fromTo(
-        ".logo-bg",
+      gsap.fromTo(".logo-bg",
         { opacity: 0, scale: 1.15, rotate: 5 },
         { opacity: 0.09, scale: 1, rotate: 12, duration: 2.2, ease: "power2.out", force3D: true }
       );
 
-      // Animasi Floating subtle untuk elemen dekoratif
       gsap.to(".floating-shape", {
-        y: 20,
-        x: 10,
-        duration: 5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        force3D: true
+        y: 20, x: 10, duration: 5, repeat: -1, yoyo: true, ease: "sine.inOut", force3D: true
       });
-    }, sectionRef);
-
-    return () => ctx.revert();
   }, [isActive, data]);
 
   if (!data) return null;

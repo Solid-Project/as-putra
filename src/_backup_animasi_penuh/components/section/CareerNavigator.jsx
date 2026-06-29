@@ -15,9 +15,8 @@ const CareerNavigator = ({ activeTab, setActiveTab }) => {
 
   return (
     <div className="flex flex-col items-center">
-      {/* 🚀 Wrapper Utama: Diubah menjadi abu-abu sangat muda agar bersih di atas putih */}
-      <div className="inline-flex p-1.5 bg-gray-100/50 border border-gray-200 rounded-2xl relative overflow-hidden">
-        
+      <div className="inline-flex gap-2 relative overflow-hidden">
+
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -65,14 +64,6 @@ const CareerNavigator = ({ activeTab, setActiveTab }) => {
         })}
       </div>
 
-      {/* 🏷️ Label Minimalis di Bawah: Disesuaikan ke Gelap (Subtle) */}
-      <div className="mt-6 flex items-center gap-4 opacity-20">
-        <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-[#1D2B53]"></div>
-        <span className="text-[9px] uppercase tracking-[0.5em] text-[#1D2B53] font-black">
-          Navigation
-        </span>
-        <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-[#1D2B53]"></div>
-      </div>
     </div>
   );
 };

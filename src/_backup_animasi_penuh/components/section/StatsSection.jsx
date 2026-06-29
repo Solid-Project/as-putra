@@ -17,6 +17,7 @@ const Counter = ({ target, suffix, label, sectionRef }) => {
         value: target,
         duration: 2,
         ease: "power2.out",
+        force3D: true,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top 90%",
@@ -62,6 +63,7 @@ const StatsSection = ({ data, index }) => {
       gsap.to(bgRef.current, {
         x: 30,
         rotate: 5,
+        force3D: true,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top bottom",
@@ -86,7 +88,7 @@ const StatsSection = ({ data, index }) => {
         ref={bgRef}
         className="absolute left-[2%] top-1/2 -translate-y-1/2 w-[20vw] opacity-[0.02] pointer-events-none -z-0"
       >
-        <img src={logoIcon} alt="" className="w-full h-auto grayscale invert" />
+        <img src={logoIcon} alt="" loading="lazy" className="w-full h-auto grayscale invert" />
       </div>
 
       {/* Konten Utama - Lebih Rapat */}
