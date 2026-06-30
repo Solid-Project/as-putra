@@ -49,14 +49,14 @@ const SectorStrip = ({ data, isActive, index }) => {
   return (
     <section
       ref={sectionRef}
-      className="h-auto md:h-screen w-full flex items-stretch overflow-hidden bg-[#0F1A3E] relative snap-start"
+      className="h-screen w-full flex items-stretch overflow-hidden bg-[#0F1A3E] relative snap-start"
       id={`section-${index}`}
     >
-      <div className="grid w-full h-auto md:h-full grid-cols-1 md:grid-flow-col md:auto-cols-fr">
+      <div className="flex w-full h-full">
         {sectors.map((item, idx) => (
           <div
             key={item.id || idx}
-            className="relative flex flex-col justify-center items-start text-white border-b md:border-b-0 md:border-r border-white/10 last:border-none px-6 py-20 min-h-[50vh] md:min-h-0 md:h-full overflow-hidden bg-[#0F1A3E]"
+            className="relative flex-1 flex flex-col justify-center items-start text-white border-r border-white/10 last:border-none px-6 overflow-hidden bg-[#0F1A3E]"
           >
             {/* BACKGROUND LAYER PARALLAKS & OVERLAY */}
             <div className="absolute inset-0 z-0 bg-[#0F1A3E]">
@@ -69,7 +69,7 @@ const SectorStrip = ({ data, isActive, index }) => {
                   alt={item.title}
                   className="w-full h-[130%] top-[-15%] absolute object-cover opacity-60"
                 />
-                <div className="absolute inset-0 bg-[#0F1A3E]/60" />
+                <div className="absolute inset-0 bg-[#0F1A3E]/60 z-[1]" />
               </div>
             </div>
             {/* CONTENT CONTAINER */}
@@ -87,6 +87,7 @@ const SectorStrip = ({ data, isActive, index }) => {
             </div>
 
           </div>
+
         ))}
       </div>
     </section>

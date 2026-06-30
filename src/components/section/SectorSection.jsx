@@ -142,7 +142,7 @@ const SectorSection = ({ index, activeIndex, currentSlug }) => {
                       src={sector.image}
                       alt={sector.label}
                       loading="lazy"
-                      className="w-full h-full object-cover filter brightness-[0.75] group-hover:brightness-90 transition-all duration-500"
+                      className="w-full h-full object-cover filter grayscale brightness-[0.4] group-hover:brightness-[0.6] transition-all duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#070D22] via-[#070D22]/60 to-transparent opacity-95" />
                   </div>

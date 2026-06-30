@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import gsap from "gsap";
-import { useSectionAnimation } from "@/hooks/useSectionAnimation";
 import { CalendarIcon, MapPinIcon, ArrowLeftIcon, UserIcon } from "@heroicons/react/24/outline";
 import ShareButtons from "@/components/ui/ShareButtons";
 
@@ -23,8 +22,6 @@ const EventDetailPage = () => {
 
   const pageRef = useRef(null);
   const heroRef = useRef(null);
-  const contentRef = useRef(null);
-  const sidebarRef = useRef(null);
 
   useEffect(() => {
     const fetchEventData = async () => {
@@ -58,76 +55,71 @@ const EventDetailPage = () => {
     window.scrollTo(0, 0);
   }, [id]);
 
-  useSectionAnimation(pageRef, () => {
+  useEffect(() => {
     if (!event || loading) return;
     gsap.fromTo(heroRef.current, { scale: 1.1, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.2, ease: "power3.out" });
     gsap.fromTo(".animate-content", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out", delay: 0.3 });
   }, [event, loading]);
 
   if (loading) return (
-    <div className="flex items-center justify-center min-h-screen bg-white">
-      <div className="w-10 h-10 border-4 border-[#FFC700] border-t-transparent rounded-full animate-spin"></div>
+    <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA]">
+      <div className="flex flex-col items-center gap-5">
+        <div className="w-10 h-10 border-[3px] border-[#D4AF37] border-t-transparent rounded-full animate-spin"></div>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-gray-400 font-black">Loading Event</span>
+      </div>
     </div>
   );
 
-  if (!event) return <div className="h-screen flex items-center justify-center">Event tidak ditemukan</div>;
+  if (!event) return <div className="h-screen flex items-center justify-center text-gray-500 text-sm font-bold uppercase tracking-widest">Event tidak ditemukan</div>;
 
   return (
     <main ref={pageRef} className="min-h-screen bg-[#FAFAFA] overflow-x-hidden">
-      {/* HERO SECTION */}
-      <div className="relative h-[45vh] md:h-[50vh] min-h-[300px] overflow-hidden">
+      <section className="relative w-full min-h-[560px] md:min-h-[640px] flex items-end overflow-hidden bg-[#0F172A]">
         <div ref={heroRef} className="absolute inset-0">
           <img src={event.thumbnail} alt={event.title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0F1A3E] via-[#0F1A3E]/40 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/70 to-[#020617]/20"></div>
+          <div className="absolute inset-0 bg-black/20"></div>
         </div>
 
-        {/* 1. KHUSUS MOBILE: Floating di atas (DESAIN ASLI ANDA) */}
-        <div className="md:hidden absolute top-6 left-0 w-full z-20 px-5">
-          <div className="flex items-center justify-between">
-              <button
+        <div className="absolute top-0 left-0 w-full z-30">
+          <div className="max-w-[1400px] mx-auto px-5 md:px-[5%] pt-6 md:pt-10 flex items-center justify-between">
+            <button
               onClick={() => navigate(-1)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black/30 backdrop-blur-md text-white border border-white/10 shadow-2xl"
+              className="group flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 backdrop-blur-xl border border-white/10 text-white hover:bg-[#D4AF37] hover:text-[#0F1A3E] transition-all duration-500"
             >
-              <ArrowLeftIcon className="w-4 h-4" />
-              <span className="text-[10px] font-black uppercase tracking-widest">{lang.back}</span>
+              <ArrowLeftIcon className="w-3.5 h-3.5 transition-transform duration-500 group-hover:-translate-x-1" />
+              <span className="text-[10px] font-black uppercase tracking-[0.25em]">{lang.back}</span>
             </button>
-            <span className="px-4 py-2 rounded-xl bg-[#FFC700] text-[#0F1A3E] text-[9px] font-black uppercase tracking-widest">
+
+            <span className="hidden md:inline-flex px-4 py-1.5 rounded-full bg-[#D4AF37] text-[#0F1A3E] text-[9px] font-black uppercase tracking-[0.25em]">
               {event.categories?.[0]?.name || lang.event}
             </span>
           </div>
         </div>
 
-        {/* HERO CONTENT */}
-        <div className="absolute inset-0 flex items-end pb-6 md:pb-10">
-          <div className="w-full px-4 sm:px-6 lg:px-[5%]">
-            <div className="max-w-[1000px] mx-auto">
-
-              {/* 2. KHUSUS DESKTOP: Sejajar di atas judul */}
-              <div className="hidden md:flex animate-content flex-row items-center gap-4 mb-4">
-                  <button
-                  onClick={() => navigate(-1)}
-                  className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-[#FFC700] hover:text-[#0F1A3E] transition-all duration-500"
-                >
-                  <ArrowLeftIcon className="w-3.5 h-3.5 transition-transform duration-500 group-hover:-translate-x-1" />
-                  <span className="text-[10px] font-black uppercase tracking-widest">{lang.back}</span>
-                </button>
-                <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[9px] font-black tracking-[0.2em] uppercase bg-[#FFC700] text-[#0F1A3E]">
+        <div className="relative z-20 w-full">
+          <div className="max-w-[1400px] mx-auto px-5 md:px-[5%] pb-16 md:pb-24 pt-28 md:pt-32">
+            <div className="max-w-4xl">
+              <div className="md:hidden mb-5">
+                <span className="inline-flex px-4 py-2 rounded-full bg-[#D4AF37] text-[#0F1A3E] text-[9px] font-black uppercase tracking-[0.25em]">
                   {event.categories?.[0]?.name || lang.event}
                 </span>
               </div>
 
-              <div className="animate-content">
-                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl tracking-tight font-['Playfair_Display'] font-bold leading-tight text-white mb-3 md:mb-4 max-w-3xl">
-                  {event.title}
-                </h1>
+              <h1 className="font-['Playfair_Display'] text-[1.8rem] sm:text-[2.4rem] md:text-[3.2rem] lg:text-[3.8rem] leading-[1.08] tracking-[-0.02em] text-white font-bold">
+                {event.title}
+              </h1>
 
-                <div className="flex flex-wrap gap-x-4 gap-y-2 text-[8px] md:text-[10px] text-white/70 font-bold uppercase tracking-widest">
-                  <span className="flex items-center gap-1.5">
-                    <CalendarIcon className="w-3 h-3 text-[#FFC700]" />
+              <div className="mt-8 md:mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
+                <div className="flex items-center gap-2.5">
+                  <CalendarIcon className="w-4 h-4 text-[#D4AF37]" />
+                  <span className="text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold text-white/60">
                     {event.created?.split(' ')[0]}
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <UserIcon className="w-3 h-3 text-[#FFC700]" />
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <UserIcon className="w-4 h-4 text-[#D4AF37]" />
+                  <span className="text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold text-white/60">
                     {event.author || "Admin"}
                   </span>
                 </div>
@@ -135,95 +127,157 @@ const EventDetailPage = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* CONTENT SECTION */}
-      <div className="w-full px-4 sm:px-6 lg:px-[5%] py-8 md:py-12">
-        <div className="max-w-[1000px] mx-auto grid grid-cols-1 lg:grid-cols-[1.8fr_0.7fr] gap-6 lg:gap-10">
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#FAFAFA]"></div>
+      </section>
 
-          <div ref={contentRef} className="animate-content order-1 lg:order-1">
-            <article className="bg-white border border-gray-100 rounded-[2rem] md:rounded-[2.5rem] p-5 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)]">
-              <div
-                className="event-content max-w-none text-sm md:text-lg leading-relaxed md:leading-[1.8] text-gray-600 font-medium"
-                dangerouslySetInnerHTML={{ __html: event.content }}
-              />
+      <section className="relative w-full px-5 md:px-[5%] pb-24 md:pb-32 -mt-10 md:-mt-16 z-30">
+        <div className="max-w-[1350px] mx-auto grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] gap-14 xl:gap-20">
+          <article className="relative">
+            <div className="bg-white rounded-[2rem] md:rounded-[2.8rem] border border-gray-100/80 shadow-[0_8px_40px_rgba(0,0,0,0.04)] overflow-hidden">
+              <div className="w-full h-1 bg-gradient-to-r from-[#D4AF37] via-[#FFE082] to-[#D4AF37]"></div>
 
-              <div className="mt-12 md:mt-20 pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-6">
-                <ShareButtons title={event.title} url={window.location.href} />
+              <div className="p-6 md:p-10 lg:p-12">
+                <div
+                  className="event-article"
+                  dangerouslySetInnerHTML={{ __html: event.content }}
+                />
 
-                <Link to="/news" className="text-[10px] font-black uppercase tracking-widest text-[#0F1A3E] border-b-2 border-[#FFC700] pb-1">
-                  {lang.allNews}
-                </Link>
-              </div>
-            </article>
-          </div>
+                <div className="mt-12 pt-6 border-t border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                  <ShareButtons title={event.title} url={window.location.href} />
 
-          {/* SIDEBAR */}
-          <aside ref={sidebarRef} className="animate-content space-y-8 order-2 lg:order-2">
-            <div className="bg-[#0F1A3E] rounded-[2rem] p-6 md:p-8 text-white shadow-xl relative overflow-hidden group">
-              <h4 className="text-lg md:text-xl font-bold mb-6 md:mb-10 font-['Playfair_Display']">{lang.info}</h4>
-              <div className="space-y-6 md:space-y-8 relative z-10">
-                {[
-                  { icon: CalendarIcon, label: lang.date, value: event.created?.split(' ')[0] },
-                  { icon: UserIcon, label: lang.author, value: event.author }
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-4">
-                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                      <item.icon className="w-4 h-4 md:w-5 md:h-5 text-[#FFC700]" />
+                  <Link
+                    to="/news"
+                    className="group inline-flex items-center gap-3 text-[#0F1A3E] hover:text-[#D4AF37] transition-all duration-300"
+                  >
+                    <span className="text-[10px] uppercase tracking-[0.25em] font-black">{lang.allNews}</span>
+                    <div className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center group-hover:border-[#D4AF37] transition-all">
+                      <ArrowLeftIcon className="w-4 h-4 rotate-180" />
                     </div>
-                    <div>
-                      <p className="text-[9px] font-black text-white/30 uppercase tracking-widest mb-0.5">{item.label}</p>
-                      <p className="text-xs md:text-sm font-bold text-white/90">{item.value}</p>
-                    </div>
-                  </div>
-                ))}
+                  </Link>
+                </div>
               </div>
             </div>
+          </article>
 
-            {/* EVENT LAINNYA */}
-            <div className="bg-white border border-gray-100 rounded-[2rem] p-6 md:p-8 shadow-sm">
-              <h4 className="text-lg md:text-xl font-bold text-[#0F1A3E] mb-6 font-['Playfair_Display']">{lang.other}</h4>
-              <div className="space-y-5">
-                {otherEvents.map((item) => (
-                  <Link
-                    key={item.slug}
-                    to={`/event/${item.slug.split('/').pop()}`}
-                    className="block group border-b border-gray-50 pb-4 last:border-0 last:pb-0"
-                  >
-                    <span className="text-[9px] text-[#FFC700] font-black uppercase tracking-widest">{item.created?.split(' ')[0]}</span>
-                    <h5 className="text-sm md:text-base font-bold text-[#0F1A3E] mt-1 leading-snug group-hover:text-[#B8860B] transition-colors line-clamp-2">{item.title}</h5>
-                  </Link>
-                ))}
+          <aside className="relative">
+            <div className="sticky top-28 space-y-6">
+              <div className="bg-[#0F1A3E] rounded-[2rem] p-6 md:p-8 text-white shadow-xl relative overflow-hidden group">
+                <div className="w-24 h-24 bg-[#D4AF37]/5 rounded-full absolute -top-6 -right-6 blur-3xl"></div>
+                <h4 className="text-lg md:text-xl font-bold mb-6 md:mb-8 font-['Playfair_Display']">{lang.info}</h4>
+                <div className="space-y-5 relative z-10">
+                  {[
+                    { icon: CalendarIcon, label: lang.date, value: event.created?.split(' ')[0] },
+                    { icon: UserIcon, label: lang.author, value: event.author || "Admin" }
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                        <item.icon className="w-4 h-4 text-[#D4AF37]" />
+                      </div>
+                      <div>
+                        <p className="text-[9px] font-black text-white/30 uppercase tracking-widest mb-0.5">{item.label}</p>
+                        <p className="text-xs md:text-sm font-bold text-white/90">{item.value}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-gray-100/80 shadow-[0_8px_40px_rgba(0,0,0,0.04)]">
+                <h4 className="text-lg md:text-xl font-bold text-[#0F1A3E] mb-6 font-['Playfair_Display']">{lang.other}</h4>
+                <div className="space-y-5">
+                  {otherEvents.map((item) => (
+                    <Link
+                      key={item.slug}
+                      to={`/event/${item.slug.split('/').pop()}`}
+                      className="block group border-b border-gray-50 pb-4 last:border-0 last:pb-0"
+                    >
+                      <span className="text-[9px] text-[#D4AF37] font-black uppercase tracking-widest">{item.created?.split(' ')[0]}</span>
+                      <h5 className="text-sm md:text-base font-bold text-[#0F1A3E] mt-1 leading-snug group-hover:text-[#D4AF37] transition-colors line-clamp-2">{item.title}</h5>
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
           </aside>
         </div>
-      </div>
+      </section>
 
       <style dangerouslySetInnerHTML={{
         __html: `
-        .event-content p { margin-bottom: 1.5rem; text-align: justify; text-justify: inter-word; }
-        @media (min-width: 768px) {
-          .event-content p { margin-bottom: 2.2rem; }
+        .event-article {
+          color: #374151;
+          font-size: 1rem;
+          line-height: 1.85;
+          font-weight: 400;
         }
-        .event-content strong { color: #0F1A3E; font-weight: 800; }
-        .event-content p:first-of-type::first-letter {
+        .event-article p {
+          margin-bottom: 1.5rem;
+        }
+        .event-article strong {
+          color: #0F172A;
+          font-weight: 700;
+        }
+        .event-article h2,
+        .event-article h3,
+        .event-article h4 {
+          color: #0F172A;
+          font-family: 'Playfair Display', serif;
+          font-weight: 700;
+          line-height: 1.25;
+          margin-top: 2.5rem;
+          margin-bottom: 1rem;
+        }
+        .event-article h2 { font-size: 1.5rem; }
+        .event-article h3 { font-size: 1.25rem; }
+        .event-article h4 { font-size: 1.1rem; }
+        .event-article ul,
+        .event-article ol {
+          padding-left: 1.5rem;
+          margin-bottom: 1.5rem;
+        }
+        .event-article li { margin-bottom: 0.5rem; }
+        .event-article blockquote {
+          margin: 2rem 0;
+          padding: 1.5rem 1.8rem;
+          border-left: 4px solid #D4AF37;
+          background: #F8F8F8;
+          border-radius: 1rem;
+          color: #374151;
+          font-style: italic;
+          font-size: 1.05rem;
+        }
+        .event-article img {
+          width: 100%;
+          max-width: 100%;
+          border-radius: 1.2rem;
+          margin: 2rem 0;
+          box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+        }
+        .event-article a {
+          color: #B8860B;
+          text-decoration: none;
+          font-weight: 600;
+          border-bottom: 1px solid transparent;
+          transition: border-color 0.2s;
+        }
+        .event-article a:hover { border-color: #B8860B; }
+        .event-article p:first-of-type::first-letter {
           float: left;
-          font-size: 3.5rem;
-          line-height: 1;
-          font-weight: 900;
-          margin-right: 0.6rem;
-          color: #FFC700;
+          font-size: 3.2rem;
+          line-height: 0.85;
+          padding-right: 0.5rem;
+          padding-top: 0.15rem;
+          font-weight: 800;
+          color: #D4AF37;
           font-family: 'Playfair Display', serif;
         }
-        @media (min-width: 768px) {
-          .event-content p:first-of-type::first-letter { font-size: 4.5rem; margin-right: 0.8rem; }
-        }
-        .event-content img {
-          max-width: 100%;
-          height: auto;
-          border-radius: 1rem;
-          margin: 2rem 0;
+        @media (max-width: 768px) {
+          .event-article {
+            font-size: 0.95rem;
+            line-height: 1.75;
+          }
+          .event-article p:first-of-type::first-letter { font-size: 2.6rem; }
         }
       `}} />
     </main>

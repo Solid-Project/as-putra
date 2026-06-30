@@ -56,7 +56,7 @@ const FullPage = ({ defaultSlug = "beranda" }) => {
 
   return (
     <main className="relative bg-black min-h-screen">
-      <Navbar />
+      <Navbar activeIndex={activeIndex} />
 
       <div className="fullpage-wrapper">
         <AutoTranslate /> 

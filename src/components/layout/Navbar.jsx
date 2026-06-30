@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import useNavbarTheme from "@/hooks/useNavbarTheme";
 
-const Navbar = () => {
+const Navbar = ({ activeIndex }) => {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -96,20 +96,12 @@ const Navbar = () => {
     fetchSectors();
   }, []);
 
-  // 2. AUTO-HIDE NAVBAR SAAT SCROLL
+  // 2. AUTO-HIDE NAVBAR BERDASARKAN ACTIVE INDEX SNAP
   useEffect(() => {
-    let lastScrollY = window.scrollY;
-    const handleScroll = () => {
-      if (window.scrollY > lastScrollY && window.scrollY > 100) {
-        setIsVisible(false); // Sembunyikan saat scroll ke bawah
-      } else {
-        setIsVisible(true); // Tampilkan saat scroll ke atas
-      }
-      lastScrollY = window.scrollY;
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    // Tampilkan navbar selalu saat di section awal (Hero/Beranda)
+    // Atau bisa disesuaikan logikanya
+    setIsVisible(true);
+  }, [activeIndex]);
 
   const closeMenu = () => { setMenuOpen(false); setDropdownOpen(false); };
 

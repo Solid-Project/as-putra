@@ -81,7 +81,7 @@ const CardSection = ({ data, isLoading, isActive, index }) => {
                   {title?.split(' ')[0]} <span className="text-[#FFC700] italic">{title?.split(' ')[1]}</span>
                 </h2>
                 <div className="max-w-md border-l-2 border-[#FFC700]/30 pl-6">
-                  <p className="text-gray-400 text-lg leading-relaxed">{description}</p>
+                  <p className="text-gray-400 text-lg leading-relaxed whitespace-normal break-words">{description}</p>
                 </div>
               </>
             )}
@@ -108,7 +108,7 @@ const CardSection = ({ data, isLoading, isActive, index }) => {
                     <div className="relative">
                        <div className="absolute -left-2 top-0 w-1 h-full bg-[#FFC700] rounded-full scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-top" />
                        <h3 className="text-[#FFC700] font-bold text-2xl mb-4 pl-4 group-hover:translate-x-2 transition-transform italic">{item.title}</h3>
-                       <p className="text-gray-300 text-sm leading-relaxed pl-4 opacity-80 group-hover:opacity-100">{item.description}</p>
+                       <p className="text-gray-300 text-sm leading-relaxed pl-4 opacity-80 group-hover:opacity-100 whitespace-normal break-words">{item.description}</p>
                     </div>
                   </div>
                 </div>

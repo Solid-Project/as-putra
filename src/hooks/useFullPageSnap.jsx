@@ -97,13 +97,13 @@ const useFullPageSnap = ({ enabled = true } = {}) => {
       return;
     }
 
-    // Bagian No-Snap (hanya untuk kehati-hatian ganda)
+    // Bagian No-Snap
     if (currentEl.classList.contains("no-snap")) {
-      if (isDown) {
-        if (rect.bottom > vh + 5) return;
-      } else {
-        if (rect.top < -5) return;
-      }
+      const isAtBottom = rect.bottom <= vh + 1;
+      const isAtTop = rect.top >= -1;
+
+      if (isDown && !isAtBottom) return; // Biarkan konten scroll sendiri
+      if (!isDown && !isAtTop) return;   // Biarkan konten scroll sendiri
     }
 
     const nextIdx = isDown ? currentIdx + 1 : currentIdx - 1;
