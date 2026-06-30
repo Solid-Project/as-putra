@@ -103,6 +103,22 @@ const Navbar = ({ activeIndex }) => {
     setIsVisible(true);
   }, [activeIndex]);
 
+  // 3. HIDE NAVBAR KETIKA FOOTER MUNCUL
+  useEffect(() => {
+    const el = document.querySelector(".footer-snap");
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(!entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   const closeMenu = () => { setMenuOpen(false); setDropdownOpen(false); };
 
   return (

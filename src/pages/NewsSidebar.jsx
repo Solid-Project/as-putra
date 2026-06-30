@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { translateDynamicText } from "@/lib/translator";
 
 const NewsSidebar = ({ currentSlug }) => {
   const [otherNews, setOtherNews] = useState([]);
@@ -7,9 +8,9 @@ const NewsSidebar = ({ currentSlug }) => {
   const [language] = useState(localStorage.getItem("user_lang") || "id");
 
   const t = {
-    id: { title: "Berita Lainnya", btn: "Lihat Semua Berita" },
-    en: { title: "Other News", btn: "View All News" },
-    jp: { title: "その他のニュース", btn: "すべてのニュースを見る" }
+    id: { title: "Berita Lainnya", btn: "Lihat Semua Berita", loading: "Memuat berita...", update: "Update" },
+    en: { title: "Other News", btn: "View All News", loading: "Loading news...", update: "Update" },
+    jp: { title: "その他のニュース", btn: "すべてのニュースを見る", loading: "ニュースを読み込み中...", update: "更新" }
   };
   const lang = t[language] || t.id;
 
@@ -23,8 +24,19 @@ const NewsSidebar = ({ currentSlug }) => {
           const filtered = json.data.details.filter(news => {
             const slug = news.slug.split('/').pop();
             return slug !== currentSlug;
-          });
-          setOtherNews(filtered.slice(0, 5));
+          }).slice(0, 5);
+
+          let items = filtered;
+          if (language !== "id") {
+            const targetLang = language === "jp" ? "ja" : language;
+            items = await Promise.all(
+              filtered.map(async (news) => ({
+                ...news,
+                title: await translateDynamicText(news.title, targetLang),
+              }))
+            );
+          }
+          setOtherNews(items);
         }
       } catch (error) {
         console.error("Error fetching sidebar news:", error);
@@ -36,7 +48,14 @@ const NewsSidebar = ({ currentSlug }) => {
     fetchOtherNews();
   }, [currentSlug]);
 
-  if (loading) return <div className="text-gray-500 animate-pulse">Loading news...</div>;
+  // update saat bahasa berubah
+  useEffect(() => {
+    const handleStorage = () => window.location.reload();
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
+  if (loading) return <div className="text-gray-500 animate-pulse">{lang.loading}</div>;
 
   return (
     <aside className="lg:sticky lg:top-[100px]">
@@ -56,7 +75,7 @@ const NewsSidebar = ({ currentSlug }) => {
             >
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-[10px] bg-[var(--color-utama)]/10 text-[var(--color-utama)] px-2 py-0.5 rounded font-bold uppercase">
-                  {item.category_name || "Update"}
+                  {item.category_name || lang.update}
                 </span>
                 <span className="text-[10px] text-[var(--color-teks-muted)]">
                   {item.created.split(' ')[0]}

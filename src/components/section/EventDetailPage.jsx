@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { CalendarIcon, MapPinIcon, ArrowLeftIcon, UserIcon } from "@heroicons/react/24/outline";
 import ShareButtons from "@/components/ui/ShareButtons";
+import { translateDynamicText } from "@/lib/translator";
 
 const EventDetailPage = () => {
   const { id } = useParams();
@@ -35,14 +36,33 @@ const EventDetailPage = () => {
         const detailJson = await detailRes.json();
         const listJson = await listRes.json();
         if (detailJson.status) {
-          setEvent(detailJson.data);
-          document.title = `${detailJson.data.title} | AS PUTRA Event`;
+          let data = detailJson.data;
+          if (language !== "id") {
+            const targetLang = language === "jp" ? "ja" : language;
+            const [title, content] = await Promise.all([
+              translateDynamicText(data.title, targetLang),
+              translateDynamicText(data.content || "", targetLang),
+            ]);
+            data = { ...data, title, content };
+          }
+          setEvent(data);
+          document.title = `${data.title} | AS PUTRA Event`;
         }
         if (listJson.status) {
-          const onlyEvents = listJson.data.details
+          let onlyEvents = listJson.data.details
             .filter(item => item.categories.some(cat => cat.name.toLowerCase() === "event"))
             .filter(item => item.slug.split('/').pop() !== id)
             .slice(0, 3);
+
+          if (language !== "id") {
+            const targetLang = language === "jp" ? "ja" : language;
+            onlyEvents = await Promise.all(
+              onlyEvents.map(async (item) => ({
+                ...item,
+                title: await translateDynamicText(item.title, targetLang),
+              }))
+            );
+          }
           setOtherEvents(onlyEvents);
         }
       } catch (error) {

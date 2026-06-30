@@ -10,6 +10,7 @@ import {
 
 import ShareButtons from "@/components/ui/ShareButtons";
 import NewsSidebar from "@/pages/NewsSidebar";
+import { translateDynamicText } from "@/lib/translator";
 
 const NewsDetailPage = () => {
   const { id } = useParams();
@@ -42,15 +43,27 @@ const NewsDetailPage = () => {
         const json = await response.json();
 
         if (isMounted && json.status) {
+          let data = json.data;
+
+          if (language !== "id") {
+            const targetLang = language === "jp" ? "ja" : language;
+            const [title, excerpt, content] = await Promise.all([
+              translateDynamicText(data.title, targetLang),
+              translateDynamicText(data.excerpt || "", targetLang),
+              translateDynamicText(data.content || "", targetLang),
+            ]);
+            data = { ...data, title, excerpt, content };
+          }
+
           gsap.to(".page-fade", {
             opacity: 0,
             y: 10,
             duration: 0.18,
             ease: "power2.out",
             onComplete: () => {
-              setNews(json.data);
+              setNews(data);
 
-              document.title = `${json.data.title} | AS PUTRA News`;
+              document.title = `${data.title} | AS PUTRA News`;
 
               gsap.fromTo(
                 ".page-fade",
