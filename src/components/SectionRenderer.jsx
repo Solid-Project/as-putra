@@ -24,10 +24,12 @@ const Layout9 = lazy(() => import("@/components/section/Layout9"));
 const Layout10 = lazy(() => import("@/components/section/Layout10"));
 const NewsSection = lazy(() => import("@/components/section/NewsSection"));
 
+import CombinedSectorStats from "@/components/section/CombinedSectorStats";
+
 const COMPONENT_MAP = {
   HeroCarousel, HistorySection, CareerSection, CardSection, StatsSection,
   SectorStrip, NewsTeaser, MilestoneSection, OurValues, VissionMission,
-  IntroSection, HeroSector,
+  IntroSection, HeroSector, CombinedSectorStats,
   layout1: Layout1, layout2: Layout2, layout3: Layout3, layout4: Layout4, layout5: Layout5,
   layout6: Layout6, layout7: Layout7, layout8: Layout8, layout9: Layout9, layout10: Layout10,
 };
@@ -35,6 +37,7 @@ const COMPONENT_MAP = {
 const THEME_MAPPING = {
   HeroCarousel: "dark", HeroSector: "dark", IntroSection: "light", HistorySection: "dark",
   CareerSection: "light", CardSection: "dark", StatsSection: "dark", SectorStrip: "dark",
+  CombinedSectorStats: "dark",
   NewsTeaser: "dark", NewsSection: "light", MilestoneSection: "light", OurValues: "light",
   VissionMission: "light", layout1: "light", layout2: "dark", layout3: "light", layout4: "dark",
   layout5: "light", layout6: "dark", layout7: "light", layout8: "dark", layout9: "light", layout10: "dark",
@@ -48,9 +51,27 @@ SafeComponentWrapper.displayName = "SafeComponentWrapper";
 export const SectionRenderer = ({ sections, activeIndex }) => {
   if (!sections || sections.length === 0) return null;
 
+  // Akali penggabungan SectorStrip (index 0) dan StatsSection (index 1)
+  const processedSections = [];
+  for (let i = 0; i < sections.length; i++) {
+    const current = sections[i];
+    const next = sections[i + 1];
+
+    if (current.layout_name === "SectorStrip" && next?.layout_name === "StatsSection") {
+      processedSections.push({
+        id: `combined-${current.id}`,
+        layout_name: "CombinedSectorStats",
+        content_data: { sectors: current.content_data || current, stats: next.content_data || next }
+      });
+      i++;
+    } else {
+      processedSections.push(current);
+    }
+  }
+
   return (
     <>
-      {sections.map((section, index) => {
+      {processedSections.map((section, index) => {
         const layoutName = section.layout_name;
         const Component = COMPONENT_MAP[layoutName];
         if (!Component) return null;
@@ -58,7 +79,7 @@ export const SectionRenderer = ({ sections, activeIndex }) => {
         // Cek mana komponen bebas (no-snap)
         const isNoSnap = [
           "CardSection", "StatsSection", "NewsTeaser",
-          "MilestoneSection", "CareerSection", "SectorStrip","layout7"
+          "MilestoneSection", "CareerSection", "SectorStrip", "CombinedSectorStats", "layout7"
         ].includes(layoutName);
 
         const currentTheme = section.theme || THEME_MAPPING[layoutName] || "dark";

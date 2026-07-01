@@ -6,6 +6,7 @@ import SectionRenderer from "@/components/SectionRenderer";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import HeroSkeleton from "@/components/skeleton/HeroSkeleton";
+import CombinedSectorStats from "@/components/section/CombinedSectorStats";
 
 import AutoTranslate from "@/lib/AutoTranslate"; 
 
@@ -62,6 +63,9 @@ const FullPage = ({ defaultSlug = "beranda" }) => {
         <AutoTranslate /> 
 
         <SectionRenderer sections={sections} activeIndex={activeIndex} />
+        
+        {/* Logic for Combined Sector/Stats if needed */}
+        {/* <CombinedSectorStats data={{sectors: ..., stats: ...}} /> */}
         
         {currentSlug === "beranda" && (
           <section className="section no-snap w-full h-auto" data-title="News Updates">

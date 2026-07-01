@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 // Import logo assets
-import logoLight from "@/assets/logo-teks-putih.png"; 
-import logoDark from "@/assets/logo-teks-asli.png";
+import logoLight from "@/assets/logo-polos-baru.png";
+import logoDark from "@/assets/logo-warna-baru.png";
 
 const useNavbarTheme = () => {
   const [theme, setTheme] = useState("dark");
@@ -11,14 +11,14 @@ const useNavbarTheme = () => {
   useEffect(() => {
     const handleThemeChange = () => {
       const sections = document.querySelectorAll(".section");
-      
+
       // Kita cek section yang berada di area atas layar (posisi navbar)
-      const navbarHeight = 80; 
+      const navbarHeight = 80;
       let foundBlur = false;
-      
+
       sections.forEach((section) => {
         const rect = section.getBoundingClientRect();
-        
+
         /**
          * Logika: Jika bagian atas section sudah melewati batas navbar 
          * DAN bagian bawah section masih di bawah batas navbar, 
@@ -27,12 +27,12 @@ const useNavbarTheme = () => {
         if (rect.top <= navbarHeight && rect.bottom >= navbarHeight) {
           const sectionTheme = section.getAttribute("data-theme");
           const sectionBlur = section.getAttribute("data-blur");
-          
+
           if (sectionBlur === "true") foundBlur = true;
-          
+
           if (sectionTheme && sectionTheme !== theme) {
             setTheme(sectionTheme);
-            
+
             if (sectionTheme === "light") {
               setLogo(logoDark); // Section terang -> Logo gelap
             } else {
@@ -48,7 +48,7 @@ const useNavbarTheme = () => {
     // Jalankan saat scroll dan resize
     window.addEventListener("scroll", handleThemeChange, { passive: true });
     window.addEventListener("resize", handleThemeChange);
-    
+
     // Inisialisasi pertama kali
     handleThemeChange();
 

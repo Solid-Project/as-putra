@@ -197,7 +197,7 @@ const HeroCarousel = ({ data, isActive, index }) => {
                   alt=""
                 />
               ) : null}
-              <div className="absolute inset-0 bg-black/50 md:bg-gradient-to-b md:from-black/60 md:via-black/30 md:to-black/70" />
+              <div className="absolute inset-0 bg-black/30 md:bg-gradient-to-b md:from-black/40 md:via-black/20 md:to-black/50" />
             </div>
             );
           })}

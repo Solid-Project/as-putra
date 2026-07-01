@@ -51,28 +51,32 @@ const StatsSection = ({ data, index }) => {
   return (
     <section
       ref={sectionRef}
-      className="relative py-12 md:py-16 bg-[#0F1A3E] overflow-hidden border-y border-white/5"
+      className="relative h-[20vh] flex items-center justify-center bg-[#0F1A3E] overflow-hidden border-y border-white/5 snap-start -mt-px"
       id={`section-${index}`}
     >
-      {/* BACKGROUND DECOR - Diperhalus agar tidak mendominasi */}
+      {/* BACKGROUND DECOR */}
       <div
         ref={bgRef}
-        className="absolute left-[2%] top-1/2 -translate-y-1/2 w-[20vw] opacity-[0.02] pointer-events-none -z-0"
+        className="absolute left-[5%] top-1/2 -translate-y-1/2 w-[12vw] opacity-[0.03] pointer-events-none"
       >
         <img src={logoIcon} alt="" loading="lazy" className="w-full h-auto grayscale invert" />
       </div>
 
-      {/* Konten Utama - Lebih Rapat */}
-      <div className="max-w-[1100px] mx-auto px-6 relative z-10">
-        <div className="flex flex-wrap items-center justify-between gap-y-8">
+      {/* Konten Utama - Menggunakan style Playfair yang indah */}
+      <div className="w-full max-w-[1440px] px-6 sm:px-8 md:px-12 lg:px-[8%]">
+        <div className="flex items-center justify-between gap-4">
           {statsData.map((stat, idx) => (
-            <div key={stat.item_id || idx} className="w-1/2 md:w-auto md:flex-1 border-r border-white/5 last:border-none">
-              <Counter
-                target={parseInt(stat.angkaTarget)}
-                suffix={stat.akhiran}
-                label={stat.description}
-                sectionRef={sectionRef}
-              />
+            <div key={stat.item_id || idx} className="flex-1 flex justify-center border-r border-white/10 last:border-none">
+              <div className="flex flex-col items-center">
+                <div className="text-2xl md:text-4xl font-black text-white font-['Playfair_Display'] tracking-tight">
+                  {parseInt(stat.angkaTarget).toLocaleString("id-ID")}
+                  <span className="text-[#FFC700] ml-1 text-base md:text-xl font-normal">{stat.akhiran}</span>
+                </div>
+                <div className="w-8 h-[2px] bg-[#FFC700]/30 my-2 rounded-full" />
+                <div className="text-[8px] md:text-[9px] uppercase tracking-[0.25em] text-white/50 font-medium">
+                  {stat.description}
+                </div>
+              </div>
             </div>
           ))}
         </div>
