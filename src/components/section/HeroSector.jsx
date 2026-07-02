@@ -73,9 +73,9 @@ const HeroSector = ({ data, index }) => {
           src={displayImage}
           alt="Hero Background"
           className="w-full h-full object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-          style={{ filter: "brightness(0.6)" }}
+          style={{ filter: "brightness(0.8)" }}
         />
-        <div className="absolute inset-0 bg-black/50 md:bg-gradient-to-b md:from-black/60 md:via-black/30 md:to-black/70" />
+        <div className="absolute inset-0 bg-black/30 md:bg-gradient-to-b md:from-black/40 md:via-black/20 md:to-black/50" />
       </div>
 
       {/* Konten Utama Tengah */}
