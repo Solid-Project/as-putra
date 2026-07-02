@@ -262,6 +262,7 @@ const HeroCarousel = ({ data, isActive, index }) => {
           <button
             key={idx}
             onClick={() => setCurrent(idx)}
+            aria-label={`Go to slide ${idx + 1}`}
             className={`h-1 md:h-1.5 transition-all duration-500 rounded-full ${
               idx === current ? "w-5 md:w-8 bg-[var(--color-utama)]" : "w-1.5 md:w-2 bg-white/30"
             }`}
