@@ -69,21 +69,11 @@ const HeroCarousel = ({ data, isActive, index }) => {
   const currentSlide = slides[current] || {};
   const isVideo = currentSlide?.type?.startsWith("video");
 
-  // Preload Images (optimasi: hanya preload 1 gambar pertama, sisanya lazy)
+  // Hapus efek preload manual (Baris 73-87 lama)
+  // Biarkan browser yang mengelola optimasi gambar dengan loading="eager/lazy"
   useEffect(() => {
     if (!slides.length) return;
-
-    const images = slides.filter((s) => !s.type.startsWith("video"));
-    if (images.length === 0) {
-      setIsInitialLoading(false);
-      return;
-    }
-
-    // Hanya preload slide pertama, sisanya biarkan loading="lazy" yang handle
-    const img = new Image();
-    img.src = `${ASSET_URL}/storage/${images[0].src}`;
-    img.onload = () => setIsInitialLoading(false);
-    img.onerror = () => setIsInitialLoading(false);
+    setIsInitialLoading(false);
   }, [slides]);
 
   // Delay Content
@@ -188,11 +178,14 @@ const HeroCarousel = ({ data, isActive, index }) => {
                   src={`${ASSET_URL}/storage/${slide.src}`}
                   muted
                   playsInline
+                  preload="metadata"
                   className="w-full h-full object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
                 />
               ) : needImage ? (
                 <img
                   src={`${ASSET_URL}/storage/${slide.src}`}
+                  loading={idx === 0 ? "eager" : "lazy"}
+                  fetchpriority={idx === 0 ? "high" : "auto"}
                   className="w-full h-full object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
                   alt=""
                 />
