@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 // Import logo assets
-import logoLight from "@/assets/logo-polos-baru.png";
-import logoDark from "@/assets/logo-warna-baru.png";
+import logoLight from "@/assets/logo-teks-putih.png";
+import logoDark from "@/assets/logo-teks-asli.png";
 
 const useNavbarTheme = () => {
   const [theme, setTheme] = useState("dark");
