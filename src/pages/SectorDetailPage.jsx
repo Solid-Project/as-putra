@@ -40,6 +40,15 @@ const SectorDetailPage = () => {
   const { slug } = useParams(); 
   const [sections, setSections] = useState(null); // Mulai dengan null agar skeleton muncul
 
+  // Deteksi mobile — efek snap GSAP hanya untuk desktop (≥768px)
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+
+  useEffect(() => {
+    const checkScreenSize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
   useEffect(() => {
     const fetchSectorData = async () => {
       setSections(null); 
@@ -85,8 +94,9 @@ const SectorDetailPage = () => {
     fetchSectorData();
   }, [slug]);
 
+  // Nonaktifkan snap GSAP di mobile agar tidak ada lompatan saat scroll sentuh
   const { activeIndex } = useFullpageSnap({ 
-    enabled: !!sections && sections.length > 0,
+    enabled: !!sections && sections.length > 0 && !isMobile,
     config: { sectionSelector: ".section" }
   });
 

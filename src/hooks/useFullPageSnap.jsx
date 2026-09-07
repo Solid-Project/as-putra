@@ -127,7 +127,17 @@ const useFullPageSnap = ({ enabled = true } = {}) => {
   }, [enabled, getElements, scrollToElement]);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {
+      // Di mobile (enabled=false): pastikan browser bisa scroll normal tanpa lompatan
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'auto';
+      }
+      // Batalkan animasi GSAP yang mungkin masih berjalan saat beralih ke mobile
+      gsap.killTweensOf(window);
+      lockRef.current = false;
+      isAnimatingRef.current = false;
+      return;
+    }
 
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
@@ -148,6 +158,10 @@ const useFullPageSnap = ({ enabled = true } = {}) => {
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("resize", handleResize);
       clearTimeout(wheelTimeoutRef.current);
+      // Kembalikan scrollRestoration ke default saat hook di-unmount
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'auto';
+      }
     };
   }, [enabled, handleWheel, getElements]);
 
