@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense, lazy } from "react"; // 1. Tambah useState di sini
+import React, { useEffect, Suspense, lazy } from "react";
 import { useParams } from "react-router-dom";
 import { usePageData } from "@/hooks/usePageData";
 import useFullpageSnap from "@/hooks/useFullPageSnap";
@@ -8,7 +8,8 @@ import Navbar from "@/components/layout/Navbar";
 import HeroSkeleton from "@/components/skeleton/HeroSkeleton";
 import CombinedSectorStats from "@/components/section/CombinedSectorStats";
 
-import AutoTranslate from "@/lib/AutoTranslate"; 
+import AutoTranslate from "@/lib/AutoTranslate";
+import useMobileDetect from "@/hooks/useMobileDetect";
 
 const NewsTeaser = lazy(() => import("@/components/section/NewsTeaser"));
 const CareerSection = lazy(() => import("@/components/section/CareerSection"));
@@ -23,24 +24,9 @@ const FullPage = ({ defaultSlug = "beranda" }) => {
   const { data, loading } = usePageData(currentSlug);
   const sections = data?.data || [];
 
-  // 2. State untuk mendeteksi apakah device saat ini adalah HP/Mobile (lebar < 768px)
-  const [isMobile, setIsMobile] = useState(false);
+  // Deteksi mobile — efek snap GSAP hanya untuk desktop (≥768px)
+  const isMobile = useMobileDetect();
 
-  useEffect(() => {
-    // Fungsi untuk cek ukuran layar
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 768); // 768px adalah breakpoint standard mobile (md di Tailwind)
-    };
-
-    // Cek saat pertama kali komponen di-mount
-    checkScreenSize();
-
-    // Dengarkan perubahan ukuran layar jika user memutar orientasi HP atau resize browser
-    window.addEventListener("resize", checkScreenSize);
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
-
-  // 3. Tambahkan kondisi !isMobile di properti enabled
   const { activeIndex } = useFullpageSnap({ 
     enabled: !loading && sections.length >= 0 && !isMobile
   });

@@ -7,7 +7,8 @@ import Footer from "@/components/layout/Footer";
 import HeroSkeleton from "@/components/skeleton/HeroSkeleton";
 import HeroSector from "@/components/section/HeroSector";
 
-import AutoTranslate from "@/lib/AutoTranslate"; 
+import AutoTranslate from "@/lib/AutoTranslate";
+import useMobileDetect from "@/hooks/useMobileDetect";
 //Import Layout
 const IntroSection = lazy(() => import("@/components/section/IntroSection"));
 const Layout1 = lazy(() => import("@/components/section/Layout1"));
@@ -41,13 +42,7 @@ const SectorDetailPage = () => {
   const [sections, setSections] = useState(null); // Mulai dengan null agar skeleton muncul
 
   // Deteksi mobile — efek snap GSAP hanya untuk desktop (≥768px)
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
-
-  useEffect(() => {
-    const checkScreenSize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", checkScreenSize);
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
+  const isMobile = useMobileDetect();
 
   useEffect(() => {
     const fetchSectorData = async () => {
