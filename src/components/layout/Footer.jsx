@@ -221,7 +221,7 @@ const Footer = () => {
               <div className="pt-3 border-t border-slate-200 flex flex-col gap-0.5">
                 <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Hotline Corporate</span>
                 <a href={companyInfo?.phone ? `tel:${companyInfo.phone}` : "tel:+62232123456"} className="text-sm font-black text-[#0F1A3E] hover:text-[#FFC619] transition-colors">
-                  {companyInfo?.phone || "(0232) 123456"}
+                  {companyInfo?.phone || "(0232) 873800"}
                 </a>
               </div>
             </div>
