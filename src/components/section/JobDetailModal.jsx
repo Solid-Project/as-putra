@@ -161,7 +161,7 @@ const JobDetailModal = ({ job, isOpen, onClose }) => {
             <p className="text-[10px] font-medium opacity-75 uppercase tracking-widest">Kirimkan berkas lamaran Anda langsung ke tim kami</p>
           </div>
           <a
-            href={`mailto:recruitment@asputra.com?subject=Lamaran Kerja - ${job.title}`}
+            href={`mailto:asputraholding@gmail.com?subject=Lamaran Kerja - ${job.title}`}
             className="group w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 bg-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md"
             style={{ color: COLOR_NAVY }}
             onMouseEnter={(e) => {
