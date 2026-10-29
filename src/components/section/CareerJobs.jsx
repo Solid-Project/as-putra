@@ -176,7 +176,7 @@ const CareerJobs = ({ isActive }) => {
               <span className="text-lg md:text-2xl font-bold tracking-tight">Kirim CV Terbuka ke:</span>
               <div className="flex items-center gap-2 text-lg md:text-2xl font-black underline underline-offset-[6px] decoration-gray-300 group-hover:decoration-[#FFC619] transition-all">
                 <EnvelopeIcon className="w-5 h-5 md:w-6 md:h-6 shrink-0" />
-                <span>recruitment@asputra.com</span>
+                <span>asputraholding@gmail.com</span>
               </div>
             </a>
         </div>
