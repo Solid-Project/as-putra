@@ -172,7 +172,7 @@ const CareerJobs = ({ isActive }) => {
             <p className="text-gray-500 text-sm md:text-base mb-3 font-semibold">
               Tidak menemukan posisi yang cocok dengan keahlian Anda?
             </p>
-            <a href="mailto:recruitment@asputra.com" className="group flex flex-col md:flex-row items-center gap-2 md:gap-3 transition-all duration-300" style={{ color: COLOR_NAVY }}>
+            <a href="mailto:asputraholding@gmail.com" className="group flex flex-col md:flex-row items-center gap-2 md:gap-3 transition-all duration-300" style={{ color: COLOR_NAVY }}>
               <span className="text-lg md:text-2xl font-bold tracking-tight">Kirim CV Terbuka ke:</span>
               <div className="flex items-center gap-2 text-lg md:text-2xl font-black underline underline-offset-[6px] decoration-gray-300 group-hover:decoration-[#FFC619] transition-all">
                 <EnvelopeIcon className="w-5 h-5 md:w-6 md:h-6 shrink-0" />
